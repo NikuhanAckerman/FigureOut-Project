@@ -8,6 +8,9 @@ public class FigureoutApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(FigureoutApplication.class, args);
+
+
+
 	}
 
 }
