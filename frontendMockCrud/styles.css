@@ -5,3 +5,8 @@
 #upper-navbar-text {
     color: #ffff
 }
+
+.custom-table {
+      max-width: 800px; /* Adjust as needed */
+      margin: 0 auto;   /* Center the table horizontally */
+}
