@@ -1,9 +1,15 @@
+@font-face {
+    font-family: "Gill Sans MT";
+    src: url(gillsansmt.ttf);
+}
+
 .navbar-custom {
     background-color: #3C4AE5;
 }
 
 #upper-navbar-text {
-    color: #ffff
+    color: #ffff;
+    font-family: "Gill Sans MT";
 }
 
 .custom-table {
