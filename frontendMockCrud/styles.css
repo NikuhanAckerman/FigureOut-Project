@@ -1,7 +1,12 @@
+body {
+    padding-top: 56px;
+}
+
 @font-face {
     font-family: "Gill Sans MT";
     src: url(gillsansmt.ttf);
 }
+
 
 .navbar-custom {
     background-color: #3C4AE5;
