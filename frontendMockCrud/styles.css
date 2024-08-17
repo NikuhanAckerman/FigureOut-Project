@@ -18,6 +18,14 @@ body {
     font-size: xx-large;
 }
 
+#add-client-button {
+    background-color: #250e8a;
+    color: #ffff;
+    font-size: large;
+}
+
+
+
 .custom-table {
       max-width: 1200px; /* Largura máxima */
       margin: 0 auto;   /* Centraliza a tabela na horizontal*/
