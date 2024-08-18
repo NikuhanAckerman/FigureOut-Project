@@ -25,9 +25,12 @@ body {
     font-family: "Gill Sans MT";
 }
 
-
-
 .custom-table {
       max-width: 1200px; /* Largura máxima */
       margin: 0 auto;   /* Centraliza a tabela na horizontal*/
+}
+
+#footer {
+  color: white;
+  text-align: center;
 }
