@@ -4,7 +4,7 @@ body {
 
 @font-face {
     font-family: "Gill Sans MT";
-    src: url(/Fonts/gillsansmt.ttf);
+    src: url(gillsansmt.ttf);
 }
 
 .navbar-custom {
