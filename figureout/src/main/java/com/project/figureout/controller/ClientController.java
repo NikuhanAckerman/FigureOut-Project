@@ -1,15 +1,14 @@
-package com.project.figureout;
+package com.project.figureout.controller;
 
+import com.project.figureout.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import com.project.figureout.model.Client;
 
+import java.util.Optional;
+
 @RestController
-@RequestMapping(path = "/clients")
+@RequestMapping(path = "/clientes")
 public class ClientController {
 
     @Autowired
@@ -21,10 +20,14 @@ public class ClientController {
         return client;
     }
 
-    @GetMapping()
+    @GetMapping({"", "/"})
     public Iterable<Client> getAllClients() {
         return clientRepository.findAll();
     }
 
+    @GetMapping("/{id}")
+    public Optional<Client> getClientById(@PathVariable long id) {
+        return clientRepository.findById(id);
+    }
 
 }
