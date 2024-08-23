@@ -29,5 +29,5 @@ public class CreditCard {
     @Column(name = "car_validade")
     @Getter @Setter private Date validade;
 
-    
+
 }
