@@ -2,12 +2,13 @@ package com.project.figureout.controller;
 
 import com.project.figureout.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.project.figureout.model.Client;
 
 import java.util.Optional;
 
-@RestController
+@Controller
 @RequestMapping(path = "/clientes")
 public class ClientController {
 
@@ -28,6 +29,14 @@ public class ClientController {
     @GetMapping("/{id}")
     public Optional<Client> getClientById(@PathVariable long id) {
         return clientRepository.findById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Client updateClient(@PathVariable long id, @RequestBody Client client) {
+        Optional<Client> clientToChange = getClientById(id);
+
+        client.setName(clientToChange.get().getName());
+
     }
 
 }
