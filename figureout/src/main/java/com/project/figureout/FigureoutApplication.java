@@ -15,7 +15,7 @@ public class FigureoutApplication {
 	public static void main(String[] args) throws ClassNotFoundException {
 		SpringApplication.run(FigureoutApplication.class, args);
 
-
+/*
 				String host, port, databaseName, userName, password;
 				host = port = databaseName = userName = password = null;
 				for (int i = 0; i < args.length - 1; i++) {
@@ -47,8 +47,8 @@ public class FigureoutApplication {
 				}
 			}
 
+*/
 
 
-
-
+	}
 }
