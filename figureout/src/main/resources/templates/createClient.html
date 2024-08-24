@@ -1,5 +1,5 @@
 <!doctype HTML>
-<html lang="pt-br">
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,26 +17,28 @@
 		</nav>
 		
 		<div class="container mt-5">
-			<form method="POST" th:object="${clientDTO}">
+			<form th:action="@{/createClient}" th:object="${clientDTO}" method="POST">
 				<div class="form-group">
                 	<label><b>Nome completo</b></label>
-                	<input type="text" class="form-control" placeholder="Insira o nome" th:field="${clientDTO.name}">
+                	<input type="text" class="form-control" placeholder="Insira o nome" th:field="*{name}" required>
 
 					<label><b>Email</b></label>
-                	<input type="text" class="form-control" placeholder="Insira o email" th:field="${clientDTO.email}">
+                	<input type="text" class="form-control" placeholder="Insira o email"  th:field="*{email}" required>
 
 					<label><b>Telefone</b></label>
-                	<input maxlength="14" id="phonenumber-input" type="text" class="form-control" placeholder="Insira o número" th:field="${clientDTO.phoneNumber}">
+                	<input maxlength="14" id="phonenumber-input" type="text" class="form-control" placeholder="Insira o número"  th:field="*{phoneNumber}" required>
 
 					<label><b>CPF</b></label>
-                	<input maxlength=14 id="cpf-input" type="text" class="form-control" placeholder="Insira o CPF" th:field="${clientDTO.cpf}">
+                	<input maxlength=14 id="cpf-input" type="text" class="form-control" placeholder="Insira o CPF"  th:field="*{cpf}" required>
 
 					<label><b>Endereço</b></label>
-                	<input type="text" class="form-control" placeholder="Insira o endereço" th:field="${clientDTO.address}">
+                	<input type="text" class="form-control" placeholder="Insira o endereço"  th:field="*{address}" required>
             	</div>
+				<button type="submit">Criar</button>
+				<a class="btn btn-danger add-delete-button" href="index">Voltar</a>
 			</form>
-			<a class="btn btn-primary add-delete-button" href="index.html">Criar</a>
-			<a class="btn btn-danger add-delete-button" href="index.html">Voltar</a>
+
+
 		</div>
 
 		<footer id="footer">
