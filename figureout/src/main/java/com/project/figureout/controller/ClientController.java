@@ -47,7 +47,6 @@ public class ClientController {
         System.out.println("post called");
 
         return "redirect:/index";
-
     }
 
     @GetMapping("/{id}")
@@ -55,15 +54,30 @@ public class ClientController {
         return clientRepository.findById(id);
     }
 
-    @PutMapping("/updateClient")
-    public Client updateClient(@PathVariable long id, @RequestBody Client client) {
-        Client clientToChange = getClientById(id).get();
+    @GetMapping("/updateClient/{id}")
+    public String showSpecificClient(@PathVariable long id, Model model) {
+        Optional<Client> client = clientRepository.findById(id);
+        ClientDTO clientDTO = new ClientDTO();
 
-        clientToChange.setName(client.getName());
-        clientToChange.setEmail(client.getEmail());
-        clientToChange.setPhoneNumber(client.getPhoneNumber());
-        clientRepository.save(clientToChange);
-        return clientToChange;
+        clientDTO.setName(client.get().getName());
+        clientDTO.setEmail(client.get().getEmail());
+        clientDTO.setPhoneNumber(client.get().getPhoneNumber());
+        clientDTO.setCpf(client.get().getCpf());
+        clientDTO.setAddress(client.get().getAddress());
+
+        model.addAttribute("clientDTO", clientDTO);
+        model.addAttribute("clientID", id);
+
+        return "updateClient";
+    }
+
+    @PostMapping("/updateClient/{id}")
+    public String updateClient(@PathVariable long id, Model model) {
+        Optional<Client> clientToChange = clientRepository.findById(id);
+
+
+
+        return "updateClient";
     }
 
 
