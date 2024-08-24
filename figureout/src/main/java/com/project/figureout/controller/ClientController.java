@@ -5,7 +5,6 @@ import com.project.figureout.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import com.project.figureout.model.Client;
 
@@ -34,8 +33,7 @@ public class ClientController {
     }
 
     @PostMapping("/createClient")
-    public String handleCreateClient(@ModelAttribute("clientDTO") ClientDTO clientDTO, BindingResult bindingResult) {
-
+    public String addClientPost(@ModelAttribute("clientDTO") ClientDTO clientDTO) {
 
         Client client = new Client();
         client.setName(clientDTO.getName());
@@ -43,6 +41,8 @@ public class ClientController {
         client.setPhoneNumber(clientDTO.getPhoneNumber());
         client.setCpf(clientDTO.getCpf());
         client.setAddress(clientDTO.getAddress());
+
+        clientRepository.save(client);
 
         System.out.println("post called");
 
