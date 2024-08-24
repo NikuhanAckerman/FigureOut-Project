@@ -1,5 +1,6 @@
 package com.project.figureout.controller;
 
+import com.project.figureout.dto.ClientDTO;
 import com.project.figureout.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,18 +17,20 @@ public class ClientController {
     @Autowired
     private ClientRepository clientRepository;
 
-    @PostMapping("/criarCliente")
-    public Client addClient(@RequestBody Client client) {
-        clientRepository.save(client);
-        return client;
-    }
-
     @GetMapping({"", "/"})
-    public String getAllClients(Model model) {
+    public String showClients(Model model) {
 
         Iterable<Client> clients =  clientRepository.findAll();
         model.addAttribute("clients", clients);
         return "index";
+    }
+
+    @PostMapping("/createClient")
+    public String addClient(Model model) {
+        ClientDTO clientDTO = new ClientDTO();
+        model.addAttribute("clientDTO", clientDTO);
+        return "index/createClient";
+
     }
 
     @GetMapping("/{id}")
@@ -35,7 +38,7 @@ public class ClientController {
         return clientRepository.findById(id);
     }
 
-    @PutMapping("/atualizarCliente")
+    @PutMapping("/updateClient")
     public Client updateClient(@PathVariable long id, @RequestBody Client client) {
         Client clientToChange = getClientById(id).get();
 
@@ -45,5 +48,6 @@ public class ClientController {
         clientRepository.save(clientToChange);
         return clientToChange;
     }
+
 
 }

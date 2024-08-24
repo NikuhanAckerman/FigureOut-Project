@@ -25,6 +25,8 @@ public class Client {
     @Column(name = "cli_cpf")
     @Getter @Setter private String cpf;
 
+    @Column(name = "cli_endereço")
+    @Getter @Setter private String address;
 
 
 }
