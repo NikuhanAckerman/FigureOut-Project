@@ -19,20 +19,20 @@
 		<div class="container mt-5">
 			<form method="POST" th:object="${clientDTO}">
 				<div class="form-group">
-                	<label for="nome"><b>Nome completo</b></label>
+                	<label><b>Nome completo</b></label>
                 	<input type="text" class="form-control" placeholder="Insira o nome" th:field="${clientDTO.name}">
 
-					<label for="nome"><b>Email</b></label>
-                	<input type="text" class="form-control" placeholder="Insira o email">
+					<label><b>Email</b></label>
+                	<input type="text" class="form-control" placeholder="Insira o email" th:field="${clientDTO.email}">
 
-					<label for="nome"><b>Telefone</b></label>
-                	<input maxlength="14" id="phonenumber-input" type="text" class="form-control" placeholder="Insira o número">
+					<label><b>Telefone</b></label>
+                	<input maxlength="14" id="phonenumber-input" type="text" class="form-control" placeholder="Insira o número" th:field="${clientDTO.phoneNumber}">
 
-					<label for="nome"><b>CPF</b></label>
-                	<input maxlength=14 id="cpf-input" type="text" class="form-control" placeholder="Insira o CPF">
+					<label><b>CPF</b></label>
+                	<input maxlength=14 id="cpf-input" type="text" class="form-control" placeholder="Insira o CPF" th:field="${clientDTO.cpf}">
 
-					<label for="nome"><b>Endereço</b></label>
-                	<input type="text" class="form-control" placeholder="Insira o endereço">
+					<label><b>Endereço</b></label>
+                	<input type="text" class="form-control" placeholder="Insira o endereço" th:field="${clientDTO.address}">
             	</div>
 			</form>
 			<a class="btn btn-primary add-delete-button" href="index.html">Criar</a>

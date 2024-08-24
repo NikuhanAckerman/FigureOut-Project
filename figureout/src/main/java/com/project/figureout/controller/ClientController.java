@@ -11,7 +11,7 @@ import com.project.figureout.model.Client;
 import java.util.Optional;
 
 @Controller
-@RequestMapping(path = "/index")
+@RequestMapping(path = "/")
 public class ClientController {
 
     @Autowired
@@ -22,14 +22,14 @@ public class ClientController {
 
         Iterable<Client> clients =  clientRepository.findAll();
         model.addAttribute("clients", clients);
-        return "index";
+        return "/index";
     }
 
     @PostMapping("/createClient")
     public String addClient(Model model) {
         ClientDTO clientDTO = new ClientDTO();
         model.addAttribute("clientDTO", clientDTO);
-        return "index/createClient";
+        return "/index/createClient";
 
     }
 
