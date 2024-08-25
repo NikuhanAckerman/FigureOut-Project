@@ -86,15 +86,13 @@ public class ClientController {
         return "redirect:/index";
     }
 
-    @DeleteMapping("/deleteClient")
+    @DeleteMapping("/deleteClient/{id}")
     public String deleteClient(@PathVariable long id) {
-        Optional<Client> clientToDelete = clientRepository.findById(id);
 
-        clientRepository.delete(clientToDelete.get());
+        clientRepository.deleteById(id);
 
-        return "/deleteClient";
+        return "redirect:/index";
     }
-
 
 
 

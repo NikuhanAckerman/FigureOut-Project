@@ -50,10 +50,11 @@
 						<td><input type="checkbox" disabled="true" th:checked="${client.disabled}"></td>
 						<td>
 							<a class="btn btn-primary" th:href="@{updateClient/{id}(id=${client.id})}">Atualizar</a>
-							<form>
-								<a th:action="@{/deleteClient/{id}(id={client.id})}" method="POST" class="btn btn-danger btn-delete">Deletar</a>
-							</form>
 
+							<form th:action="@{/deleteClient/{id}(id=${client.id})}" method="POST">
+								<input type="hidden" name="_method" value="DELETE"/>
+								<button type="submit" class="btn btn-danger btn-delete">Deletar</button>
+							</form>
 						</td>
 					</tr>
 				</tbody>

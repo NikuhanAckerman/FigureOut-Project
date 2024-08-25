@@ -13,6 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     // allows put and delete type requests
 
+    /*
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**")
@@ -27,4 +28,6 @@ public class WebConfig implements WebMvcConfigurer {
         return registrationBean;
     }
 
+     */
+    
 }
