@@ -53,7 +53,7 @@
 
 							<form th:action="@{/deleteClient/{id}(id=${client.id})}" method="POST">
 								<input type="hidden" name="_method" value="DELETE"/>
-								<button type="submit" class="btn btn-danger btn-delete">Deletar</button>
+								<button type="submit" class="btn btn-danger btn-delete" onclick="return confirm('Tem certeza?')">Deletar</button>
 							</form>
 						</td>
 					</tr>
