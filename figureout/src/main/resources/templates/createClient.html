@@ -27,16 +27,19 @@
                 	<input type="text" class="form-control" placeholder="Insira o email"  th:field="*{email}" required>
 
 					<label><b>Telefone</b></label>
-                	<input maxlength="14" id="phonenumber-input" type="text" class="form-control" placeholder="Insira o número"  th:field="*{phoneNumber}" required>
+                	<input id="phonenumber-input" type="text" class="form-control" placeholder="Insira o número"  th:field="*{phoneNumber}" required>
 
 					<label><b>CPF</b></label>
-                	<input maxlength=14 id="cpf-input" type="text" class="form-control" placeholder="Insira o CPF"  th:field="*{cpf}" required>
+                	<input id="cpf-input" type="text" class="form-control" placeholder="Insira o CPF"  th:field="*{cpf}" required>
 
 					<label><b>Endereço</b></label>
                 	<input type="text" class="form-control" placeholder="Insira o endereço"  th:field="*{address}" required>
+
+					<label><b>Inativado</b></label>
+					<input class="form-check-input" type="checkbox" th:field="*{disabled}">
             	</div>
 				<button type="submit" class="btn btn-primary add-delete-button">Criar</button>
-				<a class="btn btn-danger add-delete-button" href="index">Voltar</a>
+				<a class="btn btn-danger add-delete-button" th:href="@{/index}">Voltar</a>
 			</form>
 
 

@@ -41,22 +41,17 @@ public class ClientController {
         client.setPhoneNumber(clientDTO.getPhoneNumber());
         client.setCpf(clientDTO.getCpf());
         client.setAddress(clientDTO.getAddress());
+        client.setDisabled(clientDTO.isDisabled());
 
         clientRepository.save(client);
 
-        System.out.println("post called");
-
         return "redirect:/index";
-    }
-
-    @GetMapping("/{id}")
-    public Optional<Client> getClientById(@PathVariable long id) {
-        return clientRepository.findById(id);
     }
 
     @GetMapping("/updateClient/{id}")
     public String showSpecificClient(@PathVariable long id, Model model) {
         Optional<Client> client = clientRepository.findById(id);
+
         ClientDTO clientDTO = new ClientDTO();
 
         clientDTO.setName(client.get().getName());
@@ -64,6 +59,7 @@ public class ClientController {
         clientDTO.setPhoneNumber(client.get().getPhoneNumber());
         clientDTO.setCpf(client.get().getCpf());
         clientDTO.setAddress(client.get().getAddress());
+        clientDTO.setDisabled(client.get().isDisabled());
 
         model.addAttribute("clientDTO", clientDTO);
         model.addAttribute("clientID", id);
@@ -71,14 +67,35 @@ public class ClientController {
         return "updateClient";
     }
 
-    @PostMapping("/updateClient/{id}")
-    public String updateClient(@PathVariable long id, Model model) {
+    @PutMapping("/updateClient/{id}")
+    public String updateClient(@PathVariable long id, @ModelAttribute ClientDTO clientDTO) {
         Optional<Client> clientToChange = clientRepository.findById(id);
 
+        if(clientToChange.isPresent()) {
+            Client client = clientToChange.get();
 
+            client.setName(clientDTO.getName());
+            client.setEmail(clientDTO.getEmail());
+            client.setPhoneNumber(clientDTO.getPhoneNumber());
+            client.setCpf(clientDTO.getCpf());
+            client.setAddress(clientDTO.getAddress());
+            client.setDisabled(clientDTO.isDisabled());
+            clientRepository.save(client);
+        }
 
-        return "updateClient";
+        return "redirect:/index";
     }
+
+    @DeleteMapping("/deleteClient")
+    public String deleteClient(@PathVariable long id) {
+        Optional<Client> clientToDelete = clientRepository.findById(id);
+
+        clientRepository.delete(clientToDelete.get());
+
+        return "/deleteClient";
+    }
+
+
 
 
 }

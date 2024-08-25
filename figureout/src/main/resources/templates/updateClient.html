@@ -18,27 +18,31 @@
 		</nav>
 		
 		<div class="container mt-5">
-			<form th:action="@{/updateClient/{id}" th:object="${clientDTO}" method="PUT">
+			<form  th:action="@{/updateClient/{id}(id=${clientID})}" th:object="${clientDTO}" method="POST">
+				<input type="hidden" name="_method" value="PUT"/>
+				<input type="hidden" th:value="${clientID}" name="id"/>
 				<div class="form-group">
                 	<label><b>Nome completo</b></label>
-                	<input type="text" class="form-control" value="th:field=${clientDTO.name}">
+                	<input type="text" class="form-control" th:field="*{name}" required>
 
 					<label><b>Email</b></label>
-                	<input type="text" class="form-control" value="joaodasilva@gmail.com">
+                	<input type="text" class="form-control" th:field="*{email}" required>
 
 					<label><b>Telefone</b></label>
-                	<input type="text" class="form-control" value="(81) 3274-7880">
+                	<input type="text" class="form-control" th:field="*{phoneNumber}" required>
 
 					<label><b>CPF</b></label>
-                	<input type="text" class="form-control" value="052.418.240-06">
+                	<input type="text" class="form-control" th:field="*{cpf}" required>
 
 					<label><b>Endereço</b></label>
-                	<input type="text" class="form-control" value="R. ## Nº##, ##">
-            	</div>
-				<button type="button" class="btn btn-primary add-delete-button">Atualizar</a>
-				<a class="btn btn-danger add-delete-button" href="index">Voltar</a>
-			</form>
+                	<input type="text" class="form-control" th:field="*{address}" required>
 
+					<label><b>Inativado</b></label>
+					<input class="form-check-input" type="checkbox" th:field="*{disabled}">
+            	</div>
+				<button type="submit" class="btn btn-primary add-delete-button">Atualizar</button>
+				<a class="btn btn-danger add-delete-button" th:href="@{/index}">Voltar</a>
+			</form>
 
 		</div>
 

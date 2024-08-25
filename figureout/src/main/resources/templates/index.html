@@ -35,6 +35,7 @@
 						<th>Telefone</th>
 						<th>CPF</th>
 						<th>Endereço</th>
+						<th>Inativo</th>
 						<th>Ações</th>
 					</tr>
 				</thead>
@@ -46,10 +47,13 @@
 						<td th:text = "${client.phoneNumber}"></td>
 						<td th:text = "${client.cpf}"></td>
 						<td th:text = "${client.address}"></td>
+						<td><input type="checkbox" disabled="true" th:checked="${client.disabled}"></td>
 						<td>
+							<a class="btn btn-primary" th:href="@{updateClient/{id}(id=${client.id})}">Atualizar</a>
+							<form>
+								<a th:action="@{/deleteClient/{id}(id={client.id})}" method="POST" class="btn btn-danger btn-delete">Deletar</a>
+							</form>
 
-							<a class="btn btn-primary" th:href="@{updateClient/{client.id}}">Atualizar</a>
-							<a href="#" class="btn btn-danger btn-delete">Deletar</a>
 						</td>
 					</tr>
 				</tbody>

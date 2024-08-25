@@ -25,4 +25,7 @@ public class ClientDTO {
     @NotEmpty(message = "Digite o endereço.")
     @Getter @Setter private String address;
 
+    @NotEmpty(message = "Inativado ou não?")
+    @Getter @Setter private boolean disabled = false;
+
 }

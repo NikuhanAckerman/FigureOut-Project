@@ -28,5 +28,7 @@ public class Client {
     @Column(name = "cli_endereço")
     @Getter @Setter private String address;
 
+    @Column(name = "cli_inativado")
+    @Getter @Setter private boolean disabled;
 
 }
