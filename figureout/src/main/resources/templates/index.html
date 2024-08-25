@@ -51,7 +51,7 @@
 						<td>
 							<a class="btn btn-primary" th:href="@{updateClient/{id}(id=${client.id})}">Atualizar</a>
 
-							<form th:action="@{/deleteClient/{id}(id=${client.id})}" method="POST">
+							<form th:action="@{/deleteClient/{id}(id=${client.id})}" method="POST" display="inline">
 								<input type="hidden" name="_method" value="DELETE"/>
 								<button type="submit" class="btn btn-danger btn-delete" onclick="return confirm('Tem certeza?')">Deletar</button>
 							</form>
