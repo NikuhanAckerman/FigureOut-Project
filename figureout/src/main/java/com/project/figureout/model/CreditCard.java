@@ -20,6 +20,9 @@ public class CreditCard {
     @Column(name = "car_id")
     @Getter @Setter private long id;
 
+    @Column(name = "car_nome_impresso")
+    @Getter @Setter private String printedName;
+
     @Column(name = "car_numero")
     @Getter @Setter private String cardNumber;
 
@@ -27,7 +30,14 @@ public class CreditCard {
     @Getter @Setter private String securityCode;
 
     @Column(name = "car_validade")
-    @Getter @Setter private Date validade;
+    @Getter @Setter private Date expiration;
 
+    @Column(name = "car_pais")
+    @Getter @Setter private String country;
 
+    @Column(name = "car_cli_id")
+    @Getter @Setter private long cli_id;
+    
+    @Column(name = "car_ban_id")
+    @Getter @Setter private long ban_id;
 }
