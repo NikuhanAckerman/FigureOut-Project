@@ -4,13 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7d38fb2a-9f03-4b6f-b7c2-dc693b4faac3" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+    <list default="true" id="3b82e33b-2b84-4135-a389-f19fc3041283" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/controller/ClientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/controller/ClientController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/dto/ClientDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/dto/ClientDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/model/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/model/Address.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/model/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/model/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figureout/src/main/resources/static/CSS/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/figureout/src/main/resources/static/CSS/styles.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/figureout/src/main/resources/templates/createClient.html" beforeDir="false" afterPath="$PROJECT_DIR$/figureout/src/main/resources/templates/createClient.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -25,7 +21,7 @@
   "customColor": "",
   "associatedIndex": 6
 }]]></component>
-  <component name="ProjectId" id="2lV3Qfsc5tNWVBqKyTcPwRAEnxT" />
+  <component name="ProjectId" id="2lVMGfcPwojQZb8kEncpL3mdtOO" />
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
@@ -37,19 +33,14 @@
     "kotlin-language-version-configured": "true"
   }
 }]]></component>
-  <component name="RecentsManager">
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.project.figureout.repository" />
-    </key>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="7d38fb2a-9f03-4b6f-b7c2-dc693b4faac3" name="Changes" comment="" />
-      <created>1725251404705</created>
+      <changelist id="3b82e33b-2b84-4135-a389-f19fc3041283" name="Changes" comment="" />
+      <created>1725260698801</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1725251404705</updated>
+      <updated>1725260698801</updated>
     </task>
     <servers />
   </component>

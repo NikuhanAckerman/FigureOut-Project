@@ -33,3 +33,7 @@ body {
     margin-top: 10px;
     font-size: 18px;
 }
+
+.small-input {
+    width: 100px;
+}

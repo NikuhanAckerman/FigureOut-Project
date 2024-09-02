@@ -24,7 +24,24 @@
                 	<input type="text" class="form-control" placeholder="Insira o seu nome completo" th:field="*{name}" required>
 
 					<label><b>Email</b></label>
-                	<input type="text" class="form-control" placeholder="Insira seu email"  th:field="*{email}" required>
+					<input type="email" id="email" class="form-control" placeholder="Insira o seu email" oninput="validateEmail(this)" th:field="*{email}" required>
+
+					<script>
+						function validateEmail(input) {
+                            const email = input.value;
+                            const errorMessage = document.getElementById('error-message');
+
+                            // Expressão regular básica para validar email
+                            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+                            // Verifica se o email corresponde ao padrão
+                            if (emailPattern.test(email)) {
+                                errorMessage.style.display = 'none';
+                            } else {
+                                errorMessage.style.display = 'block';
+                            }
+                        }
+					</script>
 
 					<label><b>Senha</b></label>
 					<input type="text" class="form-control" placeholder="Insira uma senha forte!"  th:field="*{password}" required>
@@ -71,6 +88,64 @@
 
 			</form>
 
+			<form th:action="@{/createClient}" th:object="${phoneDTO}" method="POST">
+				<div class="form-group">
+					<label><b>Tipo de telefone</b></label>
+					<div class="radio-group">
+						<label>
+							<input type="radio" name="cellphone" value="Fixo" th:field="*{cellphone}" required />
+							Fixo
+						</label>
+						<label>
+							<input type="radio" name="cellphone" value="Celular" th:field="*{cellphone}" />
+							Celular
+						</label>
+					</div>
+
+					<label><b>DDD</b></label>
+					<input type="text" id="ddd" class="form-control" placeholder="(11)" oninput="applyDDDMask(this)" th:field="*{ddd}" maxlength="4" required>
+
+					<script>
+						function applyDDDMask(input) {
+                            // Remove qualquer caractere que não seja número
+                            let value = input.value.replace(/\D/g, '');
+
+                            // Adiciona a máscara no formato (XX)
+                            if (value.length > 2) {
+                                value = '(' + value.slice(0, 2) + ') ' + value.slice(2, 4);
+                            } else {
+                                value = '(' + value + ')';
+                            }
+                            // Atualiza o valor do campo de entrada
+                            input.value = value;
+                        }
+					</script>
+
+					<label><b>Número de telefone</b></label>
+					<input type="text" id="phone" class="form-control" placeholder="Digite o número de telefone" oninput="applyPhoneMask(this)" th:field="*{phoneNumber}" maxlength="10" required>
+
+					<script>
+						function applyPhoneMask(input) {
+                            // Remove qualquer caractere que não seja número
+                            let value = input.value.replace(/\D/g, '');
+
+                            // Aplica a máscara no formato XXXX-XXXX ou XXXXX-XXXX
+                            if (value.length <= 8) {
+                                // Formato XXXX-XXXX
+                                value = value.slice(0, 4) + (value.length > 4 ? '-' + value.slice(4) : '');
+                            } else {
+                                // Formato XXXXX-XXXX
+                                value = value.slice(0, 5) + '-' + value.slice(5);
+                            }
+                            // Atualiza o valor do campo de entrada
+                            input.value = value;
+                        }
+					</script>
+
+				</div>
+
+			</form>
+
 			<form th:action="@{/createClient}" th:object="${addressDTO}" method="POST">
 				<div class="form-group">
 					<label><b>Tipo de Residência</b></label>
@@ -80,25 +155,72 @@
 					<input type="text" class="form-control" placeholder="(Rua, Avenida, etc...)"  th:field="*{addressingType}" required>
 
 					<label><b>Logradouro</b></label>
-					<input id="text" type="text" class="form-control" placeholder="Insira o logradouro"  th:field="*{phoneNumber}" required>
+					<input type="text" class="form-control" placeholder="Insira o logradouro"  th:field="*{addressing}" required>
 
 					<label><b>Nº de residência</b></label>
-					<input id="text" type="text" class="form-control" placeholder="Insira o Nº da residência"  th:field="*{cpf}" maxlength="5" required>
+					<input type="text" id="residenceNumber" class="form-control" placeholder="Insira o número da residência" oninput="applyResidenceMask(this)" th:field="*{houseNumber}" maxlength="5" required>
+
+					<script>
+						function applyResidenceMask(input) {
+                            // Remove qualquer caractere que não seja número
+                            let value = input.value.replace(/\D/g, '');
+
+                            // Limita o valor a 5 dígitos
+                            if (value.length > 5) {
+                                value = value.slice(0, 5);
+                            }
+
+                            // Atualiza o valor do campo de entrada
+                            input.value = value;
+
+                            // Valida o valor
+                            validateResidenceNumber(value);
+                        }
+
+                        function validateResidenceNumber(value) {
+                            const errorMessage = document.getElementById('error-message');
+
+                            // Exibe mensagem de erro se o valor for "0" ou vazio
+                            if (value === '' || value === '0') {
+                                errorMessage.style.display = 'block';
+                            } else {
+                                errorMessage.style.display = 'none';
+                            }
+                        }
+					</script>
+
+					<label><b>CEP</b></label>
+					<input type="text" id="cep" class="form-control" placeholder="00000-000" oninput="applyCepMask(this)" th:field="*{cep}" maxlength="9" required>
+
+					<script>
+						function applyCepMask(input) {
+                            // Remove qualquer caractere que não seja número
+                            let value = input.value.replace(/\D/g, '');
+
+                            // Adiciona a máscara no formato XXXXX-XXX
+                            if (value.length > 5) {
+                                value = value.slice(0, 5) + '-' + value.slice(5, 8);
+                            }
+
+                            // Atualiza o valor do campo de entrada
+                            input.value = value;
+                        }
+					</script>
 
 					<label><b>Bairro</b></label>
-					<input type="text" class="form-control" placeholder="Insira o bairro"  th:field="*{address}" required>
+					<input type="text" class="form-control" placeholder="Insira o bairro"  th:field="*{neighbourhood}" required>
 
 					<label><b>Cidade</b></label>
-					<input type="text" class="form-control" placeholder="Insira a cidade"  th:field="*{address}" required>
+					<input type="text" class="form-control" placeholder="Insira a cidade"  th:field="*{city}" required>
 
 					<label><b>Estado</b></label>
-					<input type="text" class="form-control" placeholder="Insira o Estado"  th:field="*{address}" required>
+					<input type="text" class="form-control" placeholder="Insira o Estado"  th:field="*{state}" required>
 
 					<label><b>País</b></label>
-					<input type="text" class="form-control" placeholder="Insira o País"  th:field="*{address}" required>
+					<input type="text" class="form-control" placeholder="Insira o País"  th:field="*{country}" required>
 
 					<label><b>Observação</b></label>
-					<input type="text" class="form-control" placeholder="Insira uma observação (opcional)"  th:field="*{address}">
+					<input type="text" class="form-control" placeholder="Insira uma observação (opcional)"  th:field="*{observation}">
 
 				</div>
 				<button type="submit" class="btn btn-primary add-delete-button">Criar</button>
