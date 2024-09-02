@@ -38,9 +38,9 @@ public class ClientController {
         Client client = new Client();
         client.setName(clientDTO.getName());
         client.setEmail(clientDTO.getEmail());
-        //client.setPhoneNumber(clientDTO.getPhoneNumber());
+
         client.setCpf(clientDTO.getCpf());
-        //client.setAddress(clientDTO.getAddress());
+
         client.setDisabled(clientDTO.isDisabled());
 
         clientRepository.save(client);
@@ -76,9 +76,7 @@ public class ClientController {
 
             client.setName(clientDTO.getName());
             client.setEmail(clientDTO.getEmail());
-            //client.setPhoneNumber(clientDTO.getPhoneNumber());
             client.setCpf(clientDTO.getCpf());
-            //client.setAddress(clientDTO.getAddress());
             client.setDisabled(clientDTO.isDisabled());
             clientRepository.save(client);
         }
