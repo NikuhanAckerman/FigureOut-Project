@@ -38,9 +38,9 @@ public class ClientController {
         Client client = new Client();
         client.setName(clientDTO.getName());
         client.setEmail(clientDTO.getEmail());
-        client.setPhoneNumber(clientDTO.getPhoneNumber());
+        //client.setPhoneNumber(clientDTO.getPhoneNumber());
         client.setCpf(clientDTO.getCpf());
-        client.setAddress(clientDTO.getAddress());
+        //client.setAddress(clientDTO.getAddress());
         client.setDisabled(clientDTO.isDisabled());
 
         clientRepository.save(client);
@@ -56,9 +56,9 @@ public class ClientController {
 
         clientDTO.setName(client.get().getName());
         clientDTO.setEmail(client.get().getEmail());
-        clientDTO.setPhoneNumber(client.get().getPhoneNumber());
+        //clientDTO.setPhoneNumber(client.get().getPhoneNumber());
         clientDTO.setCpf(client.get().getCpf());
-        clientDTO.setAddress(client.get().getAddress());
+        //clientDTO.setAddress(client.get().getAddress());
         clientDTO.setDisabled(client.get().isDisabled());
 
         model.addAttribute("clientDTO", clientDTO);
@@ -76,9 +76,9 @@ public class ClientController {
 
             client.setName(clientDTO.getName());
             client.setEmail(clientDTO.getEmail());
-            client.setPhoneNumber(clientDTO.getPhoneNumber());
+            //client.setPhoneNumber(clientDTO.getPhoneNumber());
             client.setCpf(clientDTO.getCpf());
-            client.setAddress(clientDTO.getAddress());
+            //client.setAddress(clientDTO.getAddress());
             client.setDisabled(clientDTO.isDisabled());
             clientRepository.save(client);
         }

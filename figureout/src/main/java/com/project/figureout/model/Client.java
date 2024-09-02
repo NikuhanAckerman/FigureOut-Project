@@ -23,22 +23,13 @@ public class Client {
 
     @Column(name = "cli_cpf")
     @Getter @Setter private String cpf;
-    
-    // É bom tirar, tem as outras colunas pra telefone.
-    //@Column(name = "cli_telefone")
-    //@Getter @Setter private String phoneNumber;
 
     @Column(name = "cli_senha")
     @Getter @Setter private String password;
 
     @Column(name = "cli_nascimento")
     @Getter @Setter private Date birthday;
-    
-    // Melhor tirar isso aqui, tipo, essa coluna nem existe mais no outro schema.
-    //@Column(name = "cli_endereco")
-    //@Getter @Setter private String address;
-    
-    // Mudei o nome pro novo schema "FigureOutV1". Recomendo trocar o nome do atributo também se você quiser :p
+
     @Column(name = "cli_ativo")
     @Getter @Setter private boolean disabled;
 
