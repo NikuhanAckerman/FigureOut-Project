@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Date;
+
 public class ClientDTO {
 
     @NotEmpty(message = "Digite o nome.")
@@ -19,6 +21,9 @@ public class ClientDTO {
     @Size(min = 14, max = 14)
     @NotEmpty(message = "Digite o CPF.")
     @Getter @Setter private String cpf;
+
+    @NotEmpty(message = "Digite a data de nascimento.")
+    @Getter @Setter private Date birthday;
 
     @NotEmpty(message = "Inativado ou não?")
     @Getter @Setter private boolean disabled = false;

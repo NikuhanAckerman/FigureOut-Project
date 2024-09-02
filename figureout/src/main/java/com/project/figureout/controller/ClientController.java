@@ -68,8 +68,8 @@ public class ClientController {
     public String addClientPost(@ModelAttribute("clientDTO") ClientDTO clientDTO,
                                 @ModelAttribute("addressDTO") AddressDTO addressDTO,
                                 @ModelAttribute("phoneDTO") PhoneDTO phoneDTO,
-                                @ModelAttribute("genderDTO") GenderDTO genderDTO,
-                                @RequestParam String password) {
+                                @ModelAttribute("genderDTO") GenderDTO genderDTO /*,
+                                @RequestParam String password*/) {
 
         //Atributo de gênero
         Gender gender = new Gender();
@@ -81,11 +81,13 @@ public class ClientController {
         client.setName(clientDTO.getName());
         client.setEmail(clientDTO.getEmail());
         client.setCpf(clientDTO.getCpf());
+        client.setBirthday(clientDTO.getBirthday());
         client.setDisabled(clientDTO.isDisabled());
+        //client.setGender(clientDTO.getGender());
         // Validação da senha
-        if (!client.isValidPassword(clientDTO.getPassword())) {
-            return "Senha inválida. A senha deve ter pelo menos 8 caracteres, incluir letras maiúsculas, minúsculas e caracteres especiais.";
-        }
+//        if (!client.isValidPassword(clientDTO.getPassword())) {
+//            return "Senha inválida. A senha deve ter pelo menos 8 caracteres, incluir letras maiúsculas, minúsculas e caracteres especiais.";
+//        }
         client.setPassword(clientDTO.getPassword());
         clientRepository.save(client);
 
@@ -130,6 +132,7 @@ public class ClientController {
         clientDTO.setEmail(client.get().getEmail());
         clientDTO.setPassword(client.get().getPassword());
         clientDTO.setCpf(client.get().getCpf());
+        clientDTO.setBirthday(client.get().getBirthday());
         clientDTO.setDisabled(client.get().isDisabled());
 
         //Atributos de endereço.
@@ -185,6 +188,7 @@ public class ClientController {
             client.setEmail(clientDTO.getEmail());
             client.setPassword(clientDTO.getPassword());
             client.setCpf(clientDTO.getCpf());
+            client.setBirthday(clientDTO.getBirthday());
             client.setDisabled(clientDTO.isDisabled());
 
             //Atributos de endereço.

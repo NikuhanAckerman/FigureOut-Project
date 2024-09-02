@@ -16,5 +16,4 @@ public class Gender {
     @Column(name = "gen_genero")
     @Getter @Setter private String gender;
 
-
 }
