@@ -77,7 +77,15 @@
                         });
 					</script>
 
-					<label><b>Gênero</b></label>
+					<label><b>Inativado?</b></label>
+					<input class="form-check-input" type="checkbox" th:field="*{disabled}">
+
+				</div>
+
+			</form>
+
+			<form th:action="@{/createClient}" th:object="${genderDTO}" method="POST">
+				<label><b>Gênero</b></label>
 					<div class="radio-group">
 						<label>
 							<input type="radio" name="gender" value="Masculino" th:field="*{gender}" required />
@@ -92,12 +100,6 @@
 							Outro
 						</label>
 					</div>
-
-					<label><b>Inativado?</b></label>
-					<input class="form-check-input" type="checkbox" th:field="*{disabled}">
-
-            	</div>
-
 			</form>
 
 			<form th:action="@{/createClient}" th:object="${phoneDTO}" method="POST">
@@ -105,11 +107,11 @@
 					<label><b>Tipo de telefone</b></label>
 					<div class="radio-group">
 						<label>
-							<input type="radio" name="cellphone" value="Fixo" th:field="*{cellphone}" required />
+							<input type="radio" name="cellphone" value="0" th:field="*{cellphone}" required />
 							Fixo
 						</label>
 						<label>
-							<input type="radio" name="cellphone" value="Celular" th:field="*{cellphone}" />
+							<input type="radio" name="cellphone" value="1" th:field="*{cellphone}" />
 							Celular
 						</label>
 					</div>

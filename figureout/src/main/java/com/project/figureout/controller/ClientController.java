@@ -26,24 +26,27 @@ public class ClientController {
 
     @Autowired
     private ClientRepository clientRepository;
+    @Autowired
     private AddressRepository addressRepository;
+    @Autowired
     private PhoneRepository phoneRepository;
+    @Autowired
     private GenderRepository genderRepository;
 
     @GetMapping({"", "/", "/index"})
     public String showClients(Model model) {
 
         Iterable<Gender> genders =  genderRepository.findAll();
-        model.addAttribute("genders", genders);
+        model.addAttribute("gender", genders);
 
         Iterable<Client> clients =  clientRepository.findAll();
-        model.addAttribute("clients", clients);
+        model.addAttribute("client", clients);
 
         Iterable<Address> addresses =  addressRepository.findAll();
-        model.addAttribute("addresses", addresses);
+        model.addAttribute("address", addresses);
 
         Iterable<Phone> phones =  phoneRepository.findAll();
-        model.addAttribute("phones", phones);
+        model.addAttribute("phone", phones);
         return "index";
     }
 
@@ -89,7 +92,7 @@ public class ClientController {
         // Atributos de endereço.
         Address address = new Address();
         address.setTypeOfResidence(addressDTO.getTypeOfResidence());
-        address.setAdressing(addressDTO.getAdressing());
+        address.setAdressing(addressDTO.getAddressing());
         address.setHouseNumber(addressDTO.getHouseNumber());
         address.setNeighbourhood(addressDTO.getNeighbourhood());
         address.setAddressingType(addressDTO.getAddressingType());
@@ -132,7 +135,7 @@ public class ClientController {
         //Atributos de endereço.
         AddressDTO addressDTO = new AddressDTO();
         addressDTO.setTypeOfResidence(address.get().getTypeOfResidence());
-        addressDTO.setAdressing(address.get().getAdressing());
+        addressDTO.setAddressing(address.get().getAdressing());
         addressDTO.setHouseNumber(address.get().getHouseNumber());
         addressDTO.setNeighbourhood(address.get().getNeighbourhood());
         addressDTO.setAddressingType(address.get().getAddressingType());
@@ -187,7 +190,7 @@ public class ClientController {
             //Atributos de endereço.
             Address address = addressToChange.get();
             address.setTypeOfResidence(addressDTO.getTypeOfResidence());
-            address.setAdressing(addressDTO.getAdressing());
+            address.setAdressing(addressDTO.getAddressing());
             address.setHouseNumber(addressDTO.getHouseNumber());
             address.setNeighbourhood(addressDTO.getNeighbourhood());
             address.setAddressingType(addressDTO.getAddressingType());
