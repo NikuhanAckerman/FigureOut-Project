@@ -13,17 +13,14 @@ public class ClientDTO {
     @NotEmpty(message = "Digite o email.")
     @Getter @Setter private String email;
 
-    @NotEmpty(message = "Digite o número de telefone.")
-    @Size(min = 15, max = 15)
-    // (11) 98224-8652
-    @Getter @Setter private String phoneNumber;
+//    @NotEmpty(message = "Digite o número de telefone.")
+//    @Size(min = 15, max = 15)
+//    // (11) 98224-8652
+//    @Getter @Setter private String phoneNumber;
 
     @Size(min = 14, max = 14)
     @NotEmpty(message = "Digite o CPF.")
     @Getter @Setter private String cpf;
-
-    @NotEmpty(message = "Digite o endereço.")
-    @Getter @Setter private String address;
 
     @NotEmpty(message = "Inativado ou não?")
     @Getter @Setter private boolean disabled = false;

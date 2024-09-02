@@ -23,7 +23,7 @@ public class Address {
     @Getter @Setter private String houseNumber;
 
     @Column(name = "end_bairro")
-    @Getter @Setter private String neighbourHood;
+    @Getter @Setter private String neighbourhood;
 
     @Column(name = "end_tipo_logradouro")
     @Getter @Setter private String addressingType;
