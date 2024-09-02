@@ -4,11 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0c6d7202-73ff-48a5-b81a-b91cfdfac5c9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+    <list default="true" id="9d4a8fda-2ddd-436f-acef-e163d49b5180" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/controller/AddressController.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/controller/ClientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/controller/ClientController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figureout/src/main/resources/templates/createClient.html" beforeDir="false" afterPath="$PROJECT_DIR$/figureout/src/main/resources/templates/createClient.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,7 +22,7 @@
   "customColor": "",
   "associatedIndex": 6
 }]]></component>
-  <component name="ProjectId" id="2lUdR9v2emZd0ctnRuEezOTd33Y" />
+  <component name="ProjectId" id="2lUhlMC39PcMQvrm0SM26h5WO2x" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
@@ -31,6 +31,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Application.FigureoutApplication.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "ignore.virus.scanning.warn.message": "true",
@@ -40,17 +41,16 @@
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.project.figureout.repository" />
-      <recent name="com.project.figureout.controller" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="0c6d7202-73ff-48a5-b81a-b91cfdfac5c9" name="Changes" comment="" />
-      <created>1725238580391</created>
+      <changelist id="9d4a8fda-2ddd-436f-acef-e163d49b5180" name="Changes" comment="" />
+      <created>1725240715552</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1725238580391</updated>
+      <updated>1725240715552</updated>
     </task>
     <servers />
   </component>
