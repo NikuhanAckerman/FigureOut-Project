@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "Clientes")
@@ -33,12 +34,23 @@ public class Client {
     @Column(name = "cli_ativo")
     @Getter @Setter private boolean disabled;
 
-    @Column(name = "cli_tra_id")
-    @Getter @Setter private long tra_id;
+    // Conferir depois se precisa arrumar a(s) chave(s) estrangeira(s).
+    @ManyToOne
+    @JoinColumn(name = "cli_gen_id")
+    @Getter @Setter Gender gender;
 
-    @Column(name = "cli_gen_id")
-    @Getter @Setter private long gen_id;
+    @OneToOne
+    @PrimaryKeyJoinColumn(name = "cli_tel_id")
+    @Getter @Setter Phone phone;
 
-    @Column(name = "cli_tel_id")
-    @Getter @Setter private long tel_id;
+    // Expressão regular para validar a senha
+    // (Incluir no mínimo 8 caracteres, letra mínuscula, maiúscula e caractere especial).
+    private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+
+    public boolean isValidPassword(String password) {
+        if (password == null) {
+            return false;
+        }
+        return password.matches(PASSWORD_PATTERN);
+    }
 }

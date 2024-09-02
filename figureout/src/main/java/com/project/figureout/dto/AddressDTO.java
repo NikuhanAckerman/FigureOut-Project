@@ -12,7 +12,7 @@ public class AddressDTO {
     @Getter @Setter private String typeOfResidence;
 
     @NotEmpty(message = "Insira o seu logradouro.")
-    @Getter @Setter private String adressing;
+    @Getter @Setter private String addressing;
 
     @NotEmpty(message = "Insira o número da sua residência")
     @Size(min = 1, max = 5)
