@@ -2,11 +2,14 @@ package com.project.figureout.controller;
 
 import com.project.figureout.dto.AddressDTO;
 import com.project.figureout.dto.ClientDTO;
+import com.project.figureout.dto.GenderDTO;
 import com.project.figureout.dto.PhoneDTO;
 import com.project.figureout.model.Address;
+import com.project.figureout.model.Gender;
 import com.project.figureout.model.Phone;
 import com.project.figureout.repository.AddressRepository;
 import com.project.figureout.repository.ClientRepository;
+import com.project.figureout.repository.GenderRepository;
 import com.project.figureout.repository.PhoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,9 +27,13 @@ public class ClientController {
     private ClientRepository clientRepository;
     private AddressRepository addressRepository;
     private PhoneRepository phoneRepository;
+    private GenderRepository genderRepository;
 
     @GetMapping({"", "/", "/index"})
     public String showClients(Model model) {
+
+        Iterable<Gender> genders =  genderRepository.findAll();
+        model.addAttribute("genders", genders);
 
         Iterable<Client> clients =  clientRepository.findAll();
         model.addAttribute("clients", clients);
@@ -54,15 +61,22 @@ public class ClientController {
     @PostMapping("/createClient")
     public String addClientPost(@ModelAttribute("clientDTO") ClientDTO clientDTO,
                                 @ModelAttribute("addressDTO") AddressDTO addressDTO,
-                                @ModelAttribute("phoneDTO") PhoneDTO phoneDTO) {
+                                @ModelAttribute("phoneDTO") PhoneDTO phoneDTO,
+                                @ModelAttribute("genderDTO") GenderDTO genderDTO,
+                                @RequestParam String password) {
+
+        //Atributo de gênero
+        Gender gender = new Gender();
+        gender.setGender(genderDTO.getGender());
+        genderRepository.save(gender);
 
         // Atributos de cliente.
         Client client = new Client();
         client.setName(clientDTO.getName());
         client.setEmail(clientDTO.getEmail());
+        client.setPassword(clientDTO.getPassword());
         client.setCpf(clientDTO.getCpf());
         client.setDisabled(clientDTO.isDisabled());
-
         clientRepository.save(client);
 
         // Atributos de endereço.
@@ -77,7 +91,6 @@ public class ClientController {
         address.setState(addressDTO.getState());
         address.setCountry(addressDTO.getCountry());
         address.setObservation(addressDTO.getObservation());
-
         addressRepository.save(address);
 
         // Atributos de telefone.
@@ -85,7 +98,6 @@ public class ClientController {
         phone.setCellphone(phoneDTO.isCellphone());
         phone.setDdd(phoneDTO.getDdd());
         phone.setPhoneNumber(phoneDTO.getPhoneNumber());
-
         phoneRepository.save(phone);
 
         return "redirect:/index";
@@ -96,11 +108,17 @@ public class ClientController {
         Optional<Client> client = clientRepository.findById(id);
         Optional<Address> address = addressRepository.findById(id);
         Optional<Phone> phone = phoneRepository.findById(id);
+        Optional<Gender> gender = genderRepository.findById(id);
+
+        //Atributo de gênero
+        GenderDTO genderDTO = new GenderDTO();
+        genderDTO.setGender((gender.get().getGender()));
 
         //Atributos de cliente
         ClientDTO clientDTO = new ClientDTO();
         clientDTO.setName(client.get().getName());
         clientDTO.setEmail(client.get().getEmail());
+        clientDTO.setPassword(client.get().getPassword());
         clientDTO.setCpf(client.get().getCpf());
         clientDTO.setDisabled(client.get().isDisabled());
 
@@ -123,6 +141,8 @@ public class ClientController {
         phoneDTO.setDdd(phone.get().getDdd());
         phoneDTO.setPhoneNumber(phone.get().getPhoneNumber());
 
+        model.addAttribute("genderDTO", genderDTO);
+        model.addAttribute("genderID", id);
         model.addAttribute("clientDTO", clientDTO);
         model.addAttribute("clientID", id);
         model.addAttribute("addressDTO", addressDTO);
@@ -136,17 +156,24 @@ public class ClientController {
     @PutMapping("/updateClient/{id}")
     public String updateClient(@PathVariable long id, @ModelAttribute ClientDTO clientDTO,
                                @ModelAttribute AddressDTO addressDTO,
-                               @ModelAttribute PhoneDTO phoneDTO) {
+                               @ModelAttribute PhoneDTO phoneDTO,
+                               @ModelAttribute GenderDTO genderDTO) {
         Optional<Client> clientToChange = clientRepository.findById(id);
         Optional<Address> addressToChange = addressRepository.findById(id);
         Optional<Phone> phoneToChange = phoneRepository.findById(id);
+        Optional<Gender> genderToChange = genderRepository.findById(id);
 
 
         if(clientToChange.isPresent()) {
+            //Atributo de gênero
+            Gender gender = genderToChange.get();
+            gender.setGender(genderDTO.getGender());
+
             //Atributos de cliente
             Client client = clientToChange.get();
             client.setName(clientDTO.getName());
             client.setEmail(clientDTO.getEmail());
+            client.setPassword(clientDTO.getPassword());
             client.setCpf(clientDTO.getCpf());
             client.setDisabled(clientDTO.isDisabled());
 
@@ -169,6 +196,7 @@ public class ClientController {
             phone.setDdd(phoneDTO.getDdd());
             phone.setPhoneNumber(phoneDTO.getPhoneNumber());
 
+            genderRepository.save(gender);
             clientRepository.save(client);
             addressRepository.save(address);
             phoneRepository.save(phone);
@@ -180,6 +208,7 @@ public class ClientController {
     @DeleteMapping("/deleteClient/{id}")
     public String deleteClient(@PathVariable long id) {
 
+        genderRepository.deleteById(id);
         clientRepository.deleteById(id);
         addressRepository.deleteById(id);
         phoneRepository.deleteById(id);

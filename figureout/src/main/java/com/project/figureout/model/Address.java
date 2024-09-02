@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Endereços")
+@Table(name = "Enderecos")
 public class Address {
 
     @Id
@@ -43,6 +43,7 @@ public class Address {
     @Column(name = "end_observacao")
     @Getter @Setter private String observation;
 
+    @ManyToOne
     @Column(name = "end_cli_id")
     @Getter @Setter private long cli_id;
 }
