@@ -12,6 +12,7 @@ import com.project.figureout.repository.ClientRepository;
 import com.project.figureout.repository.GenderRepository;
 import com.project.figureout.repository.PhoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -48,10 +49,12 @@ public class ClientController {
 
     @GetMapping("/createClient")
     public String addClient(Model model) {
+        GenderDTO genderDTO = new GenderDTO();
         ClientDTO clientDTO = new ClientDTO();
         AddressDTO addressDTO = new AddressDTO();
         PhoneDTO phoneDTO = new PhoneDTO();
 
+        model.addAttribute("genderDTO", genderDTO);
         model.addAttribute("clientDTO", clientDTO);
         model.addAttribute("addressDTO", addressDTO);
         model.addAttribute("phoneDTO", phoneDTO);
@@ -74,9 +77,13 @@ public class ClientController {
         Client client = new Client();
         client.setName(clientDTO.getName());
         client.setEmail(clientDTO.getEmail());
-        client.setPassword(clientDTO.getPassword());
         client.setCpf(clientDTO.getCpf());
         client.setDisabled(clientDTO.isDisabled());
+        // Validação da senha
+        if (!client.isValidPassword(clientDTO.getPassword())) {
+            return "Senha inválida. A senha deve ter pelo menos 8 caracteres, incluir letras maiúsculas, minúsculas e caracteres especiais.";
+        }
+        client.setPassword(clientDTO.getPassword());
         clientRepository.save(client);
 
         // Atributos de endereço.

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "Clientes")
@@ -33,13 +34,14 @@ public class Client {
     @Column(name = "cli_ativo")
     @Getter @Setter private boolean disabled;
 
+    // Conferir depois se precisa arrumar a(s) chave(s) estrangeira(s).
     @ManyToOne
-    @Column(name = "cli_gen_id")
-    @Getter @Setter private long gen_id;
+    @JoinColumn(name = "cli_gen_id")
+    @Getter @Setter Gender gender;
 
     @OneToOne
-    @Column(name = "cli_tel_id")
-    @Getter @Setter private long tel_id;
+    @PrimaryKeyJoinColumn(name = "cli_tel_id")
+    @Getter @Setter Phone phone;
 
     // Expressão regular para validar a senha
     // (Incluir no mínimo 8 caracteres, letra mínuscula, maiúscula e caractere especial).

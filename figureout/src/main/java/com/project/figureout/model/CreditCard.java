@@ -35,9 +35,10 @@ public class CreditCard {
     @Column(name = "car_pais")
     @Getter @Setter private String country;
 
+    // Conferir depois se precisa arrumar a(s) chave(s) estrangeira(s).
     @Column(name = "car_cli_id")
     @Getter @Setter private long cli_id;
-    
+
     @Column(name = "car_ban_id")
     @Getter @Setter private long ban_id;
 }

@@ -16,11 +16,6 @@ public class ClientDTO {
     @NotEmpty(message = "Digite uma senha.")
     @Getter @Setter private String password;
 
-//    @NotEmpty(message = "Digite o número de telefone.")
-//    @Size(min = 15, max = 15)
-//    // (11) 98224-8652
-//    @Getter @Setter private String phoneNumber;
-
     @Size(min = 14, max = 14)
     @NotEmpty(message = "Digite o CPF.")
     @Getter @Setter private String cpf;

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Entity
 @Table(name = "Enderecos")
 public class Address {
@@ -43,7 +45,8 @@ public class Address {
     @Column(name = "end_observacao")
     @Getter @Setter private String observation;
 
+    // Conferir depois se precisa arrumar a(s) chave(s) estrangeira(s).
     @ManyToOne
-    @Column(name = "end_cli_id")
-    @Getter @Setter private long cli_id;
+    @JoinColumn(name = "end_cli_id")
+    @Getter @Setter Client clients;
 }
