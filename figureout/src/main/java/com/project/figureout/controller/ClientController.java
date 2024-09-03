@@ -71,27 +71,17 @@ public class ClientController {
                                 @ModelAttribute("genderDTO") GenderDTO genderDTO /*,
                                 @RequestParam String password*/) {
 
-        //Atributo de gênero
+        // Atributos de telefone.
+        Phone phone = new Phone();
+        phone.setCellphone(phoneDTO.isCellphone());
+        phone.setDdd(phoneDTO.getDdd());
+        phone.setPhoneNumber(phoneDTO.getPhoneNumber());
+        phoneRepository.save(phone);
+
         Gender gender = new Gender();
         gender.setGender(genderDTO.getGender());
         genderRepository.save(gender);
 
-        // Atributos de cliente.
-        Client client = new Client();
-        client.setName(clientDTO.getName());
-        client.setEmail(clientDTO.getEmail());
-        client.setCpf(clientDTO.getCpf());
-        client.setBirthday(clientDTO.getBirthday());
-        client.setDisabled(clientDTO.isDisabled());
-        //client.setGender(clientDTO.getGender());
-        // Validação da senha
-//        if (!client.isValidPassword(clientDTO.getPassword())) {
-//            return "Senha inválida. A senha deve ter pelo menos 8 caracteres, incluir letras maiúsculas, minúsculas e caracteres especiais.";
-//        }
-        client.setPassword(clientDTO.getPassword());
-        clientRepository.save(client);
-
-        // Atributos de endereço.
         Address address = new Address();
         address.setTypeOfResidence(addressDTO.getTypeOfResidence());
         address.setAdressing(addressDTO.getAddressing());
@@ -105,12 +95,27 @@ public class ClientController {
         address.setObservation(addressDTO.getObservation());
         addressRepository.save(address);
 
-        // Atributos de telefone.
-        Phone phone = new Phone();
-        phone.setCellphone(phoneDTO.isCellphone());
-        phone.setDdd(phoneDTO.getDdd());
-        phone.setPhoneNumber(phoneDTO.getPhoneNumber());
-        phoneRepository.save(phone);
+        // Atributos de cliente.
+        Client client = new Client();
+        client.setName(clientDTO.getName());
+        client.setEmail(clientDTO.getEmail());
+        client.setCpf(clientDTO.getCpf());
+        client.setBirthday(clientDTO.getBirthday());
+        client.setEnabled(clientDTO.isEnabled());
+        client.setGender(gender);
+        client.setPhone(phone);
+
+        // Validação da senha
+//        if (!client.isValidPassword(clientDTO.getPassword())) {
+//            return "Senha inválida. A senha deve ter pelo menos 8 caracteres, incluir letras maiúsculas, minúsculas e caracteres especiais.";
+//        }
+        client.setPassword(clientDTO.getPassword());
+        clientRepository.save(client);
+
+        // Atributos de endereço.
+
+
+
 
         return "redirect:/index";
     }
@@ -133,7 +138,7 @@ public class ClientController {
         clientDTO.setPassword(client.get().getPassword());
         clientDTO.setCpf(client.get().getCpf());
         clientDTO.setBirthday(client.get().getBirthday());
-        clientDTO.setDisabled(client.get().isDisabled());
+        clientDTO.setEnabled(client.get().isEnabled());
 
         //Atributos de endereço.
         AddressDTO addressDTO = new AddressDTO();
@@ -189,7 +194,7 @@ public class ClientController {
             client.setPassword(clientDTO.getPassword());
             client.setCpf(clientDTO.getCpf());
             client.setBirthday(clientDTO.getBirthday());
-            client.setDisabled(clientDTO.isDisabled());
+            client.setEnabled(clientDTO.isEnabled());
 
             //Atributos de endereço.
             Address address = addressToChange.get();

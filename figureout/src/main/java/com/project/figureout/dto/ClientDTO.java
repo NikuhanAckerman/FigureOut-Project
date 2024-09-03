@@ -1,5 +1,7 @@
 package com.project.figureout.dto;
 
+import com.project.figureout.model.Gender;
+import com.project.figureout.model.Phone;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -15,17 +17,22 @@ public class ClientDTO {
     @NotEmpty(message = "Digite o email.")
     @Getter @Setter private String email;
 
-    @NotEmpty(message = "Digite uma senha.")
-    @Getter @Setter private String password;
-
     @Size(min = 14, max = 14)
     @NotEmpty(message = "Digite o CPF.")
     @Getter @Setter private String cpf;
 
+    @NotEmpty(message = "Digite uma senha.")
+    @Getter @Setter private String password;
+
     @NotEmpty(message = "Digite a data de nascimento.")
     @Getter @Setter private Date birthday;
 
-    @NotEmpty(message = "Inativado ou não?")
-    @Getter @Setter private boolean disabled = false;
+    @NotEmpty(message = "Ativo ou não?")
+    @Getter @Setter private boolean enabled = true;
 
+    @Getter @Setter private long genderId;
+
+    @Getter @Setter private long phoneId;
+
+    @Getter @Setter private long addressId;
 }

@@ -17,7 +17,7 @@
 
 				<ul class="navbar-nav">
 					<li class="nav-item">
-						<a class="btn btn-default" id="add-client-button" href="/createClient">Adicionar cliente</a>
+						<a class="btn btn-default" id="add-client-button" href="createClient">Adicionar cliente</a>
 					</li>
 				</ul>
 
@@ -34,7 +34,7 @@
 						<th>Email</th>
 
 						<th>CPF</th>
-
+						<th>Password</th>
 						<th>Inativo</th>
 						<th>Ações</th>
 					</tr>
@@ -44,10 +44,9 @@
 						<td th:text = "${client.id}"></td>
 						<td th:text = "${client.name}"></td>
 						<td th:text = "${client.email}"></td>
-
 						<td th:text = "${client.cpf}"></td>
-
-						<td><input type="checkbox" disabled="true" th:checked="${client.disabled}"></td>
+						<td th:text = "${client.password}"></td>
+						<td><input type="checkbox" th:checked="${client.enabled}"></td>
 						<td>
 							<a class="btn btn-primary" th:href="@{updateClient/{id}(id=${client.id})}">Atualizar</a>
 

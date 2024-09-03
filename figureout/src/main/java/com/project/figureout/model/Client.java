@@ -3,8 +3,8 @@ package com.project.figureout.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -32,16 +32,19 @@ public class Client {
     @Getter @Setter private Date birthday;
 
     @Column(name = "cli_ativo")
-    @Getter @Setter private boolean disabled;
+    @Getter @Setter private boolean enabled = true;
 
     // Conferir depois se precisa arrumar a(s) chave(s) estrangeira(s).
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cli_gen_id")
     @Getter @Setter Gender gender;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn(name = "cli_tel_id")
     @Getter @Setter Phone phone;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Getter @Setter private List<Address> addresses;
 
     // Expressão regular para validar a senha
     // (Incluir no mínimo 8 caracteres, letra mínuscula, maiúscula e caractere especial).

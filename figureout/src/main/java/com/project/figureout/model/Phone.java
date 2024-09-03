@@ -22,5 +22,8 @@ public class Phone {
     @Column(name = "tel_numero")
     @Getter @Setter private String phoneNumber;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tel_cli_id")
+    @Getter @Setter Client client;
 
 }

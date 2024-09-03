@@ -46,7 +46,7 @@ public class Address {
     @Getter @Setter private String observation;
 
     // Conferir depois se precisa arrumar a(s) chave(s) estrangeira(s).
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "end_cli_id")
-    @Getter @Setter Client clients;
+    @Getter @Setter private Client client;
 }
