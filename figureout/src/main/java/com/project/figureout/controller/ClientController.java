@@ -18,6 +18,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.project.figureout.model.Client;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -82,7 +84,11 @@ public class ClientController {
         gender.setGender(genderDTO.getGender());
         genderRepository.save(gender);
 
+        // Atributos de endereço.
+
+        Client client = new Client();
         Address address = new Address();
+
         address.setTypeOfResidence(addressDTO.getTypeOfResidence());
         address.setAdressing(addressDTO.getAddressing());
         address.setHouseNumber(addressDTO.getHouseNumber());
@@ -93,10 +99,9 @@ public class ClientController {
         address.setState(addressDTO.getState());
         address.setCountry(addressDTO.getCountry());
         address.setObservation(addressDTO.getObservation());
-        addressRepository.save(address);
 
         // Atributos de cliente.
-        Client client = new Client();
+
         client.setName(clientDTO.getName());
         client.setEmail(clientDTO.getEmail());
         client.setCpf(clientDTO.getCpf());
@@ -104,18 +109,25 @@ public class ClientController {
         client.setEnabled(clientDTO.isEnabled());
         client.setGender(gender);
         client.setPhone(phone);
+        client.setPassword(clientDTO.getPassword());
+
+        clientRepository.save(client);
+
+        if (client.getAddresses() == null) {
+            client.setAddresses(new ArrayList<>()); // Initialize if not already done
+        }
+
+        address.setClient(client);
+
+        client.getAddresses().add(address);
+
+        addressRepository.save(address);
+        clientRepository.save(client);
 
         // Validação da senha
 //        if (!client.isValidPassword(clientDTO.getPassword())) {
 //            return "Senha inválida. A senha deve ter pelo menos 8 caracteres, incluir letras maiúsculas, minúsculas e caracteres especiais.";
 //        }
-        client.setPassword(clientDTO.getPassword());
-        clientRepository.save(client);
-
-        // Atributos de endereço.
-
-
-
 
         return "redirect:/index";
     }

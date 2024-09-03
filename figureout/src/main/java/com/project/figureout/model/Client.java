@@ -3,6 +3,8 @@ package com.project.figureout.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -44,16 +46,16 @@ public class Client {
     @Getter @Setter Phone phone;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Getter @Setter private List<Address> addresses;
+    @Getter @Setter private ArrayList<Address> addresses;
 
     // Expressão regular para validar a senha
     // (Incluir no mínimo 8 caracteres, letra mínuscula, maiúscula e caractere especial).
-    private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
+    //private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
 
-    public boolean isValidPassword(String password) {
-        if (password == null) {
-            return false;
-        }
-        return password.matches(PASSWORD_PATTERN);
-    }
+    //public boolean isValidPassword(String password) {
+    //    if (password == null) {
+    //        return false;
+    //    }
+    //    return password.matches(PASSWORD_PATTERN);
+    //}
 }

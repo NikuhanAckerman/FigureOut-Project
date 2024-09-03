@@ -34,8 +34,13 @@
 						<th>Email</th>
 
 						<th>CPF</th>
-						<th>Password</th>
+						<th>Data de nascimento</th>
+						<th>Telefone</th>
+						<th>Senha</th>
 						<th>Inativo</th>
+						<th>Gênero</th>
+						<th>Endereços</th>
+						<th>Cartões</th>
 						<th>Ações</th>
 					</tr>
 				</thead>
@@ -45,8 +50,12 @@
 						<td th:text = "${client.name}"></td>
 						<td th:text = "${client.email}"></td>
 						<td th:text = "${client.cpf}"></td>
+						<td th:text = "${client.birthday}"></td>
+						<td th:text = "${client.phone.phoneNumber}"></td>
 						<td th:text = "${client.password}"></td>
 						<td><input type="checkbox" th:checked="${client.enabled}"></td>
+						<td th:text = "${client.gender.gender}"></td>
+
 						<td>
 							<a class="btn btn-primary" th:href="@{updateClient/{id}(id=${client.id})}">Atualizar</a>
 
