@@ -4,9 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9da5926b-5d94-4bf3-9469-7f50b88aa412" name="Changes" comment="">
+    <list default="true" id="af4596ab-7aa2-472e-a816-f9d60e99aeba" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/figureout/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/figureout/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/model/Address.java" beforeDir="false" afterPath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/model/Address.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/model/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/model/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/model/CreditCard.java" beforeDir="false" afterPath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/model/CreditCard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/model/Gender.java" beforeDir="false" afterPath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/model/Gender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/model/Phone.java" beforeDir="false" afterPath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/model/Phone.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/repository/ClientRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/figureout/src/main/java/com/project/figureout/repository/ClientRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/figureout/src/main/resources/templates/createClient.html" beforeDir="false" afterPath="$PROJECT_DIR$/figureout/src/main/resources/templates/createClient.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,7 +26,7 @@
   "customColor": "",
   "associatedIndex": 6
 }]]></component>
-  <component name="ProjectId" id="2lWwy41SYlmupo2jUSJeQyuVNhm" />
+  <component name="ProjectId" id="2lY7Uj27Qr7c5j9RrZ0H6eevpGk" />
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
@@ -36,11 +42,11 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="9da5926b-5d94-4bf3-9469-7f50b88aa412" name="Changes" comment="" />
-      <created>1725309394917</created>
+      <changelist id="af4596ab-7aa2-472e-a816-f9d60e99aeba" name="Changes" comment="" />
+      <created>1725345176139</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1725309394917</updated>
+      <updated>1725345176139</updated>
     </task>
     <servers />
   </component>

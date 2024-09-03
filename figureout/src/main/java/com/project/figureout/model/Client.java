@@ -3,11 +3,13 @@ package com.project.figureout.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.util.Date;
 import java.util.Set;
 
 @Entity
+@DynamicInsert
 @Table(name = "Clientes")
 public class Client {
 
@@ -35,13 +37,13 @@ public class Client {
     @Getter @Setter private boolean disabled;
 
     // Conferir depois se precisa arrumar a(s) chave(s) estrangeira(s).
-    @ManyToOne
-    @JoinColumn(name = "cli_gen_id")
-    @Getter @Setter Gender gender;
-
-    @OneToOne
-    @PrimaryKeyJoinColumn(name = "cli_tel_id")
-    @Getter @Setter Phone phone;
+//    @ManyToOne
+//    @JoinColumn(name = "cli_gen_id")
+//    @Getter @Setter Gender gender;
+//
+//    @OneToOne
+//    @PrimaryKeyJoinColumn(name = "cli_tel_id")
+//    @Getter @Setter Phone phone;
 
     // Expressão regular para validar a senha
     // (Incluir no mínimo 8 caracteres, letra mínuscula, maiúscula e caractere especial).

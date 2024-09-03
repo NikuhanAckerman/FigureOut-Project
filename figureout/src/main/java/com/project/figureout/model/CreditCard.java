@@ -8,10 +8,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
 
 import java.util.Date;
 
 @Entity
+@DynamicInsert
 @Table(name = "Cartoes")
 public class CreditCard {
 
