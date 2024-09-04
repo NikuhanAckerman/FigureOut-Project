@@ -15,7 +15,7 @@ public class AddressDTO {
     @Getter @Setter private String addressing;
 
     @NotEmpty(message = "Insira o número da sua residência")
-    @Size(min = 1, max = 5)
+    //@Size(min = 1, max = 5)
     @Getter @Setter private String houseNumber;
 
     @NotEmpty(message = "Insira o seu bairro")

@@ -3,7 +3,9 @@ package com.project.figureout.model;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,8 +32,9 @@ public class Client {
     @Column(name = "cli_senha")
     @Getter @Setter private String password;
 
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Column(name = "cli_nascimento")
-    @Getter @Setter private Date birthday;
+    @Getter @Setter private LocalDate birthday;
 
     @Column(name = "cli_ativo")
     @Getter @Setter private boolean enabled = true;
