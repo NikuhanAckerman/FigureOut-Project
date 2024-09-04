@@ -30,9 +30,4 @@ public class ClientDTO {
     @NotEmpty(message = "Ativo ou não?")
     @Getter @Setter private boolean enabled = true;
 
-    @Getter @Setter private long genderId;
-
-    @Getter @Setter private long phoneId;
-
-    @Getter @Setter private long addressId;
 }

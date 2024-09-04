@@ -39,4 +39,5 @@ public class AddressDTO {
     @NotEmpty(message = "Insira uma observação (opcional)")
     @Getter @Setter private String observation;
 
+
 }

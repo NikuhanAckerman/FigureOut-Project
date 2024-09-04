@@ -70,7 +70,7 @@ public class ClientController {
     public String addClientPost(@ModelAttribute("clientDTO") ClientDTO clientDTO,
                                 @ModelAttribute("addressDTO") AddressDTO addressDTO,
                                 @ModelAttribute("phoneDTO") PhoneDTO phoneDTO,
-                                @ModelAttribute("genderDTO") GenderDTO genderDTO /*,
+                                @ModelAttribute("genderDTO") GenderDTO genderDTO/* ,
                                 @RequestParam String password*/) {
 
         // Atributos de telefone.
@@ -78,17 +78,26 @@ public class ClientController {
         phone.setCellphone(phoneDTO.isCellphone());
         phone.setDdd(phoneDTO.getDdd());
         phone.setPhoneNumber(phoneDTO.getPhoneNumber());
-        phoneRepository.save(phone);
 
         Gender gender = new Gender();
         gender.setGender(genderDTO.getGender());
+
+        phoneRepository.save(phone);
         genderRepository.save(gender);
 
         // Atributos de endereço.
 
         Client client = new Client();
-        Address address = new Address();
+        client.setName(clientDTO.getName());
+        client.setEmail(clientDTO.getEmail());
+        client.setCpf(clientDTO.getCpf());
+        client.setBirthday(clientDTO.getBirthday());
+        client.setEnabled(clientDTO.isEnabled());
+        client.setGender(gender);
+        client.setPhone(phone);
+        client.setPassword(clientDTO.getPassword());
 
+        Address address = new Address();
         address.setTypeOfResidence(addressDTO.getTypeOfResidence());
         address.setAdressing(addressDTO.getAddressing());
         address.setHouseNumber(addressDTO.getHouseNumber());
@@ -100,28 +109,8 @@ public class ClientController {
         address.setCountry(addressDTO.getCountry());
         address.setObservation(addressDTO.getObservation());
 
-        // Atributos de cliente.
+        client.addAddress(address);
 
-        client.setName(clientDTO.getName());
-        client.setEmail(clientDTO.getEmail());
-        client.setCpf(clientDTO.getCpf());
-        client.setBirthday(clientDTO.getBirthday());
-        client.setEnabled(clientDTO.isEnabled());
-        client.setGender(gender);
-        client.setPhone(phone);
-        client.setPassword(clientDTO.getPassword());
-
-        clientRepository.save(client);
-
-        if (client.getAddresses() == null) {
-            client.setAddresses(new ArrayList<>()); // Initialize if not already done
-        }
-
-        address.setClient(client);
-
-        client.getAddresses().add(address);
-
-        addressRepository.save(address);
         clientRepository.save(client);
 
         // Validação da senha

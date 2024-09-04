@@ -37,16 +37,21 @@ public class Client {
     @Getter @Setter private boolean enabled = true;
 
     // Conferir depois se precisa arrumar a(s) chave(s) estrangeira(s).
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "cli_gen_id")
     @Getter @Setter Gender gender;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn(name = "cli_tel_id")
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "cli_tel_id")
     @Getter @Setter Phone phone;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Getter @Setter private ArrayList<Address> addresses;
+    @Getter private List<Address> addresses = new ArrayList<>();
+
+    public void addAddress(Address address) {
+        addresses.add(address);
+        address.setClient(this);
+    }
 
     // Expressão regular para validar a senha
     // (Incluir no mínimo 8 caracteres, letra mínuscula, maiúscula e caractere especial).

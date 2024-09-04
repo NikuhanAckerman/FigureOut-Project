@@ -14,7 +14,7 @@ public class PhoneDTO {
     @Getter @Setter private String ddd;
 
     @NotEmpty(message = "Digite o número de telefone.")
-    @Size(min = 8, max = 10)
+    //@Size(min = 8, max = 10)
     // 98224-8652
     @Getter @Setter private String phoneNumber;
 
