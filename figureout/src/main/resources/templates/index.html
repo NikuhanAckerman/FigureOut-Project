@@ -31,26 +31,29 @@
 						<tr>
 							<th>ID</th>
 							<th>Nome completo</th>
-							<th>Email</th>
-							<th>CPF</th>
-							<th>Data de nascimento</th>
-							<th>Telefone</th>
 							<th>Senha</th>
-							<th>Ativo</th>
 							<th>Gênero</th>
+							<th>Data de nascimento</th>
+							<th>CPF</th>
+							<th>Email</th>
+							<th>Telefone</th>
+							<th>Ativo</th>
+
 						</tr>
 					</thead>
 					<tbody>
 						<tr th:each="client : ${clients}">
 							<td th:text = "${client.id}"></td>
 							<td th:text = "${client.name}"></td>
-							<td th:text = "${client.email}"></td>
-							<td th:text = "${client.cpf}"></td>
-							<td th:text = "${#temporals.format(client.birthday, 'dd-MM-yyyy')}"></td>
-							<td th:text = "${client.phone.phoneNumber}"></td>
 							<td th:text = "${client.password}"></td>
-							<td><input type="checkbox" th:checked="${client.enabled}"></td>
 							<td th:text = "${client.gender.genderType}"></td>
+							<td th:text = "${#temporals.format(client.birthday, 'dd-MM-yyyy')}"></td>
+							<td th:text = "${client.cpf}"></td>
+							<td th:text = "${client.email}"></td>
+							<td th:text = "${client.phone.phoneNumber}"></td>
+							<td><input type="checkbox" th:checked="${client.enabled}" disabled></td>
+
+
 							<!--
 								<a class="btn btn-primary" th:href="@{updateClient/{id}(id=${client.id})}">Atualizar</a>
 

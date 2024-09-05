@@ -38,17 +38,17 @@ public class ClientController {
     @GetMapping({"", "/", "/index"})
     public String showClients(Model model) {
 
-        List<Gender> genders =  genderRepository.findAll();
-        model.addAttribute("gender", genders);
+        //List<Gender> genders =  genderRepository.findAll();
+        //model.addAttribute("gender", genders);
 
         List<Client> clients =  clientRepository.findAll();
         model.addAttribute("clients", clients);
 
-        List<Address> addresses =  addressRepository.findAll();
-        model.addAttribute("address", addresses);
+        //List<Address> addresses =  addressRepository.findAll();
+        //model.addAttribute("address", addresses);
 
-        List<Phone> phones =  phoneRepository.findAll();
-        model.addAttribute("phone", phones);
+        //List<Phone> phones =  phoneRepository.findAll();
+        //model.addAttribute("phone", phones);
         return "index";
     }
 
