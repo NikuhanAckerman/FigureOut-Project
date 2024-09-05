@@ -12,15 +12,12 @@ import com.project.figureout.repository.ClientRepository;
 import com.project.figureout.repository.GenderRepository;
 import com.project.figureout.repository.PhoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import com.project.figureout.model.Client;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping(path = "/")
@@ -36,7 +33,7 @@ public class ClientController {
     private GenderRepository genderRepository;
 
     @GetMapping({"", "/", "/index"})
-    public String showClients(Model model) {
+    public String showClientsGet(Model model) {
 
         //List<Gender> genders =  genderRepository.findAll();
         //model.addAttribute("gender", genders);
@@ -52,8 +49,10 @@ public class ClientController {
         return "index";
     }
 
+
+
     @GetMapping("/createClient")
-    public String addClient(Model model) {
+    public String addClientGet(Model model) {
         ClientDTO clientDTO = new ClientDTO();
 
         List<Gender> genderList = genderRepository.findAll();
@@ -115,6 +114,7 @@ public class ClientController {
         return "redirect:/index";
     }
 
+    /*
     @GetMapping("/clientAddresses/{id}")
     public String showClientAddresses(@PathVariable long id, Model model) {
         List<Address> clientAddressList = clientRepository.findById(id).get().getAddresses();
@@ -123,6 +123,8 @@ public class ClientController {
 
         return "clientAddresses";
     }
+
+     */
 
 
     @GetMapping("/updateClient/{id}")
