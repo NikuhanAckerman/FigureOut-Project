@@ -32,16 +32,12 @@
 							<th>ID</th>
 							<th>Nome completo</th>
 							<th>Email</th>
-
 							<th>CPF</th>
 							<th>Data de nascimento</th>
 							<th>Telefone</th>
 							<th>Senha</th>
-							<th>Inativo</th>
+							<th>Ativo</th>
 							<th>Gênero</th>
-							<th>Endereços</th>
-							<th>Cartões</th>
-							<th>Ações</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -50,11 +46,12 @@
 							<td th:text = "${client.name}"></td>
 							<td th:text = "${client.email}"></td>
 							<td th:text = "${client.cpf}"></td>
-							<td th:text = "${#dates.format(client.birthday, 'dd-MM-yyyy')}"></td>
+							<td th:text = "${#temporals.format(client.birthday, 'dd-MM-yyyy')}"></td>
 							<td th:text = "${client.phone.phoneNumber}"></td>
 							<td th:text = "${client.password}"></td>
 							<td><input type="checkbox" th:checked="${client.enabled}"></td>
-							<td th:text = "${client.gender.gender}"></td>
+							<td th:text = "${client.gender.genderType}"></td>
+							<!--
 								<a class="btn btn-primary" th:href="@{updateClient/{id}(id=${client.id})}">Atualizar</a>
 
 								<form th:action="@{/deleteClient/{id}(id=${client.id})}" method="POST" display="inline">
@@ -62,6 +59,7 @@
 									<button type="submit" class="btn btn-danger btn-delete" onclick="return confirm('Tem certeza?')">Deletar</button>
 								</form>
 							</td>
+							-->
 						</tr>
 					</tbody>
 				</table>

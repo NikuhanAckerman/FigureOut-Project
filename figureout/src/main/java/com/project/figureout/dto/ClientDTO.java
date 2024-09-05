@@ -42,6 +42,4 @@ public class ClientDTO {
 
     @Getter @Setter private Address address;
 
-
-
 }

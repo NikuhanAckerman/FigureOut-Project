@@ -38,62 +38,50 @@ public class ClientController {
     @GetMapping({"", "/", "/index"})
     public String showClients(Model model) {
 
-        Iterable<Gender> genders =  genderRepository.findAll();
+        List<Gender> genders =  genderRepository.findAll();
         model.addAttribute("gender", genders);
 
-        Iterable<Client> clients =  clientRepository.findAll();
-        model.addAttribute("client", clients);
+        List<Client> clients =  clientRepository.findAll();
+        model.addAttribute("clients", clients);
 
-        Iterable<Address> addresses =  addressRepository.findAll();
+        List<Address> addresses =  addressRepository.findAll();
         model.addAttribute("address", addresses);
 
-        Iterable<Phone> phones =  phoneRepository.findAll();
+        List<Phone> phones =  phoneRepository.findAll();
         model.addAttribute("phone", phones);
         return "index";
     }
 
     @GetMapping("/createClient")
     public String addClient(Model model) {
-        GenderDTO genderDTO = new GenderDTO();
         ClientDTO clientDTO = new ClientDTO();
-        AddressDTO addressDTO = new AddressDTO();
-        PhoneDTO phoneDTO = new PhoneDTO();
 
-        model.addAttribute("genderDTO", genderDTO);
+        List<Gender> genderList = genderRepository.findAll();
+
         model.addAttribute("clientDTO", clientDTO);
-        model.addAttribute("addressDTO", addressDTO);
-        model.addAttribute("phoneDTO", phoneDTO);
+        model.addAttribute("genderList", genderList);
+
         return "createClient";
     }
 
     @PostMapping("/createClient")
     public String addClientPost(@ModelAttribute("clientDTO") ClientDTO clientDTO,/*, @RequestParam String password*/ Model model) {
 
-        List<Gender> availableGenders = genderRepository.findAll();
-        if(availableGenders.isEmpty()) {
-            System.out.println("Tabela de gêneros não populada ainda! por: " + this.getClass().getName());
-        } else {
-            System.out.println("Tabela de gêneros foi populada!" + this.getClass().getName());
-        }
-        model.addAttribute("availableGenders", availableGenders);
-        //Phone clientDTOPhone = clientDTO.getPhone();
-
-        //Address clientDTOAddress = clientDTO.getAddress();
+        Gender gender = genderRepository.findById(clientDTO.getGender().getId()).orElse(null);
 
         // Atributos de telefone.
-        /*Phone phone = new Phone();
-        phone.setCellphone(clientDTOPhone.isCellphone());
-        phone.setDdd(clientDTOPhone.getDdd());
-        phone.setPhoneNumber(clientDTOPhone.getPhoneNumber());
-        */
+        Phone phone = new Phone();
+        phone.setCellphone(clientDTO.getPhone().isCellphone());
+        phone.setDdd(clientDTO.getPhone().getDdd());
+        phone.setPhoneNumber(clientDTO.getPhone().getPhoneNumber());
 
-        //phoneRepository.save(phone);
+        phoneRepository.save(phone);
 
         // Atributos de endereço.
 
         Client client = new Client();
-        //client.setPhone(phone);
-        client.setGender(clientDTO.getGender());
+        client.setPhone(phone);
+        client.setGender(gender);
         client.setName(clientDTO.getName());
         client.setEmail(clientDTO.getEmail());
         client.setCpf(clientDTO.getCpf());
@@ -101,19 +89,20 @@ public class ClientController {
         client.setEnabled(clientDTO.isEnabled());
         client.setPassword(clientDTO.getPassword());
 
-        /*Address address = new Address();
-        address.setTypeOfResidence(clientDTOAddress.getTypeOfResidence());
-        address.setAddressing(clientDTOAddress.getAddressing());
-        address.setHouseNumber(clientDTOAddress.getHouseNumber());
-        address.setNeighbourhood(clientDTOAddress.getNeighbourhood());
-        address.setAddressingType(clientDTOAddress.getAddressingType());
-        address.setCep(clientDTOAddress.getCep());
-        address.setCity(clientDTOAddress.getCity());
-        address.setState(clientDTOAddress.getState());
-        address.setCountry(clientDTOAddress.getCountry());
-        address.setObservation(clientDTOAddress.getObservation());
+        Address address = new Address();
+        address.setTypeOfResidence(clientDTO.getAddress().getTypeOfResidence());
+        address.setAddressing(clientDTO.getAddress().getAddressing());
+        address.setHouseNumber(clientDTO.getAddress().getHouseNumber());
+        address.setNeighbourhood(clientDTO.getAddress().getNeighbourhood());
+        address.setAddressingType(clientDTO.getAddress().getAddressingType());
+        address.setCep(clientDTO.getAddress().getCep());
+        address.setCity(clientDTO.getAddress().getCity());
+        address.setState(clientDTO.getAddress().getState());
+        address.setCountry(clientDTO.getAddress().getCountry());
+        address.setObservation(clientDTO.getAddress().getObservation());
+        addressRepository.save(address);
 
-        client.addAddress(address);*/
+        client.addAddress(address);
 
         clientRepository.save(client);
 
