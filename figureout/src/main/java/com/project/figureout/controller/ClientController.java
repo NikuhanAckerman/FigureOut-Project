@@ -67,46 +67,53 @@ public class ClientController {
     }
 
     @PostMapping("/createClient")
-    public String addClientPost(@ModelAttribute("clientDTO") ClientDTO clientDTO/*, @RequestParam String password*/) {
+    public String addClientPost(@ModelAttribute("clientDTO") ClientDTO clientDTO,/*, @RequestParam String password*/ Model model) {
+
+        List<Gender> availableGenders = genderRepository.findAll();
+        if(availableGenders.isEmpty()) {
+            System.out.println("Tabela de gêneros não populada ainda! por: " + this.getClass().getName());
+        } else {
+            System.out.println("Tabela de gêneros foi populada!" + this.getClass().getName());
+        }
+        model.addAttribute("availableGenders", availableGenders);
+        //Phone clientDTOPhone = clientDTO.getPhone();
+
+        //Address clientDTOAddress = clientDTO.getAddress();
 
         // Atributos de telefone.
-        Phone phone = new Phone();
-        phone.setCellphone(clientDTO.isCellphone());
-        phone.setDdd(phoneDTO.getDdd());
-        phone.setPhoneNumber(phoneDTO.getPhoneNumber());
+        /*Phone phone = new Phone();
+        phone.setCellphone(clientDTOPhone.isCellphone());
+        phone.setDdd(clientDTOPhone.getDdd());
+        phone.setPhoneNumber(clientDTOPhone.getPhoneNumber());
+        */
 
-        Gender gender = new Gender();
-        gender.setGender(genderDTO.getGender());
-
-        phoneRepository.save(phone);
-        genderRepository.save(gender);
+        //phoneRepository.save(phone);
 
         // Atributos de endereço.
 
         Client client = new Client();
-        client.setPhone();
+        //client.setPhone(phone);
+        client.setGender(clientDTO.getGender());
         client.setName(clientDTO.getName());
         client.setEmail(clientDTO.getEmail());
         client.setCpf(clientDTO.getCpf());
         client.setBirthday(clientDTO.getBirthday());
         client.setEnabled(clientDTO.isEnabled());
-        client.setGender(gender);
-        client.setPhone(phone);
         client.setPassword(clientDTO.getPassword());
 
-        Address address = new Address();
-        address.setTypeOfResidence(addressDTO.getTypeOfResidence());
-        address.setAdressing(addressDTO.getAddressing());
-        address.setHouseNumber(addressDTO.getHouseNumber());
-        address.setNeighbourhood(addressDTO.getNeighbourhood());
-        address.setAddressingType(addressDTO.getAddressingType());
-        address.setCep(addressDTO.getCep());
-        address.setCity(addressDTO.getCity());
-        address.setState(addressDTO.getState());
-        address.setCountry(addressDTO.getCountry());
-        address.setObservation(addressDTO.getObservation());
+        /*Address address = new Address();
+        address.setTypeOfResidence(clientDTOAddress.getTypeOfResidence());
+        address.setAddressing(clientDTOAddress.getAddressing());
+        address.setHouseNumber(clientDTOAddress.getHouseNumber());
+        address.setNeighbourhood(clientDTOAddress.getNeighbourhood());
+        address.setAddressingType(clientDTOAddress.getAddressingType());
+        address.setCep(clientDTOAddress.getCep());
+        address.setCity(clientDTOAddress.getCity());
+        address.setState(clientDTOAddress.getState());
+        address.setCountry(clientDTOAddress.getCountry());
+        address.setObservation(clientDTOAddress.getObservation());
 
-        client.addAddress(address);
+        client.addAddress(address);*/
 
         clientRepository.save(client);
 
@@ -120,7 +127,7 @@ public class ClientController {
 
     @GetMapping("/updateClient/{id}")
     public String showSpecificClient(@PathVariable long id, Model model) {
-        Optional<Client> client = clientRepository.findById(id);
+       /* Optional<Client> client = clientRepository.findById(id);
         Optional<Address> address = addressRepository.findById(id);
         Optional<Phone> phone = phoneRepository.findById(id);
         Optional<Gender> gender = genderRepository.findById(id);
@@ -165,8 +172,10 @@ public class ClientController {
         model.addAttribute("addressID", id);
         model.addAttribute("phoneDTO", phoneDTO);
         model.addAttribute("phoneID", id);
-
+        */
         return "updateClient";
+
+
     }
 
     @PutMapping("/updateClient/{id}")
@@ -174,6 +183,7 @@ public class ClientController {
                                @ModelAttribute AddressDTO addressDTO,
                                @ModelAttribute PhoneDTO phoneDTO,
                                @ModelAttribute GenderDTO genderDTO) {
+        /*
         Optional<Client> clientToChange = clientRepository.findById(id);
         Optional<Address> addressToChange = addressRepository.findById(id);
         Optional<Phone> phoneToChange = phoneRepository.findById(id);
@@ -218,18 +228,20 @@ public class ClientController {
             addressRepository.save(address);
             phoneRepository.save(phone);
         }
-
+        */
         return "redirect:/index";
+
+
     }
 
     @DeleteMapping("/deleteClient/{id}")
     public String deleteClient(@PathVariable long id) {
-
+        /*
         genderRepository.deleteById(id);
         clientRepository.deleteById(id);
         addressRepository.deleteById(id);
         phoneRepository.deleteById(id);
-
+        */
         return "redirect:/index";
     }
 

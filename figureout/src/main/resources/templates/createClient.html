@@ -180,10 +180,10 @@
 					<input class="form-check-input" type="checkbox" th:field="*{enabled}">
 
 					<label><b>Gênero</b></label>
-					<div class="radio-group">
-						<label><input type="radio" th:field="*{gender.gender}" value="Masculino" required/> Masculino</label>
-						<label><input type="radio" th:field="*{gender.gender}" value="Feminino" required/> Feminino</label>
-						<label><input type="radio" th:field="*{gender.gender}" value="Outro" required/> Outro</label>
+					<div class="radio-group" th:each="gender : ${availableGenders}">
+						<input type="radio" th:field="*{gender}" th:value="${gender}" th:text="${gender.genderType}" required/>
+						<!--<label><input type="radio" th:field="*{genderType}" value="Feminino" required/> Feminino</label>
+						<label><input type="radio" th:field="*{genderType}" value="Outro" required/> Outro</label>-->
 					</div>
 					<!--
                                         <label><b>Tipo de telefone</b></label>

@@ -1,5 +1,6 @@
 package com.project.figureout.dto;
 
+import com.project.figureout.model.Address;
 import com.project.figureout.model.Gender;
 import com.project.figureout.model.Phone;
 import jakarta.validation.constraints.NotEmpty;
@@ -35,11 +36,11 @@ public class ClientDTO {
     @NotEmpty(message = "Ativo ou não?")
     @Getter @Setter private boolean enabled = true;
 
-    @Getter @Setter private long genderId;
+    @Getter @Setter private Gender gender;
 
-    @Getter @Setter private long phoneId;
+    @Getter @Setter private Phone phone;
 
-    @Getter @Setter private long addressId;
+    @Getter @Setter private Address address;
 
 
 

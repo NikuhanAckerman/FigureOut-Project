@@ -19,7 +19,7 @@ public class Address {
     @Getter @Setter private String typeOfResidence;
 
     @Column(name = "end_logradouro")
-    @Getter @Setter private String adressing;
+    @Getter @Setter private String addressing;
 
     @Column(name = "end_numero")
     @Getter @Setter private String houseNumber;

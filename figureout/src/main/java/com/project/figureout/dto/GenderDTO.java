@@ -7,6 +7,6 @@ import lombok.Setter;
 public class GenderDTO {
 
     @NotEmpty(message = "Insira o seu gênero.")
-    @Getter @Setter private String gender;
+    @Getter @Setter private String genderType;
 
 }
