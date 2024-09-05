@@ -39,7 +39,7 @@ public class ClientController {
         //model.addAttribute("gender", genders);
 
         List<Client> clients =  clientRepository.findAll();
-        model.addAttribute("clients", clients);
+        model.addAttribute("client", clients);
 
         //List<Address> addresses =  addressRepository.findAll();
         //model.addAttribute("address", addresses);
