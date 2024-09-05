@@ -67,15 +67,11 @@ public class ClientController {
     }
 
     @PostMapping("/createClient")
-    public String addClientPost(@ModelAttribute("clientDTO") ClientDTO clientDTO,
-                                @ModelAttribute("addressDTO") AddressDTO addressDTO,
-                                @ModelAttribute("phoneDTO") PhoneDTO phoneDTO,
-                                @ModelAttribute("genderDTO") GenderDTO genderDTO/* ,
-                                @RequestParam String password*/) {
+    public String addClientPost(@ModelAttribute("clientDTO") ClientDTO clientDTO/*, @RequestParam String password*/) {
 
         // Atributos de telefone.
         Phone phone = new Phone();
-        phone.setCellphone(phoneDTO.isCellphone());
+        phone.setCellphone(clientDTO.isCellphone());
         phone.setDdd(phoneDTO.getDdd());
         phone.setPhoneNumber(phoneDTO.getPhoneNumber());
 
@@ -88,6 +84,7 @@ public class ClientController {
         // Atributos de endereço.
 
         Client client = new Client();
+        client.setPhone();
         client.setName(clientDTO.getName());
         client.setEmail(clientDTO.getEmail());
         client.setCpf(clientDTO.getCpf());

@@ -14,6 +14,6 @@ public class Gender {
     @Getter @Setter private long id;
 
     @Column(name = "gen_genero")
-    @Getter @Setter private enum gender gender;
+    @Getter @Setter private String gender;
 
 }
