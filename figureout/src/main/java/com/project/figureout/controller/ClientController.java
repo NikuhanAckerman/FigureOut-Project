@@ -90,6 +90,7 @@ public class ClientController {
         client.setPassword(clientDTO.getPassword());
 
         Address address = new Address();
+        address.setNickname(clientDTO.getAddress().getNickname());
         address.setTypeOfResidence(clientDTO.getAddress().getTypeOfResidence());
         address.setAddressing(clientDTO.getAddress().getAddressing());
         address.setHouseNumber(clientDTO.getAddress().getHouseNumber());
@@ -113,6 +114,16 @@ public class ClientController {
 
         return "redirect:/index";
     }
+
+    @GetMapping("/clientAddresses/{id}")
+    public String showClientAddresses(@PathVariable long id, Model model) {
+        List<Address> clientAddressList = clientRepository.findById(id).get().getAddresses();
+
+        model.addAttribute("clientAddressList", clientAddressList);
+
+        return "clientAddresses";
+    }
+
 
     @GetMapping("/updateClient/{id}")
     public String showSpecificClient(@PathVariable long id, Model model) {

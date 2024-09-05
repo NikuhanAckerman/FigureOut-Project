@@ -36,6 +36,7 @@
 							<th>Data de nascimento</th>
 							<th>CPF</th>
 							<th>Email</th>
+							<th>Endereços</th>
 							<th>Telefone</th>
 							<th>Ativo</th>
 
@@ -50,8 +51,13 @@
 							<td th:text = "${#temporals.format(client.birthday, 'dd-MM-yyyy')}"></td>
 							<td th:text = "${client.cpf}"></td>
 							<td th:text = "${client.email}"></td>
+							<td>
+								<a class="btn btn-secondary" th:href="@{clientAddresses/{id}(id = ${client.id})}">Ver endereços</a>
+							</td>
 							<td th:text = "${client.phone.phoneNumber}"></td>
-							<td><input type="checkbox" th:checked="${client.enabled}" disabled></td>
+							<td>
+								<input type="checkbox" th:checked="${client.enabled}" disabled>
+							</td>
 
 
 							<!--

@@ -14,6 +14,9 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "end_id")
     @Getter @Setter private long id;
+
+    @Column(name = "end_apelido")
+    @Getter @Setter private String nickname;
     
     @Column(name = "end_tipo_residencia")
     @Getter @Setter private String typeOfResidence;
