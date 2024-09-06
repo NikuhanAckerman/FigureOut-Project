@@ -12,6 +12,7 @@ import com.project.figureout.repository.ClientRepository;
 import com.project.figureout.repository.GenderRepository;
 import com.project.figureout.repository.PhoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +50,12 @@ public class ClientController {
         return "index";
     }
 
-
+    @GetMapping("clients/{id}/addresses")
+    @ResponseBody
+    public List<Address> getClientAddresses(@PathVariable long id) {
+        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inválido."));
+        return client.getAddresses();
+    }
 
     @GetMapping("/createClient")
     public String addClientGet(Model model) {

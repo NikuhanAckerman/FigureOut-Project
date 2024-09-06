@@ -1,5 +1,6 @@
 package com.project.figureout.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -51,5 +52,6 @@ public class Address {
     // Conferir depois se precisa arrumar a(s) chave(s) estrangeira(s).
     @ManyToOne
     @JoinColumn(name = "end_cli_id")
+    @JsonIgnore
     @Getter @Setter private Client client;
 }
