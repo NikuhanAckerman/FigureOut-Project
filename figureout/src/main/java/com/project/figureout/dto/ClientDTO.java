@@ -40,6 +40,7 @@ public class ClientDTO {
 
     @Getter @Setter private Phone phone;
 
-    @Getter @Setter private Address address;
+    @Getter @Setter private Address deliveryAddress;
+    @Getter @Setter private Address chargingAddress;
 
 }

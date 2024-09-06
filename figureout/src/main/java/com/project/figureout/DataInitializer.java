@@ -23,6 +23,7 @@ public class DataInitializer implements CommandLineRunner {
             genderRepository.save(male);
             genderRepository.save(female);
             genderRepository.save(other);
+
             System.out.println("Tabela de gêneros populada.");
         }
     }

@@ -12,7 +12,6 @@ import com.project.figureout.repository.ClientRepository;
 import com.project.figureout.repository.GenderRepository;
 import com.project.figureout.repository.PhoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -102,21 +101,39 @@ public class ClientController {
         client.setEnabled(clientDTO.isEnabled());
         client.setPassword(clientDTO.getPassword());
 
-        Address address = new Address();
-        address.setNickname(clientDTO.getAddress().getNickname());
-        address.setTypeOfResidence(clientDTO.getAddress().getTypeOfResidence());
-        address.setAddressing(clientDTO.getAddress().getAddressing());
-        address.setHouseNumber(clientDTO.getAddress().getHouseNumber());
-        address.setNeighbourhood(clientDTO.getAddress().getNeighbourhood());
-        address.setAddressingType(clientDTO.getAddress().getAddressingType());
-        address.setCep(clientDTO.getAddress().getCep());
-        address.setCity(clientDTO.getAddress().getCity());
-        address.setState(clientDTO.getAddress().getState());
-        address.setCountry(clientDTO.getAddress().getCountry());
-        address.setObservation(clientDTO.getAddress().getObservation());
-        addressRepository.save(address);
+        Address deliveryAddress = new Address();
+        deliveryAddress.setAddressType(false);
+        deliveryAddress.setNickname(clientDTO.getDeliveryAddress().getNickname());
+        deliveryAddress.setTypeOfResidence(clientDTO.getDeliveryAddress().getTypeOfResidence());
+        deliveryAddress.setAddressing(clientDTO.getDeliveryAddress().getAddressing());
+        deliveryAddress.setHouseNumber(clientDTO.getDeliveryAddress().getHouseNumber());
+        deliveryAddress.setNeighbourhood(clientDTO.getDeliveryAddress().getNeighbourhood());
+        deliveryAddress.setAddressingType(clientDTO.getDeliveryAddress().getAddressingType());
+        deliveryAddress.setCep(clientDTO.getDeliveryAddress().getCep());
+        deliveryAddress.setCity(clientDTO.getDeliveryAddress().getCity());
+        deliveryAddress.setState(clientDTO.getDeliveryAddress().getState());
+        deliveryAddress.setCountry(clientDTO.getDeliveryAddress().getCountry());
+        deliveryAddress.setObservation(clientDTO.getDeliveryAddress().getObservation());
 
-        client.addAddress(address);
+        Address chargingAddress = new Address();
+        chargingAddress.setAddressType(true);
+        chargingAddress.setNickname(clientDTO.getChargingAddress().getNickname());
+        chargingAddress.setTypeOfResidence(clientDTO.getChargingAddress().getTypeOfResidence());
+        chargingAddress.setAddressing(clientDTO.getChargingAddress().getAddressing());
+        chargingAddress.setHouseNumber(clientDTO.getChargingAddress().getHouseNumber());
+        chargingAddress.setNeighbourhood(clientDTO.getChargingAddress().getNeighbourhood());
+        chargingAddress.setAddressingType(clientDTO.getChargingAddress().getAddressingType());
+        chargingAddress.setCep(clientDTO.getChargingAddress().getCep());
+        chargingAddress.setCity(clientDTO.getChargingAddress().getCity());
+        chargingAddress.setState(clientDTO.getChargingAddress().getState());
+        chargingAddress.setCountry(clientDTO.getChargingAddress().getCountry());
+        chargingAddress.setObservation(clientDTO.getChargingAddress().getObservation());
+
+        addressRepository.save(deliveryAddress);
+        addressRepository.save(chargingAddress);
+
+        client.addAddress(deliveryAddress);
+        client.addAddress(chargingAddress);
 
         clientRepository.save(client);
 

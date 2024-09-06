@@ -11,6 +11,9 @@ public class AddressDTO {
     @NotEmpty(message = "Insira o apelido")
     @Getter @Setter private String nickname;
 
+    @NotEmpty(message = "Insira o tipo")
+    @Getter @Setter private boolean addressType;
+
     @NotEmpty(message = "Insira o tipo de residência(Casa, apartamento, etc...)")
     @Getter @Setter private String typeOfResidence;
 

@@ -16,6 +16,9 @@ public class Address {
     @Column(name = "end_id")
     @Getter @Setter private long id;
 
+    @Column(name = "end_tipo")
+    @Getter @Setter private boolean addressType; // 0 = entrega, 1 = cobrança
+
     @Column(name = "end_apelido")
     @Getter @Setter private String nickname;
     

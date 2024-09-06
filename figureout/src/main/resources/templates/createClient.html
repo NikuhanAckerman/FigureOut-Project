@@ -168,8 +168,8 @@
 						<input type="text" class="form-control" placeholder="Insira o seu nome completo" th:field="*{name}" required>
 
 						<label><b>Email</b></label>
-						<input type="email" id="email" class="form-control" placeholder="Insira o seu email" th:field="*{email}" required>
-
+						<input type="email" class="form-control" placeholder="Insira o seu email" th:field="*{email}" required>
+						<!--id="email"-->
 						<label for="password"><b>Senha</b></label>
 						<input type="password" id="password" class="form-control" placeholder="Insira uma senha forte!" th:field="*{password}" required>
 
@@ -235,64 +235,127 @@
 						<input type="text" id="phone" class="form-control" placeholder="Digite o número de telefone" th:field="*{phone.phoneNumber}" maxlength="10" required>
 					</div>
 
+					<label><b>Endereços</b></label>
+
 					<div class="mt-2">
-						<label><b>Endereço residencial</b></label>
+						<label><b>Endereço de entrega</b></label>
 
 						<div>
 							<label><b>Apelido</b></label>
-							<input type="text" class="form-control" placeholder="Digite o apelido" th:field="*{address.nickname}" required>
+							<input type="text" class="form-control" placeholder="Digite o apelido" th:field="*{deliveryAddress.nickname}" required>
 						</div>
 
 						<div>
 							<label><b>Tipo de Residência</b></label>
-							<input type="text" class="form-control" placeholder="(Casa, apartamento, etc...)" th:field="*{address.typeOfResidence}" required>
+							<input type="text" class="form-control" placeholder="(Casa, apartamento, etc...)" th:field="*{deliveryAddress.typeOfResidence}" required>
 						</div>
 
 						<div>
 							<label><b>Tipo de logradouro</b></label>
-							<input type="text" class="form-control" placeholder="(Rua, Avenida, etc...)" th:field="*{address.addressingType}" required>
+							<input type="text" class="form-control" placeholder="(Rua, Avenida, etc...)" th:field="*{deliveryAddress.addressingType}" required>
 						</div>
 
 						<div>
 							<label><b>Logradouro</b></label>
-							<input type="text" class="form-control" placeholder="Insira o logradouro" th:field="*{address.addressing}" required>
+							<input type="text" class="form-control" placeholder="Insira o logradouro" th:field="*{deliveryAddress.addressing}" required>
 						</div>
 
 						<div>
 							<label><b>Nº de residência</b></label>
-							<input type="text" class="form-control" placeholder="Insira o número da residência" th:field="*{address.houseNumber}" maxlength="5" required>
+							<input type="text" class="form-control" placeholder="Insira o número da residência" th:field="*{deliveryAddress.houseNumber}" maxlength="5" required>
 						</div>
 
 						<div>
 							<label><b>CEP</b></label>
-							<input type="text" class="form-control" placeholder="00000-000" th:field="*{address.cep}" maxlength="9" required>
+							<input type="text" class="form-control" placeholder="00000-000" th:field="*{deliveryAddress.cep}" maxlength="9" required>
 						</div>
 
 						<div>
 							<label><b>Bairro</b></label>
-							<input type="text" class="form-control" placeholder="Insira o bairro" th:field="*{address.neighbourhood}" required>
+							<input type="text" class="form-control" placeholder="Insira o bairro" th:field="*{deliveryAddress.neighbourhood}" required>
 						</div>
 
 						<div>
 							<label><b>Cidade</b></label>
-							<input type="text" class="form-control" placeholder="Insira a cidade" th:field="*{address.city}" required>
+							<input type="text" class="form-control" placeholder="Insira a cidade" th:field="*{deliveryAddress.city}" required>
 						</div>
 
 						<div>
 							<label><b>Estado</b></label>
-							<input type="text" class="form-control" placeholder="Insira o Estado" th:field="*{address.state}" required>
+							<input type="text" class="form-control" placeholder="Insira o Estado" th:field="*{deliveryAddress.state}" required>
 						</div>
 
 						<div>
 							<label><b>País</b></label>
-							<input type="text" class="form-control" placeholder="Insira o País" th:field="*{address.country}" required>
+							<input type="text" class="form-control" placeholder="Insira o País" th:field="*{deliveryAddress.country}" required>
 						</div>
 
 						<div>
 							<label><b>Observação</b></label>
-							<input type="text" class="form-control" placeholder="Insira uma observação (opcional)" th:field="*{address.observation}">
+							<input type="text" class="form-control" placeholder="Insira uma observação (opcional)" th:field="*{deliveryAddress.observation}">
 						</div>
 					</div>
+
+					<div class="mt-2">
+						<label><b>Endereço de cobrança</b></label>
+
+						<div>
+							<label><b>Apelido</b></label>
+							<input type="text" class="form-control" placeholder="Digite o apelido" th:field="*{chargingAddress.nickname}" required>
+						</div>
+
+						<div>
+							<label><b>Tipo de Residência</b></label>
+							<input type="text" class="form-control" placeholder="(Casa, apartamento, etc...)" th:field="*{chargingAddress.typeOfResidence}" required>
+						</div>
+
+						<div>
+							<label><b>Tipo de logradouro</b></label>
+							<input type="text" class="form-control" placeholder="(Rua, Avenida, etc...)" th:field="*{chargingAddress.addressingType}" required>
+						</div>
+
+						<div>
+							<label><b>Logradouro</b></label>
+							<input type="text" class="form-control" placeholder="Insira o logradouro" th:field="*{chargingAddress.addressing}" required>
+						</div>
+
+						<div>
+							<label><b>Nº de residência</b></label>
+							<input type="text" class="form-control" placeholder="Insira o número da residência" th:field="*{chargingAddress.houseNumber}" maxlength="5" required>
+						</div>
+
+						<div>
+							<label><b>CEP</b></label>
+							<input type="text" class="form-control" placeholder="00000-000" th:field="*{chargingAddress.cep}" maxlength="9" required>
+						</div>
+
+						<div>
+							<label><b>Bairro</b></label>
+							<input type="text" class="form-control" placeholder="Insira o bairro" th:field="*{chargingAddress.neighbourhood}" required>
+						</div>
+
+						<div>
+							<label><b>Cidade</b></label>
+							<input type="text" class="form-control" placeholder="Insira a cidade" th:field="*{chargingAddress.city}" required>
+						</div>
+
+						<div>
+							<label><b>Estado</b></label>
+							<input type="text" class="form-control" placeholder="Insira o Estado" th:field="*{chargingAddress.state}" required>
+						</div>
+
+						<div>
+							<label><b>País</b></label>
+							<input type="text" class="form-control" placeholder="Insira o País" th:field="*{chargingAddress.country}" required>
+						</div>
+
+						<div>
+							<label><b>Observação</b></label>
+							<input type="text" class="form-control" placeholder="Insira uma observação (opcional)" th:field="*{chargingAddress.observation}">
+						</div>
+					</div>
+
+
 
 
 
