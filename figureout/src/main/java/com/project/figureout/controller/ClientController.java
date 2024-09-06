@@ -57,6 +57,14 @@ public class ClientController {
         return client.getAddresses();
     }
 
+    @DeleteMapping("clients/{id}/addresses")
+    public String deleteClientAddress(@PathVariable long id, Address address) {
+        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inválido."));
+        client.getAddresses().remove(address);
+
+        return "index";
+    }
+
     @GetMapping("/createClient")
     public String addClientGet(Model model) {
         ClientDTO clientDTO = new ClientDTO();

@@ -152,7 +152,7 @@
 						.then(addresses => {
 							const addressLists = document.querySelectorAll('.addressList');
 							addressLists.forEach(addressList => {
-								addressList.innerHTML = ''; // Clear existing content
+								addressList.innerHTML = '';
 								addresses.forEach(address => {
 									const addressItem = `
 														<div class="card">
@@ -169,6 +169,8 @@
 																<p>Estado: ${address.state}</p>
 																<p>País: ${address.country}</p>
 																<p>Observação: ${address.observation}</p>
+																<button type="button" class="btn btn-danger" th:action="@{clients/{clientId}/addresses}">Deletar</button>
+																<button type="button" class="btn btn-primary">Atualizar</button>
 															</div>
 														</div>`;
 									addressList.innerHTML += addressItem;
