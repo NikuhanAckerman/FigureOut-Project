@@ -56,12 +56,11 @@ public class ClientController {
         return client.getAddresses();
     }
 
-    @DeleteMapping("clients/{id}/addresses")
-    public String deleteClientAddress(@PathVariable long id, Address address) {
-        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
-        client.getAddresses().remove(address);
+    @GetMapping("index/{id}/addresses/create")
+    public String createClientAddress(@PathVariable long id, Model model) {
 
-        return "index";
+
+        return "index/{id}/addresses/create";
     }
 
     @GetMapping("/createClient")
