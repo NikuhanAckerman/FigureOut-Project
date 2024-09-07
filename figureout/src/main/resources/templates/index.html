@@ -84,19 +84,19 @@
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h3 class="modal-title">Gerenciar endereços</h3>
+						<h3 class="modal-title">Ver endereços</h3>
 						<button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
 					</div>
 
 					<div class="modal-body">
 
 						<div>
-							<p id="clientId"></p>
-
+							<h1 id="clientId"></h1>
 
 							<div class="card mt-3">
 								<div class="card-body">
 									<h2 class="card-title">Endereços de entrega</h2>
+
 									<div id="deliveryAddressList">
 
 									</div>
@@ -135,10 +135,15 @@
 
 				const clientId = button.getAttribute('data-bs-client-id');
 
-				const elementWithId = document.getElementById('clientId');
-				elementWithId.textContent = clientId;
 
-				fetch(`clients/${clientId}/addresses`)
+				const elementWithId = document.getElementById('clientId');
+				elementWithId.textContent = 'ID do cliente: '
+				elementWithId.textContent = elementWithId.textContent + " " + clientId;
+
+				const deliveryAddressList = document.getElementById('deliveryAddressList');
+				const chargingAddressList = document.getElementById('chargingAddressList');
+
+				fetch(`index/${clientId}/addresses`)
 						.then(response => {
 							if(!response.ok) {
 								throw new Error("Erro ao retornar endereços.");
@@ -146,8 +151,7 @@
 							return response.json();
 						})
 						.then(addresses => {
-							const deliveryAddressList = document.getElementById('deliveryAddressList');
-							const chargingAddressList = document.getElementById('chargingAddressList');
+
 							let deliveryAddresses = '';
 							let chargingAddresses = '';
 								addresses.forEach(address => {
@@ -155,8 +159,7 @@
 														<div class="card">
 															<div class="card-body">
 																<h3 class="card-title">ID: ${address.id}</h3>
-																<h3 class="card-title">Tipo: ${address.addressType}</h3>
-																<h4 class="card-title">${address.nickname}</h4>
+																<h4>${address.nickname}</h4>
 																<p>Tipo de residência: ${address.typeOfResidence}</p>
 																<p>Logradouro: ${address.addressing}</p>
 																<p>Número: ${address.houseNumber}</p>
@@ -167,7 +170,7 @@
 																<p>Estado: ${address.state}</p>
 																<p>País: ${address.country}</p>
 																<p>Observação: ${address.observation}</p>
-																<button type="button" class="btn btn-danger">Deletar</button>
+																<button type="button" class="btn btn-danger" >Deletar</button>
 																<button type="button" class="btn btn-primary">Atualizar</button>
 															</div>
 														</div>`;

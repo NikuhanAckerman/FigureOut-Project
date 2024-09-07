@@ -49,16 +49,16 @@ public class ClientController {
         return "index";
     }
 
-    @GetMapping("clients/{id}/addresses")
+    @GetMapping("index/{id}/addresses")
     @ResponseBody
     public List<Address> getClientAddresses(@PathVariable long id) {
-        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inválido."));
+        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
         return client.getAddresses();
     }
 
     @DeleteMapping("clients/{id}/addresses")
     public String deleteClientAddress(@PathVariable long id, Address address) {
-        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inválido."));
+        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
         client.getAddresses().remove(address);
 
         return "index";
