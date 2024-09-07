@@ -60,27 +60,14 @@ public class ClientController {
         model.addAttribute("clientAddressDTO", clientAddressDTO);
         model.addAttribute("clientId", id);
 
+        System.out.println("Model Attributes: " + model.asMap());
+
         return "index";
     }
 
     @PostMapping("index/{id}/addresses/create")
     public String createClientAddressPost(@PathVariable long id, @ModelAttribute ClientAddressDTO clientAddressDTO) {
         Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
-
-        /*Address address = new Address();
-
-        address.setAddressType(clientAddressDTO.getAddress().isAddressType());
-        address.setNickname(clientAddressDTO.getAddress().getNickname());
-        address.setTypeOfResidence(clientAddressDTO.getAddress().getTypeOfResidence());
-        address.setAddressing(clientAddressDTO.getAddress().getAddressing());
-        address.setHouseNumber(clientAddressDTO.getAddress().getHouseNumber());
-        address.setNeighbourhood(clientAddressDTO.getAddress().getNeighbourhood());
-        address.setAddressingType(clientAddressDTO.getAddress().getAddressingType());
-        address.setCep(clientAddressDTO.getAddress().getCep());
-        address.setCity(clientAddressDTO.getAddress().getCity());
-        address.setState(clientAddressDTO.getAddress().getState());
-        address.setCountry(clientAddressDTO.getAddress().getCountry());
-        address.setObservation(clientAddressDTO.getAddress().getObservation());*/
 
         client.addAddress(clientAddressDTO.getAddress());
 
@@ -107,18 +94,10 @@ public class ClientController {
 
         Gender gender = genderRepository.findById(clientDTO.getGender().getId()).orElse(null);
 
-        // Atributos de telefone.
-        Phone phone = new Phone();
-        phone.setCellphone(clientDTO.getPhone().isCellphone());
-        phone.setDdd(clientDTO.getPhone().getDdd());
-        phone.setPhoneNumber(clientDTO.getPhone().getPhoneNumber());
-
-        phoneRepository.save(phone);
-
-        // Atributos de endereço.
+        phoneRepository.save(clientDTO.getPhone());
 
         Client client = new Client();
-        client.setPhone(phone);
+        client.setPhone(clientDTO.getPhone());
         client.setGender(gender);
         client.setName(clientDTO.getName());
         client.setEmail(clientDTO.getEmail());
@@ -127,39 +106,14 @@ public class ClientController {
         client.setEnabled(clientDTO.isEnabled());
         client.setPassword(clientDTO.getPassword());
 
-        Address deliveryAddress = new Address();
-        deliveryAddress.setAddressType(false);
-        deliveryAddress.setNickname(clientDTO.getDeliveryAddress().getNickname());
-        deliveryAddress.setTypeOfResidence(clientDTO.getDeliveryAddress().getTypeOfResidence());
-        deliveryAddress.setAddressing(clientDTO.getDeliveryAddress().getAddressing());
-        deliveryAddress.setHouseNumber(clientDTO.getDeliveryAddress().getHouseNumber());
-        deliveryAddress.setNeighbourhood(clientDTO.getDeliveryAddress().getNeighbourhood());
-        deliveryAddress.setAddressingType(clientDTO.getDeliveryAddress().getAddressingType());
-        deliveryAddress.setCep(clientDTO.getDeliveryAddress().getCep());
-        deliveryAddress.setCity(clientDTO.getDeliveryAddress().getCity());
-        deliveryAddress.setState(clientDTO.getDeliveryAddress().getState());
-        deliveryAddress.setCountry(clientDTO.getDeliveryAddress().getCountry());
-        deliveryAddress.setObservation(clientDTO.getDeliveryAddress().getObservation());
+        clientDTO.getDeliveryAddress().setAddressType(false);
+        clientDTO.getChargingAddress().setAddressType(true);
 
-        Address chargingAddress = new Address();
-        chargingAddress.setAddressType(true);
-        chargingAddress.setNickname(clientDTO.getChargingAddress().getNickname());
-        chargingAddress.setTypeOfResidence(clientDTO.getChargingAddress().getTypeOfResidence());
-        chargingAddress.setAddressing(clientDTO.getChargingAddress().getAddressing());
-        chargingAddress.setHouseNumber(clientDTO.getChargingAddress().getHouseNumber());
-        chargingAddress.setNeighbourhood(clientDTO.getChargingAddress().getNeighbourhood());
-        chargingAddress.setAddressingType(clientDTO.getChargingAddress().getAddressingType());
-        chargingAddress.setCep(clientDTO.getChargingAddress().getCep());
-        chargingAddress.setCity(clientDTO.getChargingAddress().getCity());
-        chargingAddress.setState(clientDTO.getChargingAddress().getState());
-        chargingAddress.setCountry(clientDTO.getChargingAddress().getCountry());
-        chargingAddress.setObservation(clientDTO.getChargingAddress().getObservation());
+        addressRepository.save(clientDTO.getDeliveryAddress());
+        addressRepository.save(clientDTO.getChargingAddress());
 
-        addressRepository.save(deliveryAddress);
-        addressRepository.save(chargingAddress);
-
-        client.addAddress(deliveryAddress);
-        client.addAddress(chargingAddress);
+        client.addAddress(clientDTO.getDeliveryAddress());
+        client.addAddress(clientDTO.getChargingAddress());
 
         clientRepository.save(client);
 

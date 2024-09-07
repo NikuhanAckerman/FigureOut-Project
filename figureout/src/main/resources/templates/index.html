@@ -10,7 +10,6 @@
 		<link rel="icon" href="/Images/favicon.ico" type="image/x-icon">
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/6f5xX5L0d7/1XshTLF5j8l2/zg7L2Dd6fR5Jp4C" crossorigin="anonymous"></script>
-
 	</head>
     <body>
 		<nav class="navbar navbar-custom fixed-top">
@@ -79,8 +78,6 @@
 			</div>
 		</div>
 
-
-
 		<div id="seeAddressModal" class="modal fade">
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -136,13 +133,16 @@
                         <h5 id="addressFormCanvasLabel">Adicionar Endereço</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
+
                     <div class="offcanvas-body">
-						<form th:action="@{/index/{clientId}/addresses/create(clientId=${clientId})}" th:object="${clientAddressDTO}" method="POST">
-						<div>
+
+						<!--<form th:action="@{/index/{clientId}/addresses/create(clientId=${clientId})}" th:object="${clientAddressDTO}" method="POST">
+
+							<div>
                                 <label><b>Tipo</b></label>
                                 <div class="radio-group">
-                                    <label><input type="radio" th:field="*{address.addressType}" value="false"/> Entrega</label>
-                                    <label><input type="radio" th:field="*{address.addressType}" value="true"/> Cobrança</label>
+									<label><input type="radio" th:field="*{address.addressType}" value="true"/> Cobrança</label>
+									<label><input type="radio" th:field="*{address.addressType}" value="false"/> Entrega</label>
                                 </div>
                             </div>
 
@@ -202,9 +202,14 @@
                             </div>
 
                             <button type="submit" class="btn btn-primary">Salvar Endereço</button>
-                        </form>
+
+                        </form>-->
+
                     </div>
-		</div>
+				</div>
+
+
+
 
 		<script>
 
@@ -237,7 +242,7 @@
 							let addressCollapseCardId = 1;
 								addresses.forEach(address => {
 									const addressItem = `
-														<div class="card">
+														<div class="card mt-3">
 															<div class="card-body">
 																<h3 class="card-title">ID: ${address.id}</h3>
 																<h4>${address.nickname}</h4>
