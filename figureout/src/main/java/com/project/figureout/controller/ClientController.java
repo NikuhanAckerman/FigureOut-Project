@@ -1,9 +1,6 @@
 package com.project.figureout.controller;
 
-import com.project.figureout.dto.AddressDTO;
-import com.project.figureout.dto.ClientDTO;
-import com.project.figureout.dto.GenderDTO;
-import com.project.figureout.dto.PhoneDTO;
+import com.project.figureout.dto.*;
 import com.project.figureout.model.Address;
 import com.project.figureout.model.Gender;
 import com.project.figureout.model.Phone;
@@ -39,7 +36,7 @@ public class ClientController {
         //model.addAttribute("gender", genders);
 
         List<Client> clients =  clientRepository.findAll();
-        model.addAttribute("client", clients);
+        model.addAttribute("clients", clients);
 
         //List<Address> addresses =  addressRepository.findAll();
         //model.addAttribute("address", addresses);
@@ -57,11 +54,41 @@ public class ClientController {
     }
 
     @GetMapping("index/{id}/addresses/create")
-    public String createClientAddress(@PathVariable long id, Model model) {
+    public String createClientAddressGet(@PathVariable long id, Model model) {
+        ClientAddressDTO clientAddressDTO = new ClientAddressDTO();
 
+        model.addAttribute("clientAddressDTO", clientAddressDTO);
+        model.addAttribute("clientId", id);
 
-        return "index/{id}/addresses/create";
+        return "index";
     }
+
+    @PostMapping("index/{id}/addresses/create")
+    public String createClientAddressPost(@PathVariable long id, @ModelAttribute ClientAddressDTO clientAddressDTO) {
+        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+
+        /*Address address = new Address();
+
+        address.setAddressType(clientAddressDTO.getAddress().isAddressType());
+        address.setNickname(clientAddressDTO.getAddress().getNickname());
+        address.setTypeOfResidence(clientAddressDTO.getAddress().getTypeOfResidence());
+        address.setAddressing(clientAddressDTO.getAddress().getAddressing());
+        address.setHouseNumber(clientAddressDTO.getAddress().getHouseNumber());
+        address.setNeighbourhood(clientAddressDTO.getAddress().getNeighbourhood());
+        address.setAddressingType(clientAddressDTO.getAddress().getAddressingType());
+        address.setCep(clientAddressDTO.getAddress().getCep());
+        address.setCity(clientAddressDTO.getAddress().getCity());
+        address.setState(clientAddressDTO.getAddress().getState());
+        address.setCountry(clientAddressDTO.getAddress().getCountry());
+        address.setObservation(clientAddressDTO.getAddress().getObservation());*/
+
+        client.addAddress(clientAddressDTO.getAddress());
+
+        clientRepository.save(client);
+
+        return "redirect:/index/";
+    }
+
 
     @GetMapping("/createClient")
     public String addClientGet(Model model) {
@@ -155,7 +182,6 @@ public class ClientController {
     }
 
      */
-
 
     @GetMapping("/updateClient/{id}")
     public String showSpecificClient(@PathVariable long id, Model model) {

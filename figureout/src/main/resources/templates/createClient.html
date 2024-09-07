@@ -189,37 +189,6 @@
 					<div class="radio-group" th:each="gender : ${genderList}">
 						<input type="radio" th:field="*{gender.id}" th:value="${gender.id}" th:text="${gender.genderType}" required/>
 					</div>
-					<!--
-					<label><b>Endereços</b></label>
-					<div>
-						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deliveryAddressModal">Cadastrar endereço de entrega</button>
-						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#chargingAddressModal">Cadastrar endereço de cobrança</button>
-					</div>
-
-					<div id="deliveryAddressModal" class="modal fade">
-						<div class="modal-dialog">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h3 class="modal-title">Cadastrar endereço de entrega</h3>
-									<button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
-								</div>
-
-								<div class="modal-body">
-
-
-								</div>
-
-								<div class="modal-footer">
-									<button type="button" class="btn btn-primary" data-bs-dismiss="modal">Adicionar</button>
-									<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
-								</div>
-
-							</div>
-
-						</div>
-					</div>
-
-					-->
 
 					<div>
 						<label><b>Tipo de telefone</b></label>

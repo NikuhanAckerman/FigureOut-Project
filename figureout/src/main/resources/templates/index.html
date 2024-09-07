@@ -47,7 +47,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="client : ${client}">
+						<tr th:each="client : ${clients}">
 							<td th:text = "${client.id}"></td>
 							<td th:text = "${client.name}"></td>
 							<td th:text = "${client.password}"></td>
@@ -93,7 +93,12 @@
 
 						<div>
 							<h1 id="clientId"></h1>
-							<button type="button" class="btn btn-success">Adicionar endereço</button>
+
+							<button type="button" class="btn btn-success"
+							data-bs-toggle="offcanvas" data-bs-target="#addressFormCanvas" aria-controls="addressFormCanvas" th:data-bs-client-id="${clientId}">
+								Adicionar endereço
+							</button>
+
 							<div class="card mt-3">
 								<div class="card-body">
 									<h2 class="card-title">Endereços de entrega</h2>
@@ -124,6 +129,81 @@
 				</div>
 
 			</div>
+		</div>
+
+                <div class="offcanvas offcanvas-start" tabindex="-1" id="addressFormCanvas" aria-labelledby="addressFormCanvasLabel">
+                    <div class="offcanvas-header">
+                        <h5 id="addressFormCanvasLabel">Adicionar Endereço</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+						<form th:action="@{/index/{clientId}/addresses/create(clientId=${clientId})}" th:object="${clientAddressDTO}" method="POST">
+						<div>
+                                <label><b>Tipo</b></label>
+                                <div class="radio-group">
+                                    <label><input type="radio" th:field="*{address.addressType}" value="false"/> Entrega</label>
+                                    <label><input type="radio" th:field="*{address.addressType}" value="true"/> Cobrança</label>
+                                </div>
+                            </div>
+
+                            <div>
+                                <label><b>Apelido</b></label>
+                                <input type="text" class="form-control" placeholder="Digite o apelido" th:field="*{address.nickname}" required>
+                            </div>
+
+                            <div>
+                                <label><b>Tipo de Residência</b></label>
+                                <input type="text" class="form-control" placeholder="(Casa, apartamento, etc...)" th:field="*{address.typeOfResidence}" required>
+                            </div>
+
+                            <div>
+                                <label><b>Tipo de logradouro</b></label>
+                                <input type="text" class="form-control" placeholder="(Rua, Avenida, etc...)" th:field="*{address.addressingType}" required>
+                            </div>
+
+                            <div>
+                                <label><b>Logradouro</b></label>
+                                <input type="text" class="form-control" placeholder="Insira o logradouro" th:field="*{address.addressing}" required>
+                            </div>
+
+                            <div>
+                                <label><b>Nº de residência</b></label>
+                                <input type="text" class="form-control" placeholder="Insira o número da residência" th:field="*{address.houseNumber}" maxlength="5" required>
+                            </div>
+
+                            <div>
+                                <label><b>CEP</b></label>
+                                <input type="text" class="form-control" placeholder="00000-000" th:field="*{address.cep}" maxlength="9" required>
+                            </div>
+
+                            <div>
+                                <label><b>Bairro</b></label>
+                                <input type="text" class="form-control" placeholder="Insira o bairro" th:field="*{address.neighbourhood}" required>
+                            </div>
+
+                            <div>
+                                <label><b>Cidade</b></label>
+                                <input type="text" class="form-control" placeholder="Insira a cidade" th:field="*{address.city}" required>
+                            </div>
+
+                            <div>
+                                <label><b>Estado</b></label>
+                                <input type="text" class="form-control" placeholder="Insira o Estado" th:field="*{address.state}" required>
+                            </div>
+
+                            <div>
+                                <label><b>País</b></label>
+                                <input type="text" class="form-control" placeholder="Insira o País" th:field="*{address.country}" required>
+                            </div>
+
+                            <div>
+                                <label><b>Observação</b></label>
+                                <input type="text" class="form-control" placeholder="Insira uma observação (opcional)" th:field="*{address.observation}">
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Salvar Endereço</button>
+                        </form>
+                    </div>
 		</div>
 
 		<script>
