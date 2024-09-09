@@ -81,10 +81,12 @@ public class ClientController {
     }
 
     @PutMapping("index/{id}/addresses/update")
-    public String updateClientAddress(@PathVariable long id) {
+    public String updateClientAddress(@PathVariable long id, Model model) {
         Address addressToUpdate = addressRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+        AddressDTO addressDTO = new AddressDTO();
 
 
+        return "redirect:/index/";
     }
 
     @GetMapping("/createClient")
