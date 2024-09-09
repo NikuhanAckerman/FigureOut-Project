@@ -42,6 +42,7 @@
 							<th>Endereços</th>
 							<th>Telefone</th>
 							<th>Ativo</th>
+							<th>Ações</th>
 
 						</tr>
 					</thead>
@@ -63,15 +64,15 @@
 							</td>
 
 
-							<!--
-								<a class="btn btn-primary" th:href="@{updateClient/{id}(id=${client.id})}">Atualizar</a>
+							<td>
+								<!--<a class="btn btn-primary" th:href="@{updateClient/{id}(id=${client.id})}">Atualizar</a>-->
 
-								<form th:action="@{/deleteClient/{id}(id=${client.id})}" method="POST" display="inline">
+								<form th:action="@{/deleteClient/{id}(id=${client.id})}" method="POST" style="display: inline;">
 									<input type="hidden" name="_method" value="DELETE"/>
 									<button type="submit" class="btn btn-danger btn-delete" onclick="return confirm('Tem certeza?')">Deletar</button>
 								</form>
 							</td>
-							-->
+
 						</tr>
 					</tbody>
 				</table>
@@ -135,7 +136,6 @@
                     </div>
 
                     <div class="offcanvas-body">
-						<h1 ></h1>
 
 						<form th:object="${clientAddressDTO}" method="POST" id="addressCreateForm">
 							<div>
@@ -262,7 +262,13 @@
 																	<p>Estado: ${address.state}</p>
 																	<p>País: ${address.country}</p>
 																	<p>Observação: ${address.observation}</p>
-																	<button type="button" class="btn btn-danger" >Deletar</button>
+
+																	<form action="index/${address.id}/addresses/delete" method="POST" style="display: inline;">
+																		<input type="hidden" name="_method" value="DELETE"/>
+																		<button type="submit" class="btn btn-danger btn-delete" onclick="return confirm('Tem certeza?')">Deletar</button>
+																	</form>
+
+																	<form action="">
 																	<button type="button" class="btn btn-primary">Atualizar</button>
 																</div>
 
@@ -289,17 +295,11 @@
 				addressForm.setAttribute('action', `/index/${clientId}/addresses/create`);
 			});
 
-
-
-
 		</script>
-
 
 		<footer id="footer">
 			<img src="/Images/figureoutlogo1.svg">
 		</footer>
-
-
 
     </body>
 </html>

@@ -73,6 +73,20 @@ public class ClientController {
         return "redirect:/index";
     }
 
+    @DeleteMapping("index/{id}/addresses/delete")
+    public String deleteClientAddress(@PathVariable long id) {
+        addressRepository.deleteById(id);
+
+        return "redirect:/index";
+    }
+
+    @PutMapping("index/{id}/addresses/update")
+    public String updateClientAddress(@PathVariable long id) {
+        Address addressToUpdate = addressRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+
+
+    }
+
     @GetMapping("/createClient")
     public String addClientGet(Model model) {
         ClientDTO clientDTO = new ClientDTO();
@@ -135,52 +149,7 @@ public class ClientController {
 
     @GetMapping("/updateClient/{id}")
     public String showSpecificClient(@PathVariable long id, Model model) {
-       /* Optional<Client> client = clientRepository.findById(id);
-        Optional<Address> address = addressRepository.findById(id);
-        Optional<Phone> phone = phoneRepository.findById(id);
-        Optional<Gender> gender = genderRepository.findById(id);
 
-        //Atributo de gênero
-        GenderDTO genderDTO = new GenderDTO();
-        genderDTO.setGender((gender.get().getGender()));
-
-        //Atributos de cliente
-        ClientDTO clientDTO = new ClientDTO();
-        clientDTO.setName(client.get().getName());
-        clientDTO.setEmail(client.get().getEmail());
-        clientDTO.setPassword(client.get().getPassword());
-        clientDTO.setCpf(client.get().getCpf());
-        clientDTO.setBirthday(client.get().getBirthday());
-        clientDTO.setEnabled(client.get().isEnabled());
-
-        //Atributos de endereço.
-        AddressDTO addressDTO = new AddressDTO();
-        addressDTO.setTypeOfResidence(address.get().getTypeOfResidence());
-        addressDTO.setAddressing(address.get().getAdressing());
-        addressDTO.setHouseNumber(address.get().getHouseNumber());
-        addressDTO.setNeighbourhood(address.get().getNeighbourhood());
-        addressDTO.setAddressingType(address.get().getAddressingType());
-        addressDTO.setCep(address.get().getCep());
-        addressDTO.setCity(address.get().getCity());
-        addressDTO.setState(address.get().getState());
-        addressDTO.setCountry(address.get().getCountry());
-        addressDTO.setObservation(address.get().getObservation());
-
-        // Atributos de telefone.
-        PhoneDTO phoneDTO = new PhoneDTO();
-        phoneDTO.setCellphone(phone.get().isCellphone());
-        phoneDTO.setDdd(phone.get().getDdd());
-        phoneDTO.setPhoneNumber(phone.get().getPhoneNumber());
-
-        model.addAttribute("genderDTO", genderDTO);
-        model.addAttribute("genderID", id);
-        model.addAttribute("clientDTO", clientDTO);
-        model.addAttribute("clientID", id);
-        model.addAttribute("addressDTO", addressDTO);
-        model.addAttribute("addressID", id);
-        model.addAttribute("phoneDTO", phoneDTO);
-        model.addAttribute("phoneID", id);
-        */
         return "updateClient";
 
 
@@ -244,12 +213,8 @@ public class ClientController {
 
     @DeleteMapping("/deleteClient/{id}")
     public String deleteClient(@PathVariable long id) {
-        /*
-        genderRepository.deleteById(id);
         clientRepository.deleteById(id);
-        addressRepository.deleteById(id);
-        phoneRepository.deleteById(id);
-        */
+
         return "redirect:/index";
     }
 

@@ -4,10 +4,18 @@ import com.project.figureout.model.Gender;
 import com.project.figureout.repository.GenderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 @Configuration
 public class DataInitializer implements CommandLineRunner {
+
+    // enable DELETE and PUT requests:
+    @Bean
+    public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
+        return new HiddenHttpMethodFilter();
+    }
 
     @Autowired
     private GenderRepository genderRepository;
@@ -27,5 +35,7 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("Tabela de gêneros populada.");
         }
     }
+
+
 
 }
