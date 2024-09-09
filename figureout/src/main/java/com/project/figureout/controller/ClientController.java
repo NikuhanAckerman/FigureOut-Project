@@ -31,12 +31,21 @@ public class ClientController {
 
     @GetMapping({"", "/", "/index"})
     public String showClientsGet(Model model) {
+        ClientAddressDTO clientAddressDTO = new ClientAddressDTO(); // workaround para n ter q mexer com requestparams e javascript
+        /* explicaçao:
 
+            eu queria q o usuario pudesse adicionar endereços novos em cada cliente na pagina /index,
+            porem cada metodo get e post num controller precisa usar um endpoint diferente. ja que esse endpoint
+            "/index" ja esta sendo usado pelo metodo showClientsGet, eu precisaria criar uma nova pagina pro formulario
+            de add novo endereço ou entao uns paranaue com javascript, n vou fazzer isso pq to cansado (bro is losing his mind)
+
+         */
         //List<Gender> genders =  genderRepository.findAll();
         //model.addAttribute("gender", genders);
 
         List<Client> clients =  clientRepository.findAll();
         model.addAttribute("clients", clients);
+        model.addAttribute("clientAddressDTO", clientAddressDTO);
 
         //List<Address> addresses =  addressRepository.findAll();
         //model.addAttribute("address", addresses);
@@ -46,36 +55,23 @@ public class ClientController {
         return "index";
     }
 
-    @GetMapping("index/{id}/addresses")
+    @GetMapping("index/{id}/addresses") // exemplo de paranaue com javascript (o codigo js ta na pagina index)
     @ResponseBody
     public List<Address> getClientAddresses(@PathVariable long id) {
         Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
         return client.getAddresses();
     }
 
-    @GetMapping("index/{id}/addresses/create")
-    public String createClientAddressGet(@PathVariable long id, Model model) {
-        ClientAddressDTO clientAddressDTO = new ClientAddressDTO();
-
-        model.addAttribute("clientAddressDTO", clientAddressDTO);
-        model.addAttribute("clientId", id);
-
-        System.out.println("Model Attributes: " + model.asMap());
-
-        return "index";
-    }
-
     @PostMapping("index/{id}/addresses/create")
-    public String createClientAddressPost(@PathVariable long id, @ModelAttribute ClientAddressDTO clientAddressDTO) {
+    public String createClientAddressPost(@PathVariable long id, @ModelAttribute("clientAddressDTO") ClientAddressDTO clientAddressDTO) {
         Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
 
         client.addAddress(clientAddressDTO.getAddress());
 
         clientRepository.save(client);
 
-        return "redirect:/index/";
+        return "redirect:/index";
     }
-
 
     @GetMapping("/createClient")
     public String addClientGet(Model model) {

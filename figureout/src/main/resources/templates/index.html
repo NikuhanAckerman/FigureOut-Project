@@ -55,7 +55,7 @@
 							<td th:text = "${client.cpf}"></td>
 							<td th:text = "${client.email}"></td>
 							<td>
-								<button type="button" class="btn btn-secondary" th:data-bs-client-id = "${client.id}" data-bs-toggle="modal" data-bs-target="#seeAddressModal">Ver endereços</button>
+								<button type="button" class="btn btn-secondary" th:data-bs-client-id = "${client.id}" data-bs-toggle="modal" data-bs-target="#seeAddressModal" >Ver endereços</button>
 							</td>
 							<td th:text = "${client.phone.phoneNumber}"></td>
 							<td>
@@ -92,7 +92,7 @@
 							<h1 id="clientId"></h1>
 
 							<button type="button" class="btn btn-success"
-							data-bs-toggle="offcanvas" data-bs-target="#addressFormCanvas" aria-controls="addressFormCanvas" th:data-bs-client-id="${clientId}">
+							data-bs-toggle="offcanvas" data-bs-target="#addressFormCanvas" aria-controls="addressFormCanvas" id="addAddressButton">
 								Adicionar endereço
 							</button>
 
@@ -135,14 +135,14 @@
                     </div>
 
                     <div class="offcanvas-body">
+						<h1 ></h1>
 
-						<!--<form th:action="@{/index/{clientId}/addresses/create(clientId=${clientId})}" th:object="${clientAddressDTO}" method="POST">
-
+						<form th:object="${clientAddressDTO}" method="POST" id="addressCreateForm">
 							<div>
                                 <label><b>Tipo</b></label>
                                 <div class="radio-group">
-									<label><input type="radio" th:field="*{address.addressType}" value="true"/> Cobrança</label>
-									<label><input type="radio" th:field="*{address.addressType}" value="false"/> Entrega</label>
+									<label><input type="radio" th:field="*{address.addressType}" th:value="false"> Entrega</label>
+									<label><input type="radio" th:field="*{address.addressType}" th:value="true"/> Cobrança</label>
                                 </div>
                             </div>
 
@@ -201,10 +201,11 @@
                                 <input type="text" class="form-control" placeholder="Insira uma observação (opcional)" th:field="*{address.observation}">
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Salvar Endereço</button>
+							<div class="mt-2">
+								<button type="submit" class="btn btn-primary">Salvar Endereço</button>
+							</div>
 
-                        </form>-->
-
+                        </form>
                     </div>
 				</div>
 
@@ -214,6 +215,7 @@
 		<script>
 
 			const seeAddressModal = document.getElementById("seeAddressModal");
+			const addAddressButton = document.getElementById("addAddressButton");
 
 			seeAddressModal.addEventListener('show.bs.modal', function (event) {
 				const button = event.relatedTarget
@@ -225,7 +227,7 @@
 				elementWithId.textContent = 'ID do cliente: '
 				elementWithId.textContent = elementWithId.textContent + " " + clientId;
 
-
+				addAddressButton.setAttribute('data-bs-client-id', clientId);
 
 				fetch(`index/${clientId}/addresses`)
 						.then(response => {
@@ -277,7 +279,21 @@
 								chargingAddressList.innerHTML = chargingAddresses;
 							})
 			});
+
+			const addressOffcanvas = document.getElementById("addressFormCanvas");
+
+			addressOffcanvas.addEventListener('show.bs.offcanvas', function(event) {
+				const clientId = addAddressButton.getAttribute('data-bs-client-id');
+
+				const addressForm = document.getElementById("addressCreateForm");
+				addressForm.setAttribute('action', `/index/${clientId}/addresses/create`);
+			});
+
+
+
+
 		</script>
+
 
 		<footer id="footer">
 			<img src="/Images/figureoutlogo1.svg">

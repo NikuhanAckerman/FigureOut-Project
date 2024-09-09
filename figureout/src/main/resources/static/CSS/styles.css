@@ -37,3 +37,7 @@ body {
 .small-input {
     width: 100px;
 }
+
+#addressFormCanvas {
+    z-index: 1056; /* modal zindex é 1055, offcanvas do form de create address 1056 pra fica por cima */
+}
