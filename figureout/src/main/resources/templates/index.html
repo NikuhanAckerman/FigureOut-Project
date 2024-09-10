@@ -143,7 +143,8 @@
                     <div class="offcanvas-body">
 						<!--th:object="${clientAddressDTO}" method="POST"-->
 						<form id="addressForm">
-							<input type="hidden" name="_method" id="addressFormMethod"/>
+							<input type="hidden" id="address-id" value=""> <!-- For updates -->
+							<input type="hidden" id="client-id" value="{{clientId}}"> <!-- For both POST and PUT -->
 							<div>
                                 <label><b>Tipo</b></label>
                                 <div class="radio-group" id="addressType">
@@ -288,7 +289,10 @@
 																	-->
 
 																	<form action="index/addresses/${address.id}" method="GET" style="display: inline;">
-																		<button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#addressFormCanvas" aria-controls="addressFormCanvas" id="updateAddressButton" data-bs-address-id= "${address.id}">Atualizar</button>
+																		<button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#addressFormCanvas"
+																		aria-controls="addressFormCanvas" id="updateAddressButton" data-bs-address-id= "${address.id}"
+																		data-bs-client-id="${clientId}">
+																		Atualizar</button>
 																	</form>
 
 																</div>
@@ -310,7 +314,7 @@
 
 			addressOffcanvas.addEventListener('show.bs.offcanvas', function(event) {
 				button = event.relatedTarget;
-				const addressId = button.getAttribute('data-bs-address-id');
+				const addressIdFromGetUpdate = button.getAttribute('data-bs-address-id');
 				const addressForm = document.getElementById("addressForm");
 				const addressFormMethod = document.getElementById("addressFormMethod");
 
@@ -332,7 +336,59 @@
 
 				const addressFormSubmitButton = document.getElementById("addressFormSubmitButton")
 
-				if(button.id == "updateAddressButton") {
+				const addressId = document.getElementById('address-id').value; // Hidden input for address ID
+				const clientId = document.getElementById('client-id').value; // Client ID
+				const addressDTO = {
+					addressType: addressTypeField.value,
+					nickname: nicknameField.value,
+					typeOfResidence: typeOfResidenceField.value,
+					addressingType: addressingTypeField.value,
+					addressing: addressingField.value,
+					houseNumber: houseNumberField.value,
+					neighbourhood: neighbourhoodField.value,
+					cep: cepField.value,
+					city: cityField.value,
+					state: stateField.value,
+					country: countryField.value,
+					observation: observationField.value
+				};
+
+				let method, url;
+
+				if (addressId) {
+					// Update existing address (PUT)
+					method = 'PUT';
+					url = `/index/${clientId}/addresses/${addressId}/update`;
+				} else {
+					// Create new address (POST)
+					method = 'POST';
+					url = `/index/clients/${clientId}/addresses/create`;
+				}
+
+				fetch(url, {
+					method: method,
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(addressDTO),
+				})
+						.then(response => {
+							if (!response.ok) {
+								throw new Error('Error submitting the address');
+							}
+							return response.json(); // handle response if needed
+						})
+						.then(data => {
+							console.log('Address submission successful:', data);
+							// Optionally close the offcanvas or reset the form here
+						})
+						.catch(error => {
+							console.error('Error:', error);
+						});
+
+				/*if(button.id == "updateAddressButton") {
+
+
 					console.log("Update address")
 
 					addressForm.setAttribute('action', `index/addresses/${addressId}/update`);
@@ -385,7 +441,57 @@
 								countryField.value = country;
 								observationField.value = observation;
 
+								const addressDTO = {
+									addressType: addressTypeField.value,
+									nickname: nicknameField.value,
+									typeOfResidence: typeOfResidenceField.value,
+									addressingType: addressingTypeField.value,
+									addressing: addressingField.value,
+									houseNumber: houseNumberField.value,
+									neighbourhood: neighbourhoodField.value,
+									cep: cepField.value,
+									city: cityField.value,
+									state: stateField.value,
+									country: countryField.value,
+									observation: observationField.value
+								};
+
+								let method, url;
+
+								if (addressId) {
+									// Update existing address (PUT)
+									method = 'PUT';
+									url = `/index/${clientId}/addresses/${addressId}/update`;
+								} else {
+									// Create new address (POST)
+									method = 'POST';
+									url = `/index/clients/${clientId}/addresses/create`;
+								}
+
+								fetch(url, {
+									method: method,
+									headers: {
+										'Content-Type': 'application/json',
+									},
+									body: JSON.stringify(addressDTO),
+								})
+										.then(response => {
+											if (!response.ok) {
+												throw new Error('Error submitting the address');
+											}
+											return response.json(); // handle response if needed
+										})
+										.then(data => {
+											console.log('Address submission successful:', data);
+											// Optionally close the offcanvas or reset the form here
+										})
+										.catch(error => {
+											console.error('Error:', error);
+										});
+
 								addressFormSubmitButton.innerHTML = 'Atualizar'
+
+
 							})
 							.catch(error => console.error("Error:", error));
 
@@ -416,7 +522,7 @@
 					observationField.value = '';
 
 					addressFormSubmitButton.innerHTML = 'Criar'
-				}
+				}*/
 
 			});
 

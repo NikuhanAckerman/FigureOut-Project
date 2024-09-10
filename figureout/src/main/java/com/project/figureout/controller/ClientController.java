@@ -81,10 +81,10 @@ public class ClientController {
         return "redirect:/index";
     }
 
-    @GetMapping("index/addresses/{id}")
+    @GetMapping("index/{clientId}/addresses/{addressId}/update")
     @ResponseBody
-    public AddressDTO updateClientAddressGet(@PathVariable long id) {
-        Address addressToUpdate = addressRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+    public AddressDTO updateClientAddressGet(@PathVariable long clientId, @PathVariable long addressId) {
+        Address addressToUpdate = addressRepository.findById(addressId).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
         AddressDTO addressDTO = new AddressDTO();
 
         addressDTO.setAddressType(addressToUpdate.isAddressType());
@@ -103,9 +103,9 @@ public class ClientController {
         return addressDTO;
     }
 
-    @PutMapping(value ="index/addresses/{id}/update", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<?> updateClientAddress(@PathVariable long id, @RequestBody AddressDTO addressDTO) {
-        Address addressToUpdate = addressRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+    @PutMapping("index/{clientId}/addresses/{addressId}/update")
+    public ResponseEntity<?> updateClientAddress(@PathVariable long addressId, @PathVariable long clientId, @ModelAttribute AddressDTO addressDTO) {
+        Address addressToUpdate = addressRepository.findById(addressId).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
 
         addressToUpdate.setAddressType(addressDTO.isAddressType());
         addressToUpdate.setNickname(addressDTO.getNickname());
@@ -119,6 +119,7 @@ public class ClientController {
         addressToUpdate.setState(addressDTO.getState());
         addressToUpdate.setCountry(addressDTO.getCountry());
         addressToUpdate.setObservation(addressDTO.getObservation());
+        addressToUpdate.setClient(clientRepository.findById(clientId).orElseThrow(() -> new IllegalArgumentException("ID inexistente.")));
 
         addressRepository.save(addressToUpdate);
 
