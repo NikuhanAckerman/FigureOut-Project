@@ -9,6 +9,7 @@ import com.project.figureout.repository.ClientRepository;
 import com.project.figureout.repository.GenderRepository;
 import com.project.figureout.repository.PhoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -80,13 +81,48 @@ public class ClientController {
         return "redirect:/index";
     }
 
-    @PutMapping("index/{id}/addresses/update")
-    public String updateClientAddress(@PathVariable long id, Model model) {
+    @GetMapping("index/addresses/{id}")
+    @ResponseBody
+    public AddressDTO updateClientAddressGet(@PathVariable long id) {
         Address addressToUpdate = addressRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
         AddressDTO addressDTO = new AddressDTO();
 
+        addressDTO.setAddressType(addressToUpdate.isAddressType());
+        addressDTO.setNickname(addressToUpdate.getNickname());
+        addressDTO.setTypeOfResidence(addressToUpdate.getTypeOfResidence());
+        addressDTO.setAddressing(addressToUpdate.getAddressing());
+        addressDTO.setHouseNumber(addressToUpdate.getHouseNumber());
+        addressDTO.setNeighbourhood(addressToUpdate.getNeighbourhood());
+        addressDTO.setAddressingType(addressToUpdate.getAddressingType());
+        addressDTO.setCep(addressToUpdate.getCep());
+        addressDTO.setCity(addressToUpdate.getCity());
+        addressDTO.setState(addressToUpdate.getState());
+        addressDTO.setCountry(addressToUpdate.getCountry());
+        addressDTO.setObservation(addressToUpdate.getObservation());
 
-        return "redirect:/index/";
+        return addressDTO;
+    }
+
+    @PutMapping(value ="index/addresses/{id}/update", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> updateClientAddress(@PathVariable long id, @RequestBody AddressDTO addressDTO) {
+        Address addressToUpdate = addressRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+
+        addressToUpdate.setAddressType(addressDTO.isAddressType());
+        addressToUpdate.setNickname(addressDTO.getNickname());
+        addressToUpdate.setTypeOfResidence(addressDTO.getTypeOfResidence());
+        addressToUpdate.setAddressing(addressDTO.getAddressing());
+        addressToUpdate.setHouseNumber(addressDTO.getHouseNumber());
+        addressToUpdate.setNeighbourhood(addressDTO.getNeighbourhood());
+        addressToUpdate.setAddressingType(addressDTO.getAddressingType());
+        addressToUpdate.setCep(addressDTO.getCep());
+        addressToUpdate.setCity(addressDTO.getCity());
+        addressToUpdate.setState(addressDTO.getState());
+        addressToUpdate.setCountry(addressDTO.getCountry());
+        addressToUpdate.setObservation(addressDTO.getObservation());
+
+        addressRepository.save(addressToUpdate);
+
+        return ResponseEntity.ok("success");
     }
 
     @GetMapping("/createClient")

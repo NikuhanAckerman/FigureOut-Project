@@ -136,86 +136,84 @@
 
                 <div class="offcanvas offcanvas-start" tabindex="-1" id="addressFormCanvas" aria-labelledby="addressFormCanvasLabel">
                     <div class="offcanvas-header">
-                        <h5 id="addressFormCanvasLabel">Adicionar Endereço</h5>
+                        <h5 id="addressFormCanvasLabel">Form de endereço</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
 
                     <div class="offcanvas-body">
-
-						<form th:object="${clientAddressDTO}" method="POST" id="addressCreateForm">
+						<!--th:object="${clientAddressDTO}" method="POST"-->
+						<form id="addressForm">
+							<input type="hidden" name="_method" id="addressFormMethod"/>
 							<div>
                                 <label><b>Tipo</b></label>
-                                <div class="radio-group">
-									<label><input type="radio" th:field="*{address.addressType}" th:value="false"> Entrega</label>
-									<label><input type="radio" th:field="*{address.addressType}" th:value="true"/> Cobrança</label>
+                                <div class="radio-group" id="addressType">
+									<label><input type="radio" name="addressTypeInput" value="false" checked> Entrega</label>
+									<label><input type="radio" name="addressTypeInput" value="true"/> Cobrança</label>
                                 </div>
                             </div>
 
                             <div>
                                 <label><b>Apelido</b></label>
-                                <input type="text" class="form-control" placeholder="Digite o apelido" th:field="*{address.nickname}" required>
+                                <input type="text" class="form-control" placeholder="Digite o apelido" id="addressNicknameField" required>
                             </div>
 
                             <div>
                                 <label><b>Tipo de Residência</b></label>
-                                <input type="text" class="form-control" placeholder="(Casa, apartamento, etc...)" th:field="*{address.typeOfResidence}" required>
+                                <input type="text" class="form-control" placeholder="(Casa, apartamento, etc...)" id="addressTypeOfResidenceField" required>
                             </div>
 
                             <div>
                                 <label><b>Tipo de logradouro</b></label>
-                                <input type="text" class="form-control" placeholder="(Rua, Avenida, etc...)" th:field="*{address.addressingType}" required>
+                                <input type="text" class="form-control" placeholder="(Rua, Avenida, etc...)" id="addressAddressingTypeField" required>
                             </div>
 
                             <div>
                                 <label><b>Logradouro</b></label>
-                                <input type="text" class="form-control" placeholder="Insira o logradouro" th:field="*{address.addressing}" required>
+                                <input type="text" class="form-control" placeholder="Insira o logradouro" id="addressAddressingField" required>
                             </div>
 
                             <div>
                                 <label><b>Nº de residência</b></label>
-                                <input type="text" class="form-control" placeholder="Insira o número da residência" th:field="*{address.houseNumber}" maxlength="5" required>
+                                <input type="text" class="form-control" placeholder="Insira o número da residência" id="addressHouseNumberField" maxlength="5" required>
                             </div>
 
                             <div>
                                 <label><b>CEP</b></label>
-                                <input type="text" class="form-control" placeholder="00000-000" th:field="*{address.cep}" maxlength="9" required>
+                                <input type="text" class="form-control" placeholder="00000-000" id="addressCepField" maxlength="9" required>
                             </div>
 
                             <div>
                                 <label><b>Bairro</b></label>
-                                <input type="text" class="form-control" placeholder="Insira o bairro" th:field="*{address.neighbourhood}" required>
+                                <input type="text" class="form-control" placeholder="Insira o bairro" id="addressNeighbourhoodField" required>
                             </div>
 
                             <div>
                                 <label><b>Cidade</b></label>
-                                <input type="text" class="form-control" placeholder="Insira a cidade" th:field="*{address.city}" required>
+                                <input type="text" class="form-control" placeholder="Insira a cidade" id="addressCityField" required>
                             </div>
 
                             <div>
                                 <label><b>Estado</b></label>
-                                <input type="text" class="form-control" placeholder="Insira o Estado" th:field="*{address.state}" required>
+                                <input type="text" class="form-control" placeholder="Insira o Estado" id="addressStateField" required>
                             </div>
 
                             <div>
                                 <label><b>País</b></label>
-                                <input type="text" class="form-control" placeholder="Insira o País" th:field="*{address.country}" required>
+                                <input type="text" class="form-control" placeholder="Insira o País" id="addressCountryField" required>
                             </div>
 
                             <div>
                                 <label><b>Observação</b></label>
-                                <input type="text" class="form-control" placeholder="Insira uma observação (opcional)" th:field="*{address.observation}">
+                                <input type="text" class="form-control" placeholder="Insira uma observação (opcional)" id="addressObservationField">
                             </div>
 
 							<div class="mt-2">
-								<button type="submit" class="btn btn-primary">Adicionar</button>
+								<button type="submit" class="btn btn-primary" id="addressFormSubmitButton">Criar</button>
 							</div>
 
                         </form>
                     </div>
 				</div>
-
-
-
 
 		<script>
 
@@ -226,7 +224,6 @@
 				const button = event.relatedTarget
 
 				const clientId = button.getAttribute('data-bs-client-id');
-
 
 				const elementWithId = document.getElementById('clientId');
 				elementWithId.textContent = 'ID do cliente: '
@@ -273,10 +270,28 @@
 																		<button type="submit" class="btn btn-danger btn-delete" onclick="return confirm('Tem certeza?')">Deletar</button>
 																	</form>
 
+																	<!--
+																		data-bs-address-id= "${address.id}"
+																		data-bs-address-addressType="${address.addressType}"
+																		data-bs-address-nickname="${address.nickname}"
+																		data-bs-address-typeOfResidence="${address.typeOfResidence}"
+																		data-bs-address-addressing="${address.addressing}"
+																		data-bs-address-houseNumber="${address.houseNumber}"
+																		data-bs-address-neighbourhood="${address.neighbourhood}"
+																		data-bs-address-addressingType="${address.addressingType}"
+																		data-bs-address-cep="${address.cep}"
+																		data-bs-address-city="${address.city}"
+																		data-bs-address-state="${address.state}"
+																		data-bs-address-country="${address.country}"
+																		data-bs-address-observation="${address.observation}"
 
-																	<button type="button" class="btn btn-primary">Atualizar</button>
+																	-->
+
+																	<form action="index/addresses/${address.id}" method="GET" style="display: inline;">
+																		<button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#addressFormCanvas" aria-controls="addressFormCanvas" id="updateAddressButton" data-bs-address-id= "${address.id}">Atualizar</button>
+																	</form>
+
 																</div>
-
 															</div>
 														</div>`;
 									addressCollapseCardId += 1;
@@ -294,10 +309,115 @@
 			const addressOffcanvas = document.getElementById("addressFormCanvas");
 
 			addressOffcanvas.addEventListener('show.bs.offcanvas', function(event) {
-				const clientId = addAddressButton.getAttribute('data-bs-client-id');
+				button = event.relatedTarget;
+				const addressId = button.getAttribute('data-bs-address-id');
+				const addressForm = document.getElementById("addressForm");
+				const addressFormMethod = document.getElementById("addressFormMethod");
 
-				const addressForm = document.getElementById("addressCreateForm");
-				addressForm.setAttribute('action', `/index/${clientId}/addresses/create`);
+				const addressFormCanvasLabel = document.getElementById('addressFormCanvasLabel');
+
+				const nicknameField = document.getElementById("addressNicknameField");
+				const typeOfResidenceField = document.getElementById("addressTypeOfResidenceField");
+				const addressingTypeField = document.getElementById("addressAddressingTypeField");
+				const addressingField = document.getElementById("addressAddressingField")
+				const houseNumberField = document.getElementById("addressHouseNumberField")
+				const neighbourhoodField = document.getElementById("addressNeighbourhoodField")
+				const cepField = document.getElementById("addressCepField")
+				const cityField = document.getElementById("addressCityField")
+				const stateField = document.getElementById("addressStateField")
+				const countryField = document.getElementById("addressCountryField")
+				const observationField = document.getElementById("addressObservationField")
+
+				const addressTypeInputs = document.getElementsByName('addressTypeInput')
+
+				const addressFormSubmitButton = document.getElementById("addressFormSubmitButton")
+
+				if(button.id == "updateAddressButton") {
+					console.log("Update address")
+
+					addressForm.setAttribute('action', `index/addresses/${addressId}/update`);
+					addressForm.setAttribute('method', 'POST')
+					addressFormMethod.value = "PUT";
+					addressFormCanvasLabel.innerHTML = 'Atualizar endereço';
+
+					const addressIdNewElement = document.createElement('h5');
+					addressIdNewElement.textContent = "ID: " + addressId;
+					addressIdNewElement.id = "addressIdUpdateElement"
+
+					addressForm.insertAdjacentElement('afterbegin', addressIdNewElement);
+
+					fetch(`index/addresses/${addressId}`)
+							.then(response => {
+								if (!response.ok) {
+									throw new Error("Erro ao retornar endereço.");
+								}
+								return response.json();
+							})
+							.then(address => {
+								const addressType = address.addressType
+								const nickname = address.nickname;
+								const typeOfResidence = address.typeOfResidence;
+								const addressing = address.addressing;
+								const houseNumber = address.houseNumber;
+								const neighbourhood = address.neighbourhood;
+								const addressingType = address.addressingType;
+								const cep = address.cep;
+								const city = address.city;
+								const state = address.state;
+								const country = address.country;
+								const observation = address.observation;
+
+								if(addressType == false) {
+									addressTypeInputs.item(0).checked = true
+								} else {
+									addressTypeInputs.item(1).checked = true
+								}
+
+								nicknameField.value = nickname;
+								typeOfResidenceField.value = typeOfResidence;
+								addressingTypeField.value = addressingType;
+								addressingField.value = addressing;
+								houseNumberField.value = houseNumber;
+								neighbourhoodField.value = neighbourhood;
+								cepField.value = cep;
+								cityField.value = city;
+								stateField.value = state;
+								countryField.value = country;
+								observationField.value = observation;
+
+								addressFormSubmitButton.innerHTML = 'Atualizar'
+							})
+							.catch(error => console.error("Error:", error));
+
+				} else if (button.id == "addAddressButton") {
+					console.log("Create address")
+					const clientId = addAddressButton.getAttribute('data-bs-client-id');
+					addressFormMethod.setAttribute("action", `index/${clientId}/addresses/create`);
+					addressForm.setAttribute("method", "POST")
+					addressFormMethod.value = "POST"
+					addressFormCanvasLabel.innerHTML = 'Adicionar endereço';
+
+					const addressIdNewElement = document.getElementById("addressIdUpdateElement");
+
+					if(addressIdNewElement) {
+						addressIdNewElement.remove()
+					}
+
+					nicknameField.value = '';
+					typeOfResidenceField.value = '';
+					addressingTypeField.value = '';
+					addressingField.value = '';
+					houseNumberField.value = '';
+					neighbourhoodField.value = '';
+					cepField.value = '';
+					cityField.value = '';
+					stateField.value = '';
+					countryField.value = '';
+					observationField.value = '';
+
+					addressFormSubmitButton.innerHTML = 'Criar'
+				}
+
 			});
 
 		</script>
