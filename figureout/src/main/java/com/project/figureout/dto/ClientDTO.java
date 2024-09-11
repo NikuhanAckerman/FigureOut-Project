@@ -14,8 +14,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 import java.util.Date;
 
-@Getter
-@Setter
+@Getter @Setter
 public class ClientDTO {
 
     @NotEmpty(message = "Digite o nome.")
@@ -38,11 +37,16 @@ public class ClientDTO {
     @NotEmpty(message = "Ativo ou não?")
     private boolean enabled = true;
 
+    @NotEmpty(message = "Qual é o gênero?")
     private Gender gender;
 
+    @NotEmpty(message = "Qual é o telefone?")
     private Phone phone;
 
+    @NotEmpty(message = "Qual é o endereço de entrega?")
     private Address deliveryAddress;
+
+    @NotEmpty(message = "Qual é o endereço de cobrança?")
     private Address chargingAddress;
 
 }

@@ -5,17 +5,18 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+@Getter @Setter
 public class PhoneDTO {
 
     @NotEmpty(message = "Insira o tipo de telefone")
-    @Getter @Setter private boolean cellphone;
+    private boolean cellphone;
 
     @NotEmpty(message = "Insira o seu DDD.")
-    @Getter @Setter private String ddd;
+    private String ddd;
 
     @NotEmpty(message = "Digite o número de telefone.")
     //@Size(min = 8, max = 10)
     // 98224-8652
-    @Getter @Setter private String phoneNumber;
+    private String phoneNumber;
 
 }

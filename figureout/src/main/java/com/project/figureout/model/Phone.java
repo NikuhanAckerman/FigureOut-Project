@@ -6,20 +6,21 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "Telefones")
+@Getter @Setter
 public class Phone {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "tel_id")
-    @Getter @Setter private long id;
+    private long id;
 
     @Column(name = "tel_celular")
-    @Getter @Setter private boolean cellphone;
+    private boolean cellphone;
 
     @Column(name = "tel_ddd")
-    @Getter @Setter private String ddd;
+    private String ddd;
 
     @Column(name = "tel_numero")
-    @Getter @Setter private String phoneNumber;
+    private String phoneNumber;
 
 }

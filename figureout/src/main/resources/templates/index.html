@@ -162,6 +162,7 @@
 			const addCreditCardButton = document.getElementById("addCreditCardButton");
 
 			seeAddressModal.addEventListener('show.bs.modal', function (event) {
+				console.log("mostrou modal de address")
 				const button = event.relatedTarget
 
 				const clientId = button.getAttribute('data-bs-client-id');
@@ -180,11 +181,11 @@
 							return response.json();
 						})
 						.then(addresses => {
+
 							const deliveryAddressList = document.getElementById('deliveryAddressList');
 							const chargingAddressList = document.getElementById('chargingAddressList');
 							let deliveryAddresses = '';
 							let chargingAddresses = '';
-							let addressCollapseCardId = 1;
 
 								addresses.forEach(address => {
 									const addressItem = `
@@ -192,10 +193,10 @@
 															<div class="card-body">
 																<h3 class="card-title">ID: ${address.id}</h3>
 																<h4>${address.nickname}</h4>
-																<button class="btn" data-bs-toggle="collapse" data-bs-target="#addressCollapseCardId_${addressCollapseCardId}">
+																<button class="btn collapseAddress" data-bs-toggle="collapse" data-bs-target="#addressInfo_${address.id}">
 																	<i class="bi bi-chevron-down"></i>
 																</button>
-																<div id="addressCollapseCardId_${addressCollapseCardId}" class="collapse">
+																<div id="addressInfo_${address.id}" class="collapse">
 																	<p>Tipo de residência: ${address.typeOfResidence}</p>
 																	<p>Logradouro: ${address.addressing}</p>
 																	<p>Número: ${address.houseNumber}</p>
@@ -217,7 +218,6 @@
 																</div>
 															</div>
 														</div>`;
-									addressCollapseCardId += 1;
 
 									if(address.addressType == false) {
 										deliveryAddresses += addressItem;
@@ -233,9 +233,7 @@
 								let updateAddressButtonList = document.querySelectorAll(".updateAddressButton");
 
 								updateAddressButtonList.forEach(button => {
-									console.log("sadasd");
 									addressIdToGo = button.getAttribute("data-bs-address-id");
-
 									button.setAttribute('href', `updateAddress/${addressIdToGo}`)
 								});
 
@@ -243,16 +241,18 @@
 
 			});
 
-			seeCreditCardModal.addEventListener('show-bs-modal', function(event) {
+			seeCreditCardModal.addEventListener('show.bs.modal', function(event) {
+				console.log("abriu modal de cartao de credito");
 				const button = event.relatedTarget
 
 				const clientId = button.getAttribute('data-bs-client-id');
+				console.log(clientId);
 
 				const elementWithId = document.getElementById('clientIdCreditCard');
 				elementWithId.textContent = 'ID do cliente: '
 				elementWithId.textContent = elementWithId.textContent + " " + clientId;
 
-				addAddressButton.setAttribute('href', `/createCreditCard/${clientId}`);
+				addCreditCardButton.setAttribute('href', `/createCreditCard/${clientId}`);
 
 				fetch(`index/${clientId}/creditCards`)
 						.then(response => {
@@ -262,67 +262,48 @@
 							return response.json();
 						})
 						.then(addresses => {
-							let deliveryAddresses = '';
-							let chargingAddresses = '';
-							let addressCollapseCardId = 1;
-
 							addresses.forEach(address => {
 								const addressItem = `
 														<div class="card mt-3">
 															<div class="card-body">
 																<h3 class="card-title">ID: ${creditCard.id}</h3>
-																<h4>${address.nickname}</h4>
-																<button class="btn" data-bs-toggle="collapse" data-bs-target="#addressCollapseCardId_${addressCollapseCardId}">
+																<button class="btn" data-bs-toggle="collapse" data-bs-target="#creditCardInfo_${creditCard.id}">
 																	<i class="bi bi-chevron-down"></i>
 																</button>
-																<div id="addressCollapseCardId_${addressCollapseCardId}" class="collapse">
-																	<p>Tipo de residência: ${address.typeOfResidence}</p>
-																	<p>Logradouro: ${address.addressing}</p>
-																	<p>Número: ${address.houseNumber}</p>
-																	<p>Bairro: ${address.neighbourhood}</p>
-																	<p>Tipo de logradouro: ${address.addressingType}</p>
-																	<p>CEP: ${address.cep}</p>
-																	<p>Cidade: ${address.city}</p>
-																	<p>Estado: ${address.state}</p>
-																	<p>País: ${address.country}</p>
-																	<p>Observação: ${address.observation}</p>
+																<div id="creditCardInfo_${creditCard.id}" class="collapse">
+																	<input type="checkbox" value="${creditCard.preferido}"/>
+																	<p>Número do cartão: ${creditCard.cardNumber}</p>
+																	<p>Nome impresso no cartão: ${creditCard.printedName}</p>
+																	<p>Bandeira do cartão: ${creditCard.brand}</p>
+																	<p>Código de segurança: ${creditCard.securityCode}</p>
 
-																	<form action="index/${address.id}/addresses/delete" method="POST" style="display: inline;">
+																	<form action="index/${creditCard.id}/creditCards/delete" method="POST" style="display: inline;">
 																		<input type="hidden" name="_method" value="DELETE"/>
 																		<button type="submit" class="btn btn-danger btn-delete" onclick="return confirm('Tem certeza?')">Deletar</button>
 																	</form>
 
-																	<a class="btn btn-primary updateAddressButton" data-bs-address-id="${address.id}" href="#">Atualizar</a>
+																	<a class="btn btn-primary updateCreditCardButton" data-bs-creditCard-id="${creditCard.id}" href="#">Atualizar</a>
 
 																</div>
 															</div>
 														</div>`;
-								addressCollapseCardId += 1;
-
-								if(address.addressType == false) {
-									deliveryAddresses += addressItem;
-								} else {
-									chargingAddresses += addressItem;
-								}
 
 							});
 
-							deliveryAddressList.innerHTML = deliveryAddresses;
-							chargingAddressList.innerHTML = chargingAddresses;
+							let updateCreditCardButtonList = document.querySelectorAll(".updateAddressButton");
 
-							let updateAddressButtonList = document.querySelectorAll(".updateAddressButton");
+							updateCreditCardButtonList.forEach(button => {
 
-							updateAddressButtonList.forEach(button => {
-								console.log("sadasd");
-								addressIdToGo = button.getAttribute("data-bs-address-id");
+								creditCardIdToGo = button.getAttribute("data-bs-creditCard-id");
 
-								button.setAttribute('href', `updateAddress/${addressIdToGo}`)
+								button.setAttribute('href', `updateCreditCard/${creditCardIdToGo}`)
 							});
 
 						});
 
 
 			});
+
 
 		</script>
 
