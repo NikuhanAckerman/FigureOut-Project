@@ -190,6 +190,7 @@ public class ClientController {
 
         model.addAttribute("clientAdminUpdateDTO", ClientAdminUpdateDTO);
         model.addAttribute("genderList", genderList);
+        model.addAttribute("clientId", id);
 
         ClientAdminUpdateDTO.setName(client.getName());
         ClientAdminUpdateDTO.setEmail(client.getEmail());
