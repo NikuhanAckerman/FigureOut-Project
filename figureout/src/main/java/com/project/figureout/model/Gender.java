@@ -6,15 +6,16 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "Generos")
+@Getter @Setter
 public class Gender {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "gen_id")
-    @Getter @Setter private long id;
+    private long id;
 
     @Column(name = "gen_genero")
-    @Getter @Setter private String genderType;
+    private String genderType;
 
     public Gender(String genderType) {
         this.genderType = genderType;

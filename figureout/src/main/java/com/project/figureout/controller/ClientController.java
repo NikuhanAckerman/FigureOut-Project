@@ -94,8 +94,6 @@ public class ClientController {
         Address address = addressRepository.findById(addressId).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
         AddressDTO addressDTO = new AddressDTO();
 
-        model.addAttribute("addressDTO", addressDTO);
-
         addressDTO.setAddressType(address.isAddressType());
         addressDTO.setNickname(address.getNickname());
         addressDTO.setTypeOfResidence(address.getTypeOfResidence());
@@ -108,6 +106,8 @@ public class ClientController {
         addressDTO.setState(address.getState());
         addressDTO.setCountry(address.getCountry());
         addressDTO.setObservation(address.getObservation());
+
+        model.addAttribute("addressDTO", addressDTO);
 
         return "updateAddress";
     }
@@ -147,7 +147,7 @@ public class ClientController {
     }
 
     @PostMapping("/createClient")
-    public String addClientPost(@ModelAttribute("clientDTO") ClientDTO clientDTO, Model model) {
+    public String addClientPost(@ModelAttribute("clientDTO") ClientDTO clientDTO) {
 
         Gender gender = genderRepository.findById(clientDTO.getGender().getId()).orElse(null);
 

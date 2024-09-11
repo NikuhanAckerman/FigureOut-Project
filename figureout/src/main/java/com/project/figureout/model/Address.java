@@ -9,52 +9,53 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Enderecos")
+@Getter @Setter
 public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "end_id")
-    @Getter @Setter private long id;
+    private long id;
 
     @Column(name = "end_tipo")
-    @Getter @Setter private boolean addressType; // 0 = entrega, 1 = cobrança
+    private boolean addressType; // 0 = entrega, 1 = cobrança
 
     @Column(name = "end_apelido")
-    @Getter @Setter private String nickname;
+    private String nickname;
     
     @Column(name = "end_tipo_residencia")
-    @Getter @Setter private String typeOfResidence;
+    private String typeOfResidence;
 
     @Column(name = "end_logradouro")
-    @Getter @Setter private String addressing;
+    private String addressing;
 
     @Column(name = "end_numero")
-    @Getter @Setter private String houseNumber;
+    private String houseNumber;
 
     @Column(name = "end_bairro")
-    @Getter @Setter private String neighbourhood;
+    private String neighbourhood;
 
     @Column(name = "end_tipo_logradouro")
-    @Getter @Setter private String addressingType;
+    private String addressingType;
 
     @Column(name = "end_cep")
-    @Getter @Setter private String cep;
+    private String cep;
 
     @Column(name = "end_cidade")
-    @Getter @Setter private String city;
+    private String city;
 
     @Column(name = "end_estado")
-    @Getter @Setter private String state;
+    private String state;
 
     @Column(name = "end_pais")
-    @Getter @Setter private String country;
+    private String country;
 
     @Column(name = "end_observacao")
-    @Getter @Setter private String observation;
+    private String observation;
 
     // Conferir depois se precisa arrumar a(s) chave(s) estrangeira(s).
     @ManyToOne
     @JoinColumn(name = "end_cli_id")
-    @JsonIgnore
-    @Getter @Setter private Client client;
+    @JsonIgnore // prevenir loop recursivo
+    private Client client;
 }

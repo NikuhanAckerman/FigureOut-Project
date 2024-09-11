@@ -40,6 +40,7 @@
 							<th>CPF</th>
 							<th>Email</th>
 							<th>Endereços</th>
+							<th>Cartões</th>
 							<th>Telefone</th>
 							<th>Ativo</th>
 							<th>Atualizar</th>
@@ -59,6 +60,10 @@
 							<td>
 								<button type="button" class="btn btn-secondary" th:data-bs-client-id = "${client.id}" data-bs-toggle="modal" data-bs-target="#seeAddressModal" >Ver endereços</button>
 							</td>
+							<td>
+								<button type="button" class="btn btn-secondary" th:data-bs-client-id = "${client.id}" data-bs-toggle="modal" data-bs-target="#seeCreditCardModal" >Ver cartões</button>
+							</td>
+
 							<td th:text = "${client.phone.phoneNumber}"></td>
 							<td>
 								<input type="checkbox" th:checked="${client.enabled}" disabled>
@@ -84,34 +89,23 @@
 		</div>
 
 		<div id="seeAddressModal" class="modal fade">
-
 			<div class="modal-dialog">
-
 				<div class="modal-content">
-
 					<div class="modal-header">
-
 						<h3 class="modal-title">Ver endereços</h3>
 						<button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
-
 					</div>
-
 					<div class="modal-body">
-
 						<div>
-							<h1 id="clientId"></h1>
-
+							<h1 id="clientIdAddress"></h1>
 							<a class="btn btn-success" href="#" id="addAddressButton">Adicionar endereço</a>
-
 							<div class="card mt-3">
 								<div class="card-body">
 									<h2 class="card-title">Endereços de entrega</h2>
 									<div id="deliveryAddressList">
-
 									</div>
 								</div>
 							</div>
-
 							<div class="card mt-3">
 								<div class="card-body">
 									<h2 class="card-title">Endereços de cobrança</h2>
@@ -120,19 +114,43 @@
 									</div>
 								</div>
 							</div>
-
 						</div>
-
 					</div>
-
 					<div class="modal-footer">
 						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
 					</div>
-
 				</div>
-
 			</div>
+		</div>
 
+		<div id="seeCreditCardModal" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3 class="modal-title">Ver cartões de crédito</h3>
+						<button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
+					</div>
+					<div class="modal-body">
+						<div>
+							<h1 id="clientIdCreditCard"></h1>
+							<a class="btn btn-success" href="#" id="addCreditCardButton">Adicionar cartão</a>
+
+							<div class="card mt-3">
+								<div class="card-body">
+									<h2 class="card-title">Cartões de crédito</h2>
+									<div id="creditCardList">
+
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
+					</div>
+				</div>
+			</div>
 		</div>
 
 		<script>
@@ -140,12 +158,15 @@
 			const seeAddressModal = document.getElementById("seeAddressModal");
 			const addAddressButton = document.getElementById("addAddressButton");
 
+			const seeCreditCardModal = document.getElementById("seeCreditCardModal");
+			const addCreditCardButton = document.getElementById("addCreditCardButton");
+
 			seeAddressModal.addEventListener('show.bs.modal', function (event) {
 				const button = event.relatedTarget
 
 				const clientId = button.getAttribute('data-bs-client-id');
 
-				const elementWithId = document.getElementById('clientId');
+				const elementWithId = document.getElementById('clientIdAddress');
 				elementWithId.textContent = 'ID do cliente: '
 				elementWithId.textContent = elementWithId.textContent + " " + clientId;
 
@@ -219,6 +240,87 @@
 								});
 
 							});
+
+			});
+
+			seeCreditCardModal.addEventListener('show-bs-modal', function(event) {
+				const button = event.relatedTarget
+
+				const clientId = button.getAttribute('data-bs-client-id');
+
+				const elementWithId = document.getElementById('clientIdCreditCard');
+				elementWithId.textContent = 'ID do cliente: '
+				elementWithId.textContent = elementWithId.textContent + " " + clientId;
+
+				addAddressButton.setAttribute('href', `/createCreditCard/${clientId}`);
+
+				fetch(`index/${clientId}/creditCards`)
+						.then(response => {
+							if(!response.ok) {
+								throw new Error("Erro ao retornar cartões de crédito.");
+							}
+							return response.json();
+						})
+						.then(addresses => {
+							let deliveryAddresses = '';
+							let chargingAddresses = '';
+							let addressCollapseCardId = 1;
+
+							addresses.forEach(address => {
+								const addressItem = `
+														<div class="card mt-3">
+															<div class="card-body">
+																<h3 class="card-title">ID: ${creditCard.id}</h3>
+																<h4>${address.nickname}</h4>
+																<button class="btn" data-bs-toggle="collapse" data-bs-target="#addressCollapseCardId_${addressCollapseCardId}">
+																	<i class="bi bi-chevron-down"></i>
+																</button>
+																<div id="addressCollapseCardId_${addressCollapseCardId}" class="collapse">
+																	<p>Tipo de residência: ${address.typeOfResidence}</p>
+																	<p>Logradouro: ${address.addressing}</p>
+																	<p>Número: ${address.houseNumber}</p>
+																	<p>Bairro: ${address.neighbourhood}</p>
+																	<p>Tipo de logradouro: ${address.addressingType}</p>
+																	<p>CEP: ${address.cep}</p>
+																	<p>Cidade: ${address.city}</p>
+																	<p>Estado: ${address.state}</p>
+																	<p>País: ${address.country}</p>
+																	<p>Observação: ${address.observation}</p>
+
+																	<form action="index/${address.id}/addresses/delete" method="POST" style="display: inline;">
+																		<input type="hidden" name="_method" value="DELETE"/>
+																		<button type="submit" class="btn btn-danger btn-delete" onclick="return confirm('Tem certeza?')">Deletar</button>
+																	</form>
+
+																	<a class="btn btn-primary updateAddressButton" data-bs-address-id="${address.id}" href="#">Atualizar</a>
+
+																</div>
+															</div>
+														</div>`;
+								addressCollapseCardId += 1;
+
+								if(address.addressType == false) {
+									deliveryAddresses += addressItem;
+								} else {
+									chargingAddresses += addressItem;
+								}
+
+							});
+
+							deliveryAddressList.innerHTML = deliveryAddresses;
+							chargingAddressList.innerHTML = chargingAddresses;
+
+							let updateAddressButtonList = document.querySelectorAll(".updateAddressButton");
+
+							updateAddressButtonList.forEach(button => {
+								console.log("sadasd");
+								addressIdToGo = button.getAttribute("data-bs-address-id");
+
+								button.setAttribute('href', `updateAddress/${addressIdToGo}`)
+							});
+
+						});
+
 
 			});
 

@@ -13,48 +13,56 @@ import java.util.Set;
 
 @Entity
 @Table(name = "Clientes")
+@Getter @Setter
 public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cli_id")
-    @Getter @Setter private long id;
+    private long id;
 
     @Column(name = "cli_nome")
-    @Getter @Setter private String name;
+    private String name;
 
     @Column(name = "cli_email")
-    @Getter @Setter private String email;
+    private String email;
 
     @Column(name = "cli_cpf")
-    @Getter @Setter private String cpf;
+    private String cpf;
 
     @Column(name = "cli_senha")
-    @Getter @Setter private String password;
+    private String password;
 
-    //@DateTimeFormat(pattern = "dd-MM-yyyy")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "cli_nascimento")
-    @Getter @Setter private LocalDate birthday;
+    private LocalDate birthday;
 
     @Column(name = "cli_ativo")
-    @Getter @Setter private boolean enabled = true;
+    private boolean enabled = true;
 
     // Conferir depois se precisa arrumar a(s) chave(s) estrangeira(s).
     @ManyToOne()
     @JoinColumn(name = "cli_gen_id")
-    @Getter @Setter Gender gender;
+    private Gender gender;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "cli_tel_id")
-    @Getter @Setter Phone phone;
+    private Phone phone;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Getter private List<Address> addresses = new ArrayList<>();
+    private List<Address> addresses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CreditCard> creditCards = new ArrayList<>();
 
     public void addAddress(Address address) {
         addresses.add(address);
         address.setClient(this);
+    }
+
+    public void addCreditCard(CreditCard creditCard) {
+        creditCards.add(creditCard);
+        creditCard.setClient(this);
     }
 
     // Expressão regular para validar a senha
