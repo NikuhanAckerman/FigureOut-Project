@@ -147,6 +147,7 @@ public class ClientController {
         CreditCardDTO creditCardDTO = new CreditCardDTO();
 
         model.addAttribute("creditCardDTO", creditCardDTO);
+        model.addAttribute("clientId", id);
 
         return "createCreditCard";
     }
@@ -163,7 +164,9 @@ public class ClientController {
         creditCard.setBrand(creditCardDTO.getBrand());
         creditCard.setSecurityCode(creditCardDTO.getSecurityCode());
 
-        creditCardRepository.save(creditCard);
+        client.addCreditCard(creditCard);
+
+        clientRepository.save(client);
 
         return "redirect:/index";
 

@@ -26,9 +26,4 @@ public class CreditCardDTO {
     @NotEmpty(message = "Insira o código de segurança do cartão")
     private String securityCode;
 
-    //@NotEmpty(message = "Insira a data de validade do cartão")
-    //@Getter @Setter private Date expiration;
-
-
-
 }

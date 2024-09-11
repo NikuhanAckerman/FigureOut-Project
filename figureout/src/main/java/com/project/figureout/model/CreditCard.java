@@ -32,15 +32,9 @@ public class CreditCard {
     @Column(name = "car_cod_seguranca")
     private String securityCode;
 
-    //@Column(name = "car_validade")
-    //@Getter @Setter private Date expiration;
-
-    // Conferir depois se precisa arrumar a(s) chave(s) estrangeira(s).
     @ManyToOne
     @JoinColumn(name = "car_cli_id")
     @JsonIgnore // prevenir loop infinito
     private Client client;
 
-    //@Column(name = "car_ban_id")
-    //@Getter @Setter private long ban_id;
 }
