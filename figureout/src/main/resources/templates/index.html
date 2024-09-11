@@ -97,7 +97,7 @@
 						<div>
 							<h1 id="clientId"></h1>
 
-							<button type="button" class="btn btn-success" id="addAddressButton">Adicionar endereço</button>
+							<a class="btn btn-success" href="#" id="addAddressButton">Adicionar endereço</a>
 
 							<div class="card mt-3">
 								<div class="card-body">
@@ -145,7 +145,7 @@
 				elementWithId.textContent = 'ID do cliente: '
 				elementWithId.textContent = elementWithId.textContent + " " + clientId;
 
-				addAddressButton.setAttribute('data-bs-client-id', clientId);
+				addAddressButton.setAttribute('href', `/createAddress/${clientId}`);
 
 				fetch(`index/${clientId}/addresses`)
 						.then(response => {

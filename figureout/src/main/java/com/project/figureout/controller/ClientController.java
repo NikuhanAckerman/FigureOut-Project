@@ -32,7 +32,6 @@ public class ClientController {
 
     @GetMapping({"", "/", "/index"})
     public String showClientsGet(Model model) {
-        ClientAddressDTO clientAddressDTO = new ClientAddressDTO(); // workaround para n ter q mexer com requestparams e javascript
         /* explicaçao:
 
             eu queria q o usuario pudesse adicionar endereços novos em cada cliente na pagina /index,
@@ -46,7 +45,6 @@ public class ClientController {
 
         List<Client> clients =  clientRepository.findAll();
         model.addAttribute("clients", clients);
-        model.addAttribute("clientAddressDTO", clientAddressDTO);
 
         //List<Address> addresses =  addressRepository.findAll();
         //model.addAttribute("address", addresses);
@@ -63,11 +61,35 @@ public class ClientController {
         return client.getAddresses();
     }
 
-    @PostMapping("index/{id}/addresses/create")
-    public String createClientAddressPost(@PathVariable long id, @ModelAttribute("clientAddressDTO") ClientAddressDTO clientAddressDTO) {
-        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+    @GetMapping("/createAddress/{id}")
+    public String addClientGet(Model model, @PathVariable long id) {
+        AddressDTO addressDTO = new AddressDTO();
 
-        client.addAddress(clientAddressDTO.getAddress());
+        model.addAttribute("addressDTO", addressDTO);
+        model.addAttribute("clientId", id);
+
+        return "createAddress";
+    }
+
+    @PostMapping("createAddress/{id}")
+    public String createClientAddressPost(@PathVariable long id, @ModelAttribute("addressDTO") AddressDTO addressDTO) {
+        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+        Address address = new Address();
+
+        address.setAddressType(addressDTO.isAddressType());
+        address.setNickname(addressDTO.getNickname());
+        address.setTypeOfResidence(addressDTO.getTypeOfResidence());
+        address.setAddressing(addressDTO.getAddressing());
+        address.setHouseNumber(addressDTO.getHouseNumber());
+        address.setNeighbourhood(addressDTO.getNeighbourhood());
+        address.setAddressingType(addressDTO.getAddressingType());
+        address.setCep(addressDTO.getCep());
+        address.setCity(addressDTO.getCity());
+        address.setState(addressDTO.getState());
+        address.setCountry(addressDTO.getCountry());
+        address.setObservation(addressDTO.getObservation());
+
+        client.addAddress(address);
 
         clientRepository.save(client);
 
@@ -81,30 +103,29 @@ public class ClientController {
         return "redirect:/index";
     }
 
-    @GetMapping("index/{clientId}/addresses/{addressId}/update")
-    @ResponseBody
-    public AddressDTO updateClientAddressGet(@PathVariable long clientId, @PathVariable long addressId) {
-        Address addressToUpdate = addressRepository.findById(addressId).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+    @GetMapping("updateAddress/{id}")
+    public AddressDTO updateClientAddressGet(@PathVariable long addressId) {
+        Address address = addressRepository.findById(addressId).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
         AddressDTO addressDTO = new AddressDTO();
 
-        addressDTO.setAddressType(addressToUpdate.isAddressType());
-        addressDTO.setNickname(addressToUpdate.getNickname());
-        addressDTO.setTypeOfResidence(addressToUpdate.getTypeOfResidence());
-        addressDTO.setAddressing(addressToUpdate.getAddressing());
-        addressDTO.setHouseNumber(addressToUpdate.getHouseNumber());
-        addressDTO.setNeighbourhood(addressToUpdate.getNeighbourhood());
-        addressDTO.setAddressingType(addressToUpdate.getAddressingType());
-        addressDTO.setCep(addressToUpdate.getCep());
-        addressDTO.setCity(addressToUpdate.getCity());
-        addressDTO.setState(addressToUpdate.getState());
-        addressDTO.setCountry(addressToUpdate.getCountry());
-        addressDTO.setObservation(addressToUpdate.getObservation());
+        addressDTO.setAddressType(address.isAddressType());
+        addressDTO.setNickname(address.getNickname());
+        addressDTO.setTypeOfResidence(address.getTypeOfResidence());
+        addressDTO.setAddressing(address.getAddressing());
+        addressDTO.setHouseNumber(address.getHouseNumber());
+        addressDTO.setNeighbourhood(address.getNeighbourhood());
+        addressDTO.setAddressingType(address.getAddressingType());
+        addressDTO.setCep(address.getCep());
+        addressDTO.setCity(address.getCity());
+        addressDTO.setState(address.getState());
+        addressDTO.setCountry(address.getCountry());
+        addressDTO.setObservation(address.getObservation());
 
         return addressDTO;
     }
 
-    @PutMapping("index/{clientId}/addresses/{addressId}/update")
-    public ResponseEntity<?> updateClientAddress(@PathVariable long addressId, @PathVariable long clientId, @ModelAttribute AddressDTO addressDTO) {
+    @PutMapping("createAddress/{id}")
+    public String updateClientAddressPost(@PathVariable long addressId, @ModelAttribute("addressDTO") AddressDTO addressDTO) {
         Address addressToUpdate = addressRepository.findById(addressId).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
 
         addressToUpdate.setAddressType(addressDTO.isAddressType());
@@ -119,11 +140,10 @@ public class ClientController {
         addressToUpdate.setState(addressDTO.getState());
         addressToUpdate.setCountry(addressDTO.getCountry());
         addressToUpdate.setObservation(addressDTO.getObservation());
-        addressToUpdate.setClient(clientRepository.findById(clientId).orElseThrow(() -> new IllegalArgumentException("ID inexistente.")));
 
         addressRepository.save(addressToUpdate);
 
-        return ResponseEntity.ok("success");
+        return "redirect:/index";
     }
 
     @GetMapping("/createClient")
