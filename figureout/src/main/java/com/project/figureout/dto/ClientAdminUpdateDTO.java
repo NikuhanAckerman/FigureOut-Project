@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -26,6 +27,7 @@ public class ClientAdminUpdateDTO {
     @NotEmpty(message = "Digite uma senha.")
     private String password;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Past(message = "A data de nascimento deve ser no passado.")
     private LocalDate birthday;
 

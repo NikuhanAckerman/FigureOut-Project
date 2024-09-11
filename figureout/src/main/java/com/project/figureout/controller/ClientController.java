@@ -10,6 +10,7 @@ import com.project.figureout.repository.PhoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import com.project.figureout.model.Client;
 
@@ -183,15 +184,10 @@ public class ClientController {
 
     @GetMapping("/updateClient/{id}")
     public String updateClientGet(@PathVariable long id, Model model) {
+
         Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inválido."));
+
         ClientAdminUpdateDTO ClientAdminUpdateDTO = new ClientAdminUpdateDTO();
-
-        List<Gender> genderList = genderRepository.findAll();
-
-        model.addAttribute("clientAdminUpdateDTO", ClientAdminUpdateDTO);
-        model.addAttribute("genderList", genderList);
-        model.addAttribute("clientId", id);
-
         ClientAdminUpdateDTO.setName(client.getName());
         ClientAdminUpdateDTO.setEmail(client.getEmail());
         ClientAdminUpdateDTO.setPassword(client.getPassword());
@@ -200,6 +196,11 @@ public class ClientController {
         ClientAdminUpdateDTO.setEnabled(client.isEnabled());
         ClientAdminUpdateDTO.setGender(client.getGender());
         ClientAdminUpdateDTO.setPhone(client.getPhone());
+
+        List<Gender> genderList = genderRepository.findAll();
+        model.addAttribute("clientAdminUpdateDTO", ClientAdminUpdateDTO);
+        model.addAttribute("genderList", genderList);
+        model.addAttribute("clientId", id);
 
         return "updateClient";
 

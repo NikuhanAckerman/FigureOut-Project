@@ -33,6 +33,7 @@ public class Client {
     @Getter @Setter private String password;
 
     //@DateTimeFormat(pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "cli_nascimento")
     @Getter @Setter private LocalDate birthday;
 
