@@ -13,7 +13,7 @@
 <nav class="navbar navbar-custom fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a id="upper-navbar-text" class="navbar-brand">ADICIONAR ENDEREÇO</a>
+            <a id="upper-navbar-text" class="navbar-brand">ATUALIZAR ENDEREÇO</a>
         </div>
     </div>
 </nav>
@@ -69,75 +69,78 @@
 <div class="container mt-5">
     <form th:action="@{/updateAddress/{id}(id=${addressId})}" th:object="${addressDTO}" method="POST">
         <input type="hidden" name="_method" value="PUT">
+
+        <h1 th:text="'ID do endereço: ' + ${addressId}"></h1>
+
         <div class="form-group">
 
             <div class="mt-2">
                 <label><b>Endereço</b></label>
 
                 <div class="radio-group" id="addressType">
-                    <label><input type="radio" th:checked="*{addressType}" value="false"/> Entrega</label>
-                    <label><input type="radio" th:checked="*{addressType}" value="true"/> Cobrança</label>
+                    <label><input type="radio" th:field="*{addressType}" value="false"/> Entrega</label>
+                    <label><input type="radio" th:field="*{addressType}" value="true"/> Cobrança</label>
                 </div>
 
                 <div>
                     <label><b>Apelido</b></label>
-                    <input type="text" class="form-control" placeholder="Digite o apelido" th:value="*{nickname}" required>
+                    <input type="text" class="form-control" placeholder="Digite o apelido" th:field="*{nickname}" required>
                 </div>
 
                 <div>
                     <label><b>Tipo de Residência</b></label>
-                    <input type="text" class="form-control" placeholder="(Casa, apartamento, etc...)" th:value="*{typeOfResidence}" required>
+                    <input type="text" class="form-control" placeholder="(Casa, apartamento, etc...)" th:field="*{typeOfResidence}" required>
                 </div>
 
                 <div>
                     <label><b>Tipo de logradouro</b></label>
-                    <input type="text" class="form-control" placeholder="(Rua, Avenida, etc...)" th:value="*{addressingType}" required>
+                    <input type="text" class="form-control" placeholder="(Rua, Avenida, etc...)" th:field="*{addressingType}" required>
                 </div>
 
                 <div>
                     <label><b>Logradouro</b></label>
-                    <input type="text" class="form-control" placeholder="Insira o logradouro" th:value="*{addressing}" required>
+                    <input type="text" class="form-control" placeholder="Insira o logradouro" th:field="*{addressing}" required>
                 </div>
 
                 <div>
                     <label><b>Nº de residência</b></label>
-                    <input type="text" class="form-control" placeholder="Insira o número da residência" th:value="*{houseNumber}" maxlength="5" required>
+                    <input type="text" class="form-control" placeholder="Insira o número da residência" th:field="*{houseNumber}" maxlength="5" required>
                 </div>
 
                 <div>
                     <label><b>CEP</b></label>
-                    <input type="text" class="form-control" placeholder="00000-000" th:value="*{cep}" maxlength="9" required>
+                    <input type="text" class="form-control" placeholder="00000-000" th:field="*{cep}" maxlength="9" required>
                 </div>
 
                 <div>
                     <label><b>Bairro</b></label>
-                    <input type="text" class="form-control" placeholder="Insira o bairro" th:value="*{neighbourhood}" required>
+                    <input type="text" class="form-control" placeholder="Insira o bairro" th:field="*{neighbourhood}" required>
                 </div>
 
                 <div>
                     <label><b>Cidade</b></label>
-                    <input type="text" class="form-control" placeholder="Insira a cidade" th:value="*{city}" required>
+                    <input type="text" class="form-control" placeholder="Insira a cidade" th:field="*{city}" required>
                 </div>
 
                 <div>
                     <label><b>Estado</b></label>
-                    <input type="text" class="form-control" placeholder="Insira o Estado" th:value="*{state}" required>
+                    <input type="text" class="form-control" placeholder="Insira o Estado" th:field="*{state}" required>
                 </div>
 
                 <div>
                     <label><b>País</b></label>
-                    <input type="text" class="form-control" placeholder="Insira o País" th:value="*{country}" required>
+                    <input type="text" class="form-control" placeholder="Insira o País" th:field="*{country}" required>
                 </div>
 
                 <div>
                     <label><b>Observação</b></label>
-                    <input type="text" class="form-control" placeholder="Insira uma observação (opcional)" th:value="*{observation}">
+                    <input type="text" class="form-control" placeholder="Insira uma observação (opcional)" th:field="*{observation}">
                 </div>
             </div>
 
         </div>
 
-        <button type="submit" class="btn btn-primary add-delete-button">Criar</button>
+        <button type="submit" class="btn btn-primary add-delete-button">Atualizar</button>
         <a class="btn btn-danger add-delete-button" th:href="@{/index}">Voltar</a>
 
     </form>

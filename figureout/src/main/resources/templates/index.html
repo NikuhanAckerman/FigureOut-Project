@@ -160,6 +160,7 @@
 							let deliveryAddresses = '';
 							let chargingAddresses = '';
 							let addressCollapseCardId = 1;
+
 								addresses.forEach(address => {
 									const addressItem = `
 														<div class="card mt-3">
@@ -186,21 +187,35 @@
 																		<button type="submit" class="btn btn-danger btn-delete" onclick="return confirm('Tem certeza?')">Deletar</button>
 																	</form>
 
-																	<a class="btn btn-primary" id="updateAddressButton" href="/updateAddress/${address.id}/">Atualizar</a>
+																	<a class="btn btn-primary updateAddressButton" data-bs-address-id="${address.id}" href="#">Atualizar</a>
 
 																</div>
 															</div>
 														</div>`;
 									addressCollapseCardId += 1;
+
 									if(address.addressType == false) {
 										deliveryAddresses += addressItem;
 									} else {
 										chargingAddresses += addressItem;
 									}
+
 								});
+
 								deliveryAddressList.innerHTML = deliveryAddresses;
 								chargingAddressList.innerHTML = chargingAddresses;
-							})
+
+								let updateAddressButtonList = document.querySelectorAll(".updateAddressButton");
+
+								updateAddressButtonList.forEach(button => {
+									console.log("sadasd");
+									addressIdToGo = button.getAttribute("data-bs-address-id");
+
+									button.setAttribute('href', `updateAddress/${addressIdToGo}`)
+								});
+
+							});
+
 			});
 
 		</script>

@@ -104,9 +104,11 @@ public class ClientController {
     }
 
     @GetMapping("updateAddress/{addressId}")
-    public AddressDTO updateClientAddressGet(@PathVariable long addressId) {
+    public String updateClientAddressGet(@PathVariable long addressId, Model model) {
         Address address = addressRepository.findById(addressId).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
         AddressDTO addressDTO = new AddressDTO();
+
+        model.addAttribute("addressDTO", addressDTO);
 
         addressDTO.setAddressType(address.isAddressType());
         addressDTO.setNickname(address.getNickname());
@@ -121,7 +123,7 @@ public class ClientController {
         addressDTO.setCountry(address.getCountry());
         addressDTO.setObservation(address.getObservation());
 
-        return addressDTO;
+        return "updateAddress";
     }
 
     @PutMapping("updateAddress/{addressId}")
