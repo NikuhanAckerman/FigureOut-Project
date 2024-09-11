@@ -2,11 +2,9 @@ package com.project.figureout.controller;
 
 import com.project.figureout.dto.*;
 import com.project.figureout.model.Address;
+import com.project.figureout.model.CreditCard;
 import com.project.figureout.model.Gender;
-import com.project.figureout.repository.AddressRepository;
-import com.project.figureout.repository.ClientRepository;
-import com.project.figureout.repository.GenderRepository;
-import com.project.figureout.repository.PhoneRepository;
+import com.project.figureout.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +28,8 @@ public class ClientController {
     private PhoneRepository phoneRepository;
     @Autowired
     private GenderRepository genderRepository;
+    @Autowired
+    private CreditCardRepository creditCardRepository;
 
     @GetMapping({"", "/", "/index"})
     public String showClientsGet(Model model) {
@@ -132,6 +132,41 @@ public class ClientController {
         addressRepository.save(addressToUpdate);
 
         return "redirect:/index";
+    }
+
+    @GetMapping("index/{id}/creditCards")
+    @ResponseBody
+    public List<CreditCard> getClientCreditCards(@PathVariable long id) {
+        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+        return client.getCreditCards();
+    }
+
+    @GetMapping("createCreditCard/{id}")
+    public String createClientCreditCardGet(@PathVariable long id, Model model) {
+        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+        CreditCardDTO creditCardDTO = new CreditCardDTO();
+
+        model.addAttribute("creditCardDTO", creditCardDTO);
+
+        return "createCreditCard";
+    }
+
+    @PostMapping("createCreditCard/{id}")
+    public String createClientCreditCardPost(@PathVariable long id, @ModelAttribute CreditCardDTO creditCardDTO) {
+        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+
+        CreditCard creditCard = new CreditCard();
+
+        creditCard.setPreferido(creditCardDTO.isPreferido());
+        creditCard.setCardNumber(creditCardDTO.getCardNumber());
+        creditCard.setPrintedName(creditCardDTO.getPrintedName());
+        creditCard.setBrand(creditCardDTO.getBrand());
+        creditCard.setSecurityCode(creditCardDTO.getSecurityCode());
+
+        creditCardRepository.save(creditCard);
+
+        return "redirect:/index";
+
     }
 
     @GetMapping("/createClient")

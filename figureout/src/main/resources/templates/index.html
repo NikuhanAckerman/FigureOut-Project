@@ -261,9 +261,9 @@
 							}
 							return response.json();
 						})
-						.then(addresses => {
-							addresses.forEach(address => {
-								const addressItem = `
+						.then(creditCards => {
+							creditCards.forEach(creditCard => {
+								const creditCardItem = `
 														<div class="card mt-3">
 															<div class="card-body">
 																<h3 class="card-title">ID: ${creditCard.id}</h3>
@@ -287,7 +287,6 @@
 																</div>
 															</div>
 														</div>`;
-
 							});
 
 							let updateCreditCardButtonList = document.querySelectorAll(".updateAddressButton");
