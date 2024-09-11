@@ -103,7 +103,7 @@ public class ClientController {
         return "redirect:/index";
     }
 
-    @GetMapping("updateAddress/{id}")
+    @GetMapping("updateAddress/{addressId}")
     public AddressDTO updateClientAddressGet(@PathVariable long addressId) {
         Address address = addressRepository.findById(addressId).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
         AddressDTO addressDTO = new AddressDTO();
@@ -124,7 +124,7 @@ public class ClientController {
         return addressDTO;
     }
 
-    @PutMapping("createAddress/{id}")
+    @PutMapping("updateAddress/{addressId}")
     public String updateClientAddressPost(@PathVariable long addressId, @ModelAttribute("addressDTO") AddressDTO addressDTO) {
         Address addressToUpdate = addressRepository.findById(addressId).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
 

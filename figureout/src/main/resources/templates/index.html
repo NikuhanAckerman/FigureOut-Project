@@ -186,12 +186,7 @@
 																		<button type="submit" class="btn btn-danger btn-delete" onclick="return confirm('Tem certeza?')">Deletar</button>
 																	</form>
 
-																	<form action="index/addresses/${address.id}" method="GET" style="display: inline;">
-																		<button type="button" class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#addressFormCanvas"
-																		aria-controls="addressFormCanvas" id="updateAddressButton" data-bs-address-id= "${address.id}"
-																		data-bs-client-id="${clientId}">
-																		Atualizar</button>
-																	</form>
+																	<a class="btn btn-primary" id="updateAddressButton" href="/updateAddress/${address.id}/">Atualizar</a>
 
 																</div>
 															</div>
