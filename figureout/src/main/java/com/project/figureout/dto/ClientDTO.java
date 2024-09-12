@@ -30,6 +30,9 @@ public class ClientDTO {
     @NotEmpty(message = "Digite uma senha.")
     private String password;
 
+    @NotEmpty(message = "Digite novamente sua senha.")
+    private String confirmPassword;
+
     @NotNull
     @Past(message = "A data de nascimento deve ser no passado.")
     private LocalDate birthday;

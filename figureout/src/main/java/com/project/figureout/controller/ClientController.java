@@ -241,7 +241,15 @@ public class ClientController {
         client.setCpf(clientDTO.getCpf());
         client.setBirthday(clientDTO.getBirthday());
         client.setEnabled(clientDTO.isEnabled());
-        client.setPassword(clientDTO.getPassword());
+
+        String password = clientDTO.getPassword();
+        String confirmedPassword = clientDTO.getConfirmPassword();
+
+        if(password.equals(confirmedPassword)) {
+            client.setPassword(password);
+        } else {
+            throw new IllegalArgumentException("As senhas digitadas não batem.");
+        }
 
         clientDTO.getDeliveryAddress().setAddressType(false);
         clientDTO.getChargingAddress().setAddressType(true);
