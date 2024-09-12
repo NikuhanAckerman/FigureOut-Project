@@ -173,6 +173,9 @@
 
 				addAddressButton.setAttribute('href', `/createAddress/${clientId}`);
 
+				deliveryAddressList.innerHTML = '';
+				chargingAddressList.innerHTML = '';
+
 				fetch(`index/${clientId}/addresses`)
 						.then(response => {
 							if(!response.ok) {
@@ -255,6 +258,7 @@
 				addCreditCardButton.setAttribute('href', `/createCreditCard/${clientId}`);
 
 				const creditCardList = document.getElementById("creditCardList");
+				creditCardList.innerHTML = '';
 
 				fetch(`index/${clientId}/creditCards`)
 						.then(response => {
@@ -263,6 +267,7 @@
 							}
 							return response.json();
 						})
+
 						.then(creditCards => {
 							creditCards.forEach(creditCard => {
 								const creditCardItem = `
