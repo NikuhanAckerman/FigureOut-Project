@@ -297,11 +297,12 @@
 
 							});
 
-							let updateCreditCardButtonList = document.querySelectorAll(".updateAddressButton");
+							let updateCreditCardButtonList = document.querySelectorAll(".updateCreditCardButton");
 
 							updateCreditCardButtonList.forEach(button => {
 
 								creditCardIdToGo = button.getAttribute("data-bs-creditCard-id");
+								console.log(creditCardIdToGo);
 
 								button.setAttribute('href', `updateCreditCard/${creditCardIdToGo}`)
 							});
