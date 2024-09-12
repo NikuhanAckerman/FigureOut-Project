@@ -227,8 +227,8 @@
 
 								});
 
-								deliveryAddressList.innerHTML = deliveryAddresses;
-								chargingAddressList.innerHTML = chargingAddresses;
+								deliveryAddressList.insertAdjacentHTML("beforeend", deliveryAddresses);
+								chargingAddressList.insertAdjacentHTML("beforeend", chargingAddresses);
 
 								let updateAddressButtonList = document.querySelectorAll(".updateAddressButton");
 
@@ -254,6 +254,8 @@
 
 				addCreditCardButton.setAttribute('href', `/createCreditCard/${clientId}`);
 
+				const creditCardList = document.getElementById("creditCardList");
+
 				fetch(`index/${clientId}/creditCards`)
 						.then(response => {
 							if(!response.ok) {
@@ -271,7 +273,8 @@
 																	<i class="bi bi-chevron-down"></i>
 																</button>
 																<div id="creditCardInfo_${creditCard.id}" class="collapse">
-																	<p>Preferencial? <input type="checkbox" id="creditCardPreferredField_${creditCard.id}" disabled></p>
+																	<input type="checkbox" id="creditCardPreferredField_${creditCard.id}" data-bs-creditCard-id="${creditCard.id}" disabled>
+																	<p>Preferencial? </p>
 																	<p>Número do cartão: ${creditCard.cardNumber}</p>
 																	<p>Nome impresso no cartão: ${creditCard.printedName}</p>
 																	<p>Bandeira do cartão: ${creditCard.brand}</p>
@@ -287,13 +290,17 @@
 																</div>
 															</div>
 														</div>`;
-								creditCardList.innerHTML += creditCardItem;
+								creditCardList.insertAdjacentHTML('beforeend', creditCardItem);
 
-								let creditCardPreferredField = document.querySelector(`#creditCardPreferredField_${creditCard.id}`);
+								let creditCardPreferredField = document.getElementById(`creditCardPreferredField_${creditCard.id}`);
+								creditCardPreferredField.checked = creditCard.preferido;
 
-								creditCardPreferredField.checked = `${creditCard.preferido}`;
 							});
-							
+
+
+
+
+
 							let updateCreditCardButtonList = document.querySelectorAll(".updateAddressButton");
 
 							updateCreditCardButtonList.forEach(button => {
@@ -304,12 +311,9 @@
 							});
 
 
-
 						});
 
-
 			});
-
 
 		</script>
 

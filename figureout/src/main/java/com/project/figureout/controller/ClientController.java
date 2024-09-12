@@ -172,6 +172,13 @@ public class ClientController {
 
     }
 
+    @DeleteMapping("index/{id}/creditCards/delete")
+    public String deleteClientCreditCard(@PathVariable long id) {
+        creditCardRepository.deleteById(id);
+
+        return "redirect:/index";
+    }
+
     @GetMapping("/createClient")
     public String addClientGet(Model model) {
         ClientDTO clientDTO = new ClientDTO();
