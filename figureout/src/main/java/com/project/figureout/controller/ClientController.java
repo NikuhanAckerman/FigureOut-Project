@@ -179,6 +179,41 @@ public class ClientController {
         return "redirect:/index";
     }
 
+    @GetMapping("updateCreditCard/{id}")
+    public String updateClientCreditCardGet(@PathVariable long id, Model model) {
+        CreditCard creditCard = creditCardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+        CreditCardDTO creditCardDTO = new CreditCardDTO();
+
+        creditCardDTO.setPreferido(creditCard.isPreferido());
+        creditCardDTO.setCardNumber(creditCard.getCardNumber());
+        creditCardDTO.setPrintedName(creditCard.getPrintedName());
+        creditCardDTO.setBrand(creditCard.getBrand());
+        creditCardDTO.setSecurityCode(creditCard.getSecurityCode());
+
+        model.addAttribute("creditCardDTO", creditCardDTO);
+        model.addAttribute("creditCardId", id);
+
+
+
+        return "updateCreditCard";
+
+    }
+
+    @PutMapping("updateCreditCard/{id}")
+    public String updateClientCreditCardPut(@PathVariable long id, @ModelAttribute CreditCardDTO creditCardDTO) {
+        CreditCard creditCardToUpdate = creditCardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+
+        creditCardToUpdate.setPreferido(creditCardDTO.isPreferido());
+        creditCardToUpdate.setCardNumber(creditCardDTO.getCardNumber());
+        creditCardToUpdate.setPrintedName(creditCardDTO.getPrintedName());
+        creditCardToUpdate.setBrand(creditCardDTO.getBrand());
+        creditCardToUpdate.setSecurityCode(creditCardDTO.getSecurityCode());
+
+        creditCardRepository.save(creditCardToUpdate);
+
+        return "redirect:/index";
+    }
+
     @GetMapping("/createClient")
     public String addClientGet(Model model) {
         ClientDTO clientDTO = new ClientDTO();
