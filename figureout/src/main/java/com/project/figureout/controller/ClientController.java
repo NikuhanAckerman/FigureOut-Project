@@ -1,16 +1,14 @@
 package com.project.figureout.controller;
 
 import com.project.figureout.dto.*;
-import com.project.figureout.model.Address;
-import com.project.figureout.model.CreditCard;
-import com.project.figureout.model.Gender;
+import com.project.figureout.model.*;
 import com.project.figureout.repository.*;
+import com.project.figureout.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import com.project.figureout.model.Client;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -20,7 +18,7 @@ import java.util.List;
 @RequestMapping(path = "/")
 public class ClientController {
 
-    @Autowired
+    /*@Autowired
     private ClientRepository clientRepository;
     @Autowired
     private AddressRepository addressRepository;
@@ -29,17 +27,21 @@ public class ClientController {
     @Autowired
     private GenderRepository genderRepository;
     @Autowired
-    private CreditCardRepository creditCardRepository;
+    private CreditCardRepository creditCardRepository;*/
+
+    @Autowired
+    private ClientService clientService;
 
     @GetMapping({"", "/", "/index"})
     public String showClientsGet(Model model) {
 
-        List<Client> clients =  clientRepository.findAll();
+        List<Client> clients =  clientService.getAllClients();
         model.addAttribute("clients", clients);
 
         return "index";
     }
 
+    /*
     @GetMapping("index/{id}/addresses") // exemplo de paranaue com javascript (o codigo js ta na pagina index)
     @ResponseBody
     public List<Address> getClientAddresses(@PathVariable long id) {
@@ -132,8 +134,9 @@ public class ClientController {
         addressRepository.save(addressToUpdate);
 
         return "redirect:/index";
-    }
+    }*/
 
+    /*
     @GetMapping("index/{id}/creditCards")
     @ResponseBody
     public List<CreditCard> getClientCreditCards(@PathVariable long id) {
@@ -212,13 +215,13 @@ public class ClientController {
         creditCardRepository.save(creditCardToUpdate);
 
         return "redirect:/index";
-    }
+    }*/
 
     @GetMapping("/createClient")
     public String addClientGet(Model model) {
         ClientDTO clientDTO = new ClientDTO();
 
-        List<Gender> genderList = genderRepository.findAll();
+        List<Gender> genderList = clientService.getAllGenders();
 
         model.addAttribute("clientDTO", clientDTO);
         model.addAttribute("genderList", genderList);
@@ -229,38 +232,9 @@ public class ClientController {
     @PostMapping("/createClient")
     public String addClientPost(@ModelAttribute("clientDTO") ClientDTO clientDTO) {
 
-        Gender gender = genderRepository.findById(clientDTO.getGender().getId()).orElse(null);
-
-        phoneRepository.save(clientDTO.getPhone());
-
         Client client = new Client();
-        client.setPhone(clientDTO.getPhone());
-        client.setGender(gender);
-        client.setName(clientDTO.getName());
-        client.setEmail(clientDTO.getEmail());
-        client.setCpf(clientDTO.getCpf());
-        client.setBirthday(clientDTO.getBirthday());
-        client.setEnabled(clientDTO.isEnabled());
 
-        String password = clientDTO.getPassword();
-        String confirmedPassword = clientDTO.getConfirmPassword();
-
-        if(password.equals(confirmedPassword)) {
-            client.setPassword(password);
-        } else {
-            throw new IllegalArgumentException("As senhas digitadas não batem.");
-        }
-
-        clientDTO.getDeliveryAddress().setAddressType(false);
-        clientDTO.getChargingAddress().setAddressType(true);
-
-        addressRepository.save(clientDTO.getDeliveryAddress());
-        addressRepository.save(clientDTO.getChargingAddress());
-
-        client.addAddress(clientDTO.getDeliveryAddress());
-        client.addAddress(clientDTO.getChargingAddress());
-
-        clientRepository.save(client);
+        clientService.registerClient(client, clientDTO);
 
         // Validação da senha
 //        if (!client.isValidPassword(clientDTO.getPassword())) {
@@ -270,23 +244,17 @@ public class ClientController {
         return "redirect:/index";
     }
 
+
     @GetMapping("/updateClient/{id}")
     public String updateClientGet(@PathVariable long id, Model model) {
 
-        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inválido."));
+        Client client = clientService.getClientById(id);
 
-        ClientAdminUpdateDTO ClientAdminUpdateDTO = new ClientAdminUpdateDTO();
-        ClientAdminUpdateDTO.setName(client.getName());
-        ClientAdminUpdateDTO.setEmail(client.getEmail());
-        ClientAdminUpdateDTO.setPassword(client.getPassword());
-        ClientAdminUpdateDTO.setCpf(client.getCpf());
-        ClientAdminUpdateDTO.setBirthday(client.getBirthday());
-        ClientAdminUpdateDTO.setEnabled(client.isEnabled());
-        ClientAdminUpdateDTO.setGender(client.getGender());
-        ClientAdminUpdateDTO.setPhone(client.getPhone());
+        ClientBasicDataDTO clientBasicDataDTO = new ClientBasicDataDTO();
+
 
         List<Gender> genderList = genderRepository.findAll();
-        model.addAttribute("clientAdminUpdateDTO", ClientAdminUpdateDTO);
+        model.addAttribute("clientBasicDataSetter", clientBasicDataDTO);
         model.addAttribute("genderList", genderList);
         model.addAttribute("clientId", id);
 
@@ -316,7 +284,7 @@ public class ClientController {
 
     @DeleteMapping("/deleteClient/{id}")
     public String deleteClient(@PathVariable long id) {
-        clientRepository.deleteById(id);
+        clientService.deleteClientById(id);
 
         return "redirect:/index";
     }

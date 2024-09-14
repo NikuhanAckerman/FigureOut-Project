@@ -9,8 +9,9 @@ import lombok.Setter;
 @Getter @Setter
 public class AddressDTO {
 
-    @NotEmpty(message = "Insira o tipo")
-    private boolean addressType;
+    private boolean isDeliveryAddress = false; // 0 = entrega, 1 = cobrança
+
+    private boolean isChargingAddress = false;
 
     @NotEmpty(message = "Insira o apelido")
     private String nickname;
@@ -45,6 +46,5 @@ public class AddressDTO {
 
     @NotEmpty(message = "Insira uma observação (opcional)")
     private String observation;
-
 
 }

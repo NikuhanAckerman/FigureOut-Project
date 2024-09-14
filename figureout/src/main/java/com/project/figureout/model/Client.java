@@ -55,15 +55,15 @@ public class Client {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CreditCard> creditCards = new ArrayList<>();
 
-    public void addAddress(Address address) {
-        addresses.add(address);
-        address.setClient(this);
-    }
+    //public void addAddress(Address address) {
+    //    addresses.add(address);
+    //    address.setClient(this);
+    //}
 
-    public void addCreditCard(CreditCard creditCard) {
-        creditCards.add(creditCard);
-        creditCard.setClient(this);
-    }
+    //public void addCreditCard(CreditCard creditCard) {
+    //    creditCards.add(creditCard);
+    //    creditCard.setClient(this);
+    //}
 
     // Expressão regular para validar a senha
     // (Incluir no mínimo 8 caracteres, letra mínuscula, maiúscula e caractere especial).

@@ -68,129 +68,128 @@
 
 					<label><b>Endereços</b></label>
 
+					<div>
+						<label><b>Usar o endereço de entrega como endereço de cobrança também?</b></label>
+						<input class="form-check-input" type="checkbox" id="isSameAddressCheckbox" th:field="*{sameAddress}">
+					</div>
+
 					<div class="mt-2">
 						<label><b>Endereço de entrega</b></label>
 
 						<div>
 							<label><b>Apelido</b></label>
-							<input type="text" class="form-control" placeholder="Digite o apelido" th:field="*{deliveryAddress.nickname}" required>
+							<input type="text" class="form-control" placeholder="Digite o apelido" th:field="*{deliveryAddressDTO.nickname}" required>
 						</div>
 
 						<div>
 							<label><b>Tipo de Residência</b></label>
-							<input type="text" class="form-control" placeholder="(Casa, apartamento, etc...)" th:field="*{deliveryAddress.typeOfResidence}" required>
+							<input type="text" class="form-control" placeholder="(Casa, apartamento, etc...)" th:field="*{deliveryAddressDTO.typeOfResidence}" required>
 						</div>
 
 						<div>
 							<label><b>Tipo de logradouro</b></label>
-							<input type="text" class="form-control" placeholder="(Rua, Avenida, etc...)" th:field="*{deliveryAddress.addressingType}" required>
+							<input type="text" class="form-control" placeholder="(Rua, Avenida, etc...)" th:field="*{deliveryAddressDTO.addressingType}" required>
 						</div>
 
 						<div>
 							<label><b>Logradouro</b></label>
-							<input type="text" class="form-control" placeholder="Insira o logradouro" th:field="*{deliveryAddress.addressing}" required>
+							<input type="text" class="form-control" placeholder="Insira o logradouro" th:field="*{deliveryAddressDTO.addressing}" required>
 						</div>
 
 						<div>
 							<label><b>Nº de residência</b></label>
-							<input type="text" class="form-control" placeholder="Insira o número da residência" th:field="*{deliveryAddress.houseNumber}" maxlength="5" required>
+							<input type="text" class="form-control" placeholder="Insira o número da residência" th:field="*{deliveryAddressDTO.houseNumber}" maxlength="5" required>
 						</div>
 
 						<div>
 							<label><b>CEP</b></label>
-							<input type="text" class="form-control" placeholder="00000-000" th:field="*{deliveryAddress.cep}" maxlength="9" required>
+							<input type="text" class="form-control" placeholder="00000-000" th:field="*{deliveryAddressDTO.cep}" maxlength="9" required>
 						</div>
 
 						<div>
 							<label><b>Bairro</b></label>
-							<input type="text" class="form-control" placeholder="Insira o bairro" th:field="*{deliveryAddress.neighbourhood}" required>
+							<input type="text" class="form-control" placeholder="Insira o bairro" th:field="*{deliveryAddressDTO.neighbourhood}" required>
 						</div>
 
 						<div>
 							<label><b>Cidade</b></label>
-							<input type="text" class="form-control" placeholder="Insira a cidade" th:field="*{deliveryAddress.city}" required>
+							<input type="text" class="form-control" placeholder="Insira a cidade" th:field="*{deliveryAddressDTO.city}" required>
 						</div>
 
 						<div>
 							<label><b>Estado</b></label>
-							<input type="text" class="form-control" placeholder="Insira o Estado" th:field="*{deliveryAddress.state}" required>
+							<input type="text" class="form-control" placeholder="Insira o Estado" th:field="*{deliveryAddressDTO.state}" required>
 						</div>
 
 						<div>
 							<label><b>País</b></label>
-							<input type="text" class="form-control" placeholder="Insira o País" th:field="*{deliveryAddress.country}" required>
+							<input type="text" class="form-control" placeholder="Insira o País" th:field="*{deliveryAddressDTO.country}" required>
 						</div>
 
 						<div>
 							<label><b>Observação</b></label>
-							<input type="text" class="form-control" placeholder="Insira uma observação (opcional)" th:field="*{deliveryAddress.observation}">
+							<input type="text" class="form-control" placeholder="Insira uma observação (opcional)" th:field="*{deliveryAddressDTO.observation}">
 						</div>
 					</div>
 
-					<div class="mt-2">
+					<div class="mt-2" id="chargingAddressDiv">
 						<label><b>Endereço de cobrança</b></label>
 
 						<div>
 							<label><b>Apelido</b></label>
-							<input type="text" class="form-control" placeholder="Digite o apelido" th:field="*{chargingAddress.nickname}" required>
+							<input type="text" class="form-control" placeholder="Digite o apelido" th:field="*{chargingAddressDTO.nickname}">
 						</div>
 
 						<div>
 							<label><b>Tipo de Residência</b></label>
-							<input type="text" class="form-control" placeholder="(Casa, apartamento, etc...)" th:field="*{chargingAddress.typeOfResidence}" required>
+							<input type="text" class="form-control" placeholder="(Casa, apartamento, etc...)" th:field="*{chargingAddressDTO.typeOfResidence}">
 						</div>
 
 						<div>
 							<label><b>Tipo de logradouro</b></label>
-							<input type="text" class="form-control" placeholder="(Rua, Avenida, etc...)" th:field="*{chargingAddress.addressingType}" required>
+							<input type="text" class="form-control" placeholder="(Rua, Avenida, etc...)" th:field="*{chargingAddressDTO.addressingType}">
 						</div>
 
 						<div>
 							<label><b>Logradouro</b></label>
-							<input type="text" class="form-control" placeholder="Insira o logradouro" th:field="*{chargingAddress.addressing}" required>
+							<input type="text" class="form-control" placeholder="Insira o logradouro" th:field="*{chargingAddressDTO.addressing}">
 						</div>
 
 						<div>
 							<label><b>Nº de residência</b></label>
-							<input type="text" class="form-control" placeholder="Insira o número da residência" th:field="*{chargingAddress.houseNumber}" maxlength="5" required>
+							<input type="text" class="form-control" placeholder="Insira o número da residência" th:field="*{chargingAddressDTO.houseNumber}" maxlength="5">
 						</div>
 
 						<div>
 							<label><b>CEP</b></label>
-							<input type="text" class="form-control" placeholder="00000-000" th:field="*{chargingAddress.cep}" maxlength="9" required>
+							<input type="text" class="form-control" placeholder="00000-000" th:field="*{chargingAddressDTO.cep}" maxlength="9">
 						</div>
 
 						<div>
 							<label><b>Bairro</b></label>
-							<input type="text" class="form-control" placeholder="Insira o bairro" th:field="*{chargingAddress.neighbourhood}" required>
+							<input type="text" class="form-control" placeholder="Insira o bairro" th:field="*{chargingAddressDTO.neighbourhood}">
 						</div>
 
 						<div>
 							<label><b>Cidade</b></label>
-							<input type="text" class="form-control" placeholder="Insira a cidade" th:field="*{chargingAddress.city}" required>
+							<input type="text" class="form-control" placeholder="Insira a cidade" th:field="*{chargingAddressDTO.city}">
 						</div>
 
 						<div>
 							<label><b>Estado</b></label>
-							<input type="text" class="form-control" placeholder="Insira o Estado" th:field="*{chargingAddress.state}" required>
+							<input type="text" class="form-control" placeholder="Insira o Estado" th:field="*{chargingAddressDTO.state}">
 						</div>
 
 						<div>
 							<label><b>País</b></label>
-							<input type="text" class="form-control" placeholder="Insira o País" th:field="*{chargingAddress.country}" required>
+							<input type="text" class="form-control" placeholder="Insira o País" th:field="*{chargingAddressDTO.country}">
 						</div>
 
 						<div>
 							<label><b>Observação</b></label>
-							<input type="text" class="form-control" placeholder="Insira uma observação (opcional)" th:field="*{chargingAddress.observation}">
+							<input type="text" class="form-control" placeholder="Insira uma observação (opcional)" th:field="*{chargingAddressDTO.observation}">
 						</div>
 					</div>
-
-
-
-
-
-
 
 				</div>
 
@@ -200,6 +199,28 @@
 			</form>
 
 		</div>
+
+		<script>
+
+			sameAddressInput = document.getElementById("isSameAddressCheckbox");
+			chargingAddressDiv = document.getElementById("chargingAddressDiv")
+
+
+			sameAddressInput.addEventListener('click', function(event) {
+
+				if(sameAddressInput.checked == true) {
+
+					chargingAddressDiv.style.display = 'none';
+
+				} else {
+
+					chargingAddressDiv.style.display = 'block';
+
+				}
+
+			})
+
+		</script>
 
 		<footer id="footer">
 			<img src="/Images/figureoutlogo1.svg">

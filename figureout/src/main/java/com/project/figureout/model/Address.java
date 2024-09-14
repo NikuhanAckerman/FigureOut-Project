@@ -17,8 +17,11 @@ public class Address {
     @Column(name = "end_id", nullable = false, unique = true)
     private long id;
 
-    @Column(name = "end_tipo", nullable = false)
-    private boolean addressType; // 0 = entrega, 1 = cobrança
+    @Column(name = "end_entrega", nullable = false)
+    private boolean isDeliveryAddress; // 0 = entrega, 1 = cobrança
+
+    @Column(name = "end_cobranca", nullable = false)
+    private boolean isChargingAddress;
 
     @Column(name = "end_apelido", nullable = false, length = 30)
     private String nickname;
@@ -41,13 +44,13 @@ public class Address {
     @Column(name = "end_cep", nullable = false, length = 8)
     private String cep;
 
-    @Column(name = "end_cidade", nullable = false, length = 187)
+    @Column(name = "end_cidade", nullable = false, length = 32) //Vila Bela da Santíssima Trindade
     private String city;
 
-    @Column(name = "end_estado", nullable = false, length = 19)
+    @Column(name = "end_estado", nullable = false, length = 19) //Rio Grande do Norte
     private String state;
 
-    @Column(name = "end_pais", nullable = false, length = 60)
+    @Column(name = "end_pais", nullable = false, length = 6) // Brasil
     private String country;
 
     @Column(name = "end_observacao", length = 60)
