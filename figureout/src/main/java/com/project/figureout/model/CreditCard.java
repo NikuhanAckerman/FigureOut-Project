@@ -14,22 +14,22 @@ public class CreditCard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "car_id")
+    @Column(name = "car_id", nullable = false, unique = true)
     private long id;
 
-    @Column(name = "car_preferido")
+    @Column(name = "car_preferido", nullable = false)
     private boolean preferido;
 
-    @Column(name = "car_numero")
+    @Column(name = "car_numero", nullable = false, length = 20)
     private String cardNumber;
 
-    @Column(name = "car_nome_impresso")
+    @Column(name = "car_nome_impresso", nullable = false, length = 30)
     private String printedName;
 
-    @Column(name = "car_bandeira")
+    @Column(name = "car_bandeira", nullable = false, length = 25)
     private String brand;
 
-    @Column(name = "car_cod_seguranca")
+    @Column(name = "car_cod_seguranca", nullable = false, length = 4)
     private String securityCode;
 
     @ManyToOne

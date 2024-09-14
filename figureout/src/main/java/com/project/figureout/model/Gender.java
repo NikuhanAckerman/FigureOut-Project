@@ -11,10 +11,10 @@ public class Gender {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "gen_id")
+    @Column(name = "gen_id", nullable = false, unique = true)
     private long id;
 
-    @Column(name = "gen_genero")
+    @Column(name = "gen_genero", nullable = false, length = 9)
     private String genderType;
 
     public Gender(String genderType) {

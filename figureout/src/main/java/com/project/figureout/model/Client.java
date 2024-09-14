@@ -18,26 +18,26 @@ public class Client {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cli_id")
+    @Column(name = "cli_id", nullable = false, unique = true)
     private long id;
 
-    @Column(name = "cli_nome")
+    @Column(name = "cli_nome", nullable = false, length = 80)
     private String name;
 
-    @Column(name = "cli_email")
+    @Column(name = "cli_email", nullable = false)
     private String email;
 
-    @Column(name = "cli_cpf")
+    @Column(name = "cli_cpf", nullable = false, unique = true, length = 11)
     private String cpf;
 
-    @Column(name = "cli_senha")
+    @Column(name = "cli_senha", nullable = false, length = 128)
     private String password;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Column(name = "cli_nascimento")
+    @Column(name = "cli_nascimento", nullable = false)
     private LocalDate birthday;
 
-    @Column(name = "cli_ativo")
+    @Column(name = "cli_ativo", nullable = false)
     private boolean enabled = true;
 
     // Conferir depois se precisa arrumar a(s) chave(s) estrangeira(s).

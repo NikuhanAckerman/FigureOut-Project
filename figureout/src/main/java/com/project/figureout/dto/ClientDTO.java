@@ -3,10 +3,7 @@ package com.project.figureout.dto;
 import com.project.figureout.model.Address;
 import com.project.figureout.model.Gender;
 import com.project.figureout.model.Phone;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,39 +14,41 @@ import java.util.Date;
 @Getter @Setter
 public class ClientDTO {
 
-    @NotEmpty(message = "Digite o nome.")
+    @NotBlank(message = "O nome não pode estar vazio.")
     private String name;
 
-    @NotEmpty(message = "Digite o email.")
-     private String email;
+    @NotBlank(message = "O e-mail não pode estar vazio.")
+    private String email;
 
-    //@Size(min = 14, max = 14)
-    @NotEmpty(message = "Digite o CPF.")
+
+    @NotBlank(message = "O CPF não pode estar vazio.")
+    @Size(max = 14)
+    
     private String cpf;
 
-    @NotEmpty(message = "Digite uma senha.")
+    @NotBlank(message = "A senha não pode estar vazia.")
     private String password;
 
-    @NotEmpty(message = "Digite novamente sua senha.")
+    @NotBlank(message = "A confirmação de senha não pode estar vazia.")
     private String confirmPassword;
 
-    @NotNull
-    @Past(message = "A data de nascimento deve ser no passado.")
+    @NotBlank(message = "A data de nascimento não pode estar vazia.")
+    @Past(message = "A data de nascimento deve estar no passado.")
     private LocalDate birthday;
 
-    @NotEmpty(message = "Ativo ou não?")
+    @NotBlank(message = "O campo de 'ativo' não pode estar vazio.")
     private boolean enabled = true;
 
-    @NotEmpty(message = "Qual é o gênero?")
+    @NotBlank(message = "O gênero não pode estar vazio.")
     private Gender gender;
 
-    @NotEmpty(message = "Qual é o telefone?")
+    @NotBlank(message = "O telefone não pode estar vazio.")
     private Phone phone;
 
-    @NotEmpty(message = "Qual é o endereço de entrega?")
+    @NotBlank(message = "O endereço de entrega não pode estar vazio.")
     private Address deliveryAddress;
 
-    @NotEmpty(message = "Qual é o endereço de cobrança?")
+    @NotBlank(message = "O endereço de cobrança não pode estar vazio.")
     private Address chargingAddress;
 
 }

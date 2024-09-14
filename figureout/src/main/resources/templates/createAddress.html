@@ -18,54 +18,6 @@
               </div>
         </nav>
 
-<!-- oninput="applyResidenceMask(this)" -->
-<script>
-  /*
-  function applyResidenceMask(input) {
-      // Remove qualquer caractere que não seja número
-      let value = input.value.replace(/\D/g, '');
-
-      // Limita o valor a 5 dígitos
-      if (value.length > 5) {
-          value = value.slice(0, 5);
-      }
-
-      // Atualiza o valor do campo de entrada
-      input.value = value;
-
-      // Valida o valor
-      validateResidenceNumber(value);
-  }
-  function validateResidenceNumber(value) {
-      const errorMessage = document.getElementById('error-message');
-
-      // Exibe mensagem de erro se o valor for "0" ou vazio
-      if (value === '' || value === '0') {
-          errorMessage.style.display = 'block';
-      } else {
-          errorMessage.style.display = 'none';
-      }
-  }
-  */
-</script>
-<!-- oninput="applyCepMask(this)" -->
-<script>
-  /*
-  function applyCepMask(input) {
-      // Remove qualquer caractere que não seja número
-      let value = input.value.replace(/\D/g, '');
-
-      // Adiciona a máscara no formato XXXXX-XXX
-      if (value.length > 5) {
-          value = value.slice(0, 5) + '-' + value.slice(5, 8);
-      }
-
-      // Atualiza o valor do campo de entrada
-      input.value = value;
-  }
-  */
-</script>
-
         <div class="container mt-5">
             <form th:action="@{/createAddress/{id}(id=${clientId})}" th:object="${addressDTO}" method="POST">
                 <div class="form-group">

@@ -9,13 +9,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 @Configuration
-public class DataInitializer implements CommandLineRunner {
+public class AppInitializer implements CommandLineRunner {
 
     // enable DELETE and PUT requests:
     @Bean
     public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
         return new HiddenHttpMethodFilter();
     }
+
 
     @Autowired
     private GenderRepository genderRepository;
