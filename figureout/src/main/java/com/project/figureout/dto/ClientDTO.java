@@ -14,7 +14,7 @@ import java.util.Date;
 @Getter @Setter
 public class ClientDTO {
 
-    ClientBasicDataDTO clientBasicDataDTO;
+    private ClientBasicDataDTO clientBasicDataDTO;
 
     /*
     @NotBlank(message = "O nome não pode estar vazio.")

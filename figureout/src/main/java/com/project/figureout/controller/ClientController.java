@@ -18,17 +18,6 @@ import java.util.List;
 @RequestMapping(path = "/")
 public class ClientController {
 
-    /*@Autowired
-    private ClientRepository clientRepository;
-    @Autowired
-    private AddressRepository addressRepository;
-    @Autowired
-    private PhoneRepository phoneRepository;
-    @Autowired
-    private GenderRepository genderRepository;
-    @Autowired
-    private CreditCardRepository creditCardRepository;*/
-
     @Autowired
     private ClientService clientService;
 
@@ -41,12 +30,10 @@ public class ClientController {
         return "index";
     }
 
-    /*
     @GetMapping("index/{id}/addresses") // exemplo de paranaue com javascript (o codigo js ta na pagina index)
     @ResponseBody
     public List<Address> getClientAddresses(@PathVariable long id) {
-        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
-        return client.getAddresses();
+        return clientService.getClientAddresses(id);
     }
 
     @GetMapping("/createAddress/{id}")
@@ -61,53 +48,26 @@ public class ClientController {
 
     @PostMapping("createAddress/{id}")
     public String createClientAddressPost(@PathVariable long id, @ModelAttribute("addressDTO") AddressDTO addressDTO) {
-        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
-        Address address = new Address();
+        Client client = clientService.getClientById(id);
 
-        address.setAddressType(addressDTO.isAddressType());
-        address.setNickname(addressDTO.getNickname());
-        address.setTypeOfResidence(addressDTO.getTypeOfResidence());
-        address.setAddressing(addressDTO.getAddressing());
-        address.setHouseNumber(addressDTO.getHouseNumber());
-        address.setNeighbourhood(addressDTO.getNeighbourhood());
-        address.setAddressingType(addressDTO.getAddressingType());
-        address.setCep(addressDTO.getCep());
-        address.setCity(addressDTO.getCity());
-        address.setState(addressDTO.getState());
-        address.setCountry(addressDTO.getCountry());
-        address.setObservation(addressDTO.getObservation());
-
-        client.addAddress(address);
-
-        clientRepository.save(client);
+        clientService.registerAddress(client, addressDTO);
 
         return "redirect:/index";
     }
 
     @DeleteMapping("index/{id}/addresses/delete")
     public String deleteClientAddress(@PathVariable long id) {
-        addressRepository.deleteById(id);
+        clientService.deleteAddress(id);
 
         return "redirect:/index";
     }
 
     @GetMapping("updateAddress/{addressId}")
     public String updateClientAddressGet(@PathVariable long addressId, Model model) {
-        Address address = addressRepository.findById(addressId).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+        Address address = clientService.getAddressById(addressId);
         AddressDTO addressDTO = new AddressDTO();
 
-        addressDTO.setAddressType(address.isAddressType());
-        addressDTO.setNickname(address.getNickname());
-        addressDTO.setTypeOfResidence(address.getTypeOfResidence());
-        addressDTO.setAddressing(address.getAddressing());
-        addressDTO.setHouseNumber(address.getHouseNumber());
-        addressDTO.setNeighbourhood(address.getNeighbourhood());
-        addressDTO.setAddressingType(address.getAddressingType());
-        addressDTO.setCep(address.getCep());
-        addressDTO.setCity(address.getCity());
-        addressDTO.setState(address.getState());
-        addressDTO.setCountry(address.getCountry());
-        addressDTO.setObservation(address.getObservation());
+        clientService.populateAddressDTO(addressDTO, address);
 
         model.addAttribute("addressDTO", addressDTO);
 
@@ -116,37 +76,22 @@ public class ClientController {
 
     @PutMapping("updateAddress/{addressId}")
     public String updateClientAddressPost(@PathVariable long addressId, @ModelAttribute("addressDTO") AddressDTO addressDTO) {
-        Address addressToUpdate = addressRepository.findById(addressId).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+        Address addressToUpdate = clientService.getAddressById(addressId);
 
-        addressToUpdate.setAddressType(addressDTO.isAddressType());
-        addressToUpdate.setNickname(addressDTO.getNickname());
-        addressToUpdate.setTypeOfResidence(addressDTO.getTypeOfResidence());
-        addressToUpdate.setAddressing(addressDTO.getAddressing());
-        addressToUpdate.setHouseNumber(addressDTO.getHouseNumber());
-        addressToUpdate.setNeighbourhood(addressDTO.getNeighbourhood());
-        addressToUpdate.setAddressingType(addressDTO.getAddressingType());
-        addressToUpdate.setCep(addressDTO.getCep());
-        addressToUpdate.setCity(addressDTO.getCity());
-        addressToUpdate.setState(addressDTO.getState());
-        addressToUpdate.setCountry(addressDTO.getCountry());
-        addressToUpdate.setObservation(addressDTO.getObservation());
-
-        addressRepository.save(addressToUpdate);
+        clientService.updateAddress(addressId, addressDTO);
 
         return "redirect:/index";
-    }*/
+    }
 
-    /*
     @GetMapping("index/{id}/creditCards")
     @ResponseBody
     public List<CreditCard> getClientCreditCards(@PathVariable long id) {
-        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
-        return client.getCreditCards();
+        return clientService.getClientCreditCards(id);
     }
 
     @GetMapping("createCreditCard/{id}")
     public String createClientCreditCardGet(@PathVariable long id, Model model) {
-        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+        Client client = clientService.getClientById(id);
         CreditCardDTO creditCardDTO = new CreditCardDTO();
 
         model.addAttribute("creditCardDTO", creditCardDTO);
@@ -155,21 +100,12 @@ public class ClientController {
         return "createCreditCard";
     }
 
+
     @PostMapping("createCreditCard/{id}")
     public String createClientCreditCardPost(@PathVariable long id, @ModelAttribute CreditCardDTO creditCardDTO) {
-        Client client = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+        Client client = clientService.getClientById(id);
 
-        CreditCard creditCard = new CreditCard();
-
-        creditCard.setPreferido(creditCardDTO.isPreferido());
-        creditCard.setCardNumber(creditCardDTO.getCardNumber());
-        creditCard.setPrintedName(creditCardDTO.getPrintedName());
-        creditCard.setBrand(creditCardDTO.getBrand());
-        creditCard.setSecurityCode(creditCardDTO.getSecurityCode());
-
-        client.addCreditCard(creditCard);
-
-        clientRepository.save(client);
+        clientService.registerCreditCard(client, creditCardDTO);
 
         return "redirect:/index";
 
@@ -177,26 +113,21 @@ public class ClientController {
 
     @DeleteMapping("index/{id}/creditCards/delete")
     public String deleteClientCreditCard(@PathVariable long id) {
-        creditCardRepository.deleteById(id);
+        clientService.deleteCreditCard(id);
 
         return "redirect:/index";
     }
 
+
     @GetMapping("updateCreditCard/{id}")
     public String updateClientCreditCardGet(@PathVariable long id, Model model) {
-        CreditCard creditCard = creditCardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+        CreditCard creditCard = clientService.getCreditCardById(id);
         CreditCardDTO creditCardDTO = new CreditCardDTO();
 
-        creditCardDTO.setPreferido(creditCard.isPreferido());
-        creditCardDTO.setCardNumber(creditCard.getCardNumber());
-        creditCardDTO.setPrintedName(creditCard.getPrintedName());
-        creditCardDTO.setBrand(creditCard.getBrand());
-        creditCardDTO.setSecurityCode(creditCard.getSecurityCode());
+        clientService.populateCreditCardDTO(creditCardDTO, creditCard);
 
         model.addAttribute("creditCardDTO", creditCardDTO);
         model.addAttribute("creditCardId", id);
-
-
 
         return "updateCreditCard";
 
@@ -204,23 +135,16 @@ public class ClientController {
 
     @PutMapping("updateCreditCard/{id}")
     public String updateClientCreditCardPut(@PathVariable long id, @ModelAttribute CreditCardDTO creditCardDTO) {
-        CreditCard creditCardToUpdate = creditCardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inexistente."));
+        CreditCard creditCardToUpdate = clientService.getCreditCardById(id);
 
-        creditCardToUpdate.setPreferido(creditCardDTO.isPreferido());
-        creditCardToUpdate.setCardNumber(creditCardDTO.getCardNumber());
-        creditCardToUpdate.setPrintedName(creditCardDTO.getPrintedName());
-        creditCardToUpdate.setBrand(creditCardDTO.getBrand());
-        creditCardToUpdate.setSecurityCode(creditCardDTO.getSecurityCode());
-
-        creditCardRepository.save(creditCardToUpdate);
+        clientService.updateCreditCard(creditCardToUpdate, creditCardDTO);
 
         return "redirect:/index";
-    }*/
+    }
 
     @GetMapping("/createClient")
     public String addClientGet(Model model) {
         ClientDTO clientDTO = new ClientDTO();
-
         List<Gender> genderList = clientService.getAllGenders();
 
         model.addAttribute("clientDTO", clientDTO);
@@ -252,8 +176,7 @@ public class ClientController {
 
         ClientBasicDataDTO clientBasicDataDTO = new ClientBasicDataDTO();
 
-
-        List<Gender> genderList = genderRepository.findAll();
+        List<Gender> genderList = clientService.getAllGenders();
         model.addAttribute("clientBasicDataSetter", clientBasicDataDTO);
         model.addAttribute("genderList", genderList);
         model.addAttribute("clientId", id);
@@ -263,20 +186,13 @@ public class ClientController {
     }
 
     @PutMapping("/updateClient/{id}")
-    public String updateClient(@PathVariable long id, @ModelAttribute ClientAdminUpdateDTO clientAdminUpdateDTO) {
+    public String updateClient(@PathVariable long id, @ModelAttribute ClientBasicDataDTO clientBasicDataDTO) {
 
-        Client clientToUpdate = clientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("ID inválido."));
+        Client clientToUpdate = clientService.getClientById(id);
 
-        clientToUpdate.setName(clientAdminUpdateDTO.getName());
-        clientToUpdate.setEmail(clientAdminUpdateDTO.getEmail());
-        clientToUpdate.setPassword(clientAdminUpdateDTO.getPassword());
-        clientToUpdate.setCpf(clientAdminUpdateDTO.getCpf());
-        clientToUpdate.setBirthday(clientAdminUpdateDTO.getBirthday());
-        clientToUpdate.setEnabled(clientAdminUpdateDTO.isEnabled());
-        clientToUpdate.setGender(clientAdminUpdateDTO.getGender());
-        clientToUpdate.setPhone(clientAdminUpdateDTO.getPhone());
+        clientService.clientBasicDataSetter(clientToUpdate, clientBasicDataDTO);
 
-        clientRepository.save(clientToUpdate);
+        clientService.saveClient(clientToUpdate);
 
         return "redirect:/index";
 
@@ -288,7 +204,5 @@ public class ClientController {
 
         return "redirect:/index";
     }
-
-
 
 }

@@ -3,8 +3,10 @@ package com.project.figureout.service;
 import com.project.figureout.dto.AddressDTO;
 import com.project.figureout.dto.ClientBasicDataDTO;
 import com.project.figureout.dto.ClientDTO;
+import com.project.figureout.dto.CreditCardDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,10 +15,19 @@ import java.util.NoSuchElementException;
 @Service
 public class ClientService {
 
+    @Autowired
     ClientRepository clientRepository;
+
+    @Autowired
     GenderRepository genderRepository;
+
+    @Autowired
     PhoneRepository phoneRepository;
+
+    @Autowired
     AddressRepository addressRepository;
+
+    @Autowired
     CreditCardRepository creditCardRepository;
 
     public List<Client> getAllClients() {
@@ -55,38 +66,72 @@ public class ClientService {
         client.setPhone(phone);
     }
 
-    public void addAddressToClient(Address address, long id) {
-        Client client = getClientById(id);
+    public Address getAddressById(long id) {
+        return addressRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Endereço não encontrado com base no ID."));
+    }
 
+    public List<Address> getClientAddresses(long id) {
+        return getClientById(id).getAddresses();
+    }
+
+    public void addAddressToClient(Client client, Address address) {
+        addressRepository.save(address);
 
         client.getAddresses().add(address);
         address.setClient(client);
-
-        addressRepository.save(address);
     }
 
-    public void removeAddressFromClient(Address address, long id) {
-        Client client = getClientById(id);
-
-        client.getAddresses().remove(address);
+    public void deleteAddress(long id) {
+        addressRepository.deleteById(id);
     }
 
-    public void addCreditCardToClient(CreditCard creditCard, long id) {
-        Client client = getClientById(id);
+    public void populateAddressDTO(AddressDTO addressDTO, Address address) {
+        addressDTO.setDeliveryAddress(address.isDeliveryAddress());
+        addressDTO.setChargingAddress(address.isChargingAddress());
+        addressDTO.setNickname(address.getNickname());
+        addressDTO.setTypeOfResidence(address.getTypeOfResidence());
+        addressDTO.setAddressing(address.getAddressing());
+        addressDTO.setHouseNumber(address.getHouseNumber());
+        addressDTO.setNeighbourhood(address.getNeighbourhood());
+        addressDTO.setAddressingType(address.getAddressingType());
+        addressDTO.setCep(address.getCep());
+        addressDTO.setCity(address.getCity());
+        addressDTO.setState(address.getState());
+        addressDTO.setCountry(address.getCountry());
+        addressDTO.setObservation(address.getObservation());
+    }
 
+    public CreditCard getCreditCardById(long id) {
+        return creditCardRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Cartão de crédito não encontrado com base no ID."));
+    }
+
+    public List<CreditCard> getClientCreditCards(long id) {
+        return getClientById(id).getCreditCards();
+    }
+
+    public void addCreditCardToClient(Client client, CreditCard creditCard) {
         client.getCreditCards().add(creditCard);
         creditCard.setClient(client);
 
         creditCardRepository.save(creditCard);
     }
 
-    public void removeCreditCardFromClient(CreditCard creditCard, long id) {
-        Client client = getClientById(id);
+    public void populateCreditCardDTO(CreditCardDTO creditCardDTO, CreditCard creditCard) {
 
-        client.getCreditCards().remove(creditCard);
+        creditCardDTO.setPreferido(creditCard.isPreferido());
+        creditCardDTO.setCardNumber(creditCard.getCardNumber());
+        creditCardDTO.setPrintedName(creditCard.getPrintedName());
+        creditCardDTO.setBrand(creditCard.getBrand());
+        creditCardDTO.setSecurityCode(creditCard.getSecurityCode());
+
+    }
+
+    public void deleteCreditCard(long id) {
+        creditCardRepository.deleteById(id);
     }
 
     public void clientBasicDataSetter(Client client, ClientBasicDataDTO clientBasicDataDTO) {
+        System.out.println("calling basic data setter");
         client.setName(clientBasicDataDTO.getName());
         client.setEmail(clientBasicDataDTO.getEmail());
         client.setCpf(clientBasicDataDTO.getCpf());
@@ -105,6 +150,7 @@ public class ClientService {
 
     public void registerClient(Client client, ClientDTO clientDTO) {
 
+        System.out.println("calling register");
         clientBasicDataSetter(client, clientDTO.getClientBasicDataDTO());
 
         AddressDTO clientDTODeliveryAddress = clientDTO.getDeliveryAddressDTO();
@@ -127,11 +173,7 @@ public class ClientService {
             address.setCountry(clientDTODeliveryAddress.getCountry());
             address.setObservation(clientDTODeliveryAddress.getObservation());
 
-            address.setClient(client);
-
-            client.getAddresses().add(address);
-
-            addressRepository.save(address);
+            addAddressToClient(client, address);
         } else {
             Address deliveryAddress = new Address();
             Address chargingAddress = new Address();
@@ -148,7 +190,6 @@ public class ClientService {
             deliveryAddress.setState(clientDTODeliveryAddress.getState());
             deliveryAddress.setCountry(clientDTODeliveryAddress.getCountry());
             deliveryAddress.setObservation(clientDTODeliveryAddress.getObservation());
-            deliveryAddress.setClient(client);
 
             chargingAddress.setChargingAddress(true);
             chargingAddress.setNickname(clientDTOChargingAddress.getNickname());
@@ -162,22 +203,78 @@ public class ClientService {
             chargingAddress.setState(clientDTOChargingAddress.getState());
             chargingAddress.setCountry(clientDTOChargingAddress.getCountry());
             chargingAddress.setObservation(clientDTOChargingAddress.getObservation());
-            chargingAddress.setClient(client);
 
-            client.getAddresses().add(deliveryAddress);
-            client.getAddresses().add(chargingAddress);
 
-            addressRepository.save(deliveryAddress);
-            addressRepository.save(chargingAddress);
+            addAddressToClient(client, deliveryAddress);
+            addAddressToClient(client, chargingAddress);
         }
 
         clientRepository.save(client);
 
     }
 
+    public void registerAddress(Client client, AddressDTO addressDTO) {
+        Address address = new Address();
 
+        address.setDeliveryAddress(addressDTO.isDeliveryAddress());
+        address.setChargingAddress(addressDTO.isChargingAddress());
+        address.setNickname(addressDTO.getNickname());
+        address.setTypeOfResidence(addressDTO.getTypeOfResidence());
+        address.setAddressing(addressDTO.getAddressing());
+        address.setHouseNumber(addressDTO.getHouseNumber());
+        address.setNeighbourhood(addressDTO.getNeighbourhood());
+        address.setAddressingType(addressDTO.getAddressingType());
+        address.setCep(addressDTO.getCep());
+        address.setCity(addressDTO.getCity());
+        address.setState(addressDTO.getState());
+        address.setCountry(addressDTO.getCountry());
+        address.setObservation(addressDTO.getObservation());
 
+        addAddressToClient(client, address);
 
+    }
+
+    public void updateAddress(long id, AddressDTO addressDTO) {
+        Address address = getAddressById(id);
+
+        address.setDeliveryAddress(addressDTO.isDeliveryAddress());
+        address.setChargingAddress(addressDTO.isChargingAddress());
+        address.setNickname(addressDTO.getNickname());
+        address.setTypeOfResidence(addressDTO.getTypeOfResidence());
+        address.setAddressing(addressDTO.getAddressing());
+        address.setHouseNumber(addressDTO.getHouseNumber());
+        address.setNeighbourhood(addressDTO.getNeighbourhood());
+        address.setAddressingType(addressDTO.getAddressingType());
+        address.setCep(addressDTO.getCep());
+        address.setCity(addressDTO.getCity());
+        address.setState(addressDTO.getState());
+        address.setCountry(addressDTO.getCountry());
+        address.setObservation(addressDTO.getObservation());
+
+        addressRepository.save(address);
+    }
+
+    public void registerCreditCard(Client client, CreditCardDTO creditCardDTO) {
+        CreditCard creditCard = new CreditCard();
+
+        creditCard.setPreferido(creditCardDTO.isPreferido());
+        creditCard.setCardNumber(creditCardDTO.getCardNumber());
+        creditCard.setPrintedName(creditCardDTO.getPrintedName());
+        creditCard.setBrand(creditCardDTO.getBrand());
+        creditCard.setSecurityCode(creditCardDTO.getSecurityCode());
+
+        addCreditCardToClient(client, creditCard);
+    }
+
+    public void updateCreditCard(CreditCard creditCard, CreditCardDTO creditCardDTO) {
+        creditCard.setPreferido(creditCardDTO.isPreferido());
+        creditCard.setCardNumber(creditCardDTO.getCardNumber());
+        creditCard.setPrintedName(creditCardDTO.getPrintedName());
+        creditCard.setBrand(creditCardDTO.getBrand());
+        creditCard.setSecurityCode(creditCardDTO.getSecurityCode());
+
+        creditCardRepository.save(creditCard);
+    }
 
 
 }
