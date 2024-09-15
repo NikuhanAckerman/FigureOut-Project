@@ -2,10 +2,7 @@ package com.project.figureout.dto;
 
 import com.project.figureout.model.Gender;
 import com.project.figureout.model.Phone;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,32 +13,35 @@ import java.time.LocalDate;
 public class ClientBasicDataDTO {
 
     @NotBlank(message = "O nome não pode estar vazio.")
+    @Pattern(regexp = "^[A-Za-z\\s]+$")
     private String name;
 
     @NotBlank(message = "O e-mail não pode estar vazio.")
+    @Email
     private String email;
 
     @NotBlank(message = "O CPF não pode estar vazio.")
     @Size(max = 14)
+    @Pattern(regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}")
     private String cpf;
 
     @NotBlank(message = "A senha não pode estar vazia.")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&-_])[A-Za-z\\d@$!%*?&]{8}$")
     private String password;
 
     @NotBlank(message = "A confirmação de senha não pode estar vazia.")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&-_])[A-Za-z\\d@$!%*?&]{8}$")
     private String confirmPassword;
 
-    @NotBlank(message = "A data de nascimento não pode estar vazia.")
+    @NotNull(message = "A data de nascimento não pode ser nula.")
     @Past(message = "A data de nascimento deve estar no passado.")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
 
-    @NotBlank(message = "O campo de 'ativo' não pode estar vazio.")
     private boolean enabled = true;
 
-    //@NotBlank(message = "O gênero não pode estar vazio.")
     private Gender gender;
 
-    //@NotBlank(message = "O telefone não pode estar vazio.")
     private Phone phone;
 
 }

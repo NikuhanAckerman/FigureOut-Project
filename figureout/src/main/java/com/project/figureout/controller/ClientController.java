@@ -4,6 +4,7 @@ import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.*;
 import com.project.figureout.service.ClientService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -154,7 +155,11 @@ public class ClientController {
     }
 
     @PostMapping("/createClient")
-    public String addClientPost(@ModelAttribute("clientDTO") ClientDTO clientDTO) {
+    public String addClientPost(@Valid @ModelAttribute("clientDTO") ClientDTO clientDTO, BindingResult result) {
+
+        if(result.hasErrors()) {
+            return "createClient";
+        }
 
         Client client = new Client();
 
@@ -176,8 +181,10 @@ public class ClientController {
 
         ClientBasicDataDTO clientBasicDataDTO = new ClientBasicDataDTO();
 
+        clientService.populateClientBasicDataDTO(clientBasicDataDTO, client);
+
         List<Gender> genderList = clientService.getAllGenders();
-        model.addAttribute("clientBasicDataSetter", clientBasicDataDTO);
+        model.addAttribute("clientBasicDataDTO", clientBasicDataDTO);
         model.addAttribute("genderList", genderList);
         model.addAttribute("clientId", id);
 
@@ -190,9 +197,7 @@ public class ClientController {
 
         Client clientToUpdate = clientService.getClientById(id);
 
-        clientService.clientBasicDataSetter(clientToUpdate, clientBasicDataDTO);
-
-        clientService.saveClient(clientToUpdate);
+        clientService.updateClient(clientToUpdate, clientBasicDataDTO);
 
         return "redirect:/index";
 

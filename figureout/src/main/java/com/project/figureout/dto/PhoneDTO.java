@@ -1,22 +1,24 @@
 package com.project.figureout.dto;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
 public class PhoneDTO {
 
-    @NotEmpty(message = "Insira o tipo de telefone")
+    @NotNull(message = "O tipo de telefone não pode ser nulo.")
     private boolean cellphone;
 
-    @NotEmpty(message = "Insira o seu DDD.")
+    @NotBlank(message = "O DDD não pode ser nulo.")
+    @Pattern(regexp = "^[\\d]{2}$")
     private String ddd;
 
-    @NotEmpty(message = "Digite o número de telefone.")
+    @NotBlank(message = "O número de telefone não pode ser nulo.")
+    @Pattern(regexp = "^[\\d-]{1,10}$")
     //@Size(min = 8, max = 10)
-    // 98224-8652
+    // 91234-5678
+    // 1234-5678
     private String phoneNumber;
 
 }

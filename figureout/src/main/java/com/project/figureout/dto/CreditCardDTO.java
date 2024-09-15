@@ -1,8 +1,7 @@
 package com.project.figureout.dto;
 
 import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,19 +10,23 @@ import java.util.Date;
 @Getter @Setter
 public class CreditCardDTO {
 
-    @NotEmpty(message = "Este cartão é o preferencial?")
+    @NotNull(message = "O campo 'preferido' não pode estar vazio.")
     private boolean preferido;
 
-    @NotEmpty(message = "Insira o número do cartão")
+    @NotBlank(message = "O número do cartão não pode estar vazio.")
+    @Pattern(regexp = "^[\\d]$")
     private String cardNumber;
 
-    @NotEmpty(message = "Insira o nome impresso em seu cartão.")
+    @NotBlank(message = "O nome impresso não pode estar vazio.")
+    @Pattern(regexp = "^[A-Za-z\\s]+$")
     private String printedName;
 
-    @NotEmpty(message = "Insira a bandeira do cartão.")
+    @NotEmpty(message = "A bandeira do cartão não pode estar vazia.")
+    @Pattern(regexp = "^[A-Za-z\\s]*$")
     private String brand;
 
-    @NotEmpty(message = "Insira o código de segurança do cartão")
+    @NotEmpty(message = "O código de segurança do cartão não pode estar vazio.")
+    @Pattern(regexp = "[\\d]{3,4}")
     private String securityCode;
 
 }

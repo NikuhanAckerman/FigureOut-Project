@@ -25,6 +25,7 @@
 					<div>
 						<label><b>Nome completo</b></label>
 						<input type="text" class="form-control" placeholder="Insira o seu nome completo" th:field="*{clientBasicDataDTO.name}" required>
+						<p th:if="${#fields.hasErrors('clientBasicDataDTO.name')}" class="text-danger">O nome não pode conter números nem caracteres especiais.</p>
 
 						<label><b>Email</b></label>
 						<input class="form-control" placeholder="Insira o seu email" th:field="*{clientBasicDataDTO.email}" required>
