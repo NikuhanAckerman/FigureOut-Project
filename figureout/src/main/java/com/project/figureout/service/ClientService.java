@@ -75,10 +75,10 @@ public class ClientService {
     }
 
     public void addAddressToClient(Client client, Address address) {
-        addressRepository.save(address);
-
         client.getAddresses().add(address);
         address.setClient(client);
+
+        addressRepository.save(address);
     }
 
     public void deleteAddress(long id) {
@@ -150,8 +150,9 @@ public class ClientService {
 
     public void registerClient(Client client, ClientDTO clientDTO) {
 
-        System.out.println("calling register");
         clientBasicDataSetter(client, clientDTO.getClientBasicDataDTO());
+
+        clientRepository.save(client);
 
         AddressDTO clientDTODeliveryAddress = clientDTO.getDeliveryAddressDTO();
         AddressDTO clientDTOChargingAddress = clientDTO.getChargingAddressDTO();
@@ -204,12 +205,9 @@ public class ClientService {
             chargingAddress.setCountry(clientDTOChargingAddress.getCountry());
             chargingAddress.setObservation(clientDTOChargingAddress.getObservation());
 
-
             addAddressToClient(client, deliveryAddress);
             addAddressToClient(client, chargingAddress);
         }
-
-        clientRepository.save(client);
 
     }
 

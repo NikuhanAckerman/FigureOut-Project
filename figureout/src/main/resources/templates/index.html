@@ -101,19 +101,12 @@
 							<a class="btn btn-success" href="#" id="addAddressButton">Adicionar endereço</a>
 							<div class="card mt-3">
 								<div class="card-body">
-									<h2 class="card-title">Endereços de entrega</h2>
-									<div id="deliveryAddressList">
+									<h2 class="card-title">Endereços</h2>
+									<div id="addressListDiv">
 									</div>
 								</div>
 							</div>
-							<div class="card mt-3">
-								<div class="card-body">
-									<h2 class="card-title">Endereços de cobrança</h2>
-									<div id="chargingAddressList">
 
-									</div>
-								</div>
-							</div>
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -173,8 +166,8 @@
 
 				addAddressButton.setAttribute('href', `/createAddress/${clientId}`);
 
-				deliveryAddressList.innerHTML = '';
-				chargingAddressList.innerHTML = '';
+				const addressListDiv = document.getElementById('addressListDiv');
+				addressListDiv.innerHTML = '';
 
 				fetch(`index/${clientId}/addresses`)
 						.then(response => {
@@ -185,10 +178,7 @@
 						})
 						.then(addresses => {
 
-							const deliveryAddressList = document.getElementById('deliveryAddressList');
-							const chargingAddressList = document.getElementById('chargingAddressList');
-							let deliveryAddresses = '';
-							let chargingAddresses = '';
+							let addressList = '';
 
 								addresses.forEach(address => {
 									const addressItem = `
@@ -200,6 +190,8 @@
 																	<i class="bi bi-chevron-down"></i>
 																</button>
 																<div id="addressInfo_${address.id}" class="collapse">
+																	<label style="display: inline;">É endereço de entrega?<b><p class="isDeliveryAddress" data-bs-address-isDelivery="${address.deliveryAddress}"></p></b></label>
+                    												<label style="display: inline;">É endereço de cobrança?<b><p class="isChargingAddress" data-bs-address-isCharging="${address.chargingAddress}"></p></b></label>
 																	<p>Tipo de residência: ${address.typeOfResidence}</p>
 																	<p>Logradouro: ${address.addressing}</p>
 																	<p>Número: ${address.houseNumber}</p>
@@ -222,16 +214,33 @@
 															</div>
 														</div>`;
 
-									if(address.addressType == false) {
-										deliveryAddresses += addressItem;
-									} else {
-										chargingAddresses += addressItem;
-									}
+									addressList += addressItem;
 
 								});
 
-								deliveryAddressList.insertAdjacentHTML("beforeend", deliveryAddresses);
-								chargingAddressList.insertAdjacentHTML("beforeend", chargingAddresses);
+								addressListDiv.insertAdjacentHTML("beforeend", addressList);
+
+								let isDeliveryAddressList = document.querySelectorAll(".isDeliveryAddress");
+
+								isDeliveryAddressList.forEach(p => {
+									isDeliveryValue = p.getAttribute("data-bs-address-isDelivery")
+									if(isDeliveryValue == "true") {
+										p.textContent = "Sim";
+									} else {
+										p.textContent = "Não";
+									}
+								});
+
+								let isChargingAddressList = document.querySelectorAll(".isChargingAddress");
+
+								isChargingAddressList.forEach(p => {
+									isChargingValue = p.getAttribute("data-bs-address-isCharging");
+									if(isChargingValue == "true") {
+										p.textContent = "Sim";
+									} else {
+										p.textContent = "Não";
+									}
+								});
 
 								let updateAddressButtonList = document.querySelectorAll(".updateAddressButton");
 

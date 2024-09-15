@@ -18,10 +18,10 @@ public class Address {
     private long id;
 
     @Column(name = "end_entrega", nullable = false)
-    private boolean isDeliveryAddress; // 0 = entrega, 1 = cobrança
+    private boolean deliveryAddress; // 0 = entrega, 1 = cobrança
 
     @Column(name = "end_cobranca", nullable = false)
-    private boolean isChargingAddress;
+    private boolean chargingAddress;
 
     @Column(name = "end_apelido", nullable = false, length = 30)
     private String nickname;
