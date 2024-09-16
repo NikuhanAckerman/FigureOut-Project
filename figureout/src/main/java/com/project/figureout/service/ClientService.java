@@ -72,60 +72,9 @@ public class ClientService {
 
         saveClient(client);
 
-        AddressDTO clientDTODeliveryAddress = clientDTO.getDeliveryAddressDTO();
-        AddressDTO clientDTOChargingAddress = clientDTO.getChargingAddressDTO();
+        AddressDTO clientDTOAddress = clientDTO.getAddressDTO();
 
-        if(clientDTO.isSameAddress()) {
-            Address address = new Address();
-
-            address.setDeliveryAddress(true);
-            address.setChargingAddress(true);
-            address.setNickname(clientDTODeliveryAddress.getNickname());
-            address.setTypeOfResidence(clientDTODeliveryAddress.getTypeOfResidence());
-            address.setAddressing(clientDTODeliveryAddress.getAddressing());
-            address.setHouseNumber(clientDTODeliveryAddress.getHouseNumber());
-            address.setNeighbourhood(clientDTODeliveryAddress.getNeighbourhood());
-            address.setAddressingType(clientDTODeliveryAddress.getAddressingType());
-            address.setCep(clientDTODeliveryAddress.getCep());
-            address.setCity(clientDTODeliveryAddress.getCity());
-            address.setState(clientDTODeliveryAddress.getState());
-            address.setCountry(clientDTODeliveryAddress.getCountry());
-            address.setObservation(clientDTODeliveryAddress.getObservation());
-
-            addAddressToClient(client, address);
-        } else {
-            Address deliveryAddress = new Address();
-            Address chargingAddress = new Address();
-
-            deliveryAddress.setDeliveryAddress(true);
-            deliveryAddress.setNickname(clientDTODeliveryAddress.getNickname());
-            deliveryAddress.setTypeOfResidence(clientDTODeliveryAddress.getTypeOfResidence());
-            deliveryAddress.setAddressing(clientDTODeliveryAddress.getAddressing());
-            deliveryAddress.setHouseNumber(clientDTODeliveryAddress.getHouseNumber());
-            deliveryAddress.setNeighbourhood(clientDTODeliveryAddress.getNeighbourhood());
-            deliveryAddress.setAddressingType(clientDTODeliveryAddress.getAddressingType());
-            deliveryAddress.setCep(clientDTODeliveryAddress.getCep());
-            deliveryAddress.setCity(clientDTODeliveryAddress.getCity());
-            deliveryAddress.setState(clientDTODeliveryAddress.getState());
-            deliveryAddress.setCountry(clientDTODeliveryAddress.getCountry());
-            deliveryAddress.setObservation(clientDTODeliveryAddress.getObservation());
-
-            chargingAddress.setChargingAddress(true);
-            chargingAddress.setNickname(clientDTOChargingAddress.getNickname());
-            chargingAddress.setTypeOfResidence(clientDTOChargingAddress.getTypeOfResidence());
-            chargingAddress.setAddressing(clientDTOChargingAddress.getAddressing());
-            chargingAddress.setHouseNumber(clientDTOChargingAddress.getHouseNumber());
-            chargingAddress.setNeighbourhood(clientDTOChargingAddress.getNeighbourhood());
-            chargingAddress.setAddressingType(clientDTOChargingAddress.getAddressingType());
-            chargingAddress.setCep(clientDTOChargingAddress.getCep());
-            chargingAddress.setCity(clientDTOChargingAddress.getCity());
-            chargingAddress.setState(clientDTOChargingAddress.getState());
-            chargingAddress.setCountry(clientDTOChargingAddress.getCountry());
-            chargingAddress.setObservation(clientDTOChargingAddress.getObservation());
-
-            addAddressToClient(client, deliveryAddress);
-            addAddressToClient(client, chargingAddress);
-        }
+        registerAddress(client, clientDTOAddress);
 
     }
 
@@ -212,7 +161,6 @@ public class ClientService {
         address.setObservation(addressDTO.getObservation());
 
         addAddressToClient(client, address);
-
     }
 
     public void updateAddress(long id, AddressDTO addressDTO) {

@@ -19,11 +19,6 @@ public class ClientDTO {
     private ClientBasicDataDTO clientBasicDataDTO;
 
     //@NotBlank(message = "O endereço de entrega não pode estar vazio.")
-    private AddressDTO deliveryAddressDTO;
-
-    //@NotBlank(message = "O endereço de cobrança não pode estar vazio.")
-    private AddressDTO chargingAddressDTO;
-
-    private boolean sameAddress = false;
+    private AddressDTO addressDTO;
 
 }
