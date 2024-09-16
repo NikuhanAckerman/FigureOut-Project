@@ -24,33 +24,63 @@
 
 					<div>
 						<label><b>Nome completo</b></label>
+						<p class="text-primary" style="display: inline;">o nome não pode possuir caracteres especiais ou números, e deve ser o nome completo.</p>
 						<input type="text" class="form-control" placeholder="Insira o seu nome completo" th:field="*{clientBasicDataDTO.name}" required>
-						<p th:if="${#fields.hasErrors('clientBasicDataDTO.name')}" class="text-danger">O nome não pode conter números nem caracteres especiais.</p>
+						<ul style="list-style-type: none;">
+							<li th:each="err : ${#fields.errors('clientBasicDataDTO.name')}" th:text="${err}" class="text-danger"/>
+						</ul>
 
 						<label><b>Email</b></label>
 						<input class="form-control" placeholder="Insira o seu email" th:field="*{clientBasicDataDTO.email}" required>
+						<ul style="list-style-type: none;">
+							<li th:each="err : ${#fields.errors('clientBasicDataDTO.email')}" th:text="${err}" class="text-danger"/>
+						</ul>
 
 						<label><b>Senha</b></label>
+						<p class="text-primary" style="display: inline;">a senha deve possuir, no mínimo:
+						   8 caracteres;
+						   uma letra maiúscula;
+						   uma letra minúscula;
+						   um número;
+						   um caracter especial. (#, @, $, %, !, ?, etc.)</p>
 						<input class="form-control" placeholder="Insira uma senha forte!" th:field="*{clientBasicDataDTO.password}" required>
+						<ul style="list-style-type: none;">
+							<li th:each="err : ${#fields.errors('clientBasicDataDTO.password')}" th:text="${err}" class="text-danger"/>
+						</ul>
 
 						<label><b>Confirme sua senha</b></label>
 						<input class="form-control" placeholder="Confirme sua senha!" th:field="*{clientBasicDataDTO.confirmPassword}" required>
+						<ul style="list-style-type: none;">
+							<li th:each="err : ${#fields.errors('clientBasicDataDTO.confirmPassword')}" th:text="${err}" class="text-danger"/>
+						</ul>
 
 						<label><b>Data de Nascimento</b></label>
 						<input type="date" class="form-control" th:field="*{clientBasicDataDTO.birthday}" required>
+						<ul style="list-style-type: none;">
+							<li th:each="err : ${#fields.errors('clientBasicDataDTO.birthday')}" th:text="${err}" class="text-danger"/>
+						</ul>
 
 						<label for="cpf-input"><b>CPF</b></label>
 						<input type="text" id="cpf-input" class="form-control" placeholder="Insira seu CPF" th:field="*{clientBasicDataDTO.cpf}" required>
+						<ul style="list-style-type: none;">
+							<li th:each="err : ${#fields.errors('clientBasicDataDTO.cpf')}" th:text="${err}" class="text-danger"/>
+						</ul>
 					</div>
 
 					<div>
 						<label><b>Ativo?</b></label>
 						<input class="form-check-input" type="checkbox" th:field="*{clientBasicDataDTO.enabled}">
+						<ul style="list-style-type: none;">
+							<li th:each="err : ${#fields.errors('clientBasicDataDTO.enabled')}" th:text="${err}" class="text-danger"/>
+						</ul>
 					</div>
 
 					<label><b>Gênero</b></label>
 					<div class="radio-group" th:each="gender : ${genderList}">
 						<input type="radio" th:field="*{clientBasicDataDTO.gender.id}" th:value="${gender.id}" th:text="${gender.genderType}" required/>
+						<ul style="list-style-type: none;">
+							<li th:each="err : ${#fields.errors('clientBasicDataDTO.gender.id')}" th:text="${err}" class="text-danger"/>
+						</ul>
 					</div>
 
 					<div>
@@ -58,20 +88,32 @@
 						<div class="radio-group">
 							<label><input type="radio" th:field="*{clientBasicDataDTO.phone.cellphone}" value="false"/> Fixo</label>
 							<label><input type="radio" th:field="*{clientBasicDataDTO.phone.cellphone}" value="true"/> Celular</label>
+							<ul style="list-style-type: none;">
+								<li th:each="err : ${#fields.errors('clientBasicDataDTO.phone.cellphone')}" th:text="${err}" class="text-danger"/>
+							</ul>
 						</div>
 
 						<label><b>DDD</b></label>
 						<input type="text" id="ddd" class="form-control" placeholder="(11)" th:field="*{clientBasicDataDTO.phone.ddd}" maxlength="4" required>
+						<ul style="list-style-type: none;">
+							<li th:each="err : ${#fields.errors('clientBasicDataDTO.phone.ddd')}" th:text="${err}" class="text-danger"/>
+						</ul>
 
 						<label><b>Número de telefone</b></label>
 						<input type="text" id="phone" class="form-control" placeholder="Digite o número de telefone" th:field="*{clientBasicDataDTO.phone.phoneNumber}" maxlength="10" required>
+						<ul style="list-style-type: none;">
+							<li th:each="err : ${#fields.errors('clientBasicDataDTO.phone.phoneNumber')}" th:text="${err}" class="text-danger"/>
+						</ul>
 					</div>
 
 					<label><b>Endereços</b></label>
 
 					<div>
-						<label><b>Usar o endereço de entrega como endereço de cobrança também?</b></label>
+						<p class="text-primary" style="display: inline;"><b>Usar o endereço de entrega como endereço de cobrança também?</b></p>
 						<input class="form-check-input" type="checkbox" id="isSameAddressCheckbox" th:field="*{sameAddress}">
+						<ul style="list-style-type: none;">
+							<li th:each="err : ${#fields.errors('sameAddress')}" th:text="${err}" class="text-danger"/>
+						</ul>
 					</div>
 
 					<div class="mt-2">
@@ -80,56 +122,89 @@
 						<div>
 							<label><b>Apelido</b></label>
 							<input type="text" class="form-control" placeholder="Digite o apelido" th:field="*{deliveryAddressDTO.nickname}" required>
+							<ul style="list-style-type: none;">
+								<li th:each="err : ${#fields.errors('deliveryAddressDTO.nickname')}" th:text="${err}" class="text-danger"/>
+							</ul>
 						</div>
 
 						<div>
 							<label><b>Tipo de Residência</b></label>
 							<input type="text" class="form-control" placeholder="(Casa, apartamento, etc...)" th:field="*{deliveryAddressDTO.typeOfResidence}" required>
+							<ul style="list-style-type: none;">
+								<li th:each="err : ${#fields.errors('deliveryAddressDTO.typeOfResidence')}" th:text="${err}" class="text-danger"/>
+							</ul>
 						</div>
 
 						<div>
 							<label><b>Tipo de logradouro</b></label>
 							<input type="text" class="form-control" placeholder="(Rua, Avenida, etc...)" th:field="*{deliveryAddressDTO.addressingType}" required>
+							<ul style="list-style-type: none;">
+								<li th:each="err : ${#fields.errors('deliveryAddressDTO.addressingType')}" th:text="${err}" class="text-danger"/>
+							</ul>
 						</div>
 
 						<div>
 							<label><b>Logradouro</b></label>
 							<input type="text" class="form-control" placeholder="Insira o logradouro" th:field="*{deliveryAddressDTO.addressing}" required>
+							<ul style="list-style-type: none;">
+								<li th:each="err : ${#fields.errors('deliveryAddressDTO.addressing')}" th:text="${err}" class="text-danger"/>
+							</ul>
 						</div>
 
 						<div>
 							<label><b>Nº de residência</b></label>
 							<input type="text" class="form-control" placeholder="Insira o número da residência" th:field="*{deliveryAddressDTO.houseNumber}" maxlength="5" required>
+							<ul style="list-style-type: none;">
+								<li th:each="err : ${#fields.errors('deliveryAddressDTO.houseNumber')}" th:text="${err}" class="text-danger"/>
+							</ul>
 						</div>
 
 						<div>
 							<label><b>CEP</b></label>
-							<input type="text" class="form-control" placeholder="00000-000" th:field="*{deliveryAddressDTO.cep}" maxlength="9" required>
+							<input type="text" class="form-control" placeholder="00000-000" th:field="*{deliveryAddressDTO.cep}" maxlength="10" required>
+							<ul style="list-style-type: none;">
+								<li th:each="err : ${#fields.errors('deliveryAddressDTO.cep')}" th:text="${err}" class="text-danger"/>
+							</ul>
 						</div>
 
 						<div>
 							<label><b>Bairro</b></label>
 							<input type="text" class="form-control" placeholder="Insira o bairro" th:field="*{deliveryAddressDTO.neighbourhood}" required>
+							<ul style="list-style-type: none;">
+								<li th:each="err : ${#fields.errors('deliveryAddressDTO.neighbourhood')}" th:text="${err}" class="text-danger"/>
+							</ul>
 						</div>
 
 						<div>
 							<label><b>Cidade</b></label>
 							<input type="text" class="form-control" placeholder="Insira a cidade" th:field="*{deliveryAddressDTO.city}" required>
+							<ul style="list-style-type: none;">
+								<li th:each="err : ${#fields.errors('deliveryAddressDTO.city')}" th:text="${err}" class="text-danger"/>
+							</ul>
 						</div>
 
 						<div>
 							<label><b>Estado</b></label>
 							<input type="text" class="form-control" placeholder="Insira o Estado" th:field="*{deliveryAddressDTO.state}" required>
+							<ul style="list-style-type: none;">
+								<li th:each="err : ${#fields.errors('deliveryAddressDTO.state')}" th:text="${err}" class="text-danger"/>
+							</ul>
 						</div>
 
 						<div>
 							<label><b>País</b></label>
 							<input type="text" class="form-control" placeholder="Insira o País" th:field="*{deliveryAddressDTO.country}" required>
+							<ul style="list-style-type: none;">
+								<li th:each="err : ${#fields.errors('deliveryAddressDTO.country')}" th:text="${err}" class="text-danger"/>
+							</ul>
 						</div>
 
 						<div>
 							<label><b>Observação</b></label>
 							<input type="text" class="form-control" placeholder="Insira uma observação (opcional)" th:field="*{deliveryAddressDTO.observation}">
+							<ul style="list-style-type: none;">
+								<li th:each="err : ${#fields.errors('deliveryAddressDTO.observation')}" th:text="${err}" class="text-danger"/>
+							</ul>
 						</div>
 					</div>
 
@@ -139,6 +214,9 @@
 						<div>
 							<label><b>Apelido</b></label>
 							<input type="text" class="form-control" placeholder="Digite o apelido" th:field="*{chargingAddressDTO.nickname}">
+							<ul style="list-style-type: none;">
+								<li th:each="err : ${#fields.errors('chargingAddressDTO.nickname')}" th:text="${err}" class="text-danger"/>
+							</ul>
 						</div>
 
 						<div>

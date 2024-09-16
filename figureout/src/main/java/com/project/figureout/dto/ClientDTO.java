@@ -24,6 +24,6 @@ public class ClientDTO {
     //@NotBlank(message = "O endereço de cobrança não pode estar vazio.")
     private AddressDTO chargingAddressDTO;
 
-    private boolean sameAddress = true;
+    private boolean sameAddress = false;
 
 }
