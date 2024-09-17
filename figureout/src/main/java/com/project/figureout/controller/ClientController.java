@@ -147,10 +147,15 @@ public class ClientController {
     public String addClientGet(Model model) {
         ClientDTO clientDTO = new ClientDTO();
         List<Gender> genderList = clientService.getAllGenders();
-        System.out.println("recarregou os generos");
+        List<City> cityList = clientService.getAllCities();
+        List<State> stateList = clientService.getAllStates();
+        List<Country> countryList = clientService.getAllCountries();
 
         model.addAttribute("clientDTO", clientDTO);
         model.addAttribute("genderList", genderList);
+        model.addAttribute("cityList", cityList);
+        model.addAttribute("stateList", stateList);
+        model.addAttribute("countryList", countryList);
 
         return "createClient";
     }
@@ -161,6 +166,9 @@ public class ClientController {
         if(result.hasErrors()) {
             List<Gender> genderList = clientService.getAllGenders();
             model.addAttribute("genderList", genderList);
+            List<City> cityList = clientService.getAllCities();
+            List<State> stateList = clientService.getAllStates();
+            List<Country> countryList = clientService.getAllCountries();
 
             return "createClient";
         }

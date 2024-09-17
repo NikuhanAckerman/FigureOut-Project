@@ -88,8 +88,6 @@
 						<li th:each="err : ${#fields.errors('clientBasicDataDTO.genderDTO.id')}" th:text="${err}" class="text-danger"/>
 					</ul>
 
-
-
 					<div>
 						<label><b>Tipo de telefone</b></label>
 						<div class="radio-group">
@@ -199,6 +197,9 @@
 
 						<div>
 							<label><b>Cidade</b></label>
+							<select class="form-select" aria-label="Escolha uma cidade">
+								<option th:each="">
+							</select>
 							<input type="text" class="form-control" placeholder="Insira a cidade" th:field="*{addressDTO.city}" required>
 							<ul style="list-style-type: none;">
 								<li th:each="err : ${#fields.errors('addressDTO.city')}" th:text="${err}" class="text-danger"/>

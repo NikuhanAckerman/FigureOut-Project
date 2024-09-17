@@ -31,6 +31,13 @@ public class ClientService {
     @Autowired
     CreditCardRepository creditCardRepository;
 
+    @Autowired
+    CityRepository cityRepository;
+    @Autowired
+    StateRepository stateRepository;
+    @Autowired
+    CountryRepository countryRepository;
+
     // Client Methods
 
     public List<Client> getAllClients() {
@@ -51,10 +58,6 @@ public class ClientService {
 
     public void saveClientList(List<Client> clientList) {
         clientRepository.saveAll(clientList);
-    }
-
-    public List<Gender> getAllGenders() {
-        return genderRepository.findAll();
     }
 
     public void updateClientAdmin(Client client, ClientBasicDataDTO clientBasicDataDTO) {
@@ -109,10 +112,32 @@ public class ClientService {
 
     // Gender Methods
 
+    public List<Gender> getAllGenders() {
+        return genderRepository.findAll();
+    }
+
     public void setGenderToClient(Gender gender, long id) {
         Client client = getClientById(id);
 
         client.setGender(gender);
+    }
+
+    // City Methods
+
+    public List<City> getAllCities() {
+        return cityRepository.findAll();
+    }
+
+    // State Methods
+
+    public List<State> getAllStates() {
+        return stateRepository.findAll();
+    }
+
+    // Country Methods
+
+    public List<Country> getAllCountries() {
+        return countryRepository.findAll();
     }
 
     // Phone Methods

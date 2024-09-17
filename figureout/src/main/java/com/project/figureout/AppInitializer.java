@@ -17,7 +17,6 @@ public class AppInitializer implements CommandLineRunner {
         return new HiddenHttpMethodFilter();
     }
 
-
     @Autowired
     private GenderRepository genderRepository;
 
@@ -35,6 +34,8 @@ public class AppInitializer implements CommandLineRunner {
 
             System.out.println("Tabela de gêneros populada.");
         }
+
+
     }
 
 
