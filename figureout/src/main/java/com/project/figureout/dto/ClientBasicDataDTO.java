@@ -2,6 +2,8 @@ package com.project.figureout.dto;
 
 import com.project.figureout.model.Gender;
 import com.project.figureout.model.Phone;
+import com.project.figureout.validation.PasswordsMatch;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +12,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 
 @Getter @Setter
+@PasswordsMatch
 public class ClientBasicDataDTO {
 
     @NotBlank(message = "O nome não pode estar vazio.")
@@ -41,9 +44,11 @@ public class ClientBasicDataDTO {
     @NotNull(message = "O campo 'ativo' não pode ser nulo.")
     private boolean enabled = true;
 
+    @Valid
     @NotNull(message = "O gênero não pode ser nulo.")
     private GenderDTO genderDTO;
 
+    @Valid
     @NotNull(message = "O telefone não pode ser nulo.")
     private PhoneDTO phoneDTO;
 

@@ -66,11 +66,9 @@ public class ClientService {
     public void registerClient(Client client, ClientDTO clientDTO) {
 
         clientBasicDataSetter(client, clientDTO.getClientBasicDataDTO());
-
         saveClient(client);
 
         AddressDTO clientDTOAddress = clientDTO.getAddressDTO();
-
         registerAddress(client, clientDTOAddress);
 
     }
@@ -271,21 +269,11 @@ public class ClientService {
         clientBasicDataDTO.setPassword(client.getPassword());
         clientBasicDataDTO.setBirthday(client.getBirthday());
         clientBasicDataDTO.setEnabled(client.isEnabled());
-
-        GenderDTO genderDTO = new GenderDTO();
-        PhoneDTO phoneDTO = new PhoneDTO();
-
-        genderDTO.setId(client.getGender().getId());
-        clientBasicDataDTO.setGenderDTO(genderDTO);
-
-        phoneDTO.setCellphone(client.getPhone().isCellphone());
-        phoneDTO.setDdd(client.getPhone().getDdd());
-        phoneDTO.setPhoneNumber(client.getPhone().getPhoneNumber());
-        clientBasicDataDTO.setPhoneDTO(phoneDTO);
-
+        clientBasicDataDTO.getGenderDTO().setId(client.getGender().getId());
+        clientBasicDataDTO.getPhoneDTO().setCellphone(client.getPhone().isCellphone());
+        clientBasicDataDTO.getPhoneDTO().setDdd(client.getPhone().getDdd());
+        clientBasicDataDTO.getPhoneDTO().setPhoneNumber(client.getPhone().getPhoneNumber());
     }
-
-    // Validation Methods
 
     // Data treatment methods
 

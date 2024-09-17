@@ -22,6 +22,10 @@
 			<form th:action="@{/createClient}" th:object="${clientDTO}" method="POST">
 				<div class="form-group">
 
+					<ul style="list-style-type: none;">
+						<li th:each="err : ${#fields.errors('clientBasicDataDTO')}" th:text="${err}" class="text-danger"/>
+					</ul>
+
 					<div>
 						<label><b>Nome completo</b></label>
 						<p class="text-primary" style="display: inline;">o nome não pode possuir caracteres especiais ou números, e deve ser o nome completo.</p>
