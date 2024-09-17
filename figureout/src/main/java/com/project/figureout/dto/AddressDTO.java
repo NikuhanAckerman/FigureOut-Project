@@ -1,61 +1,59 @@
 package com.project.figureout.dto;
 
 import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
 public class AddressDTO {
 
+    @NotNull(message = "O campo 'Entrega' não pode ser nulo.")
     private boolean deliveryAddress = false;
 
+    @NotNull(message = "O campo 'Cobrança' não pode ser nulo.")
     private boolean chargingAddress = false;
 
-    @NotEmpty(message = "Insira o apelido")
+    @NotBlank(message = "O apelido não pode estar vazio.")
     private String nickname;
 
-    @NotEmpty(message = "Insira o tipo de residência(Casa, apartamento, etc...)")
-    @Pattern(regexp = "^[A-Za-z\\s]*$") // letras, numeros, espaços
+    @NotBlank(message = "O tipo de residência não pode estar vazio.")
+    @Pattern(message = "Tipo de residência inválido. Não insira números e nem caracteres especiais.", regexp = "^[A-Za-z\\s]*$") // letras, espaços
     private String typeOfResidence;
 
-    @NotEmpty(message = "Insira o seu logradouro.")
-    @Pattern(regexp = "^[A-Za-z\\d\\s]*$")
+    @NotBlank(message = "O logradouro não pode estar vazio.")
+    @Pattern(message = "Logradouro inválido. Não insira caracteres especiais.", regexp = "^[A-Za-z\\d\\s]*$")
     private String addressing;
 
-    @NotEmpty(message = "Insira o número da sua residência")
+    @NotBlank(message = "O número de residência não pode estar vazio.")
     //@Size(min = 1, max = 5)
-    @Pattern(regexp = "^[\\d]{1,5}$") // 1 a 5 caracteres, apenas numeros
+    @Pattern(message = "Número de residência inválido. Insira somente números.", regexp = "^[\\d]{1,5}$") // 1 a 5 caracteres, apenas numeros
     private String houseNumber;
 
-    @NotEmpty(message = "Insira o seu bairro")
-    @Pattern(regexp = "^[A-Za-z\\d\\s]*$")
+    @NotBlank(message = "O bairro não pode estar vazio.")
+    @Pattern(message = "Bairro inválido. Não insira caracteres especiais.", regexp = "^[A-Za-z\\d\\s]*$")
     private String neighbourhood;
 
-    @NotEmpty(message = "Insira o seu tipo de logradouro")
-    @Pattern(regexp = "^[A-Za-z\\s]*$")
+    @NotBlank(message = "O tipo de logradouro não pode estar vazio.")
+    @Pattern(message = "Tipo de logradouro inválido. Não insira números e nem caracteres especiais.", regexp = "^[A-Za-z\\s]*$")
     private String addressingType;
 
-    @NotEmpty(message = "Insira o seu CEP.")
-    @Pattern(regexp = "^\\d{5}-\\d{3}$") // 5 digitos, traço, 3 digitos
+    @NotBlank(message = "O CEP não pode estar vazio.")
+    @Pattern(message = "O formato é inválido. O CEP deve estar no formato: '12345-678'.", regexp = "^\\d{5}-\\d{3}$") // 5 digitos, traço, 3 digitos
     private String cep;
 
-    @NotEmpty(message = "Insira a sua cidade.")
-    @Pattern(regexp = "^[A-Za-z\\s]*$")
+    @NotBlank(message = "A cidade não pode estar vazia.")
+    @Pattern(message = "Cidade inválida. Não insira números e nem caracteres especiais.", regexp = "^[A-Za-z\\s]*$")
     private String city;
 
-    @NotEmpty(message = "Insira o seu Estado")
-    @Pattern(regexp = "^[A-Za-z\\s]*$")
+    @NotBlank(message = "O estado não pode estar vazio.")
+    @Pattern(message = "Estado inválido. Não insira números e nem caracteres especiais.", regexp = "^[A-Za-z\\s]*$")
     private String state;
 
-    @NotEmpty(message = "Insira o seu país")
-    @Pattern(regexp = "^[A-Za-z\\s]*$")
+    @NotBlank(message = "O país não pode estar vazio.")
+    @Pattern(message = "País inválido. Não insira números e nem caracteres especiais.", regexp = "^[A-Za-z\\s]*$")
     private String country;
 
-    @NotEmpty(message = "Insira uma observação (opcional)")
     private String observation;
 
 }

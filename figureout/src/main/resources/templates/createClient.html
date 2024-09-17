@@ -76,33 +76,36 @@
 					</div>
 
 					<label><b>Gênero</b></label>
+
 					<div class="radio-group" th:each="gender : ${genderList}">
-						<input type="radio" th:field="*{clientBasicDataDTO.gender.id}" th:value="${gender.id}" th:text="${gender.genderType}" required/>
-						<ul style="list-style-type: none;">
-							<li th:each="err : ${#fields.errors('clientBasicDataDTO.gender.id')}" th:text="${err}" class="text-danger"/>
-						</ul>
+						<input type="radio" th:field="*{clientBasicDataDTO.genderDTO.id}" th:value="${gender.id}" th:text="${gender.genderType}" required/>
 					</div>
+					<ul style="list-style-type: none;">
+						<li th:each="err : ${#fields.errors('clientBasicDataDTO.genderDTO.id')}" th:text="${err}" class="text-danger"/>
+					</ul>
+
+
 
 					<div>
 						<label><b>Tipo de telefone</b></label>
 						<div class="radio-group">
-							<label><input type="radio" th:field="*{clientBasicDataDTO.phone.cellphone}" value="false"/> Fixo</label>
-							<label><input type="radio" th:field="*{clientBasicDataDTO.phone.cellphone}" value="true"/> Celular</label>
+							<label><input type="radio" th:field="*{clientBasicDataDTO.phoneDTO.cellphone}" value="false"/> Fixo</label>
+							<label><input type="radio" th:field="*{clientBasicDataDTO.phoneDTO.cellphone}" value="true"/> Celular</label>
 							<ul style="list-style-type: none;">
-								<li th:each="err : ${#fields.errors('clientBasicDataDTO.phone.cellphone')}" th:text="${err}" class="text-danger"/>
+								<li th:each="err : ${#fields.errors('clientBasicDataDTO.phoneDTO.cellphone')}" th:text="${err}" class="text-danger"/>
 							</ul>
 						</div>
 
 						<label><b>DDD</b></label>
-						<input type="text" id="ddd" class="form-control" placeholder="(11)" th:field="*{clientBasicDataDTO.phone.ddd}" maxlength="4" required>
+						<input type="text" id="ddd" class="form-control" placeholder="(11)" th:field="*{clientBasicDataDTO.phoneDTO.ddd}" maxlength="2" required>
 						<ul style="list-style-type: none;">
-							<li th:each="err : ${#fields.errors('clientBasicDataDTO.phone.ddd')}" th:text="${err}" class="text-danger"/>
+							<li th:each="err : ${#fields.errors('clientBasicDataDTO.phoneDTO.ddd')}" th:text="${err}" class="text-danger"/>
 						</ul>
 
 						<label><b>Número de telefone</b></label>
-						<input type="text" id="phone" class="form-control" placeholder="Digite o número de telefone" th:field="*{clientBasicDataDTO.phone.phoneNumber}" maxlength="10" required>
+						<input type="text" id="phone" class="form-control" placeholder="Digite o número de telefone" th:field="*{clientBasicDataDTO.phoneDTO.phoneNumber}" maxlength="10" required>
 						<ul style="list-style-type: none;">
-							<li th:each="err : ${#fields.errors('clientBasicDataDTO.phone.phoneNumber')}" th:text="${err}" class="text-danger"/>
+							<li th:each="err : ${#fields.errors('clientBasicDataDTO.phoneDTO.phoneNumber')}" th:text="${err}" class="text-danger"/>
 						</ul>
 					</div>
 
@@ -119,8 +122,17 @@
 								<label><b>Entrega</b></label>
 								<input class="form-check-input" type="checkbox" th:field="*{addressDTO.deliveryAddress}">
 
+								<ul style="list-style-type: none;">
+									<li th:each="err : ${#fields.errors('addressDTO.deliveryAddress')}" th:text="${err}" class="text-danger"/>
+								</ul>
+
 								<label><b>Cobrança</b></label>
 								<input class="form-check-input" type="checkbox" th:field="*{addressDTO.chargingAddress}">
+
+								<ul style="list-style-type: none;">
+									<li th:each="err : ${#fields.errors('addressDTO.chargingAddress')}" th:text="${err}" class="text-danger"/>
+								</ul>
+
 							</div>
 
 						</div>
@@ -226,7 +238,6 @@
 		<footer id="footer">
 			<img src="/Images/figureoutlogo1.svg">
 		</footer>
-
 
     </body>
 </html>

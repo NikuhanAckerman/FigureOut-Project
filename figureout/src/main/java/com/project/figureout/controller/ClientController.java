@@ -147,6 +147,7 @@ public class ClientController {
     public String addClientGet(Model model) {
         ClientDTO clientDTO = new ClientDTO();
         List<Gender> genderList = clientService.getAllGenders();
+        System.out.println("recarregou os generos");
 
         model.addAttribute("clientDTO", clientDTO);
         model.addAttribute("genderList", genderList);
@@ -155,9 +156,12 @@ public class ClientController {
     }
 
     @PostMapping("/createClient")
-    public String addClientPost(@Valid @ModelAttribute("clientDTO") ClientDTO clientDTO, BindingResult result) {
+    public String addClientPost(@Valid @ModelAttribute("clientDTO") ClientDTO clientDTO, BindingResult result, Model model) {
 
         if(result.hasErrors()) {
+            List<Gender> genderList = clientService.getAllGenders();
+            model.addAttribute("genderList", genderList);
+
             return "createClient";
         }
 

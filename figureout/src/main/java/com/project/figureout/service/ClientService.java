@@ -1,9 +1,6 @@
 package com.project.figureout.service;
 
-import com.project.figureout.dto.AddressDTO;
-import com.project.figureout.dto.ClientBasicDataDTO;
-import com.project.figureout.dto.ClientDTO;
-import com.project.figureout.dto.CreditCardDTO;
+import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.*;
 import jakarta.validation.constraints.NotBlank;
@@ -94,12 +91,22 @@ public class ClientService {
         System.out.println("calling basic data setter");
         client.setName(clientBasicDataDTO.getName());
         client.setEmail(clientBasicDataDTO.getEmail());
-        client.setCpf(clientBasicDataDTO.getCpf());
+        client.setCpf(treatMaskedCpf(clientBasicDataDTO.getCpf()));
         client.setPassword(clientBasicDataDTO.getPassword());
         client.setBirthday(clientBasicDataDTO.getBirthday());
         client.setEnabled(clientBasicDataDTO.isEnabled());
-        client.setGender(clientBasicDataDTO.getGender());
-        client.setPhone(clientBasicDataDTO.getPhone());
+
+        Gender gender = new Gender();
+        Phone phone = new Phone();
+
+        gender.setId(clientBasicDataDTO.getGenderDTO().getId());
+
+        phone.setCellphone(clientBasicDataDTO.getPhoneDTO().isCellphone());
+        phone.setDdd(clientBasicDataDTO.getPhoneDTO().getDdd());
+        phone.setPhoneNumber(treatMaskedPhoneNumber(clientBasicDataDTO.getPhoneDTO().getPhoneNumber()));
+
+        client.setGender(gender);
+        client.setPhone(phone);
     }
 
     // Gender Methods
@@ -154,7 +161,7 @@ public class ClientService {
         address.setHouseNumber(addressDTO.getHouseNumber());
         address.setNeighbourhood(addressDTO.getNeighbourhood());
         address.setAddressingType(addressDTO.getAddressingType());
-        address.setCep(addressDTO.getCep());
+        address.setCep(treatMaskedCep(addressDTO.getCep()));
         address.setCity(addressDTO.getCity());
         address.setState(addressDTO.getState());
         address.setCountry(addressDTO.getCountry());
@@ -226,7 +233,9 @@ public class ClientService {
         creditCardRepository.save(creditCard);
     }
 
-    // Populate DTO Methods
+    // Population Methods
+
+    // DTO Population Methods
 
     public void populateAddressDTO(AddressDTO addressDTO, Address address) {
         addressDTO.setDeliveryAddress(address.isDeliveryAddress());
@@ -262,13 +271,50 @@ public class ClientService {
         clientBasicDataDTO.setPassword(client.getPassword());
         clientBasicDataDTO.setBirthday(client.getBirthday());
         clientBasicDataDTO.setEnabled(client.isEnabled());
-        clientBasicDataDTO.setGender(client.getGender());
-        clientBasicDataDTO.setPhone(client.getPhone());
+
+        GenderDTO genderDTO = new GenderDTO();
+        PhoneDTO phoneDTO = new PhoneDTO();
+
+        genderDTO.setId(client.getGender().getId());
+        clientBasicDataDTO.setGenderDTO(genderDTO);
+
+        phoneDTO.setCellphone(client.getPhone().isCellphone());
+        phoneDTO.setDdd(client.getPhone().getDdd());
+        phoneDTO.setPhoneNumber(client.getPhone().getPhoneNumber());
+        clientBasicDataDTO.setPhoneDTO(phoneDTO);
 
     }
 
     // Validation Methods
 
+    // Data treatment methods
+
+    public String treatMaskedCpf(String cpf) {
+        String treatedCpf;
+
+        treatedCpf = cpf.replace(".", "");
+
+        treatedCpf = treatedCpf.replace("-", "");
+
+        return treatedCpf;
+
+    }
+
+    public String treatMaskedCep(String cep) {
+        String treatedCep;
+
+        treatedCep = cep.replace("-", "");
+
+        return treatedCep;
+    }
+
+    public String treatMaskedPhoneNumber(String phoneNumber) {
+        String treatedPhoneNumber;
+
+        treatedPhoneNumber = phoneNumber.replace("-", "");
+
+        return treatedPhoneNumber;
+    }
 
 
 }

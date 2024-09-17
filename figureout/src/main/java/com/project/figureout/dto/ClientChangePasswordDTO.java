@@ -10,11 +10,11 @@ import lombok.Setter;
 public class ClientChangePasswordDTO {
 
     @NotBlank(message = "A senha não pode estar vazia.")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&-_])[A-Za-z\\d@$!%*?&]{8}$")
+    @Pattern(message = "A senha digitada é inválida.", regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*\\p{Punct})[A-Za-z\\d\\p{Punct}]{8,}$")
     private String password;
 
     @NotBlank(message = "A confirmação de senha não pode estar vazia.")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*?&-_])[A-Za-z\\d@$!%*?&]{8}$")
+    @Pattern(message = "A senha digitada é inválida.", regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*\\p{Punct})[A-Za-z\\d\\p{Punct}]{8,}$")
     private String confirmPassword;
 
 }
