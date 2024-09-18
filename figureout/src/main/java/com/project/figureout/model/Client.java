@@ -41,7 +41,7 @@ public class Client {
     private boolean enabled = true;
 
     // Conferir depois se precisa arrumar a(s) chave(s) estrangeira(s).
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name = "cli_gen_id")
     private Gender gender;
 

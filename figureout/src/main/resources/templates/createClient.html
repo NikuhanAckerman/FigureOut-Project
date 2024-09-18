@@ -26,6 +26,10 @@
 						<li th:each="err : ${#fields.errors('clientBasicDataDTO')}" th:text="${err}" class="text-danger"/>
 					</ul>
 
+					<ul style="list-style-type: none;">
+						<li th:each="err : ${#fields.errors('addressDTO')}" th:text="${err}" class="text-danger"/>
+					</ul>
+
 					<div>
 						<label><b>Nome completo</b></label>
 						<p class="text-primary" style="display: inline;">o nome não pode possuir caracteres especiais ou números, e deve ser o nome completo.</p>
@@ -197,9 +201,6 @@
 
 						<div>
 							<label><b>Cidade</b></label>
-							<select class="form-select" aria-label="Escolha uma cidade">
-								<option th:each="">
-							</select>
 							<input type="text" class="form-control" placeholder="Insira a cidade" th:field="*{addressDTO.city}" required>
 							<ul style="list-style-type: none;">
 								<li th:each="err : ${#fields.errors('addressDTO.city')}" th:text="${err}" class="text-danger"/>
@@ -208,19 +209,36 @@
 
 						<div>
 							<label><b>Estado</b></label>
-							<input type="text" class="form-control" placeholder="Insira o Estado" th:field="*{addressDTO.state}" required>
+							<select class="form-select form-selected-sm" aria-label="Escolha um país">
+								<option selected>Selecione o estado</option>
+								<option th:each="state : ${stateList}" th:field="*{addressDTO.stateDTO.id}" th:value="${state.id}" th:text="${state.name}">
+							</select>
 							<ul style="list-style-type: none;">
-								<li th:each="err : ${#fields.errors('addressDTO.state')}" th:text="${err}" class="text-danger"/>
+								<li th:each="err : ${#fields.errors('addressDTO.stateDTO.id')}" th:text="${err}" class="text-danger"/>
 							</ul>
 						</div>
 
 						<div>
 							<label><b>País</b></label>
-							<input type="text" class="form-control" placeholder="Insira o País" th:field="*{addressDTO.country}" required>
+							<select class="form-select" aria-label="Escolha um país">
+								<option selected>Selecione o país</option>
+								<option th:each="country : ${countryList}" th:field="*{addressDTO.countryDTO.id}" th:value="${country.id}" th:text="${country.name}">
+							</select>
 							<ul style="list-style-type: none;">
-								<li th:each="err : ${#fields.errors('addressDTO.country')}" th:text="${err}" class="text-danger"/>
+								<li th:each="err : ${#fields.errors('addressDTO.countryDTO.id')}" th:text="${err}" class="text-danger"/>
 							</ul>
 						</div>
+
+						<!--<div class="radio-group" th:each="gender : ${genderList}">
+							<input type="radio" th:field="*{clientBasicDataDTO.genderDTO.id}" th:value="${gender.id}" th:text="${gender.genderType}" required/>
+						</div>
+						<ul style="list-style-type: none;">
+							<li th:each="err : ${#fields.errors('clientBasicDataDTO.genderDTO.id')}" th:text="${err}" class="text-danger"/>
+						</ul>-->
+
+
+
+
 
 						<div>
 							<label><b>Observação</b></label>
@@ -243,6 +261,7 @@
 		<footer id="footer">
 			<img src="/Images/figureoutlogo1.svg">
 		</footer>
+
 
     </body>
 </html>

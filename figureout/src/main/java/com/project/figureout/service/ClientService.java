@@ -32,9 +32,8 @@ public class ClientService {
     CreditCardRepository creditCardRepository;
 
     @Autowired
-    CityRepository cityRepository;
-    @Autowired
     StateRepository stateRepository;
+
     @Autowired
     CountryRepository countryRepository;
 
@@ -122,12 +121,6 @@ public class ClientService {
         client.setGender(gender);
     }
 
-    // City Methods
-
-    public List<City> getAllCities() {
-        return cityRepository.findAll();
-    }
-
     // State Methods
 
     public List<State> getAllStates() {
@@ -186,9 +179,15 @@ public class ClientService {
         address.setAddressingType(addressDTO.getAddressingType());
         address.setCep(treatMaskedCep(addressDTO.getCep()));
         address.setCity(addressDTO.getCity());
-        address.setState(addressDTO.getState());
-        address.setCountry(addressDTO.getCountry());
         address.setObservation(addressDTO.getObservation());
+
+        State state = new State();
+        Country country = new Country();
+
+        state.setId(addressDTO.getStateDTO().getId());
+        country.setId(addressDTO.getCountryDTO().getId());
+        address.setState(state);
+        address.setCountry(country);
 
         addAddressToClient(client, address);
     }
@@ -206,8 +205,8 @@ public class ClientService {
         address.setAddressingType(addressDTO.getAddressingType());
         address.setCep(addressDTO.getCep());
         address.setCity(addressDTO.getCity());
-        address.setState(addressDTO.getState());
-        address.setCountry(addressDTO.getCountry());
+        //address.setState(addressDTO.getState());
+        //address.setCountry(addressDTO.getCountry());
         address.setObservation(addressDTO.getObservation());
 
         saveAddress(address);
@@ -271,8 +270,8 @@ public class ClientService {
         addressDTO.setAddressingType(address.getAddressingType());
         addressDTO.setCep(address.getCep());
         addressDTO.setCity(address.getCity());
-        addressDTO.setState(address.getState());
-        addressDTO.setCountry(address.getCountry());
+        //addressDTO.setState(address.getState());
+        //addressDTO.setCountry(address.getCountry());
         addressDTO.setObservation(address.getObservation());
     }
 

@@ -1,18 +1,21 @@
 package com.project.figureout.dto;
 
+import com.project.figureout.validation.AddressAtLeastOneType;
 import jakarta.persistence.Column;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
+@AddressAtLeastOneType
 public class AddressDTO {
 
     @NotNull(message = "O campo 'Entrega' não pode ser nulo.")
-    private boolean deliveryAddress = false;
+    private boolean deliveryAddress;
 
     @NotNull(message = "O campo 'Cobrança' não pode ser nulo.")
-    private boolean chargingAddress = false;
+    private boolean chargingAddress;
 
     @NotBlank(message = "O apelido não pode estar vazio.")
     private String nickname;
@@ -46,13 +49,11 @@ public class AddressDTO {
     @Pattern(message = "Cidade inválida. Não insira números e nem caracteres especiais.", regexp = "^[A-Za-z\\s]*$")
     private String city;
 
-    @NotBlank(message = "O estado não pode estar vazio.")
-    @Pattern(message = "Estado inválido. Não insira números e nem caracteres especiais.", regexp = "^[A-Za-z\\s]*$")
-    private String state;
+    @Valid
+    private StateDTO stateDTO;
 
-    @NotBlank(message = "O país não pode estar vazio.")
-    @Pattern(message = "País inválido. Não insira números e nem caracteres especiais.", regexp = "^[A-Za-z\\s]*$")
-    private String country;
+    @Valid
+    private CountryDTO countryDTO;
 
     private String observation;
 

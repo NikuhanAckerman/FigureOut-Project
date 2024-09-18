@@ -1,12 +1,15 @@
 package com.project.figureout.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "Estados")
+@Getter @Setter
 public class State {
 
     @Id
@@ -16,9 +19,6 @@ public class State {
 
     @Column(name = "est_nome", length = 25)
     private String name;
-
-    @OneToMany(mappedBy = "state", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<City> cities = new ArrayList<>();
 
 
 }

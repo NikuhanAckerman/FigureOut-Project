@@ -47,11 +47,14 @@ public class Address {
     @Column(name = "end_cidade", nullable = false, length = 32) //Vila Bela da Santíssima Trindade
     private String city;
 
-    @Column(name = "end_estado", nullable = false, length = 19) //Rio Grande do Norte
-    private String state;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "end_est_id", nullable = false) //Rio Grande do Norte
+    private State state;
+    // um endereço pode ter um estado, um estado pode estar em varios endereços
 
-    @Column(name = "end_pais", nullable = false, length = 6) // Brasil
-    private String country;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "end_pai_id", nullable = false) // Brasil
+    private Country country;
 
     @Column(name = "end_observacao", length = 60)
     private String observation;
