@@ -209,8 +209,8 @@
 
 						<div>
 							<label><b>Estado</b></label>
-							<select class="form-select form-selected-sm" aria-label="Escolha um país">
-								<option selected>Selecione o estado</option>
+							<option selected>Adicione o estado</option>
+							<select class="form-select" aria-label="Escolha um estado">
 								<option th:each="state : ${stateList}" th:field="*{addressDTO.stateDTO.id}" th:value="${state.id}" th:text="${state.name}">
 							</select>
 							<ul style="list-style-type: none;">
@@ -221,7 +221,7 @@
 						<div>
 							<label><b>País</b></label>
 							<select class="form-select" aria-label="Escolha um país">
-								<option selected>Selecione o país</option>
+								<option selected>Adicione o país</option>
 								<option th:each="country : ${countryList}" th:field="*{addressDTO.countryDTO.id}" th:value="${country.id}" th:text="${country.name}">
 							</select>
 							<ul style="list-style-type: none;">
@@ -235,10 +235,6 @@
 						<ul style="list-style-type: none;">
 							<li th:each="err : ${#fields.errors('clientBasicDataDTO.genderDTO.id')}" th:text="${err}" class="text-danger"/>
 						</ul>-->
-
-
-
-
 
 						<div>
 							<label><b>Observação</b></label>
