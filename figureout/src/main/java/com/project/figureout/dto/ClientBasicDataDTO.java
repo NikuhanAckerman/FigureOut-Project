@@ -2,6 +2,8 @@ package com.project.figureout.dto;
 
 import com.project.figureout.model.Gender;
 import com.project.figureout.model.Phone;
+import com.project.figureout.validation.CpfCantBeUsedByMultipleAccounts;
+import com.project.figureout.validation.EmailCantBeUsedByMultipleAccounts;
 import com.project.figureout.validation.PasswordsMatch;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -21,11 +23,13 @@ public class ClientBasicDataDTO {
 
     @NotBlank(message = "O e-mail não pode estar vazio.")
     @Email(message = "Este e-mail não é válido.")
+    @EmailCantBeUsedByMultipleAccounts
     private String email;
 
     @NotBlank(message = "O CPF não pode estar vazio.")
     @Size(max = 14)
     @Pattern(message = "O formato é inválido. O CPF deve estar no formato: '123.456.789-00'.", regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}")
+    @CpfCantBeUsedByMultipleAccounts
     private String cpf;
 
     @NotBlank(message = "A senha não pode estar vazia.")
