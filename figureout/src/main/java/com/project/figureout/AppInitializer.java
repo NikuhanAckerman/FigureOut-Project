@@ -33,6 +33,9 @@ public class AppInitializer implements CommandLineRunner {
             genderRepository.save(other);
 
             System.out.println("Tabela de gêneros populada.");
+
+
+
         }
 
 

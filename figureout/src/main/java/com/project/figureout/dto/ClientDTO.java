@@ -18,9 +18,7 @@ public class ClientDTO {
     @Valid
     private ClientBasicDataDTO clientBasicDataDTO;
 
-    //@NotBlank(message = "O endereço de entrega não pode estar vazio.")
     @Valid
     private AddressDTO addressDTO;
-    
 
 }

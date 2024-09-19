@@ -181,6 +181,9 @@ public class ClientService {
         address.setCity(addressDTO.getCity());
         address.setObservation(addressDTO.getObservation());
 
+        State state = new State();
+        Country country = new Country();
+
         state.setId(addressDTO.getStateDTO().getId());
         country.setId(addressDTO.getCountryDTO().getId());
 

@@ -199,8 +199,8 @@
 																	<p>Tipo de logradouro: ${address.addressingType}</p>
 																	<p>CEP: ${address.cep}</p>
 																	<p>Cidade: ${address.city}</p>
-																	<p>Estado: ${address.state}</p>
-																	<p>País: ${address.country}</p>
+																	<p>Estado: ${address.state.name}</p>
+																	<p>País: ${address.country.name}</p>
 																	<p>Observação: ${address.observation}</p>
 
 																	<form action="index/${address.id}/addresses/delete" method="POST" style="display: inline;">

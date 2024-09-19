@@ -50,10 +50,10 @@ public class AddressDTO {
     private String city;
 
     @Valid
-    private StateDTO stateDTO = new StateDTO();
+    private StateDTO stateDTO;
 
     @Valid
-    private CountryDTO countryDTO = new CountryDTO();
+    private CountryDTO countryDTO;
 
     private String observation;
 
