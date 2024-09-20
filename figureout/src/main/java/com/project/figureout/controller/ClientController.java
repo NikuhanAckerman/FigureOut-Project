@@ -137,9 +137,11 @@ public class ClientController {
     public String createClientCreditCardGet(@PathVariable long id, Model model) {
         CreditCardDTO creditCardDTO = new CreditCardDTO();
 
+        List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
+
         model.addAttribute("creditCardDTO", creditCardDTO);
         model.addAttribute("clientId", id);
-
+        model.addAttribute("creditCardBrandList", creditCardBrandList);
         //System.out.println("GET Method Id output: " + creditCardDTO.getClientId());
 
         return "createCreditCard";
@@ -153,7 +155,10 @@ public class ClientController {
         System.out.println("POST Method Id output: " + id);
 
         if(result.hasErrors()) {
+            List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
+
             model.addAttribute("clientId", id);
+            model.addAttribute("creditCardBrandList", creditCardBrandList);
 
             return "createCreditCard";
         }

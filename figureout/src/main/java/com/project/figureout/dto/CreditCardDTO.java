@@ -22,9 +22,9 @@ public class CreditCardDTO {
     @Pattern(message = "O nome impresso não pode possuir números.", regexp = "^[A-Za-z\\s]+$")
     private String printedName;
 
-    @NotEmpty(message = "A bandeira do cartão não pode estar vazia.")
-    @Pattern(message = "A bandeira não pode possuir números ou caracteres especiais.", regexp = "^[A-Za-z]+[\\s]*$")
-    private String brand;
+    @NotNull(message = "A bandeira do cartão não pode ser nula.")
+    //@Pattern(message = "A bandeira não pode possuir números ou caracteres especiais.", regexp = "^[A-Za-z]+[\\s]*$")
+    private CreditCardBrandDTO creditCardBrandDTO;
 
     @NotEmpty(message = "O código de segurança do cartão não pode estar vazio.")
     @Pattern(message = "O código de segurança não pode ter letras, caracteres especiais, ou espaços, e pode ter no máximo 4 caracteres.", regexp = "[\\d]{3,4}")

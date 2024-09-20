@@ -48,11 +48,16 @@
           <li th:each="err : ${#fields.errors('printedName')}" th:text="${err}" class="text-danger"/>
         </ul>
 
-        <label><b>Bandeira do cartão</b></label>
-        <input type="text" class="form-control" placeholder="Insira a bandeira do cartão" th:field="*{brand}" required>
-        <ul style="list-style-type: none;">
-          <li th:each="err : ${#fields.errors('brand')}" th:text="${err}" class="text-danger"/>
-        </ul>
+        <div>
+          <label><b>Bandeira do cartão</b></label>
+          <select class="form-select" aria-label="Escolha uma bandeira" th:field="*{creditCardBrandDTO.id}">
+            <option value="0" selected>Escolha a bandeira</option>
+            <option th:each="brand : ${creditCardBrandList}" th:value="${brand.id}" th:text="${brand.name}">
+          </select>
+          <ul style="list-style-type: none;">
+            <li th:each="err : ${#fields.errors('countryDTO.id')}" th:text="${err}" class="text-danger"/>
+          </ul>
+        </div>
 
         <label><b>Código de segurança (CVV/CVC)</b></label>
         <input type="text" class="form-control" placeholder="Insira o código de segurança do cartão" th:field="*{securityCode}" required>

@@ -1,8 +1,11 @@
 package com.project.figureout.service;
 
+import com.project.figureout.dto.CreditCardBrandDTO;
 import com.project.figureout.dto.CreditCardDTO;
 import com.project.figureout.model.Client;
 import com.project.figureout.model.CreditCard;
+import com.project.figureout.model.CreditCardBrand;
+import com.project.figureout.repository.CreditCardBrandRepository;
 import com.project.figureout.repository.CreditCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,9 @@ public class CreditCardService {
 
     @Autowired
     private CreditCardRepository creditCardRepository;
+
+    @Autowired
+    private CreditCardBrandRepository creditCardBrandRepository;
 
     public CreditCard getCreditCardById(long id) {
         return creditCardRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Cartão de crédito não encontrado com base no ID."));
@@ -38,11 +44,22 @@ public class CreditCardService {
         creditCardRepository.deleteById(id);
     }
 
+    public List<CreditCardBrand> getAllCreditCardBrands() {
+        return creditCardBrandRepository.findAll();
+    }
+
+    public CreditCardBrand getCreditCardBrandById(long id) {
+        return creditCardBrandRepository.findById(id).get();
+    }
+
     public void insertDataIntoCreditCard(CreditCard creditCard, CreditCardDTO creditCardDTO) {
         creditCard.setPreferido(creditCardDTO.isPreferido());
         creditCard.setCardNumber(creditCardDTO.getCardNumber());
         creditCard.setPrintedName(creditCardDTO.getPrintedName());
-        creditCard.setBrand(creditCardDTO.getBrand());
+
+        CreditCardBrand creditCardBrand = getCreditCardBrandById(creditCardDTO.getCreditCardBrandDTO().getId());
+
+        creditCard.setBrand(creditCardBrand);
         creditCard.setSecurityCode(creditCardDTO.getSecurityCode());
     }
 
@@ -69,7 +86,11 @@ public class CreditCardService {
         creditCardDTO.setPreferido(creditCard.isPreferido());
         creditCardDTO.setCardNumber(creditCard.getCardNumber());
         creditCardDTO.setPrintedName(creditCard.getPrintedName());
-        creditCardDTO.setBrand(creditCard.getBrand());
+
+        CreditCardBrandDTO creditCardBrandDTO = new CreditCardBrandDTO();
+        creditCardBrandDTO.setId(creditCard.getId());
+        creditCardDTO.setCreditCardBrandDTO(creditCardBrandDTO);
+
         creditCardDTO.setSecurityCode(creditCard.getSecurityCode());
 
     }

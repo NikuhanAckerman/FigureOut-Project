@@ -26,8 +26,9 @@ public class CreditCard {
     @Column(name = "car_nome_impresso", nullable = false, length = 30)
     private String printedName;
 
-    @Column(name = "car_bandeira", nullable = false, length = 25)
-    private String brand;
+    @ManyToOne
+    @JoinColumn(name = "car_ban_id")
+    private CreditCardBrand brand;
 
     @Column(name = "car_cod_seguranca", nullable = false, length = 4)
     private String securityCode;
