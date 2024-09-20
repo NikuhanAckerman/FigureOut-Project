@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de compra</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <script>
+        function removerLinha(button) {
+            // Encontrar a linha da tabela que contém o botão
+            const linha = button.closest('tr');
+            // Remover a linha do DOM
+            linha.remove();
+            atualizarTotalGeral();
+        }
+
+        // Calcula o valor total da compra somando as linhas de cima.
+        function atualizarTotalProduto(linha) {
+            const preco = parseFloat(linha.querySelector('.preco').textContent.replace('R$ ', '').replace(',', '.'));
+            const quantidade = parseInt(linha.querySelector('.quantidade').value);
+            const totalProduto = preco * quantidade;
+            linha.querySelector('.total').textContent = `R$ ${totalProduto.toFixed(2).replace('.', ',')}`;
+            return totalProduto;
+        }
+
+        function atualizarTotalGeral() {
+            const tabela = document.querySelector('table tbody');
+            const linhas = tabela.querySelectorAll('tr');
+            let totalGeral = 0;
+
+            // Itera sobre as linhas, exceto a última (total da compra)
+            linhas.forEach((linha, index) => {
+                if (index < linhas.length - 1) { // Ignora a linha do total
+                    totalGeral += atualizarTotalProduto(linha); // Soma o total do produto
+                }
+            });
+
+            // Atualiza total na última linha
+            const totalLinha = tabela.querySelector('tr:last-child .total');
+            totalLinha.textContent = `R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
+        }
+
+        function atualizarQuantidade(input) {
+            const linha = input.closest('tr');
+            atualizarTotalProduto(linha); // Atualiza o total do produto
+            atualizarTotalGeral(); // Atualiza o total geral
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            atualizarTotalGeral();
+        });
+
+    </script>
+
+</head>
+<body>
+<div class="container mt-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.html">Início</a></li>
+            <li class="breadcrumb-item"><a href="shop.html">Loja</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Carrinho</li>
+        </ol>
+    </nav>
+
+    <h1>Carrinho</h1>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Produto</th>
+            <th scope="col">Preço</th>
+            <th scope="col">Quantidade</th>
+            <th scope="col">Total</th>
+            <!-- <th scope="col">Ação</th> -->
+        </tr>
+        </thead>
+        <tbody>
+
+        <!-- Inserir coisas do thymeleaf aqui -->
+        <tr>
+            <td>Asuka - Niitengo (Toy's Works)</td>
+            <td class="preco">R$ 159,99</td>
+            <td>
+                <input type="number" class="form-control quantidade" value="1" min="1" onchange="atualizarQuantidade(this)">
+            </td>
+            <td class="total">R$ 159,99</td>
+            <td><button class="btn btn-danger" onclick="removerLinha(this)">Remover</button></td>
+        </tr>
+        <tr>
+            <td>Paimon - 1/7 (Apex Innovation)</td>
+            <td class="preco">R$ 549,68</td>
+            <td>
+                <input type="number" class="form-control quantidade" value="1" min="1" onchange="atualizarQuantidade(this)">
+            </td>
+            <td class="total">R$ 549,68</td>
+            <td><button class="btn btn-danger" onclick="removerLinha(this)">Remover</button></td>
+        </tr>
+        <tr>
+            <td colspan="3" class="text-right font-weight-bold">Total da Compra</td>
+            <td class="total">R$ </td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+    <div class="text-center">
+        <button class="btn btn-primary">Finalizar Compra</button>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
