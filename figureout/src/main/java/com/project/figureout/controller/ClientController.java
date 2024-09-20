@@ -3,7 +3,10 @@ package com.project.figureout.controller;
 import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.*;
+import com.project.figureout.service.AddressService;
 import com.project.figureout.service.ClientService;
+import com.project.figureout.service.CreditCardService;
+import com.project.figureout.service.StateAndCountryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,6 +24,15 @@ public class ClientController {
 
     @Autowired
     private ClientService clientService;
+
+    @Autowired
+    private AddressService addressService;
+
+    @Autowired
+    private StateAndCountryService stateAndCountryService;
+
+    @Autowired
+    private CreditCardService creditCardService;
 
     @GetMapping({"", "/", "/index"})
     public String showClientsGet(Model model) {
@@ -41,8 +53,8 @@ public class ClientController {
     public String addClientGet(Model model, @PathVariable long id) {
         AddressDTO addressDTO = new AddressDTO();
 
-        List<State> stateList = clientService.getAllStates();
-        List<Country> countryList = clientService.getAllCountries();
+        List<State> stateList = stateAndCountryService.getAllStates();
+        List<Country> countryList = stateAndCountryService.getAllCountries();
 
         model.addAttribute("stateList", stateList);
         model.addAttribute("countryList", countryList);
@@ -57,8 +69,8 @@ public class ClientController {
         Client client = clientService.getClientById(id);
 
         if(result.hasErrors()) {
-            List<State> stateList = clientService.getAllStates();
-            List<Country> countryList = clientService.getAllCountries();
+            List<State> stateList = stateAndCountryService.getAllStates();
+            List<Country> countryList = stateAndCountryService.getAllCountries();
             model.addAttribute("stateList", stateList);
             model.addAttribute("countryList", countryList);
             model.addAttribute("clientId", id);
@@ -66,28 +78,28 @@ public class ClientController {
             return "createAddress";
         }
 
-        clientService.registerAddress(client, addressDTO);
+        addressService.registerAddress(client, addressDTO);
 
         return "redirect:/index";
     }
 
     @DeleteMapping("index/{id}/addresses/delete")
     public String deleteClientAddress(@PathVariable long id) {
-        clientService.deleteAddress(id);
+        addressService.deleteAddress(id);
 
         return "redirect:/index";
     }
 
     @GetMapping("updateAddress/{addressId}")
     public String updateClientAddressGet(@PathVariable long addressId, Model model) {
-        Address address = clientService.getAddressById(addressId);
+        Address address = addressService.getAddressById(addressId);
         AddressDTO addressDTO = new AddressDTO();
 
-        List<State> stateList = clientService.getAllStates();
-        List<Country> countryList = clientService.getAllCountries();
+        List<State> stateList = stateAndCountryService.getAllStates();
+        List<Country> countryList = stateAndCountryService.getAllCountries();
 
 
-        clientService.populateAddressDTO(addressDTO, address);
+        addressService.populateAddressDTO(addressDTO, address);
 
         model.addAttribute("addressDTO", addressDTO);
         model.addAttribute("stateList", stateList);
@@ -98,9 +110,9 @@ public class ClientController {
 
     @PutMapping("updateAddress/{addressId}")
     public String updateClientAddressPost(@PathVariable long addressId, @Valid @ModelAttribute("addressDTO") AddressDTO addressDTO, BindingResult result, Model model) {
-        Address addressToUpdate = clientService.getAddressById(addressId);
-        List<State> stateList = clientService.getAllStates();
-        List<Country> countryList = clientService.getAllCountries();
+        Address addressToUpdate = addressService.getAddressById(addressId);
+        List<State> stateList = stateAndCountryService.getAllStates();
+        List<Country> countryList = stateAndCountryService.getAllCountries();
 
         if(result.hasErrors()) {
             model.addAttribute("addressId", addressId);
@@ -110,7 +122,7 @@ public class ClientController {
             return "updateAddress";
         }
 
-        clientService.updateAddress(addressId, addressDTO);
+        addressService.updateAddress(addressId, addressDTO);
 
         return "redirect:/index";
     }
@@ -118,7 +130,7 @@ public class ClientController {
     @GetMapping("index/{id}/creditCards")
     @ResponseBody
     public List<CreditCard> getClientCreditCards(@PathVariable long id) {
-        return clientService.getClientCreditCards(id);
+        return creditCardService.getClientCreditCards(id);
     }
 
     @GetMapping("createCreditCard/{id}")
@@ -146,7 +158,7 @@ public class ClientController {
             return "createCreditCard";
         }
 
-        clientService.registerCreditCard(client, creditCardDTO);
+        creditCardService.registerCreditCard(client, creditCardDTO);
 
         return "redirect:/index";
 
@@ -154,7 +166,7 @@ public class ClientController {
 
     @DeleteMapping("index/{id}/creditCards/delete")
     public String deleteClientCreditCard(@PathVariable long id) {
-        clientService.deleteCreditCard(id);
+        creditCardService.deleteCreditCard(id);
 
         return "redirect:/index";
     }
@@ -162,10 +174,10 @@ public class ClientController {
 
     @GetMapping("updateCreditCard/{id}")
     public String updateClientCreditCardGet(@PathVariable long id, Model model) {
-        CreditCard creditCard = clientService.getCreditCardById(id);
+        CreditCard creditCard = creditCardService.getCreditCardById(id);
         CreditCardDTO creditCardDTO = new CreditCardDTO();
 
-        clientService.populateCreditCardDTO(creditCardDTO, creditCard);
+        creditCardService.populateCreditCardDTO(creditCardDTO, creditCard);
 
         model.addAttribute("creditCardDTO", creditCardDTO);
         model.addAttribute("creditCardId", id);
@@ -175,21 +187,26 @@ public class ClientController {
     }
 
     @PutMapping("updateCreditCard/{id}")
-    public String updateClientCreditCardPut(@PathVariable long id, @ModelAttribute CreditCardDTO creditCardDTO) {
-        CreditCard creditCardToUpdate = clientService.getCreditCardById(id);
+    public String updateClientCreditCardPut(@PathVariable long id, @Valid @ModelAttribute CreditCardDTO creditCardDTO, BindingResult result, Model model) {
+        CreditCard creditCardToUpdate = creditCardService.getCreditCardById(id);
 
-        clientService.updateCreditCard(creditCardToUpdate, creditCardDTO);
+        if(result.hasErrors()) {
+            model.addAttribute("creditCardId", id);
+
+            return "updateCreditCard";
+        }
+
+        creditCardService.updateCreditCard(creditCardToUpdate, creditCardDTO);
 
         return "redirect:/index";
     }
-
 
     @GetMapping("/createClient")
     public String addClientGet(Model model) {
         ClientDTO clientDTO = new ClientDTO();
         List<Gender> genderList = clientService.getAllGenders();
-        List<State> stateList = clientService.getAllStates();
-        List<Country> countryList = clientService.getAllCountries();
+        List<State> stateList = stateAndCountryService.getAllStates();
+        List<Country> countryList = stateAndCountryService.getAllCountries();
 
         model.addAttribute("clientDTO", clientDTO);
         model.addAttribute("genderList", genderList);
@@ -204,8 +221,8 @@ public class ClientController {
 
         if(result.hasErrors()) {
             List<Gender> genderList = clientService.getAllGenders();
-            List<State> stateList = clientService.getAllStates();
-            List<Country> countryList = clientService.getAllCountries();
+            List<State> stateList = stateAndCountryService.getAllStates();
+            List<Country> countryList = stateAndCountryService.getAllCountries();
             model.addAttribute("genderList", genderList);
             model.addAttribute("stateList", stateList);
             model.addAttribute("countryList", countryList);

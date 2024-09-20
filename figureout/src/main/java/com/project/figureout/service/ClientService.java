@@ -17,25 +17,13 @@ import java.util.NoSuchElementException;
 public class ClientService {
 
     @Autowired
-    ClientRepository clientRepository;
+    private AddressService addressService;
 
     @Autowired
-    GenderRepository genderRepository;
+    private ClientRepository clientRepository;
 
     @Autowired
-    PhoneRepository phoneRepository;
-
-    @Autowired
-    AddressRepository addressRepository;
-
-    @Autowired
-    CreditCardRepository creditCardRepository;
-
-    @Autowired
-    StateRepository stateRepository;
-
-    @Autowired
-    CountryRepository countryRepository;
+    private GenderRepository genderRepository;
 
     // Client Methods
 
@@ -55,36 +43,23 @@ public class ClientService {
         clientRepository.save(client);
     }
 
-    public void saveClientList(List<Client> clientList) {
-        clientRepository.saveAll(clientList);
-    }
-
-    public void updateClientAdmin(Client client, ClientBasicDataDTO clientBasicDataDTO) {
-        clientBasicDataSetter(client, clientBasicDataDTO);
-
-        saveClient(client);
-    }
-
     public void registerClient(Client client, ClientDTO clientDTO) {
 
         clientBasicDataSetter(client, clientDTO.getClientBasicDataDTO());
         saveClient(client);
 
         AddressDTO clientDTOAddress = clientDTO.getAddressDTO();
-        registerAddress(client, clientDTOAddress);
-
+        addressService.registerAddress(client, clientDTOAddress);
     }
 
     public void updateClient(Client client, ClientBasicDataDTO clientBasicDataDTO) {
+        clientBasicDataSetter(client, clientBasicDataDTO);
 
-        if(clientBasicDataDTO.getConfirmPassword().equals(clientBasicDataDTO.getPassword())) {
-            clientBasicDataSetter(client, clientBasicDataDTO);
+        saveClient(client);
+    }
 
-            saveClient(client);
-        } else {
-            throw new IllegalArgumentException("Senhas não batem.");
-        }
-
+    public List<Address> getClientAddresses(long id) {
+        return getClientById(id).getAddresses();
     }
 
     public void clientBasicDataSetter(Client client, ClientBasicDataDTO clientBasicDataDTO) {
@@ -103,208 +78,14 @@ public class ClientService {
 
         phone.setCellphone(clientBasicDataDTO.getPhoneDTO().isCellphone());
         phone.setDdd(clientBasicDataDTO.getPhoneDTO().getDdd());
-        phone.setPhoneNumber(treatMaskedPhoneNumber(clientBasicDataDTO.getPhoneDTO().getPhoneNumber()));
+        phone.setPhoneNumber(clientBasicDataDTO.getPhoneDTO().getPhoneNumber());
 
         client.setGender(gender);
         client.setPhone(phone);
     }
-
-    // Gender Methods
 
     public List<Gender> getAllGenders() {
         return genderRepository.findAll();
-    }
-
-    public void setGenderToClient(Gender gender, long id) {
-        Client client = getClientById(id);
-
-        client.setGender(gender);
-    }
-
-    // State Methods
-
-    public List<State> getAllStates() {
-        return stateRepository.findAll();
-    }
-
-    public State getStateById(long id) {
-        return stateRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Estado não encontrado pelo ID."));
-    }
-
-    // Country Methods
-
-    public List<Country> getAllCountries() {
-        return countryRepository.findAll();
-    }
-
-    public Country getCountryById(long id) {
-        return countryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("País não encontrado pelo ID."));
-    }
-
-    // Phone Methods
-
-    public void setPhoneToClient(Phone phone, long id) {
-        Client client = getClientById(id);
-
-        client.setPhone(phone);
-    }
-
-    // Address Methods
-
-    public void saveAddress(Address address) {
-        addressRepository.save(address);
-    }
-
-    public Address getAddressById(long id) {
-        return addressRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Endereço não encontrado com base no ID."));
-    }
-
-    public List<Address> getClientAddresses(long id) {
-        return getClientById(id).getAddresses();
-    }
-
-    public void addAddressToClient(Client client, Address address) {
-        client.getAddresses().add(address);
-        address.setClient(client);
-
-        saveAddress(address);
-    }
-
-    public void deleteAddress(long id) {
-        addressRepository.deleteById(id);
-    }
-
-    public void registerAddress(Client client, AddressDTO addressDTO) {
-        Address address = new Address();
-
-        address.setDeliveryAddress(addressDTO.isDeliveryAddress());
-        address.setChargingAddress(addressDTO.isChargingAddress());
-        address.setNickname(addressDTO.getNickname());
-        address.setTypeOfResidence(addressDTO.getTypeOfResidence());
-        address.setAddressing(addressDTO.getAddressing());
-        address.setHouseNumber(addressDTO.getHouseNumber());
-        address.setNeighbourhood(addressDTO.getNeighbourhood());
-        address.setAddressingType(addressDTO.getAddressingType());
-        address.setCep(treatMaskedCep(addressDTO.getCep()));
-        address.setCity(addressDTO.getCity());
-        address.setObservation(addressDTO.getObservation());
-
-        State state = new State();
-        Country country = new Country();
-
-        state.setId(addressDTO.getStateDTO().getId());
-        country.setId(addressDTO.getCountryDTO().getId());
-
-        address.setState(state);
-        address.setCountry(country);
-
-        addAddressToClient(client, address);
-    }
-
-    public void updateAddress(long id, AddressDTO addressDTO) {
-        Address address = getAddressById(id);
-
-        address.setDeliveryAddress(addressDTO.isDeliveryAddress());
-        address.setChargingAddress(addressDTO.isChargingAddress());
-        address.setNickname(addressDTO.getNickname());
-        address.setTypeOfResidence(addressDTO.getTypeOfResidence());
-        address.setAddressing(addressDTO.getAddressing());
-        address.setHouseNumber(addressDTO.getHouseNumber());
-        address.setNeighbourhood(addressDTO.getNeighbourhood());
-        address.setAddressingType(addressDTO.getAddressingType());
-        address.setCep(treatMaskedCep(addressDTO.getCep()));
-        address.setCity(addressDTO.getCity());
-
-        State state = getStateById(addressDTO.getStateDTO().getId());
-        Country country = getCountryById(addressDTO.getCountryDTO().getId());
-
-        address.setState(state);
-        address.setCountry(country);
-
-        address.setObservation(addressDTO.getObservation());
-
-        saveAddress(address);
-    }
-
-    // Credit Card Methods
-
-    public CreditCard getCreditCardById(long id) {
-        return creditCardRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Cartão de crédito não encontrado com base no ID."));
-    }
-
-    public List<CreditCard> getClientCreditCards(long id) {
-        return getClientById(id).getCreditCards();
-    }
-
-    public void addCreditCardToClient(Client client, CreditCard creditCard) {
-        client.getCreditCards().add(creditCard);
-        creditCard.setClient(client);
-
-        creditCardRepository.save(creditCard);
-    }
-
-    public void deleteCreditCard(long id) {
-        creditCardRepository.deleteById(id);
-    }
-
-    public void registerCreditCard(Client client, CreditCardDTO creditCardDTO) {
-        CreditCard creditCard = new CreditCard();
-
-        creditCard.setPreferido(creditCardDTO.isPreferido());
-        creditCard.setCardNumber(creditCardDTO.getCardNumber());
-        creditCard.setPrintedName(creditCardDTO.getPrintedName());
-        creditCard.setBrand(creditCardDTO.getBrand());
-        creditCard.setSecurityCode(creditCardDTO.getSecurityCode());
-
-        addCreditCardToClient(client, creditCard);
-    }
-
-    public void updateCreditCard(CreditCard creditCard, CreditCardDTO creditCardDTO) {
-        creditCard.setPreferido(creditCardDTO.isPreferido());
-        creditCard.setCardNumber(creditCardDTO.getCardNumber());
-        creditCard.setPrintedName(creditCardDTO.getPrintedName());
-        creditCard.setBrand(creditCardDTO.getBrand());
-        creditCard.setSecurityCode(creditCardDTO.getSecurityCode());
-
-        creditCardRepository.save(creditCard);
-    }
-
-    // Population Methods
-
-    // DTO Population Methods
-
-    public void populateAddressDTO(AddressDTO addressDTO, Address address) {
-        addressDTO.setDeliveryAddress(address.isDeliveryAddress());
-        addressDTO.setChargingAddress(address.isChargingAddress());
-        addressDTO.setNickname(address.getNickname());
-        addressDTO.setTypeOfResidence(address.getTypeOfResidence());
-        addressDTO.setAddressing(address.getAddressing());
-        addressDTO.setHouseNumber(address.getHouseNumber());
-        addressDTO.setNeighbourhood(address.getNeighbourhood());
-        addressDTO.setAddressingType(address.getAddressingType());
-        addressDTO.setCep(addMaskToCep(address.getCep()));
-        addressDTO.setCity(address.getCity());
-
-        StateDTO stateDTO = new StateDTO();
-        stateDTO.setId(address.getState().getId());
-
-        CountryDTO countryDTO = new CountryDTO();
-        countryDTO.setId(address.getCountry().getId());
-
-        addressDTO.setStateDTO(stateDTO);
-        addressDTO.setCountryDTO(countryDTO);
-
-        addressDTO.setObservation(address.getObservation());
-    }
-
-    public void populateCreditCardDTO(CreditCardDTO creditCardDTO, CreditCard creditCard) {
-
-        creditCardDTO.setPreferido(creditCard.isPreferido());
-        creditCardDTO.setCardNumber(creditCard.getCardNumber());
-        creditCardDTO.setPrintedName(creditCard.getPrintedName());
-        creditCardDTO.setBrand(creditCard.getBrand());
-        creditCardDTO.setSecurityCode(creditCard.getSecurityCode());
-
     }
 
     public void populateClientBasicDataDTO(ClientBasicDataDTO clientBasicDataDTO, Client client) {
@@ -313,7 +94,7 @@ public class ClientService {
         clientBasicDataDTO.setEmail(client.getEmail());
         clientBasicDataDTO.setCpf(addMaskToCpf(client.getCpf()));
         clientBasicDataDTO.setPassword(client.getPassword());
-        clientBasicDataDTO.setBirthday(client.getBirthday());   
+        clientBasicDataDTO.setBirthday(client.getBirthday());
         clientBasicDataDTO.setEnabled(client.isEnabled());
 
         clientBasicDataDTO.getGenderDTO().setId(client.getGender().getId());
@@ -322,8 +103,6 @@ public class ClientService {
         clientBasicDataDTO.getPhoneDTO().setDdd(client.getPhone().getDdd());
         clientBasicDataDTO.getPhoneDTO().setPhoneNumber(client.getPhone().getPhoneNumber());
     }
-
-    // Data treatment methods
 
     public String treatMaskedCpf(String cpf) {
         String treatedCpf;
@@ -340,26 +119,5 @@ public class ClientService {
         // 123.456.789-00
         return cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
     }
-
-    public String treatMaskedCep(String cep) {
-        String treatedCep;
-
-        treatedCep = cep.replace("-", "");
-
-        return treatedCep;
-    }
-
-    public String addMaskToCep(String cep) {
-        return cep.replaceAll("(\\d{5})(.*)", "$1-$2");
-    }
-
-    public String treatMaskedPhoneNumber(String phoneNumber) {
-        String treatedPhoneNumber;
-
-        treatedPhoneNumber = phoneNumber.replace("-", "");
-
-        return treatedPhoneNumber;
-    }
-
 
 }

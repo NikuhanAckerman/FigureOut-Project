@@ -26,23 +26,43 @@
 
     <div class="form-group">
 
+      <ul style="list-style-type: none;">
+        <li th:each="err : ${#fields.errors('*')}" th:text="${err}" class="text-danger"></li>
+      </ul>
+
       <div>
         <label><b>Preferencial?</b></label>
         <input class="form-check-input" type="checkbox" th:field="*{preferido}">
+
+        <ul style="list-style-type: none;">
+          <li th:each="err : ${#fields.errors('preferido')}" th:text="${err}" class="text-danger"/>
+        </ul>
       </div>
 
       <div>
         <label><b>Número do cartão</b></label>
         <input type="text" class="form-control" placeholder="Insira o número do cartão" th:field="*{cardNumber}" required>
+        <ul style="list-style-type: none;">
+          <li th:each="err : ${#fields.errors('cardNumber')}" th:text="${err}" class="text-danger"/>
+        </ul>
 
         <label><b>Nome impresso no cartão</b></label>
         <input type="text" class="form-control" placeholder="Insira o nome impresso no cartão" th:field="*{printedName}" required>
+        <ul style="list-style-type: none;">
+          <li th:each="err : ${#fields.errors('printedName')}" th:text="${err}" class="text-danger"/>
+        </ul>
 
         <label><b>Bandeira do cartão</b></label>
         <input type="text" class="form-control" placeholder="Insira a bandeira do cartão" th:field="*{brand}" required>
+        <ul style="list-style-type: none;">
+          <li th:each="err : ${#fields.errors('brand')}" th:text="${err}" class="text-danger"/>
+        </ul>
 
         <label><b>Código de segurança (CVV/CVC)</b></label>
         <input type="text" class="form-control" placeholder="Insira o código de segurança do cartão" th:field="*{securityCode}" required>
+        <ul style="list-style-type: none;">
+          <li th:each="err : ${#fields.errors('securityCode')}" th:text="${err}" class="text-danger"/>
+        </ul>
       </div>
 
     </div>
