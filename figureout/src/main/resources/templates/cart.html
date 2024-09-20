@@ -8,6 +8,7 @@
 
     <script>
         let desconto = 0;
+        let cartoes = []; // Array para armazenar os cartões de crédito
 
         function removerLinha(button) {
             const linha = button.closest('tr');
@@ -76,6 +77,33 @@
             atualizarTotalGeral(); // Atualiza o total após aplicar o cupom
         }
 
+        function adicionarCartao() {
+            const numeroCartao = document.getElementById('numero-cartao').value;
+            if (numeroCartao) {
+                cartoes.push(numeroCartao);
+                atualizarDropdownCartoes();
+                document.getElementById('numero-cartao').value = ''; // Limpa o campo após adicionar
+            } else {
+                alert('Digite um número de cartão válido.');
+            }
+        }
+
+        function adicionarCartaoDropdown() {
+            const dropdownContainer = document.getElementById('cartao-dropdown-container');
+            const novoDropdown = document.createElement('div');
+            novoDropdown.classList.add('mb-3');
+
+            const select = document.createElement('select');
+            select.classList.add('form-control');
+            select.innerHTML = `<option value="" disabled selected>Selecione um cartão</option>
+                <option value="cartao1">Cartão azul</option>
+                <option value="cartao2">Cartão marrom</option>
+                <option value="cartao3">Cartão roxo</option>`;
+
+            novoDropdown.appendChild(select);
+            dropdownContainer.appendChild(novoDropdown);
+        }
+
         // Chama atualizarTotalGeral ao carregar a página
         document.addEventListener('DOMContentLoaded', () => {
             atualizarTotalGeral();
@@ -138,8 +166,45 @@
         </tr>
         </tbody>
     </table>
+
+    <!-- Seção de Cartões de Crédito -->
+    <p><b>Selecione um ou mais Cartões de Crédito:</b></p>
+    <div id="cartao-dropdown-container" class="mb-3">
+        <select id="cartao-dropdown" class="form-control">
+            <option value="" disabled selected>Selecione um cartão</option>
+            <option value="cartao1">Cartão azul</option>
+            <option value="cartao2">Cartão marrom</option>
+            <option value="cartao3">Cartão roxo</option>
+        </select>
+    </div>
+
+    <button class="btn btn-secondary mb-3" onclick="adicionarCartaoDropdown()">Adicionar mais um cartão</button>
+
+
+    <div class="mb-3">
+        <a href="createCreditCard.html" class="btn btn-success">Adicionar um novo cartão de crédito</a>
+    </div>
+
+    <!-- Seção de Endereço -->
+    <p><b>Selecione um Endereço:</b></p>
+    <div class="mb-3">
+        <select id="address-dropdown" class="form-control">
+            <option value="" disabled selected>Selecione um endereço</option>
+            <option>Casa em Poá</option>
+            <option>Casa em Mogi</option>
+            <option>Casa em Suzano</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <a href="createAddress.html" class="btn btn-success">Adicionar um novo endereço</a>
+    </div>
+
+    <!-- Botões de finalizar compra e continuar comprando -->
     <div class="text-center">
+        <button href="shop.html" class="btn btn-secondary mt-3">Continuar Comprando</button>
         <button id="btn-finalizar" class="btn btn-primary mt-3">Finalizar Compra</button>
+
     </div>
 </div>
 
