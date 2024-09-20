@@ -15,10 +15,10 @@ public class PhoneDTO {
     private String ddd;
 
     @NotBlank(message = "O número de telefone não pode ser nulo.")
-    @Pattern(message = "O formato é inválido. O número de telefone deve estar no formato: '12345-6789' ou se for residencial:  '1234-5678'.", regexp = "^[\\d-]{1,10}$")
+    @Pattern(message = "O número de telefone deve possuir apenas números, sem traços ou espaços.", regexp = "^[\\d]{8,9}$")
     //@Size(min = 8, max = 10)
-    // 91234-5678
-    // 1234-5678
+    // 912345678
+    // 12345678
     private String phoneNumber;
 
 }

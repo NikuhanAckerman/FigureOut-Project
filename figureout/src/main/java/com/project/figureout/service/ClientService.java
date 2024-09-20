@@ -127,10 +127,18 @@ public class ClientService {
         return stateRepository.findAll();
     }
 
+    public State getStateById(long id) {
+        return stateRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Estado não encontrado pelo ID."));
+    }
+
     // Country Methods
 
     public List<Country> getAllCountries() {
         return countryRepository.findAll();
+    }
+
+    public Country getCountryById(long id) {
+        return countryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("País não encontrado pelo ID."));
     }
 
     // Phone Methods
@@ -204,10 +212,15 @@ public class ClientService {
         address.setHouseNumber(addressDTO.getHouseNumber());
         address.setNeighbourhood(addressDTO.getNeighbourhood());
         address.setAddressingType(addressDTO.getAddressingType());
-        address.setCep(addressDTO.getCep());
+        address.setCep(treatMaskedCep(addressDTO.getCep()));
         address.setCity(addressDTO.getCity());
-        //address.setState(addressDTO.getState());
-        //address.setCountry(addressDTO.getCountry());
+
+        State state = getStateById(addressDTO.getStateDTO().getId());
+        Country country = getCountryById(addressDTO.getCountryDTO().getId());
+
+        address.setState(state);
+        address.setCountry(country);
+
         address.setObservation(addressDTO.getObservation());
 
         saveAddress(address);
@@ -269,10 +282,18 @@ public class ClientService {
         addressDTO.setHouseNumber(address.getHouseNumber());
         addressDTO.setNeighbourhood(address.getNeighbourhood());
         addressDTO.setAddressingType(address.getAddressingType());
-        addressDTO.setCep(address.getCep());
+        addressDTO.setCep(addMaskToCep(address.getCep()));
         addressDTO.setCity(address.getCity());
-        //addressDTO.setState(address.getState());
-        //addressDTO.setCountry(address.getCountry());
+
+        StateDTO stateDTO = new StateDTO();
+        stateDTO.setId(address.getState().getId());
+
+        CountryDTO countryDTO = new CountryDTO();
+        countryDTO.setId(address.getCountry().getId());
+
+        addressDTO.setStateDTO(stateDTO);
+        addressDTO.setCountryDTO(countryDTO);
+
         addressDTO.setObservation(address.getObservation());
     }
 
@@ -290,11 +311,13 @@ public class ClientService {
 
         clientBasicDataDTO.setName(client.getName());
         clientBasicDataDTO.setEmail(client.getEmail());
-        clientBasicDataDTO.setCpf(client.getCpf());
+        clientBasicDataDTO.setCpf(addMaskToCpf(client.getCpf()));
         clientBasicDataDTO.setPassword(client.getPassword());
-        clientBasicDataDTO.setBirthday(client.getBirthday());
+        clientBasicDataDTO.setBirthday(client.getBirthday());   
         clientBasicDataDTO.setEnabled(client.isEnabled());
+
         clientBasicDataDTO.getGenderDTO().setId(client.getGender().getId());
+
         clientBasicDataDTO.getPhoneDTO().setCellphone(client.getPhone().isCellphone());
         clientBasicDataDTO.getPhoneDTO().setDdd(client.getPhone().getDdd());
         clientBasicDataDTO.getPhoneDTO().setPhoneNumber(client.getPhone().getPhoneNumber());
@@ -313,12 +336,21 @@ public class ClientService {
 
     }
 
+    public String addMaskToCpf(String cpf) {
+        // 123.456.789-00
+        return cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+    }
+
     public String treatMaskedCep(String cep) {
         String treatedCep;
 
         treatedCep = cep.replace("-", "");
 
         return treatedCep;
+    }
+
+    public String addMaskToCep(String cep) {
+        return cep.replaceAll("(\\d{5})(.*)", "$1-$2");
     }
 
     public String treatMaskedPhoneNumber(String phoneNumber) {

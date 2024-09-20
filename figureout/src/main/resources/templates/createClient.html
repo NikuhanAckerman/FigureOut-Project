@@ -84,7 +84,6 @@
 					</div>
 
 					<label><b>Gênero</b></label>
-
 					<div class="radio-group" th:each="gender : ${genderList}">
 						<input type="radio" th:field="*{clientBasicDataDTO.genderDTO.id}" th:value="${gender.id}" th:text="${gender.genderType}" required/>
 					</div>

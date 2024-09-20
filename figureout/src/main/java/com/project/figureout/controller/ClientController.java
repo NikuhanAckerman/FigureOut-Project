@@ -83,16 +83,32 @@ public class ClientController {
         Address address = clientService.getAddressById(addressId);
         AddressDTO addressDTO = new AddressDTO();
 
+        List<State> stateList = clientService.getAllStates();
+        List<Country> countryList = clientService.getAllCountries();
+
+
         clientService.populateAddressDTO(addressDTO, address);
 
         model.addAttribute("addressDTO", addressDTO);
+        model.addAttribute("stateList", stateList);
+        model.addAttribute("countryList", countryList);
 
         return "updateAddress";
     }
 
     @PutMapping("updateAddress/{addressId}")
-    public String updateClientAddressPost(@PathVariable long addressId, @ModelAttribute("addressDTO") AddressDTO addressDTO) {
+    public String updateClientAddressPost(@PathVariable long addressId, @Valid @ModelAttribute("addressDTO") AddressDTO addressDTO, BindingResult result, Model model) {
         Address addressToUpdate = clientService.getAddressById(addressId);
+        List<State> stateList = clientService.getAllStates();
+        List<Country> countryList = clientService.getAllCountries();
+
+        if(result.hasErrors()) {
+            model.addAttribute("addressId", addressId);
+            model.addAttribute("stateList", stateList);
+            model.addAttribute("countryList", countryList);
+
+            return "updateAddress";
+        }
 
         clientService.updateAddress(addressId, addressDTO);
 
@@ -112,7 +128,7 @@ public class ClientController {
         model.addAttribute("creditCardDTO", creditCardDTO);
         model.addAttribute("clientId", id);
 
-        System.out.println("GET Method Id output: " + creditCardDTO.getClientId());
+        //System.out.println("GET Method Id output: " + creditCardDTO.getClientId());
 
         return "createCreditCard";
     }
@@ -229,9 +245,17 @@ public class ClientController {
     }
 
     @PutMapping("/updateClient/{id}")
-    public String updateClient(@PathVariable long id, @ModelAttribute ClientBasicDataDTO clientBasicDataDTO) {
+    public String updateClient(@PathVariable long id, @Valid @ModelAttribute ClientBasicDataDTO clientBasicDataDTO, BindingResult result, Model model) {
 
         Client clientToUpdate = clientService.getClientById(id);
+
+        if(result.hasErrors()) {
+            List<Gender> genderList = clientService.getAllGenders();
+            model.addAttribute("clientId", id);
+            model.addAttribute("genderList", genderList);
+
+            return "updateClient";
+        }
 
         clientService.updateClient(clientToUpdate, clientBasicDataDTO);
 

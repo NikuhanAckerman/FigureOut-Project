@@ -23,13 +23,13 @@ public class ClientBasicDataDTO {
 
     @NotBlank(message = "O e-mail não pode estar vazio.")
     @Email(message = "Este e-mail não é válido.")
-    @EmailCantBeUsedByMultipleAccounts
+    //@EmailCantBeUsedByMultipleAccounts solve issue with update first
     private String email;
 
     @NotBlank(message = "O CPF não pode estar vazio.")
     @Size(max = 14)
     @Pattern(message = "O formato é inválido. O CPF deve estar no formato: '123.456.789-00'.", regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}")
-    @CpfCantBeUsedByMultipleAccounts
+    //@CpfCantBeUsedByMultipleAccounts solve issue with update first
     private String cpf;
 
     @NotBlank(message = "A senha não pode estar vazia.")
@@ -50,10 +50,10 @@ public class ClientBasicDataDTO {
 
     @Valid
     @NotNull(message = "O gênero não pode ser nulo.")
-    private GenderDTO genderDTO;
+    private GenderDTO genderDTO = new GenderDTO(); // solution for now, deeper problem at hand in the updateClient page and ClientController possibly
 
     @Valid
     @NotNull(message = "O telefone não pode ser nulo.")
-    private PhoneDTO phoneDTO;
+    private PhoneDTO phoneDTO = new PhoneDTO();
 
 }

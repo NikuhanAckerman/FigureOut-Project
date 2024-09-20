@@ -9,7 +9,6 @@ import lombok.Setter;
 import java.util.Date;
 
 @Getter @Setter
-@OnlyOnePreferentialCreditCard
 public class CreditCardDTO {
 
     @NotNull(message = "O campo 'preferido' não pode ser nulo.")
