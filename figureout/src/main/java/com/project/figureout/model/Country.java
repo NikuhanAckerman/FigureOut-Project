@@ -17,5 +17,4 @@ public class Country {
     @Column(name = "pai_nome", length = 6)
     private String name;
 
-
 }

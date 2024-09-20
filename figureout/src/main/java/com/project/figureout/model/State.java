@@ -21,5 +21,4 @@ public class State {
     @Column(name = "est_nome", length = 25)
     private String name;
 
-
 }

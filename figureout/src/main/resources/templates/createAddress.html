@@ -22,6 +22,10 @@
             <form th:action="@{/createAddress/{id}(id=${clientId})}" th:object="${addressDTO}" method="POST">
                 <div class="form-group">
 
+                    <ul style="list-style-type: none;">
+                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}" class="text-danger"/>
+                    </ul>
+
                     <div class="mt-2">
                         <label><b>Endereço</b></label>
 
@@ -33,8 +37,17 @@
                                 <label><b>Entrega</b></label>
                                 <input class="form-check-input" type="checkbox" th:field="*{deliveryAddress}">
 
+                                <ul style="list-style-type: none;">
+                                    <li th:each="err : ${#fields.errors('deliveryAddress')}" th:text="${err}" class="text-danger"/>
+                                </ul>
+
                                 <label><b>Cobrança</b></label>
                                 <input class="form-check-input" type="checkbox" th:field="*{chargingAddress}">
+
+                                <ul style="list-style-type: none;">
+                                    <li th:each="err : ${#fields.errors('chargingAddress')}" th:text="${err}" class="text-danger"/>
+                                </ul>
+
                             </div>
 
                         </div>
@@ -42,58 +55,96 @@
                         <div>
                             <label><b>Apelido</b></label>
                             <input type="text" class="form-control" placeholder="Digite o apelido" th:field="*{nickname}" required>
+                            <ul style="list-style-type: none;">
+                                <li th:each="err : ${#fields.errors('nickname')}" th:text="${err}" class="text-danger"/>
+                            </ul>
                         </div>
 
                         <div>
                             <label><b>Tipo de Residência</b></label>
                             <input type="text" class="form-control" placeholder="(Casa, apartamento, etc...)" th:field="*{typeOfResidence}" required>
+                            <ul style="list-style-type: none;">
+                                <li th:each="err : ${#fields.errors('typeOfResidence')}" th:text="${err}" class="text-danger"/>
+                            </ul>
                         </div>
 
                         <div>
                             <label><b>Tipo de logradouro</b></label>
                             <input type="text" class="form-control" placeholder="(Rua, Avenida, etc...)" th:field="*{addressingType}" required>
+                            <ul style="list-style-type: none;">
+                                <li th:each="err : ${#fields.errors('addressingType')}" th:text="${err}" class="text-danger"/>
+                            </ul>
                         </div>
 
                         <div>
                             <label><b>Logradouro</b></label>
                             <input type="text" class="form-control" placeholder="Insira o logradouro" th:field="*{addressing}" required>
+                            <ul style="list-style-type: none;">
+                                <li th:each="err : ${#fields.errors('addressing')}" th:text="${err}" class="text-danger"/>
+                            </ul>
                         </div>
 
                         <div>
                             <label><b>Nº de residência</b></label>
                             <input type="text" class="form-control" placeholder="Insira o número da residência" th:field="*{houseNumber}" maxlength="5" required>
+                            <ul style="list-style-type: none;">
+                                <li th:each="err : ${#fields.errors('houseNumber')}" th:text="${err}" class="text-danger"/>
+                            </ul>
                         </div>
 
                         <div>
                             <label><b>CEP</b></label>
-                            <input type="text" class="form-control" placeholder="00000-000" th:field="*{cep}" maxlength="9" required>
+                            <input type="text" class="form-control" placeholder="00000-000" th:field="*{cep}" maxlength="10" required>
+                            <ul style="list-style-type: none;">
+                                <li th:each="err : ${#fields.errors('cep')}" th:text="${err}" class="text-danger"/>
+                            </ul>
                         </div>
 
                         <div>
                             <label><b>Bairro</b></label>
                             <input type="text" class="form-control" placeholder="Insira o bairro" th:field="*{neighbourhood}" required>
+                            <ul style="list-style-type: none;">
+                                <li th:each="err : ${#fields.errors('neighbourhood')}" th:text="${err}" class="text-danger"/>
+                            </ul>
                         </div>
 
                         <div>
                             <label><b>Cidade</b></label>
                             <input type="text" class="form-control" placeholder="Insira a cidade" th:field="*{city}" required>
+                            <ul style="list-style-type: none;">
+                                <li th:each="err : ${#fields.errors('city')}" th:text="${err}" class="text-danger"/>
+                            </ul>
                         </div>
 
                         <div>
                             <label><b>Estado</b></label>
-                            <input type="text" class="form-control" placeholder="Insira o Estado" th:field="*{state}" required>
+                            <select class="form-select" aria-label="Escolha um estado" th:field="*{stateDTO.id}">
+                                <option value="0" selected>Adicione o estado</option>
+                                <option th:each="state : ${stateList}" th:value="${state.id}" th:text="${state.name}">
+                            </select>
+                            <ul style="list-style-type: none;">
+                                <li th:each="err : ${#fields.errors('stateDTO.id')}" th:text="${err}" class="text-danger"/>
+                            </ul>
                         </div>
 
                         <div>
                             <label><b>País</b></label>
-                            <input type="text" class="form-control" placeholder="Insira o País" th:field="*{country}" required>
+                            <select class="form-select" aria-label="Escolha um país" th:field="*{countryDTO.id}">
+                                <option value="0" selected>Adicione o país</option>
+                                <option th:each="country : ${countryList}" th:value="${country.id}" th:text="${country.name}">
+                            </select>
+                            <ul style="list-style-type: none;">
+                                <li th:each="err : ${#fields.errors('countryDTO.id')}" th:text="${err}" class="text-danger"/>
+                            </ul>
                         </div>
 
                         <div>
                             <label><b>Observação</b></label>
                             <input type="text" class="form-control" placeholder="Insira uma observação (opcional)" th:field="*{observation}">
+                            <ul style="list-style-type: none;">
+                                <li th:each="err : ${#fields.errors('observation')}" th:text="${err}" class="text-danger"/>
+                            </ul>
                         </div>
-
                     </div>
 
                 </div>

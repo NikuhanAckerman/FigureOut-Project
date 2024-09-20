@@ -41,6 +41,11 @@ public class ClientController {
     public String addClientGet(Model model, @PathVariable long id) {
         AddressDTO addressDTO = new AddressDTO();
 
+        List<State> stateList = clientService.getAllStates();
+        List<Country> countryList = clientService.getAllCountries();
+
+        model.addAttribute("stateList", stateList);
+        model.addAttribute("countryList", countryList);
         model.addAttribute("addressDTO", addressDTO);
         model.addAttribute("clientId", id);
 
@@ -48,8 +53,18 @@ public class ClientController {
     }
 
     @PostMapping("createAddress/{id}")
-    public String createClientAddressPost(@PathVariable long id, @ModelAttribute("addressDTO") AddressDTO addressDTO) {
+    public String createClientAddressPost(@PathVariable long id, @Valid @ModelAttribute("addressDTO") AddressDTO addressDTO, BindingResult result, Model model) {
         Client client = clientService.getClientById(id);
+
+        if(result.hasErrors()) {
+            List<State> stateList = clientService.getAllStates();
+            List<Country> countryList = clientService.getAllCountries();
+            model.addAttribute("stateList", stateList);
+            model.addAttribute("countryList", countryList);
+            model.addAttribute("clientId", id);
+
+            return "createAddress";
+        }
 
         clientService.registerAddress(client, addressDTO);
 
@@ -92,7 +107,6 @@ public class ClientController {
 
     @GetMapping("createCreditCard/{id}")
     public String createClientCreditCardGet(@PathVariable long id, Model model) {
-        Client client = clientService.getClientById(id);
         CreditCardDTO creditCardDTO = new CreditCardDTO();
 
         model.addAttribute("creditCardDTO", creditCardDTO);
@@ -103,8 +117,14 @@ public class ClientController {
 
 
     @PostMapping("createCreditCard/{id}")
-    public String createClientCreditCardPost(@PathVariable long id, @ModelAttribute CreditCardDTO creditCardDTO) {
+    public String createClientCreditCardPost(@PathVariable long id, @Valid @ModelAttribute CreditCardDTO creditCardDTO, BindingResult result, Model model) {
         Client client = clientService.getClientById(id);
+
+        if(result.hasErrors()) {
+            model.addAttribute("clientId", id);
+
+            return "createCreditCard";
+        }
 
         clientService.registerCreditCard(client, creditCardDTO);
 
