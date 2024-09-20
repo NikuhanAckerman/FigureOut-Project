@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
     <script>
+        let desconto = 0;
+
         function removerLinha(button) {
             const linha = button.closest('tr');
             linha.remove();
@@ -33,10 +35,13 @@
                 }
             });
 
+            // Aplica o desconto
+            const totalComDesconto = totalGeral - (totalGeral * (desconto / 100));
+
             // Atualiza total na última linha
             const totalLinha = tabela.querySelector('tr:last-child .total');
-            totalLinha.textContent = `R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
-            atualizarBotaoFinalizar(totalGeral); // Atualiza o estado do botão "Finalizar Compra"
+            totalLinha.textContent = `R$ ${totalComDesconto.toFixed(2).replace('.', ',')}`;
+            atualizarBotaoFinalizar(totalComDesconto); // Atualiza o estado do botão "Finalizar Compra"
         }
 
         function atualizarQuantidade(input) {
@@ -58,6 +63,19 @@
             }
         }
 
+        // Cupom hardcoded pra testar ;)
+        function aplicarCupom() {
+            const cupomInput = document.getElementById('cupom-input').value;
+            if (cupomInput === 'SCATIL10') { // Exemplo de cupom
+                desconto = 10; // Aplica 10% de desconto
+                alert('Cupom aplicado com sucesso!');
+            } else {
+                desconto = 0;
+                alert('Cupom inválido.');
+            }
+            atualizarTotalGeral(); // Atualiza o total após aplicar o cupom
+        }
+
         // Chama atualizarTotalGeral ao carregar a página
         document.addEventListener('DOMContentLoaded', () => {
             atualizarTotalGeral();
@@ -76,6 +94,11 @@
     </nav>
 
     <h1>Carrinho</h1>
+    <p><b>Cupom de desconto:</b></p>
+    <div class="mb-3">
+        <input type="text" id="cupom-input" class="form-control" placeholder="Digite seu cupom de desconto">
+        <button class="btn btn-primary mt-2" onclick="aplicarCupom()">Aplicar Cupom</button>
+    </div>
 
     <table class="table table-striped">
         <thead>
