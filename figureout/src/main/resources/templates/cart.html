@@ -8,20 +8,17 @@
 
     <script>
         function removerLinha(button) {
-            // Encontrar a linha da tabela que contém o botão
             const linha = button.closest('tr');
-            // Remover a linha do DOM
             linha.remove();
-            atualizarTotalGeral();
+            atualizarTotalGeral(); // Atualiza o total geral após a remoção
         }
 
-        // Calcula o valor total da compra somando as linhas de cima.
         function atualizarTotalProduto(linha) {
             const preco = parseFloat(linha.querySelector('.preco').textContent.replace('R$ ', '').replace(',', '.'));
             const quantidade = parseInt(linha.querySelector('.quantidade').value);
             const totalProduto = preco * quantidade;
             linha.querySelector('.total').textContent = `R$ ${totalProduto.toFixed(2).replace('.', ',')}`;
-            return totalProduto;
+            return totalProduto; // Retorna o total do produto
         }
 
         function atualizarTotalGeral() {
@@ -39,6 +36,7 @@
             // Atualiza total na última linha
             const totalLinha = tabela.querySelector('tr:last-child .total');
             totalLinha.textContent = `R$ ${totalGeral.toFixed(2).replace('.', ',')}`;
+            atualizarBotaoFinalizar(totalGeral); // Atualiza o estado do botão "Finalizar Compra"
         }
 
         function atualizarQuantidade(input) {
@@ -47,10 +45,23 @@
             atualizarTotalGeral(); // Atualiza o total geral
         }
 
+        function atualizarBotaoFinalizar(totalGeral) {
+            const botaoFinalizar = document.getElementById('btn-finalizar');
+            if (totalGeral === 0) {
+                botaoFinalizar.classList.add('btn-secondary'); // Adiciona a classe cinza
+                botaoFinalizar.classList.remove('btn-primary'); // Remove a classe padrão
+                botaoFinalizar.disabled = true; // Desabilita o botão
+            } else {
+                botaoFinalizar.classList.remove('btn-secondary'); // Remove a classe cinza
+                botaoFinalizar.classList.add('btn-primary'); // Adiciona a classe padrão
+                botaoFinalizar.disabled = false; // Habilita o botão
+            }
+        }
+
+        // Chama atualizarTotalGeral ao carregar a página
         document.addEventListener('DOMContentLoaded', () => {
             atualizarTotalGeral();
         });
-
     </script>
 
 </head>
@@ -105,7 +116,7 @@
         </tbody>
     </table>
     <div class="text-center">
-        <button class="btn btn-primary">Finalizar Compra</button>
+        <button id="btn-finalizar" class="btn btn-primary mt-3">Finalizar Compra</button>
     </div>
 </div>
 
