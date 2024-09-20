@@ -9,6 +9,8 @@ import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 public class OnlyOnePreferentialCreditCardValidator implements ConstraintValidator<OnlyOnePreferentialCreditCard, Object> {
@@ -23,29 +25,35 @@ public class OnlyOnePreferentialCreditCardValidator implements ConstraintValidat
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext constraintValidatorContext) {
+        return false;
+        /*
         if(obj instanceof CreditCardDTO){
             CreditCardDTO creditCardDTO = (CreditCardDTO) obj;
 
-            String clientId = creditCardDTO.getClientId();
 
-            Client client = clientService.getClientById(Long.parseLong(clientId));
+            //System.out.println("Annotation Method Id output: " + clientId);
 
-            List<CreditCard> clientCreditCards = client.getCreditCards();
+            if(creditCardDTO.isPreferido()) {
+                List<CreditCard> clientCreditCards = client.getCreditCards();
 
-            for(CreditCard creditCard: clientCreditCards) {
+                if(!clientCreditCards.isEmpty()) {
 
-                if(creditCard.isPreferido()) {
-                    return false;
+                    for(CreditCard creditCard: clientCreditCards) {
+
+                        if(creditCard.isPreferido()) {
+                            return false;
+                        }
+
+                    }
+                    return true;
                 }
 
             }
 
             return true;
-
         }
 
-
-        return false;
+        return false;*/
     }
 
 }

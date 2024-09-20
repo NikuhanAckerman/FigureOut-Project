@@ -11,8 +11,6 @@ import java.util.Date;
 @Getter @Setter
 @OnlyOnePreferentialCreditCard
 public class CreditCardDTO {
-    @NotNull(message = "O id do cliente não pode ser nulo.")
-    private String clientId;
 
     @NotNull(message = "O campo 'preferido' não pode ser nulo.")
     private boolean preferido;

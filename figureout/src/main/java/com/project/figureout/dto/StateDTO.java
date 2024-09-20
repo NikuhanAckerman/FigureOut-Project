@@ -8,6 +8,6 @@ import lombok.Setter;
 public class StateDTO {
 
     @NotNull(message = "O id do estado não pode estar vazio.")
-    private String id;
+    private long id;
 
 }

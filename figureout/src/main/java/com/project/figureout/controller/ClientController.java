@@ -112,6 +112,8 @@ public class ClientController {
         model.addAttribute("creditCardDTO", creditCardDTO);
         model.addAttribute("clientId", id);
 
+        System.out.println("GET Method Id output: " + creditCardDTO.getClientId());
+
         return "createCreditCard";
     }
 
@@ -119,6 +121,8 @@ public class ClientController {
     @PostMapping("createCreditCard/{id}")
     public String createClientCreditCardPost(@PathVariable long id, @Valid @ModelAttribute CreditCardDTO creditCardDTO, BindingResult result, Model model) {
         Client client = clientService.getClientById(id);
+
+        System.out.println("POST Method Id output: " + id);
 
         if(result.hasErrors()) {
             model.addAttribute("clientId", id);

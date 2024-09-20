@@ -21,7 +21,6 @@
 <div class="container mt-5">
   <form th:action="@{/createCreditCard/{id}(id=${clientId})}" th:object="${creditCardDTO}" method="POST">
     <div class="form-group">
-      <input type="hidden" th:field="*{clientId}" value="${clientId}">
 
       <ul style="list-style-type: none;">
         <li th:each="err : ${#fields.errors('*')}" th:text="${err}" class="text-danger"></li>

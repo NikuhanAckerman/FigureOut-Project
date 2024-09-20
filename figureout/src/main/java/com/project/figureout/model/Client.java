@@ -1,5 +1,6 @@
 package com.project.figureout.model;
 
+import com.project.figureout.validation.OnlyOnePreferentialCreditCard;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
