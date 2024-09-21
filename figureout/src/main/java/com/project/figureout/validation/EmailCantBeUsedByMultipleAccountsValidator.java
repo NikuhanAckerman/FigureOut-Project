@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class EmailCantBeUsedByMultipleAccountsValidator implements ConstraintValidator<EmailCantBeUsedByMultipleAccounts, String> {
+public class EmailCantBeUsedByMultipleAccountsValidator implements ConstraintValidator<EmailCantBeUsedByMultipleAccounts, Object> {
 
     @Autowired
     ClientService clientService;
@@ -20,16 +20,26 @@ public class EmailCantBeUsedByMultipleAccountsValidator implements ConstraintVal
     }
 
     @Override
-    public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(Object obj, ConstraintValidatorContext constraintValidatorContext) {
 
-        List<Client> allClients = clientService.getAllClients();
+        if(obj instanceof Client) {
+            Client client = (Client) obj;
+            List<Client> allClients = clientService.getAllClients();
 
-        for (Client client : allClients) {
-            if (client.getEmail().equals(s)) {
-                return false;
+            for(Client clientObjectInsideList: allClients) {
+
+                if(clientObjectInsideList.getEmail().equals(client.getEmail())) {
+                    if(!clientObjectInsideList.equals(client)) {
+                        return false;
+                    }
+                }
+
             }
+
+            return true;
         }
 
         return true;
+
     }
 }

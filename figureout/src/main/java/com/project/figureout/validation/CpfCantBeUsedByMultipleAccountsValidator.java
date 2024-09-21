@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class CpfCantBeUsedByMultipleAccountsValidator implements ConstraintValidator<CpfCantBeUsedByMultipleAccounts, String> {
+public class CpfCantBeUsedByMultipleAccountsValidator implements ConstraintValidator<CpfCantBeUsedByMultipleAccounts, Object> {
 
     @Autowired
     ClientService clientService;
@@ -19,16 +19,25 @@ public class CpfCantBeUsedByMultipleAccountsValidator implements ConstraintValid
     }
 
     @Override
-    public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(Object obj, ConstraintValidatorContext constraintValidatorContext) {
 
-        List<Client> allClients = clientService.getAllClients();
+        if(obj instanceof Client) {
+            Client client = (Client) obj;
+            List<Client> allClients = clientService.getAllClients();
 
-        String cpfFieldTreated = clientService.treatMaskedCpf(s);
+            String cpfFieldTreated = clientService.treatMaskedCpf(client.getCpf());
 
-        for (Client client : allClients) {
-            if (client.getCpf().equals(cpfFieldTreated)) {
-                return false;
+            for(Client clientObjectInsideList: allClients) {
+
+                if(clientObjectInsideList.getCpf().equals(cpfFieldTreated)) {
+                    if(!clientObjectInsideList.equals(client)) {
+                        return false;
+                    }
+                }
+
             }
+
+            return true;
         }
 
         return true;

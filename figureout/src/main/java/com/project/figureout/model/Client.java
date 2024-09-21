@@ -1,5 +1,7 @@
 package com.project.figureout.model;
 
+import com.project.figureout.validation.CpfCantBeUsedByMultipleAccounts;
+import com.project.figureout.validation.EmailCantBeUsedByMultipleAccounts;
 import com.project.figureout.validation.OnlyOnePreferentialCreditCard;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,6 +17,9 @@ import java.util.Set;
 @Entity
 @Table(name = "Clientes")
 @Getter @Setter
+@OnlyOnePreferentialCreditCard
+@EmailCantBeUsedByMultipleAccounts
+@CpfCantBeUsedByMultipleAccounts
 public class Client {
 
     @Id

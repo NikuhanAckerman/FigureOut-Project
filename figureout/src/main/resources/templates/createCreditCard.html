@@ -55,7 +55,7 @@
             <option th:each="brand : ${creditCardBrandList}" th:value="${brand.id}" th:text="${brand.name}">
           </select>
           <ul style="list-style-type: none;">
-            <li th:each="err : ${#fields.errors('countryDTO.id')}" th:text="${err}" class="text-danger"/>
+            <li th:each="err : ${#fields.errors('creditCardBrandDTO.id')}" th:text="${err}" class="text-danger"/>
           </ul>
         </div>
 

@@ -8,6 +8,7 @@ import com.project.figureout.service.ClientService;
 import com.project.figureout.service.CreditCardService;
 import com.project.figureout.service.StateAndCountryService;
 import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -147,9 +148,9 @@ public class ClientController {
         return "createCreditCard";
     }
 
-
     @PostMapping("createCreditCard/{id}")
     public String createClientCreditCardPost(@PathVariable long id, @Valid @ModelAttribute CreditCardDTO creditCardDTO, BindingResult result, Model model) {
+        @Valid
         Client client = clientService.getClientById(id);
 
         System.out.println("POST Method Id output: " + id);

@@ -25,35 +25,20 @@ public class OnlyOnePreferentialCreditCardValidator implements ConstraintValidat
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext constraintValidatorContext) {
-        return false;
-        /*
-        if(obj instanceof CreditCardDTO){
-            CreditCardDTO creditCardDTO = (CreditCardDTO) obj;
+        if(obj instanceof Client){
+            Client client = (Client) obj;
+
+            List<CreditCard> clientCreditCardList = client.getCreditCards();
+
+            long preferentialCount = clientCreditCardList.stream()
+                    .filter(CreditCard::isPreferido)
+                    .count();
 
 
-            //System.out.println("Annotation Method Id output: " + clientId);
-
-            if(creditCardDTO.isPreferido()) {
-                List<CreditCard> clientCreditCards = client.getCreditCards();
-
-                if(!clientCreditCards.isEmpty()) {
-
-                    for(CreditCard creditCard: clientCreditCards) {
-
-                        if(creditCard.isPreferido()) {
-                            return false;
-                        }
-
-                    }
-                    return true;
-                }
-
-            }
-
-            return true;
+            return (preferentialCount <= 1);
         }
 
-        return false;*/
+        return false;
     }
 
 }
