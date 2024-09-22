@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho de compra</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <script>
+        let desconto = 0;
+        let cartoes = []; // Array para armazenar os cartões de crédito
+
+        function removerLinha(button) {
+            const linha = button.closest('tr');
+            linha.remove();
+            atualizarTotalGeral(); // Atualiza o total geral após a remoção
+        }
+
+        function atualizarTotalProduto(linha) {
+            const preco = parseFloat(linha.querySelector('.preco').textContent.replace('R$ ', '').replace(',', '.'));
+            const quantidade = parseInt(linha.querySelector('.quantidade').value);
+            const totalProduto = preco * quantidade;
+            linha.querySelector('.total').textContent = `R$ ${totalProduto.toFixed(2).replace('.', ',')}`;
+            return totalProduto; // Retorna o total do produto
+        }
+
+        function atualizarTotalGeral() {
+            const tabela = document.querySelector('table tbody');
+            const linhas = tabela.querySelectorAll('tr');
+            let totalGeral = 0;
+
+            // Itera sobre as linhas, exceto a última (total da compra)
+            linhas.forEach((linha, index) => {
+                if (index < linhas.length - 1) { // Ignora a linha do total
+                    totalGeral += atualizarTotalProduto(linha); // Soma o total do produto
+                }
+            });
+
+            // Aplica o desconto
+            const totalComDesconto = totalGeral - (totalGeral * (desconto / 100));
+
+            // Atualiza total na última linha
+            const totalLinha = tabela.querySelector('tr:last-child .total');
+            totalLinha.textContent = `R$ ${totalComDesconto.toFixed(2).replace('.', ',')}`;
+            atualizarBotaoFinalizar(totalComDesconto); // Atualiza o estado do botão "Finalizar Compra"
+        }
+
+        function atualizarQuantidade(input) {
+            const linha = input.closest('tr');
+            atualizarTotalProduto(linha); // Atualiza o total do produto
+            atualizarTotalGeral(); // Atualiza o total geral
+        }
+
+        function atualizarBotaoFinalizar(totalGeral) {
+            const botaoFinalizar = document.getElementById('btn-finalizar');
+            if (totalGeral === 0) {
+                botaoFinalizar.classList.add('btn-secondary'); // Adiciona a classe cinza
+                botaoFinalizar.classList.remove('btn-primary'); // Remove a classe padrão
+                botaoFinalizar.disabled = true; // Desabilita o botão
+            } else {
+                botaoFinalizar.classList.remove('btn-secondary'); // Remove a classe cinza
+                botaoFinalizar.classList.add('btn-primary'); // Adiciona a classe padrão
+                botaoFinalizar.disabled = false; // Habilita o botão
+            }
+        }
+
+        // Cupom hardcoded pra testar ;)
+        function aplicarCupom() {
+            const cupomInput = document.getElementById('cupom-input').value;
+            if (cupomInput === 'SCATIL10') { // Exemplo de cupom
+                desconto = 10; // Aplica 10% de desconto
+                alert('Cupom aplicado com sucesso!');
+            } else {
+                desconto = 0;
+                alert('Cupom inválido.');
+            }
+            atualizarTotalGeral(); // Atualiza o total após aplicar o cupom
+        }
+
+        function adicionarCartao() {
+            const numeroCartao = document.getElementById('numero-cartao').value;
+            if (numeroCartao) {
+                cartoes.push(numeroCartao);
+                atualizarDropdownCartoes();
+                document.getElementById('numero-cartao').value = ''; // Limpa o campo após adicionar
+            } else {
+                alert('Digite um número de cartão válido.');
+            }
+        }
+
+        function adicionarCartaoDropdown() {
+            const dropdownContainer = document.getElementById('cartao-dropdown-container');
+            const novoDropdown = document.createElement('div');
+            novoDropdown.classList.add('mb-3');
+
+            const select = document.createElement('select');
+            select.classList.add('form-control');
+            select.innerHTML = `<option value="" disabled selected>Selecione um cartão</option>
+                <option value="cartao1">Cartão azul</option>
+                <option value="cartao2">Cartão marrom</option>
+                <option value="cartao3">Cartão roxo</option>`;
+
+            novoDropdown.appendChild(select);
+            dropdownContainer.appendChild(novoDropdown);
+        }
+
+        // Chama atualizarTotalGeral ao carregar a página
+        document.addEventListener('DOMContentLoaded', () => {
+            atualizarTotalGeral();
+        });
+    </script>
+
+</head>
+<body>
+<div class="container mt-5">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.html">Início</a></li>
+            <li class="breadcrumb-item"><a href="shop.html">Loja</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Carrinho</li>
+        </ol>
+    </nav>
+
+    <h1>Carrinho</h1>
+    <p><b>Cupom de desconto:</b></p>
+    <div class="mb-3">
+        <input type="text" id="cupom-input" class="form-control" placeholder="Digite seu cupom de desconto">
+        <button class="btn btn-primary mt-2" onclick="aplicarCupom()">Aplicar Cupom</button>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">Produto</th>
+            <th scope="col">Preço</th>
+            <th scope="col">Quantidade</th>
+            <th scope="col">Total</th>
+            <!-- <th scope="col">Ação</th> -->
+        </tr>
+        </thead>
+        <tbody>
+
+        <!-- Inserir coisas do thymeleaf aqui -->
+        <tr>
+            <td>Asuka - Niitengo (Toy's Works)</td>
+            <td class="preco">R$ 159,99</td>
+            <td>
+                <input type="number" class="form-control quantidade" value="1" min="1" onchange="atualizarQuantidade(this)">
+            </td>
+            <td class="total">R$ 159,99</td>
+            <td><button class="btn btn-danger" onclick="removerLinha(this)">Remover</button></td>
+        </tr>
+        <tr>
+            <td>Paimon - 1/7 (Apex Innovation)</td>
+            <td class="preco">R$ 549,68</td>
+            <td>
+                <input type="number" class="form-control quantidade" value="1" min="1" onchange="atualizarQuantidade(this)">
+            </td>
+            <td class="total">R$ 549,68</td>
+            <td><button class="btn btn-danger" onclick="removerLinha(this)">Remover</button></td>
+        </tr>
+        <tr>
+            <td colspan="3" class="text-right font-weight-bold">Total da Compra</td>
+            <td class="total">R$ </td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Seção de Cartões de Crédito -->
+    <p><b>Selecione um ou mais Cartões de Crédito:</b></p>
+    <div id="cartao-dropdown-container" class="mb-3">
+        <select id="cartao-dropdown" class="form-control">
+            <option value="" disabled selected>Selecione um cartão</option>
+            <option value="cartao1">Cartão azul</option>
+            <option value="cartao2">Cartão marrom</option>
+            <option value="cartao3">Cartão roxo</option>
+        </select>
+    </div>
+
+
+    <div class="mb-3">
+        <button class="btn btn-secondary" onclick="adicionarCartaoDropdown()">Adicionar mais um cartão</button>
+        <a href="createCreditCard.html" class="btn btn-success">Adicionar um novo cartão de crédito</a>
+    </div>
+
+    <!-- Seção de Endereço -->
+    <p><b>Selecione um Endereço:</b></p>
+    <div class="mb-3">
+        <select id="address-dropdown" class="form-control">
+            <option value="" disabled selected>Selecione um endereço</option>
+            <option>Casa em Poá</option>
+            <option>Casa em Mogi</option>
+            <option>Casa em Suzano</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <a href="createAddress.html" class="btn btn-success">Adicionar um novo endereço</a>
+    </div>
+
+    <!-- Botões de finalizar compra e continuar comprando -->
+    <div class="text-center">
+        <a href="shop.html" class="btn btn-secondary mt-3">Continuar Comprando</a>
+        <button id="btn-finalizar" class="btn btn-primary mt-3">Finalizar Compra</button>
+
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
