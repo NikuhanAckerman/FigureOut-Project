@@ -34,14 +34,20 @@ public class Product {
     @Column(name = "pro_profundidade")
     private float depth;
 
+    @Column(name = "pro_valor_compra")
+    private double purchaseAmount;
+
     @ManyToMany
     @JoinTable(
             name = "ProdutosCategorias",
             joinColumns = @JoinColumn(name = "pro_id"),
             inverseJoinColumns = @JoinColumn(name = "cat_id")
+
     )
     private List<Category> categories;
 
-
+    @ManyToOne
+    @JoinColumn(name = "pro_gdp_id")
+    private PricingGroup pricingGroup;
 
 }
