@@ -16,6 +16,8 @@ import java.time.LocalDate;
 @Getter @Setter
 @PasswordsMatch
 public class ClientBasicDataDTO {
+    @NotNull
+    private long clientId;
 
     @NotBlank(message = "O nome não pode estar vazio.")
     @Pattern(message = "O nome possui caracteres não permitidos.", regexp = "^[A-Za-zÀ-ÖØ-Ýà-öø-ÿ\\s]*$")

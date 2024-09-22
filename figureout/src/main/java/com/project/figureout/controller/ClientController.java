@@ -140,24 +140,25 @@ public class ClientController {
 
         List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
 
+        creditCardDTO.setClientId(id); // necessary to pre-set this in the form via hidden field
+        //System.out.println("GET METHOD: " + creditCardDTO.getClientId());
+
         model.addAttribute("creditCardDTO", creditCardDTO);
         model.addAttribute("clientId", id);
         model.addAttribute("creditCardBrandList", creditCardBrandList);
-        //System.out.println("GET Method Id output: " + creditCardDTO.getClientId());
 
         return "createCreditCard";
     }
 
     @PostMapping("createCreditCard/{id}")
     public String createClientCreditCardPost(@PathVariable long id, @Valid @ModelAttribute CreditCardDTO creditCardDTO, BindingResult result, Model model) {
-        @Valid
         Client client = clientService.getClientById(id);
 
-        System.out.println("POST Method Id output: " + id);
+
 
         if(result.hasErrors()) {
             List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
-
+            //System.out.println("POST Method Id output: " + id);
             model.addAttribute("clientId", id);
             model.addAttribute("creditCardBrandList", creditCardBrandList);
 
@@ -225,6 +226,9 @@ public class ClientController {
     @PostMapping("/createClient")
     public String addClientPost(@Valid @ModelAttribute("clientDTO") ClientDTO clientDTO, BindingResult result, Model model) {
 
+
+        Client client = new Client();
+
         if(result.hasErrors()) {
             List<Gender> genderList = clientService.getAllGenders();
             List<State> stateList = stateAndCountryService.getAllStates();
@@ -232,18 +236,12 @@ public class ClientController {
             model.addAttribute("genderList", genderList);
             model.addAttribute("stateList", stateList);
             model.addAttribute("countryList", countryList);
+            model.addAttribute("clientId", client.getId());
 
             return "createClient";
         }
 
-        Client client = new Client();
-
         clientService.registerClient(client, clientDTO);
-
-        // Validação da senha
-//        if (!client.isValidPassword(clientDTO.getPassword())) {
-//            return "Senha inválida. A senha deve ter pelo menos 8 caracteres, incluir letras maiúsculas, minúsculas e caracteres especiais.";
-//        }
 
         return "redirect:/index";
     }

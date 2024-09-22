@@ -1,5 +1,6 @@
 package com.project.figureout.validation;
 
+import com.project.figureout.dto.ClientBasicDataDTO;
 import com.project.figureout.model.Client;
 import com.project.figureout.service.ClientService;
 import jakarta.validation.ConstraintValidator;
@@ -21,15 +22,19 @@ public class CpfCantBeUsedByMultipleAccountsValidator implements ConstraintValid
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext constraintValidatorContext) {
 
-        if(obj instanceof Client) {
-            Client client = (Client) obj;
+        if(obj instanceof ClientBasicDataDTO) {
+            ClientBasicDataDTO clientBasicDataDTO = (ClientBasicDataDTO) obj;
+            long id = clientBasicDataDTO.getClientId();
+            Client client = clientService.getClientById(id);
             List<Client> allClients = clientService.getAllClients();
 
-            String cpfFieldTreated = clientService.treatMaskedCpf(client.getCpf());
+            String treatedClientBasicDataDTOCpf = clientService.treatMaskedCpf(clientBasicDataDTO.getCpf());
 
             for(Client clientObjectInsideList: allClients) {
 
-                if(clientObjectInsideList.getCpf().equals(cpfFieldTreated)) {
+                String treatedClientCpf = clientService.treatMaskedCpf(clientObjectInsideList.getCpf());
+
+                if(treatedClientCpf.equals(treatedClientBasicDataDTOCpf)) {
                     if(!clientObjectInsideList.equals(client)) {
                         return false;
                     }
@@ -41,5 +46,6 @@ public class CpfCantBeUsedByMultipleAccountsValidator implements ConstraintValid
         }
 
         return true;
+
     }
 }
