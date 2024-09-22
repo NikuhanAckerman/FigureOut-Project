@@ -18,4 +18,6 @@ public class Cart {
     @Column(name = "car_preco_total")
     private double totalPrice;
 
+
+
 }

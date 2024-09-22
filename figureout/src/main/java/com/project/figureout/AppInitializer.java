@@ -1,10 +1,7 @@
 package com.project.figureout;
 
 import com.project.figureout.model.*;
-import com.project.figureout.repository.CountryRepository;
-import com.project.figureout.repository.CreditCardBrandRepository;
-import com.project.figureout.repository.GenderRepository;
-import com.project.figureout.repository.StateRepository;
+import com.project.figureout.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -36,6 +33,9 @@ public class AppInitializer implements CommandLineRunner {
 
     @Autowired
     private CountryRepository countryRepository;
+
+    @Autowired
+    private PricingGroupRepository pricingGroupRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -124,6 +124,23 @@ public class AppInitializer implements CommandLineRunner {
             countryRepository.saveAll(countryList);
 
             System.out.println("Tabela de países populada.");
+        }
+
+        if(pricingGroupRepository.count() == 0) {
+            System.out.println("Populando tabela de grupos de precificação...");
+
+            ArrayList<PricingGroup> pricingGroupList = new ArrayList<>();
+
+            Collections.addAll(pricingGroupList,
+                    new PricingGroup("Ouro", 20.0),
+                    new PricingGroup("Prata", 15.0),
+                    new PricingGroup("Ferro", 10.0),
+                    new PricingGroup("Bronze", 5.0)
+            );
+
+            pricingGroupRepository.saveAll(pricingGroupList);
+
+            System.out.println("Tabela de grupos de precificação populada.");
         }
 
     }
