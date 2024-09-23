@@ -1,9 +1,12 @@
 package com.project.figureout.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "Carrinhos")
+@Getter @Setter
 public class Cart {
 
     @Id
@@ -17,7 +20,5 @@ public class Cart {
 
     @Column(name = "car_preco_total")
     private double totalPrice;
-
-
 
 }

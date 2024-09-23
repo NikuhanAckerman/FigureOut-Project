@@ -1,11 +1,14 @@
 package com.project.figureout.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "CarrinhosProdutos")
+@Getter @Setter
 public class CartsProducts {
 
     @EmbeddedId

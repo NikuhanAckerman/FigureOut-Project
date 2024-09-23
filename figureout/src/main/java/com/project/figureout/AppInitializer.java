@@ -182,6 +182,10 @@ public class AppInitializer implements CommandLineRunner {
                     new Category("ABS"),
                     new Category("Vinil")
             );
+
+            categoryRepository.saveAll(categoryList);
+
+            System.out.println("Tabela de categorias populada.");
         }
 
     }

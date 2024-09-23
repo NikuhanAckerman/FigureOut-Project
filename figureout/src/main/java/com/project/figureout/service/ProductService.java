@@ -49,6 +49,14 @@ public class ProductService {
         productRepository.save(product);
     }
 
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAll();
+    }
+
+    public List<PricingGroup> getAllPricingGroups() {
+        return pricingGroupRepository.findAll();
+    }
+
     public void productDataSetter(Product product, ProductDTO productDTO) {
         System.out.println("calling product data setter");
         product.setName(productDTO.getName());
@@ -75,15 +83,16 @@ public class ProductService {
         String fileName = multipartFile.getOriginalFilename();
 
         try {
-            String uploadDirectory = "/Product_Images";
+            String uploadDirectory = "src/main/resources/static/Images/Product_Images";
             Path uploadPath = Paths.get(uploadDirectory);
 
             if(!Files.exists(uploadPath)) {
-                Files.createDirectory(uploadPath);
+                Files.createDirectories(uploadPath);
             }
 
             try(InputStream inputStream = multipartFile.getInputStream()) {
-                Files.copy(inputStream, Paths.get(uploadDirectory + fileName), StandardCopyOption.REPLACE_EXISTING);
+                Path filePath = uploadPath.resolve(fileName);
+                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

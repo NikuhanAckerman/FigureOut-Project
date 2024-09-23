@@ -22,7 +22,7 @@ public class ProductDTO {
 
     private float weight;
 
-    private float depth;
+    private float length;
 
     private double purchaseAmount;
 
