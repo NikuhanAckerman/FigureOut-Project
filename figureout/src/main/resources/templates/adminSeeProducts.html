@@ -54,7 +54,7 @@
       <tr th:each="product : ${products}">
         <td th:text = "${product.id}"></td>
         <td>
-          <img th:src="@{/Product_Images/{image}(image=${product.imageFilepath})}" style="width: 16px; height: auto;">
+          <img th:src="@{/Images/Product_Images/{file}(file=${product.imageFilepath})}" style="width: 200px;">
         </td>
         <td th:text = "${product.name}"></td>
         <td th:text = "${product.description}"></td>
