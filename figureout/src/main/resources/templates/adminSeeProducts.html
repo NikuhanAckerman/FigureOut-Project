@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CRUD de cliente</title>
+  <link rel="stylesheet" href="/CSS/styles.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="icon" href="/Images/favicon.ico" type="image/x-icon">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/6f5xX5L0d7/1XshTLF5j8l2/zg7L2Dd6fR5Jp4C" crossorigin="anonymous"></script>
+</head>
+<body>
+<nav class="navbar navbar-custom fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a id="upper-navbar-text" class="navbar-brand">PRODUTOS</a>
+    </div>
+
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="btn navbar-top-button" href="createClient">Adicionar produto</a>
+        <a class="btn navbar-top-button" href="seeSales">Vendas</a>
+        <a class="btn btn-danger" href="/index">CRUD de clientes</a>
+      </li>
+    </ul>
+
+  </div>
+</nav>
+
+<div class="container mt-5">
+  <div style="max-width: 1200px; margin: 0 auto">
+    <table class="table table-striped table-hover">
+      <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Altura</th>
+        <th>Largura</th>
+        <th>Peso</th>
+        <th>Profundidade</th>
+        <th>Valor de compra</th>
+        <th>Categorias</th>
+        <th>Grupo de precificação</th>
+        <th>Atualizar</th>
+        <th>Deletar</th>
+
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="product : ${products}">
+        <td th:text = "${product.id}"></td>
+        <td th:text = "${product.name}"></td>
+        <td th:text = "${product.description}"></td>
+        <td th:text = "${product.height}"></td>
+        <td th:text = "${product.width}"></td>
+        <td th:text = "${product.depth}"></td>
+        <td th:text = "${product.purchaseAmount}"></td>
+        <td>
+          <button type="button" class="btn btn-secondary" th:data-bs-product-id = "${product.id}" data-bs-toggle="modal" data-bs-target="#seeCategoriesModal" >Ver categorias</button>
+        </td>
+        <td th:text = "${product.pricingGroup.name}"></td>
+
+        <td>
+          <a class="btn btn-primary" th:href="@{/updateClient/{id}(id=${client.id})}">Atualizar</a>
+        </td>
+
+        <td>
+          <form th:action="@{/deleteClient/{id}(id=${client.id})}" method="POST">
+            <input type="hidden" name="_method" value="DELETE"/>
+            <button type="submit" class="btn btn-danger btn-delete" onclick="return confirm('Tem certeza?')">Deletar</button>
+          </form>
+        </td>
+
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="seeCategoriesModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Ver categorias</h3>
+        <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <h1 id="productIdCategory"></h1>
+          <a class="btn btn-success" href="#" id="addCategoryButton">Adicionar categoria</a>
+          <div class="card mt-3">
+            <div class="card-body">
+              <h2 class="card-title">Categorias</h2>
+              <div id="categoryListDiv">
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+
+  const seeCategoriesModal = document.getElementById("seeCategoriesModal");
+  const addCategoryButton = document.getElementById("addCategoryButton");
+
+  seeCategoriesModal.addEventListener('show.bs.modal', function (event) {
+    console.log("mostrou modal de categoria")
+    const button = event.relatedTarget
+
+    const productId = button.getAttribute('data-bs-product-id');
+
+    const elementWithId = document.getElementById('productIdCategory');
+    elementWithId.textContent = 'ID do cliente: '
+    elementWithId.textContent = elementWithId.textContent + " " + productId;
+
+    addCategoryButton.setAttribute('href', `/createAddress/${productId}`);
+
+    const categoryListDiv = document.getElementById('categoryListDiv');
+    categoryListDiv.innerHTML = '';
+
+    fetch(`index/${productId}/categories`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error("Erro ao retornar categorias.");
+              }
+              return response.json();
+            })
+            .then(categories => {
+
+              let categoryList = '';
+
+              categories.forEach(category => {
+                const categoryItem = `<p>${category.name}</p>`;
+
+                categoryList += categoryItem;
+
+              });
+
+              categoryListDiv.insertAdjacentHTML("beforeend", categoryList);
+
+
+            })
+
+  })
+
+</script>
+
+<footer id="footer">
+  <img src="/Images/figureoutlogo1.svg">
+</footer>
+
+</body>
+</html>

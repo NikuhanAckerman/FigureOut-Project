@@ -31,8 +31,8 @@ public class Product {
     @Column(name = "pro_peso")
     private float weight;
 
-    @Column(name = "pro_profundidade")
-    private float depth;
+    @Column(name = "pro_comprimento")
+    private float length;
 
     @Column(name = "pro_valor_compra")
     private double purchaseAmount;
@@ -49,5 +49,8 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "pro_gdp_id")
     private PricingGroup pricingGroup;
+
+    @Column(name = "pro_caminho_imagem")
+    private String imageFilepath;
 
 }
