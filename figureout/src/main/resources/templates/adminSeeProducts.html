@@ -54,7 +54,7 @@
       <tr th:each="product : ${products}">
         <td th:text = "${product.id}"></td>
         <td>
-          <img th:src="@{/Images/Product_Images/{file}(file=${product.imageFilepath})}" style="width: 200px;">
+          <img th:src="@{/products/productPicture/{id}(id=${product.id})}" style="width: 200px;"/>
         </td>
         <td th:text = "${product.name}"></td>
         <td th:text = "${product.description}"></td>
@@ -67,17 +67,16 @@
           <button type="button" class="btn btn-secondary" th:data-bs-product-id = "${product.id}" data-bs-toggle="modal" data-bs-target="#seeCategoriesModal" >Ver categorias</button>
         </td>
         <td th:text = "${product.pricingGroup.name}"></td>
-
-        <!--<td>
-          <a class="btn btn-primary" th:href="@{/updateClient/{id}(id=${client.id})}">Atualizar</a>
-        </td>
-
         <td>
-          <form th:action="@{/deleteClient/{id}(id=${client.id})}" method="POST">
+          <form th:action="@{/products/deleteProduct/{id}(id=${product.id})}" method="POST">
             <input type="hidden" name="_method" value="DELETE"/>
             <button type="submit" class="btn btn-danger btn-delete" onclick="return confirm('Tem certeza?')">Deletar</button>
           </form>
-        </td>-->
+        </td>
+
+        <td>
+          <a class="btn btn-primary" th:href="@{/products/updateProduct/{id}(id=${product.id})}">Atualizar</a>
+        </td>
 
       </tr>
       </tbody>
@@ -95,7 +94,6 @@
       <div class="modal-body">
         <div>
           <h1 id="productIdCategory"></h1>
-          <a class="btn btn-success" href="#" id="addCategoryButton">Adicionar categoria</a>
           <div class="card mt-3">
             <div class="card-body">
               <h2 class="card-title">Categorias</h2>
@@ -116,7 +114,6 @@
 <script>
 
   const seeCategoriesModal = document.getElementById("seeCategoriesModal");
-  const addCategoryButton = document.getElementById("addCategoryButton");
 
   seeCategoriesModal.addEventListener('show.bs.modal', function (event) {
     console.log("mostrou modal de categoria")
@@ -125,15 +122,13 @@
     const productId = button.getAttribute('data-bs-product-id');
 
     const elementWithId = document.getElementById('productIdCategory');
-    elementWithId.textContent = 'ID do cliente: '
+    elementWithId.textContent = 'ID do produto: '
     elementWithId.textContent = elementWithId.textContent + " " + productId;
-
-    addCategoryButton.setAttribute('href', `/createAddress/${productId}`);
 
     const categoryListDiv = document.getElementById('categoryListDiv');
     categoryListDiv.innerHTML = '';
 
-    fetch(`index/${productId}/categories`)
+    fetch(`/products/getProductCategories/${productId}`)
             .then(response => {
               if (!response.ok) {
                 throw new Error("Erro ao retornar categorias.");
@@ -145,14 +140,11 @@
               let categoryList = '';
 
               categories.forEach(category => {
-                const categoryItem = `<p>${category.name}</p>`;
-
+                const categoryItem = `<p><b>${category.name}</b></p>`;
                 categoryList += categoryItem;
-
               });
 
               categoryListDiv.insertAdjacentHTML("beforeend", categoryList);
-
 
             })
 

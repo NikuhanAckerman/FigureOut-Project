@@ -16,10 +16,10 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
-        <a class="nav-link" href="index.html">Início</a>
+        <a class="nav-link" th:href="@{/index}">Início</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="shop.html">Produtos</a>
+        <a class="nav-link" th:href="@{/products/shop}">Produtos</a>
       </li>
     </ul>
   </div>
@@ -28,22 +28,30 @@
 <div class="container mt-5">
   <div class="row">
     <div class="col-md-6">
-      <img src="../static/Images/Product%20Images/asukaTeste.jpg" class="img-fluid" alt="Nome do Produto">
+      <img th:src="@{/products/productPicture/{id}(id=${product.id})}" class="img-fluid" alt="Nome do Produto">
     </div>
     <div class="col-md-6">
-      <h2>Asuka - Niitengo (Toy's Works)</h2>
-      <p id="price" class="lead">R$ 159,99</p>
+      <h2 th:text="${product.name}"></h2>
+      <p id="price" class="lead" th:text=" 'R$' + ${product.purchaseAmount}"></p>
+      <!-- href="cart.html" -->
+      <a  class="btn btn-primary btn-lg" >Adicionar ao Carrinho</a>
 
-      <a href="cart.html" class="btn btn-primary btn-lg" >Adicionar ao Carrinho</a>
-
-      <p><br>Descrição super detalhada do produto.</p>
+      <h5 class="mt-3">Descrição:</h5>
+      <p th:text="${product.description}"><br></p>
 
       <h5>Especificações:</h5>
       <ul>
-        <li id="size">Tamanho: 0,65 cm</li>
-        <li id="material">Material: ABS, PVC</li>
-        <li id="company">Empresa: Toy's Work</li>
+        <li th:text=" 'Altura: ' + ${product.height} + 'cm' " ></li>
+        <li th:text=" 'Largura: ' + ${product.width} + 'cm' " ></li>
+        <li th:text=" 'Comprimento: ' + ${product.length} + 'cm' " ></li>
+        <li th:text=" 'Peso: ' + ${product.weight} + 'cm' " ></li>
       </ul>
+
+      <h5>Categorias:</h5>
+      <ul th:each="productCategory : ${product.categories}">
+        <li th:text="${productCategory.name}" ></li>
+      </ul>
+
     </div>
   </div>
 </div>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,11 +16,11 @@
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="index.html">Início</a>
+        <a class="nav-link" href="/index">Administrador</a>
       </li>
-      <li class="nav-item">
+      <!--<li class="nav-item">
         <a class="nav-link" href="#">Produtos</a>
-      </li>
+      </li>-->
     </ul>
   </div>
 </nav>
@@ -28,7 +28,7 @@
 <div class="container mt-5">
   <h1 class="text-center">Catálogo de Produtos</h1>
 
-  <!-- Filtro de categorias -->
+  <!-- Filtro de categorias
   <div class="mb-4">
     <label for="categorySelect" class="form-label">Categorias:</label>
     <select class="form-select" id="categorySelect">
@@ -49,19 +49,22 @@
       <option value="5">1/16</option>
     </select>
 
-  </div>
+  </div>-->
 
   <div class="row">
-    <div class="col-md-4 mb-4">
+
+    <div class="col-md-4 mb-4" th:each="product : ${products}">
       <div class="card">
-        <img src="../static/Images/Product%20Images/asukaTeste.jpg" class="card-img-top" alt="Produto 1">
+        <img th:src="@{/products/productPicture/{id}(id=${product.id})}" class="card-img-top">   <!--alt="Produto 1"-->
         <div class="card-body">
-          <h5 class="card-title">Asuka - Niitengo (Toy's Works)</h5>
-          <p class="card-text"><strong>R$ 159,99</strong></p>
-          <a href="product.html" class="btn btn-primary">Visualizar produto</a>
+          <h5 class="card-title" th:text="${product.name}"></h5>
+          <p class="card-text" th:text="'R$' +  ${product.purchaseAmount}"><strong></strong></p>
+          <a th:href="@{/products/specificProduct/{id}(id=${product.id})}" class="btn btn-primary">Visualizar produto</a>
         </div>
       </div>
     </div>
+
+    <!--
     <div class="col-md-4 mb-4">
       <div class="card">
         <img src="../static/Images/Product%20Images/paimonTeste.jpg" class="card-img-top" alt="Produto 2">
@@ -72,6 +75,7 @@
         </div>
       </div>
     </div>
+
     <div class="col-md-4 mb-4">
       <div class="card">
         <img src="../static/Images/Product%20Images/hatsuneMikuTeste.jpg" class="card-img-top" alt="Produto 3">
@@ -81,8 +85,10 @@
           <a href="product.html" class="btn btn-primary">Visualizar produto</a>
         </div>
       </div>
-    </div>
+    </div>-->
+
   </div>
+
 </div>
 
 

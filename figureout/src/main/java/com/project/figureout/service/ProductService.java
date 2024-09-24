@@ -20,6 +20,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -74,32 +75,50 @@ public class ProductService {
 
         product.setPricingGroup(pricingGroupRepository.findById(productDTO.getPricingGroup()).orElseThrow(() -> new NoSuchElementException("Grupo de precificação não encontrado.")));
 
-        product.setImageFilepath(saveProductPicture(productDTO));
+        product.setPicture(saveProductPicture(productDTO));
 
     }
 
-    public String saveProductPicture(ProductDTO productDTO) {
-        MultipartFile multipartFile = productDTO.getProductImage();
-        String fileName = multipartFile.getOriginalFilename();
+    public byte[] saveProductPicture(ProductDTO productDTO) {
 
         try {
-            String uploadDirectory = "src/main/resources/static/Images/Product_Images";
-            Path uploadPath = Paths.get(uploadDirectory);
-
-            if(!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-
-            try(InputStream inputStream = multipartFile.getInputStream()) {
-                Path filePath = uploadPath.resolve(fileName);
-                Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+            MultipartFile multipartFile = productDTO.getProductImage();
+            if (!multipartFile.isEmpty()) {
+                byte[] imageData = multipartFile.getBytes();
+                return imageData;
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            return null;  // Handle the error appropriately
         }
 
-        return fileName;
+        return null;
+    }
+
+    public void populateProductDTO(ProductDTO productDTO, Product product) {
+
+        productDTO.setName(product.getName());
+        productDTO.setDescription(product.getDescription());
+        productDTO.setHeight(product.getHeight());
+        productDTO.setWidth(product.getWidth());
+        productDTO.setWeight(product.getWeight());
+        productDTO.setLength(product.getLength());
+        productDTO.setPurchaseAmount(product.getPurchaseAmount());
+
+        List<Long> productCategoryIdList = product.getCategories().stream()
+                .map(Category::getId)  // Map each Category to its id
+                .collect(Collectors.toList());  // Collect the IDs into a list
+
+        productDTO.setCategoriesIds(productCategoryIdList);
+        productDTO.setPricingGroup(product.getPricingGroup().getId());
 
     }
+
+    public void updateProduct(Product product, ProductDTO productDTO) {
+        productDataSetter(product, productDTO);
+
+        saveProduct(product);
+    }
+
 
 }

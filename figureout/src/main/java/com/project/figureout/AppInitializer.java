@@ -152,35 +152,13 @@ public class AppInitializer implements CommandLineRunner {
             ArrayList<Category> categoryList = new ArrayList<>();
 
             Collections.addAll(categoryList,
-                    new Category("Genshin Impact"),
-                    new Category("Honkai: Star Rail"),
-                    new Category("Zenless Zone Zero"),
-                    new Category("Wuthering Waves"),
-                    new Category("Senran Kagura"),
-                    new Category("OMORI"),
-                    new Category("Celeste"),
-                    new Category("Undertale"),
-                    new Category("Vocaloid"),
-                    new Category("Marvel"),
-                    new Category("DC"),
-                    new Category("Hora de Aventura"),
-                    new Category("Apenas Um Show"),
-
-                    new Category("Anime"),
-                    new Category("Jogo"),
-                    new Category("Desenho animado"),
-                    new Category("HQ"),
-
-                    new Category("Masculino"),
-                    new Category("Feminino"),
-                    new Category("Outro"),
-
-                    new Category("Furry"),
-
-                    new Category("PVC"),
-                    new Category("Polystone"),
-                    new Category("ABS"),
-                    new Category("Vinil")
+                    new Category("Chaveiro"),
+                    new Category("Pré-pintado"),
+                    new Category("Model Kit"),
+                    new Category("Nendoroid"),
+                    new Category("Pelúcia"),
+                    new Category("Amiibo"),
+                    new Category("Figura de ação")
             );
 
             categoryRepository.saveAll(categoryList);

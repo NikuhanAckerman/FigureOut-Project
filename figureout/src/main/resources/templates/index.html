@@ -21,7 +21,8 @@
 				<ul class="navbar-nav">
 					<li class="nav-item">
 						<a class="btn navbar-top-button" href="createClient">Adicionar cliente</a>
-						<a class="btn navbar-top-button" href="products/seeProducts">Produtos</a>
+						<a class="btn navbar-top-button" href="products/seeProducts">Gerenciar Produtos</a>
+						<a class="btn navbar-top-button" th:href="@{products/shop}">Ver Loja</a>
 					</li>
 				</ul>
 
@@ -72,8 +73,6 @@
 
 							<td>
 								<a class="btn btn-primary" th:href="@{/updateClient/{id}(id=${client.id})}">Atualizar</a>
-
-
 							</td>
 
 							<td>
