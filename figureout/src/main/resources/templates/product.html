@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Página do Produto</title>
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="icon" href="/Images/favicon.ico" type="image/x-icon">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/6f5xX5L0d7/1XshTLF5j8l2/zg7L2Dd6fR5Jp4C" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -34,7 +37,27 @@
       <h2 th:text="${product.name}"></h2>
       <p id="price" class="lead" th:text=" 'R$' + ${product.purchaseAmount}"></p>
       <!-- href="cart.html" -->
-      <a  class="btn btn-primary btn-lg" >Adicionar ao Carrinho</a>
+
+      <button class="btn btn-primary btn-lg" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+        Adicionar ao Carrinho
+      </button>
+
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+
+        <div class="offcanvas-header">
+          <h5 id="offcanvasRightLabel">Offcanvas right</h5>
+          <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+
+        <div class="offcanvas-body">
+
+        </div>
+
+      </div>
+
+
+
+
 
       <h5 class="mt-3">Descrição:</h5>
       <p th:text="${product.description}"><br></p>
@@ -51,6 +74,9 @@
       <ul th:each="productCategory : ${product.categories}">
         <li th:text="${productCategory.name}" ></li>
       </ul>
+
+      <a class="btn btn-danger btn-lg" th:href="@{/products/shop}">Voltar à loja</a>
+
 
     </div>
   </div>
