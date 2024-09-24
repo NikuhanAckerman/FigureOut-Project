@@ -3,6 +3,7 @@ package com.project.figureout.controller;
 import com.project.figureout.dto.ClientDTO;
 import com.project.figureout.dto.ProductDTO;
 import com.project.figureout.model.*;
+import com.project.figureout.service.ClientService;
 import com.project.figureout.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -19,6 +20,9 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
+
+    @Autowired
+    ClientService clientService;
 
     @GetMapping("/seeProducts")
     public String showProductsGet(Model model) {
@@ -132,5 +136,16 @@ public class ProductController {
     public List<Category> getProductCategories(@PathVariable Long id) {
         return productService.getProductById(id).getCategories();
     }
+
+/*
+    @PostMapping("/products/addProductToCart/{productId}/{clientId}")
+    public String addProductToCart(@PathVariable Long productId, @PathVariable Long clientId, Model model) {
+        Product product = productService.getProductById(productId);
+        Client client = clientService.getClientById(clientId);
+
+        Cart cart = new Cart();
+
+
+    }*/
 
 }

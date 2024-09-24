@@ -38,14 +38,20 @@
       <p id="price" class="lead" th:text=" 'R$' + ${product.purchaseAmount}"></p>
       <!-- href="cart.html" -->
 
-      <button class="btn btn-primary btn-lg" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+      <form th:action="@{/products/addProductToCart/{productId}/{clientId}(clientId=${clientId})(productId=${product.id})}" method="POST">
+        <input type="hidden" name="_method" value="DELETE"/>
+
+
+      <button class="btn btn-primary btn-lg" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
         Adicionar ao Carrinho
       </button>
 
-      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+      </form>
+
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
 
         <div class="offcanvas-header">
-          <h5 id="offcanvasRightLabel">Offcanvas right</h5>
+          <h5 id="offcanvasCartLabel">Carrinho</h5>
           <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
 
