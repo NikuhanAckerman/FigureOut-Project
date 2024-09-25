@@ -3,9 +3,14 @@ package com.project.figureout.controller;
 import com.project.figureout.dto.ClientDTO;
 import com.project.figureout.dto.ProductDTO;
 import com.project.figureout.model.*;
+import com.project.figureout.repository.CartRepository;
 import com.project.figureout.service.CartService;
 import com.project.figureout.service.ClientService;
 import com.project.figureout.service.ProductService;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -27,6 +33,9 @@ public class ProductController {
 
     @Autowired
     CartService cartService;
+
+    @Autowired
+    private CartRepository cartRepository;
 
     //long clientId = 1;
     //Client client = clientService.getClientById(clientId);
@@ -96,6 +105,7 @@ public class ProductController {
     public String showShop(Model model) {
         List<Product> products =  productService.getAllProducts();
         model.addAttribute("products", products);
+        model.addAttribute("cart", cartService.getCartByClientId(1));
 
         return "shop";
     }
@@ -107,6 +117,8 @@ public class ProductController {
         //List<Category> categoryList = productService.getAllCategories();
         //List<PricingGroup> pricingGroupList = productService.getAllPricingGroups();
         model.addAttribute("product", product);
+        model.addAttribute("cart", cartService.getCartByClientId(1));
+        model.addAttribute("clientId", 1);
         //model.addAttribute("cart", cartService.getCartByClientId(clientId));
 
         return "product";
@@ -145,24 +157,40 @@ public class ProductController {
         return productService.getProductById(id).getCategories();
     }
 
-    @GetMapping("/cart/{id}")
-    public String showCart(@PathVariable Long id, Model model) {
+    @GetMapping("/getCartByClientId/{id}")
+    public Cart getSpecificCart(@PathVariable Long id) {
+        return cartService.getCartByClientId(id);
+    }
+
+    @GetMapping("/cart/{clientId}")
+    @ResponseBody
+    public Cart showCart(@PathVariable Long id, Model model) {
         Cart cart = cartService.getCartByClientId(id);
 
         model.addAttribute("cart", cart);
 
-        return "cart";
+        return cart;
     }
 
-    /*
+
     @PostMapping("/products/addProductToCart/{productId}/{cartId}")
     public String addProductToCart(@PathVariable Long productId, @PathVariable Long clientId, Model model) {
         Product product = productService.getProductById(productId);
         Client client = clientService.getClientById(clientId);
 
-        Cart cart = new Cart();
+        Cart cart = cartService.getCartByClientId(client.getId());
 
+        CartsProducts cartProduct = new CartsProducts();
+        cartProduct.setCart(cart);
+        cartProduct.setProduct(product);
+        cartProduct.setProductQuantity(1);
+        cartProduct.setProductPrice(product.getPurchaseAmount());
 
-    }*/
+        cart.getCartProducts().add(cartProduct);
+
+        cartRepository.save(cart);
+
+        return "redirect:/products/specificProduct/" + productId;
+    }
 
 }
