@@ -3,6 +3,7 @@ package com.project.figureout.controller;
 import com.project.figureout.dto.ClientDTO;
 import com.project.figureout.dto.ProductDTO;
 import com.project.figureout.model.*;
+import com.project.figureout.service.CartService;
 import com.project.figureout.service.ClientService;
 import com.project.figureout.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,12 @@ public class ProductController {
 
     @Autowired
     ClientService clientService;
+
+    @Autowired
+    CartService cartService;
+
+    //long clientId = 1;
+    //Client client = clientService.getClientById(clientId);
 
     @GetMapping("/seeProducts")
     public String showProductsGet(Model model) {
@@ -100,6 +107,7 @@ public class ProductController {
         //List<Category> categoryList = productService.getAllCategories();
         //List<PricingGroup> pricingGroupList = productService.getAllPricingGroups();
         model.addAttribute("product", product);
+        //model.addAttribute("cart", cartService.getCartByClientId(clientId));
 
         return "product";
     }
@@ -137,8 +145,17 @@ public class ProductController {
         return productService.getProductById(id).getCategories();
     }
 
-/*
-    @PostMapping("/products/addProductToCart/{productId}/{clientId}")
+    @GetMapping("/cart/{id}")
+    public String showCart(@PathVariable Long id, Model model) {
+        Cart cart = cartService.getCartByClientId(id);
+
+        model.addAttribute("cart", cart);
+
+        return "cart";
+    }
+
+    /*
+    @PostMapping("/products/addProductToCart/{productId}/{cartId}")
     public String addProductToCart(@PathVariable Long productId, @PathVariable Long clientId, Model model) {
         Product product = productService.getProductById(productId);
         Client client = clientService.getClientById(clientId);

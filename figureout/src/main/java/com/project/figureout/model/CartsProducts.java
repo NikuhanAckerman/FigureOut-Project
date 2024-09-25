@@ -12,17 +12,17 @@ import java.time.LocalDateTime;
 public class CartsProducts {
 
     @EmbeddedId
-    CartsProductsKey id;
+    private CartsProductsKey id;
 
     @ManyToOne
     @MapsId("cartId")
     @JoinColumn(name = "cpr_car_id")
-    Cart cart;
+    private Cart cart;
 
     @ManyToOne
     @MapsId("productId")
     @JoinColumn(name = "cpr_pro_id")
-    Product product;
+    private Product product;
 
     @Column(name = "cpr_quantidade_produto")
     private int productQuantity;

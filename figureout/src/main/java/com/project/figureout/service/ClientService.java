@@ -46,6 +46,7 @@ public class ClientService {
     public void registerClient(Client client, ClientDTO clientDTO) {
 
         clientBasicDataSetter(client, clientDTO.getClientBasicDataDTO());
+        client.getCart().setTotalPrice(0.0);
         saveClient(client);
 
         AddressDTO clientDTOAddress = clientDTO.getAddressDTO();
