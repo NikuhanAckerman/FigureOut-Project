@@ -40,6 +40,9 @@ public class AppInitializer implements CommandLineRunner {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private SupplierRepository supplierRepository;
+
     @Override
     public void run(String... args) throws Exception {
         if (genderRepository.count() == 0) {
@@ -81,33 +84,33 @@ public class AppInitializer implements CommandLineRunner {
             ArrayList<State> stateList = new ArrayList<>();
 
             Collections.addAll(stateList,
-                    new State("Acre"),
-                    new State("Alagoas"),
-                    new State("Amazonas"),
-                    new State("Amapá"),
-                    new State("Bahia"),
-                    new State("Ceará"),
-                    new State("Distrito Federal"),
-                    new State("Espírito Santo"),
-                    new State("Goiás"),
-                    new State("Maranhão"),
-                    new State("Minas Gerais"),
-                    new State("Mato Grosso do Sul"),
-                    new State("Mato Grosso"),
-                    new State("Pará"),
-                    new State("Paraíba"),
-                    new State("Pernambuco"),
-                    new State("Piauí"),
-                    new State("Paraná"),
-                    new State("Rio de Janeiro"),
-                    new State("Rio Grande do Norte"),
-                    new State("Rondônia"),
-                    new State("Roraima"),
-                    new State("Rio Grande do Sul"),
-                    new State("Santa Catarina"),
-                    new State("Sergipe"),
-                    new State("São Paulo"),
-                    new State("Tocantins")
+                    new State("Acre", 15.0),
+                    new State("Alagoas", 15.0),
+                    new State("Amazonas", 15.0),
+                    new State("Amapá", 15.0),
+                    new State("Bahia", 15.0),
+                    new State("Ceará", 15.0),
+                    new State("Distrito Federal", 15.0),
+                    new State("Espírito Santo", 15.0),
+                    new State("Goiás", 15.0),
+                    new State("Maranhão", 15.0),
+                    new State("Minas Gerais", 10.0),
+                    new State("Mato Grosso do Sul", 10.0),
+                    new State("Mato Grosso", 10.0),
+                    new State("Pará", 10.0),
+                    new State("Paraíba", 10.0),
+                    new State("Pernambuco", 10.0),
+                    new State("Piauí", 15.0),
+                    new State("Paraná", 10.0),
+                    new State("Rio de Janeiro", 5.0),
+                    new State("Rio Grande do Norte", 15.0),
+                    new State("Rondônia", 15.0),
+                    new State("Roraima", 15.0),
+                    new State("Rio Grande do Sul", 10.0),
+                    new State("Santa Catarina", 10.0),
+                    new State("Sergipe", 15.0),
+                    new State("São Paulo", 5.0),
+                    new State("Tocantins", 15.0)
             );
 
             stateRepository.saveAll(stateList);
@@ -158,12 +161,34 @@ public class AppInitializer implements CommandLineRunner {
                     new Category("Nendoroid"),
                     new Category("Pelúcia"),
                     new Category("Amiibo"),
-                    new Category("Figura de ação")
+                    new Category("Figura de ação"),
+                    new Category("1/4"),
+                    new Category("1/6"),
+                    new Category("1/7"),
+                    new Category("1/8"),
+                    new Category("1/16")
             );
 
             categoryRepository.saveAll(categoryList);
 
             System.out.println("Tabela de categorias populada.");
+        }
+
+        if(supplierRepository.count() == 0) {
+            System.out.println("Populando tabela de fornecedores...");
+
+            ArrayList<Supplier> supplierList = new ArrayList<>();
+
+            Collections.addAll(supplierList,
+                    new Supplier("Fornecedor A"),
+                    new Supplier("Fornecedor B"),
+                    new Supplier("Fornecedor C"),
+                    new Supplier("Fornecedor D")
+            );
+
+            supplierRepository.saveAll(supplierList);
+
+            System.out.println("Tabela de fornecedores populada.");
         }
 
     }

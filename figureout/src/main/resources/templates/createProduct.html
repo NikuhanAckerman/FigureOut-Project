@@ -44,6 +44,8 @@
                 <label><b>Preço de compra</b></label>
                 <input type="number" class="form-control" step="0.01" min="0" placeholder="Insira a largura do produto" th:field="*{purchaseAmount}" required>
 
+
+
                 <div class="form-group">
                     <label>Categorias</label>
 
@@ -67,6 +69,10 @@
                         ></option>
                     </select>
                 </div>
+
+                <p class="text-primary" style="display: inline;">O valor do preço de venda não pode ser menor do que o preço de compra + o grupo de precificação.</p>
+                <label><b>Preço de venda</b></label>
+                <input type="number" class="form-control" step="0.01" min="0" placeholder="Insira a largura do produto" th:field="*{price}" required>
 
                 <label><b>Foto do produto</b></label>
                 <input type="file" class="form-control" th:field="*{productImage}" required>

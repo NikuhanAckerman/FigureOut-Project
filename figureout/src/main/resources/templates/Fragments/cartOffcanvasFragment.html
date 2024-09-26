@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+</head>
+<body>
+
+    <div th:fragment="cartButtonFragment">
+        <button type="button" class="nav-link bi bi-cart" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart"></button>
+    </div>
+
+    <div th:fragment="cartOffcanvasFragment(clientId, cart)">
+
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
+            <div class="offcanvas-header">
+                <h5 id="offcanvasCartLabel">Carrinho</h5>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <a class="btn btn-primary mb-3">Fazer compra</a>
+                <div class="card mb-3" th:each="cartProduct : ${cart.cartProducts}">
+                    <img th:src="@{/products/productPicture/{id}(id=${cartProduct.product.id})}" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${cartProduct.product.name}"></h5>
+                        <p class="card-text" th:text="'R$' + ${cartProduct.product.purchaseAmount}"></p>
+                        <a th:href="@{/products/specificProduct/{id}(id=${cartProduct.product.id})}" class="btn btn-primary">Visualizar produto</a>
+
+                        <form th:action="@{/cart/removeProductFromCart/{productId}/{clientId}(productId=${cartProduct.product.id}, clientId=${clientId})}" method="POST">
+                            <input type="hidden" name="_method" value="DELETE"/>
+                            <button class="btn btn-danger" type="submit" onclick="return confirm('Tem certeza?')">Tirar do carrinho</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

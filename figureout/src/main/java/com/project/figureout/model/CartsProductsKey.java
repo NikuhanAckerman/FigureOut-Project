@@ -17,4 +17,11 @@ public class CartsProductsKey implements Serializable {
     @Column(name = "cpr_pro_id")
     private long productId;
 
+    public CartsProductsKey(long cartId, long productId) {
+        this.setCartId(cartId);
+        this.setProductId(productId);
+    }
+
+    public CartsProductsKey() {}
+
 }

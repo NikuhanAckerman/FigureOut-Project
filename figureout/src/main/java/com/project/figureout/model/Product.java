@@ -50,9 +50,11 @@ public class Product {
     @JoinColumn(name = "pro_gdp_id")
     private PricingGroup pricingGroup;
 
+    @Column(name = "pro_preco_venda")
+    private double price;
+
     @Lob
     @Column(name = "pro_foto", columnDefinition = "MEDIUMBLOB") // 16mb max size, .JPG/JPEG only
     private byte[] picture;
-
 
 }

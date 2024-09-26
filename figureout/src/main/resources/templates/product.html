@@ -19,14 +19,16 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav ml-auto">
+
       <li class="nav-item">
         <a class="nav-link" th:href="@{/index}">Início</a>
       </li>
+
       <li class="nav-item">
         <a class="nav-link" th:href="@{/products/shop}">Produtos</a>
       </li>
 
-      <button type="button" class="nav-link bi bi-cart" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart"></button>
+      <div th:replace="Fragments/cartOffcanvasFragment :: cartButtonFragment"></div>
 
     </ul>
   </div>
@@ -42,7 +44,7 @@
       <p id="price" class="lead" th:text=" 'R$' + ${product.purchaseAmount}"></p>
       <!-- href="cart.html" -->
 
-      <form th:action="@{/products/addProductToCart/{productId}/{clientId}(productId=${product.id}, clientId=${clientId})}" method="POST">
+      <form th:action="@{/cart/addProductToCart/{productId}/{clientId}(productId=${product.id}, clientId=${clientId})}" method="POST">
         <button class="btn btn-primary btn-lg" type="submit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
           Adicionar ao Carrinho
         </button>
@@ -71,32 +73,7 @@
   </div>
 </div>
 
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
-
-  <div class="offcanvas-header">
-    <h5 id="offcanvasCartLabel">Carrinho</h5>
-    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-
-  <div class="offcanvas-body">
-
-
-    <div class="card" th:each="product : ${cart.cartProducts}">
-
-      <img th:src="@{/products/productPicture/{id}(id=${product.id})}" class="card-img-top">   <!--alt="Produto 1"-->
-      <div class="card-body">
-        <h5 class="card-title" th:text="${product.name}"></h5>
-        <p class="card-text" th:text="'R$' +  ${product.purchaseAmount}"><strong></strong></p>
-        <a th:href="@{/products/specificProduct/{id}(id=${product.id})}" class="btn btn-primary">Visualizar produto</a>
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-
+<div th:replace="Fragments/cartOffcanvasFragment :: cartOffcanvasFragment(${clientId}, ${cart})"></div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>

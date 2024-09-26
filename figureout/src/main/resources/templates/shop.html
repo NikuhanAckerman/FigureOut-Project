@@ -20,19 +20,24 @@
     <ul class="navbar-nav ml-auto">
       <li class="nav-item active">
         <a class="nav-link" href="/index">Administrador</a>
-
-        <button type="button" class="nav-link bi bi-cart" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart"></button>
-
       </li>
-      <!--<li class="nav-item">
+
+      <li class="nav-item">
         <a class="nav-link" href="#">Produtos</a>
-      </li>-->
+      </li>
+
+      <div th:replace="Fragments/cartOffcanvasFragment :: cartButtonFragment"></div>
+
     </ul>
   </div>
 </nav>
 
+
+
 <div class="container mt-5">
   <h1 class="text-center">Catálogo de Produtos</h1>
+
+
 
   <!-- Filtro de categorias
   <div class="mb-4">
@@ -74,32 +79,7 @@
 
 </div>
 
-
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
-
-  <div class="offcanvas-header">
-    <h5 id="offcanvasCartLabel">Carrinho</h5>
-    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-  </div>
-
-  <div class="offcanvas-body">
-
-
-    <div class="card" th:each="product : ${cart.cartProducts}">
-
-      <img th:src="@{/products/productPicture/{id}(id=${product.id})}" class="card-img-top">   <!--alt="Produto 1"-->
-      <div class="card-body">
-        <h5 class="card-title" th:text="${product.name}"></h5>
-        <p class="card-text" th:text="'R$' +  ${product.purchaseAmount}"><strong></strong></p>
-        <a th:href="@{/products/specificProduct/{id}(id=${product.id})}" class="btn btn-primary">Visualizar produto</a>
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
+<div th:replace="Fragments/cartOffcanvasFragment :: cartOffcanvasFragment(${clientId}, ${cart})"></div>
 
 
 <!--<script src="/JavaScript/cartOffCanvas.js"></script>-->

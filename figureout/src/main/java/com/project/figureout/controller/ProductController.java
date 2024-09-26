@@ -106,7 +106,7 @@ public class ProductController {
         List<Product> products =  productService.getAllProducts();
         model.addAttribute("products", products);
         model.addAttribute("cart", cartService.getCartByClientId(1));
-
+        model.addAttribute("clientId", 1);
         return "shop";
     }
 
@@ -114,12 +114,9 @@ public class ProductController {
     public String showSpecificProduct(@PathVariable Long id, Model model) {
         Product product = productService.getProductById(id);
         List<Category> productCategoryList = product.getCategories();
-        //List<Category> categoryList = productService.getAllCategories();
-        //List<PricingGroup> pricingGroupList = productService.getAllPricingGroups();
         model.addAttribute("product", product);
         model.addAttribute("cart", cartService.getCartByClientId(1));
         model.addAttribute("clientId", 1);
-        //model.addAttribute("cart", cartService.getCartByClientId(clientId));
 
         return "product";
     }
@@ -155,42 +152,6 @@ public class ProductController {
     @ResponseBody
     public List<Category> getProductCategories(@PathVariable Long id) {
         return productService.getProductById(id).getCategories();
-    }
-
-    @GetMapping("/getCartByClientId/{id}")
-    public Cart getSpecificCart(@PathVariable Long id) {
-        return cartService.getCartByClientId(id);
-    }
-
-    @GetMapping("/cart/{clientId}")
-    @ResponseBody
-    public Cart showCart(@PathVariable Long id, Model model) {
-        Cart cart = cartService.getCartByClientId(id);
-
-        model.addAttribute("cart", cart);
-
-        return cart;
-    }
-
-
-    @PostMapping("/addProductToCart/{productId}/{clientId}")
-    public String addProductToCart(@PathVariable Long productId, @PathVariable Long clientId, Model model) {
-        Product product = productService.getProductById(productId);
-        Client client = clientService.getClientById(clientId);
-
-        Cart cart = cartService.getCartById(1);
-
-        CartsProducts cartProduct = new CartsProducts();
-        cartProduct.setCart(cart);
-        cartProduct.setProduct(product);
-        cartProduct.setProductQuantity(1);
-        cartProduct.setProductPrice(product.getPurchaseAmount());
-
-        cart.getCartProducts().add(cartProduct);
-
-        cartRepository.save(cart);
-
-        return "redirect:/products/specificProduct/" + productId;
     }
 
 }

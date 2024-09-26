@@ -1,12 +1,11 @@
 package com.project.figureout.service;
 
-import com.project.figureout.model.Cart;
-import com.project.figureout.model.Client;
-import com.project.figureout.model.Product;
+import com.project.figureout.model.*;
 import com.project.figureout.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.NoSuchElementException;
 
 @Service
@@ -37,12 +36,28 @@ public class CartService {
         throw new NoSuchElementException("Carrinho não encontrado com base no ID do cliente.");
     }
 
-    public void deleteCartById(long id) {
-        cartRepository.deleteById(id); // add exception throwing to this later, apparently this doesnt throw EmptyResultDataAccessException anymore
-    }
-
     public void saveCart(Cart cart) {
         cartRepository.save(cart);
+    }
+
+    public void deleteProductFromCart(Cart cart, Product product) {
+        cart.getCartProducts().removeIf(cartProduct -> cartProduct.getProduct().getId() == (product.getId()));
+        saveCart(cart);
+    }
+
+    public void addProductToCart(Cart cart, Product product) {
+        CartsProductsKey cartsProductsKey = new CartsProductsKey(cart.getId(), product.getId());
+
+        CartsProducts cartProduct = new CartsProducts();
+        cartProduct.setId(cartsProductsKey);
+        cartProduct.setCart(cart);
+        cartProduct.setProduct(product);
+        cartProduct.setProductQuantity(1);
+        cartProduct.setProductPrice(product.getPurchaseAmount());
+
+        cart.getCartProducts().add(cartProduct);
+
+        saveCart(cart);
     }
 
 }

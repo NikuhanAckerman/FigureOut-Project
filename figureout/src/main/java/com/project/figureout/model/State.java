@@ -21,8 +21,12 @@ public class State {
     @Column(name = "est_nome", length = 25)
     private String name;
 
-    public State(String name) {
-        this.name = name;
+    @Column(name = "est_frete")
+    private double frete;
+
+    public State(String name, double frete) {
+        this.setName(name);
+        this.setFrete(frete);
     }
 
     public State() {}
