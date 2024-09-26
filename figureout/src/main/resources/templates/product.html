@@ -43,7 +43,7 @@
       <!-- href="cart.html" -->
 
       <form th:action="@{/products/addProductToCart/{productId}/{clientId}(productId=${product.id}, clientId=${clientId})}" method="POST">
-        <button class="btn btn-primary btn-lg" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
+        <button class="btn btn-primary btn-lg" type="submit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
           Adicionar ao Carrinho
         </button>
       </form>

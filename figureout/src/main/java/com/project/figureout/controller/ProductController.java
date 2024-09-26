@@ -173,12 +173,12 @@ public class ProductController {
     }
 
 
-    @PostMapping("/products/addProductToCart/{productId}/{cartId}")
+    @PostMapping("/addProductToCart/{productId}/{clientId}")
     public String addProductToCart(@PathVariable Long productId, @PathVariable Long clientId, Model model) {
         Product product = productService.getProductById(productId);
         Client client = clientService.getClientById(clientId);
 
-        Cart cart = cartService.getCartByClientId(client.getId());
+        Cart cart = cartService.getCartById(1);
 
         CartsProducts cartProduct = new CartsProducts();
         cartProduct.setCart(cart);
