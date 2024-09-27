@@ -68,12 +68,15 @@ public class ProductService {
         product.setLength(productDTO.getWidth());
         product.setPurchaseAmount(productDTO.getPurchaseAmount());
 
+
         List<Category> categoryListAddToProduct = new ArrayList<>();
         categoryListAddToProduct.addAll(categoryRepository.findAllById(productDTO.getCategoriesIds()));
 
         product.setCategories(categoryListAddToProduct);
 
         product.setPricingGroup(pricingGroupRepository.findById(productDTO.getPricingGroup()).orElseThrow(() -> new NoSuchElementException("Grupo de precificação não encontrado.")));
+
+        product.setPrice(productDTO.getPrice());
 
         product.setPicture(saveProductPicture(productDTO));
 

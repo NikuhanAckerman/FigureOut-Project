@@ -30,6 +30,12 @@ public class ProductDTO {
 
     private long pricingGroup;
 
+    private double price;
+
     private MultipartFile productImage;
+
+    private StockDTO stockDTO;
+
+    private long supplier;
 
 }

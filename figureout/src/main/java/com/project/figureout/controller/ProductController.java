@@ -2,8 +2,11 @@ package com.project.figureout.controller;
 
 import com.project.figureout.dto.ClientDTO;
 import com.project.figureout.dto.ProductDTO;
+import com.project.figureout.dto.StockDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartRepository;
+import com.project.figureout.repository.StockRepository;
+import com.project.figureout.repository.SupplierRepository;
 import com.project.figureout.service.CartService;
 import com.project.figureout.service.ClientService;
 import com.project.figureout.service.ProductService;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/products")
@@ -35,7 +39,11 @@ public class ProductController {
     CartService cartService;
 
     @Autowired
-    private CartRepository cartRepository;
+    private StockRepository stockRepository;
+
+    @Autowired
+    private SupplierRepository supplierRepository;
+
 
     //long clientId = 1;
     //Client client = clientService.getClientById(clientId);
@@ -60,11 +68,16 @@ public class ProductController {
     public String createProductGet(Model model) {
         List<Category> categoryList = productService.getAllCategories();
         List<PricingGroup> pricingGroupList = productService.getAllPricingGroups();
+        List<Supplier> supplierList = supplierRepository.findAll();
         ProductDTO productDTO = new ProductDTO();
+        StockDTO stockDTO = new StockDTO();
 
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("pricingGroupList", pricingGroupList);
+        model.addAttribute("supplierList", supplierList);
         model.addAttribute("productDTO", productDTO);
+        model.addAttribute("stockDTO", stockDTO);
+
 
         return "createProduct";
     }
@@ -72,8 +85,14 @@ public class ProductController {
     @PostMapping("/createProduct")
     public String createProduct(@ModelAttribute ProductDTO productDTO, Model model) {
         Product product = new Product();
+        Stock stock = new Stock();
+
+        stock.setProduct(product);
+        stock.setSupplier(supplierRepository.findById(productDTO.getSupplier()).orElseThrow(() -> new NoSuchElementException("Fornecedor não encontrado.")));
 
         productService.productDataSetter(product, productDTO);
+
+        stock.setProduct(product);
 
         productService.saveProduct(product);
 

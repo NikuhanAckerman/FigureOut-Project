@@ -28,7 +28,7 @@ public class Stock {
     private double productPurchaseAmount;
 
     @OneToOne
-    @Column(name = "est_for_id")
+    @JoinColumn(name = "est_for_id") // Foreign key for the Supplier
     private Supplier supplier;
 
     @Column(name = "est_data_entrada")

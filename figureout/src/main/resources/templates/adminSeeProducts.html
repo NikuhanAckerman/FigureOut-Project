@@ -45,6 +45,7 @@
         <th>Valor de compra</th>
         <th>Categorias</th>
         <th>Grupo de precificação</th>
+        <th>Valor de venda</th>
         <th>Atualizar</th>
         <th>Deletar</th>
 
@@ -67,15 +68,17 @@
           <button type="button" class="btn btn-secondary" th:data-bs-product-id = "${product.id}" data-bs-toggle="modal" data-bs-target="#seeCategoriesModal" >Ver categorias</button>
         </td>
         <td th:text = "${product.pricingGroup.name}"></td>
+        <td th:text = "${product.price}"></td>
+
+        <td>
+          <a class="btn btn-primary" th:href="@{/products/updateProduct/{id}(id=${product.id})}">Atualizar</a>
+        </td>
+
         <td>
           <form th:action="@{/products/deleteProduct/{id}(id=${product.id})}" method="POST">
             <input type="hidden" name="_method" value="DELETE"/>
             <button type="submit" class="btn btn-danger btn-delete" onclick="return confirm('Tem certeza?')">Deletar</button>
           </form>
-        </td>
-
-        <td>
-          <a class="btn btn-primary" th:href="@{/products/updateProduct/{id}(id=${product.id})}">Atualizar</a>
         </td>
 
       </tr>

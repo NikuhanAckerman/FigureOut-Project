@@ -69,7 +69,7 @@
         <img th:src="@{/products/productPicture/{id}(id=${product.id})}" class="card-img-top">   <!--alt="Produto 1"-->
         <div class="card-body">
           <h5 class="card-title" th:text="${product.name}"></h5>
-          <p class="card-text" th:text="'R$' +  ${product.purchaseAmount}"><strong></strong></p>
+          <p class="card-text" th:text="'R$' +  ${product.price}"><strong></strong></p>
           <a th:href="@{/products/specificProduct/{id}(id=${product.id})}" class="btn btn-primary">Visualizar produto</a>
         </div>
       </div>
