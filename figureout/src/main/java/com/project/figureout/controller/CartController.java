@@ -1,5 +1,7 @@
 package com.project.figureout.controller;
 
+import com.project.figureout.dto.CartProductDTO;
+import com.project.figureout.dto.StockDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartsProductsRepository;
 import com.project.figureout.service.CartService;
@@ -44,12 +46,14 @@ public class CartController {
     }
 
     @PostMapping("/addProductToCart/{productId}/{clientId}")
-    public String addProductToCart(@PathVariable Long productId, @PathVariable Long clientId, Model model, HttpServletRequest request) {
+    public String addProductToCart(@PathVariable Long productId, @PathVariable Long clientId,
+                                   @ModelAttribute CartProductDTO cartProductDTO,
+                                   Model model, HttpServletRequest request) {
         Product product = productService.getProductById(productId);
         Client client = clientService.getClientById(clientId);
         Cart cart = cartService.getCartByClientId(clientId);
 
-        cartService.addProductToCart(cart, product);
+        cartService.addProductToCart(cart, product, cartProductDTO);
 
         // Get the previous page URL from the Referer header
         String referer = request.getHeader("Referer");
@@ -71,6 +75,27 @@ public class CartController {
         // Redirect back to the same page
         return "redirect:" + referer;
     }
+
+    @PostMapping("/changeProductQuantity/{productId}/{clientId}")
+    public String changeProductQuantity(@PathVariable Long productId, @PathVariable Long clientId,
+                                   @ModelAttribute StockDTO stockDTO,
+                                   Model model, HttpServletRequest request) {
+        Product product = productService.getProductById(productId);
+        Client client = clientService.getClientById(clientId);
+        Cart cart = cartService.getCartByClientId(clientId);
+
+        // Get the previous page URL from the Referer header
+        String referer = request.getHeader("Referer");
+
+        // Redirect back to the same page
+        return "redirect:" + referer;
+    }
+
+
+
+
+
+
 
 
 }

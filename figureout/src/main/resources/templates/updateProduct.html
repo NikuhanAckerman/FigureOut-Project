@@ -69,6 +69,25 @@
           </select>
         </div>
 
+        <label><b>Preço de venda</b></label>
+        <p class="text-primary" style="display: inline;">O valor do preço de venda não pode ser menor do que o preço de compra + o grupo de precificação.</p>
+        <input type="number" class="form-control" step="0.01" min="0" placeholder="Insira a largura do produto" th:field="*{price}" required>
+
+        <label><b>Quantidade disponível em estoque</b></label>
+        <input type="number" class="form-control" step="0.01" min="0" placeholder="Insira a largura do produto" th:field="*{stockDTO.productQuantityAvailable}" required>
+
+        <div class="form-group">
+          <label>Fornecedor</label>
+          <select class="form-control" th:field="*{supplier}">
+            <option selected value="0">Selecione um fornecedor</option>
+            <option
+                    th:each="supplier : ${supplierList}"
+                    th:value="${supplier.id}"
+                    th:text="${supplier.name}"
+            ></option>
+          </select>
+        </div>
+
         <label><b>Foto do produto</b></label>
         <input type="file" class="form-control" th:field="*{productImage}" required>
 

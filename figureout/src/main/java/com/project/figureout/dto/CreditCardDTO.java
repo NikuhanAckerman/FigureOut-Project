@@ -26,7 +26,6 @@ public class CreditCardDTO {
     private String printedName;
 
     @NotNull(message = "A bandeira do cartão não pode ser nula.")
-    //@Pattern(message = "A bandeira não pode possuir números ou caracteres especiais.", regexp = "^[A-Za-z]+[\\s]*$")
     private CreditCardBrandDTO creditCardBrandDTO;
 
     @NotEmpty(message = "O código de segurança do cartão não pode estar vazio.")

@@ -10,6 +10,7 @@ import com.project.figureout.repository.SupplierRepository;
 import com.project.figureout.service.CartService;
 import com.project.figureout.service.ClientService;
 import com.project.figureout.service.ProductService;
+import com.project.figureout.service.StockService;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -39,7 +40,7 @@ public class ProductController {
     CartService cartService;
 
     @Autowired
-    private StockRepository stockRepository;
+    private StockService stockService;
 
     @Autowired
     private SupplierRepository supplierRepository;
@@ -70,14 +71,11 @@ public class ProductController {
         List<PricingGroup> pricingGroupList = productService.getAllPricingGroups();
         List<Supplier> supplierList = supplierRepository.findAll();
         ProductDTO productDTO = new ProductDTO();
-        StockDTO stockDTO = new StockDTO();
 
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("pricingGroupList", pricingGroupList);
         model.addAttribute("supplierList", supplierList);
         model.addAttribute("productDTO", productDTO);
-        model.addAttribute("stockDTO", stockDTO);
-
 
         return "createProduct";
     }
@@ -87,14 +85,11 @@ public class ProductController {
         Product product = new Product();
         Stock stock = new Stock();
 
-        stock.setProduct(product);
-        stock.setSupplier(supplierRepository.findById(productDTO.getSupplier()).orElseThrow(() -> new NoSuchElementException("Fornecedor não encontrado.")));
-
         productService.productDataSetter(product, productDTO);
-
-        stock.setProduct(product);
-
         productService.saveProduct(product);
+
+        stockService.productInStockDataSetter(stock, product, productDTO);
+        stockService.saveProductInStock(stock);
 
         return "redirect:/products/seeProducts";
     }
@@ -132,7 +127,10 @@ public class ProductController {
     @GetMapping("/specificProduct/{id}")
     public String showSpecificProduct(@PathVariable Long id, Model model) {
         Product product = productService.getProductById(id);
+        Stock stock = stockService.getProductInStockByProductId(id);
         List<Category> productCategoryList = product.getCategories();
+        model.addAttribute("stock", stock);
+        model.addAttribute("stockDTO", new StockDTO());
         model.addAttribute("product", product);
         model.addAttribute("cart", cartService.getCartByClientId(1));
         model.addAttribute("clientId", 1);
@@ -143,7 +141,10 @@ public class ProductController {
     @GetMapping("/updateProduct/{id}")
     public String updateProductGet(@PathVariable Long id, Model model) {
         Product product = productService.getProductById(id);
+        List<Supplier> supplierList = supplierRepository.findAll();
+
         ProductDTO productDTO = new ProductDTO();
+        productDTO.setStockDTO(new StockDTO());
 
         productService.populateProductDTO(productDTO, product);
 
@@ -154,6 +155,7 @@ public class ProductController {
         model.addAttribute("productId", id);
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("pricingGroupList", pricingGroupList);
+        model.addAttribute("supplierList", supplierList);
 
         return "updateProduct";
     }
@@ -161,8 +163,10 @@ public class ProductController {
     @PutMapping("/updateProduct/{id}")
     public String updateProductPut(@PathVariable Long id, @ModelAttribute ProductDTO productDTO, Model model) {
         Product product = productService.getProductById(id);
+        Stock stock = stockService.getProductInStockByProductId(id);
 
         productService.updateProduct(product, productDTO);
+        stockService.saveProductInStock(stock);
 
         return "redirect:/products/seeProducts";
     }

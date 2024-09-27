@@ -6,6 +6,7 @@ import com.project.figureout.model.*;
 import com.project.figureout.repository.CategoryRepository;
 import com.project.figureout.repository.PricingGroupRepository;
 import com.project.figureout.repository.ProductRepository;
+import com.project.figureout.repository.StockRepository;
 import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,9 @@ public class ProductService {
 
     @Autowired
     private PricingGroupRepository pricingGroupRepository;
+
+    @Autowired
+    private StockRepository stockRepository;
 
     public List<Product> getAllProducts() {
         return productRepository.findAll();
@@ -67,7 +71,6 @@ public class ProductService {
         product.setWeight(productDTO.getWeight());
         product.setLength(productDTO.getWidth());
         product.setPurchaseAmount(productDTO.getPurchaseAmount());
-
 
         List<Category> categoryListAddToProduct = new ArrayList<>();
         categoryListAddToProduct.addAll(categoryRepository.findAllById(productDTO.getCategoriesIds()));
@@ -114,6 +117,14 @@ public class ProductService {
 
         productDTO.setCategoriesIds(productCategoryIdList);
         productDTO.setPricingGroup(product.getPricingGroup().getId());
+        productDTO.setPrice(product.getPrice());
+
+        // find the Stock table by the product
+
+        Stock stock = stockRepository.findByProductId(product.getId());
+
+        productDTO.getStockDTO().setProductQuantityAvailable(stock.getProductQuantityAvailable());
+        productDTO.setSupplier(stock.getSupplier().getId());
 
     }
 

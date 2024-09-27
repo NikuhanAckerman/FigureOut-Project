@@ -1,10 +1,13 @@
 package com.project.figureout.service;
 
+import com.project.figureout.dto.CartProductDTO;
+import com.project.figureout.dto.StockDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.NoSuchElementException;
 
@@ -45,15 +48,18 @@ public class CartService {
         saveCart(cart);
     }
 
-    public void addProductToCart(Cart cart, Product product) {
+    public void addProductToCart(Cart cart, Product product, CartProductDTO cartProductDTO) {
         CartsProductsKey cartsProductsKey = new CartsProductsKey(cart.getId(), product.getId());
 
         CartsProducts cartProduct = new CartsProducts();
         cartProduct.setId(cartsProductsKey);
         cartProduct.setCart(cart);
         cartProduct.setProduct(product);
-        cartProduct.setProductQuantity(1);
+        cartProduct.setProductQuantity(cartProductDTO.getProductQuantityAvailable());
         cartProduct.setProductPrice(product.getPurchaseAmount());
+
+        LocalDateTime now = LocalDateTime.now();
+        cartProduct.setProductAddedTime(now);
 
         cart.getCartProducts().add(cartProduct);
 

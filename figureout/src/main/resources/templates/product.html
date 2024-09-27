@@ -43,8 +43,11 @@
       <h2 th:text="${product.name}"></h2>
       <p id="price" class="lead" th:text=" 'R$' + ${product.price}"></p>
       <!-- href="cart.html" -->
+      <h5 class="mt-3" th:text=" 'Disponível em estoque: ' + ${stock.productQuantityAvailable}"></h5>
 
-      <form th:action="@{/cart/addProductToCart/{productId}/{clientId}(productId=${product.id}, clientId=${clientId})}" method="POST">
+      <form th:action="@{/cart/addProductToCart/{productId}/{clientId}(productId=${product.id}, clientId=${clientId})}" method="POST" th:object="${cartProductDTO}">
+        <input type="number" class="form-control" step="1" min="1" th:field="*{productQuantityAvailable}" required>
+
         <button class="btn btn-primary btn-lg" type="submit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
           Adicionar ao Carrinho
         </button>
