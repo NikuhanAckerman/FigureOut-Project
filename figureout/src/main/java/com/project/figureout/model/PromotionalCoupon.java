@@ -20,4 +20,11 @@ public class PromotionalCoupon {
     @Column(name = "cup_desconto")
     private double couponDiscount;
 
+    public PromotionalCoupon(String couponName, double couponDiscount) {
+        this.setCouponName(couponName);
+        this.setCouponDiscount(couponDiscount);
+    }
+
+    public PromotionalCoupon() {}
+
 }

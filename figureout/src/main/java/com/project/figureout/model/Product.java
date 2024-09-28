@@ -42,7 +42,6 @@ public class Product {
             name = "ProdutosCategorias",
             joinColumns = @JoinColumn(name = "pro_id"),
             inverseJoinColumns = @JoinColumn(name = "cat_id")
-
     )
     private List<Category> categories;
 

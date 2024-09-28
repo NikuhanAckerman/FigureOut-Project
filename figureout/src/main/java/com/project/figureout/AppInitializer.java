@@ -43,6 +43,9 @@ public class AppInitializer implements CommandLineRunner {
     @Autowired
     private SupplierRepository supplierRepository;
 
+    @Autowired
+    private PromotionalCouponRepository promotionalCouponRepository;
+
     @Override
     public void run(String... args) throws Exception {
         if (genderRepository.count() == 0) {
@@ -189,6 +192,21 @@ public class AppInitializer implements CommandLineRunner {
             supplierRepository.saveAll(supplierList);
 
             System.out.println("Tabela de fornecedores populada.");
+        }
+
+        if(promotionalCouponRepository.count() == 0) {
+            System.out.println("Populando tabela de cupons promocionais...");
+
+            ArrayList<PromotionalCoupon> promotionalCouponList = new ArrayList<>();
+
+            Collections.addAll(promotionalCouponList,
+                    new PromotionalCoupon("FIGUREOUT10", 10.0),
+                    new PromotionalCoupon("GENSHINIMPACT5", 5.0)
+            );
+
+            promotionalCouponRepository.saveAll(promotionalCouponList);
+
+            System.out.println("Tabela de cupons promocionais populada.");
         }
 
     }

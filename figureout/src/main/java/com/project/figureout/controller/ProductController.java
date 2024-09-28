@@ -1,5 +1,6 @@
 package com.project.figureout.controller;
 
+import com.project.figureout.dto.CartProductDTO;
 import com.project.figureout.dto.ClientDTO;
 import com.project.figureout.dto.ProductDTO;
 import com.project.figureout.dto.StockDTO;
@@ -44,7 +45,6 @@ public class ProductController {
 
     @Autowired
     private SupplierRepository supplierRepository;
-
 
     //long clientId = 1;
     //Client client = clientService.getClientById(clientId);
@@ -130,7 +130,7 @@ public class ProductController {
         Stock stock = stockService.getProductInStockByProductId(id);
         List<Category> productCategoryList = product.getCategories();
         model.addAttribute("stock", stock);
-        model.addAttribute("stockDTO", new StockDTO());
+        model.addAttribute("cartProductDTO", new CartProductDTO());
         model.addAttribute("product", product);
         model.addAttribute("cart", cartService.getCartByClientId(1));
         model.addAttribute("clientId", 1);

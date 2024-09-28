@@ -4,6 +4,7 @@ import com.project.figureout.dto.CartProductDTO;
 import com.project.figureout.dto.StockDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartRepository;
+import com.project.figureout.repository.CartsProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,8 @@ public class CartService {
 
     @Autowired
     private CartRepository cartRepository;
+    @Autowired
+    private CartsProductsRepository cartsProductsRepository;
 
     public Cart getCartById(long id) {
         return cartRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Carrinho não encontrado com base no ID."));
@@ -63,6 +66,7 @@ public class CartService {
 
         cart.getCartProducts().add(cartProduct);
 
+        cartsProductsRepository.save(cartProduct);
         saveCart(cart);
     }
 

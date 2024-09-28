@@ -18,16 +18,12 @@ public class Sale {
     private long id;
 
     @ManyToOne
+    @JoinColumn(name = "ven_car_id")
     private Cart cart;
 
     @ManyToOne
+    @JoinColumn(name = "ven_end_id")
     private Address deliveryAddress;
-
-    @ManyToMany
-    @JoinTable(name = "VendasCartoesDeCredito",
-            joinColumns = @JoinColumn(name = "ven_id"),
-            inverseJoinColumns = @JoinColumn(name = "car_id"))
-    private List<CreditCard> creditCardList = new ArrayList<>();
 
     private enum Status {
         PAGAMENTO_REJEITADO,

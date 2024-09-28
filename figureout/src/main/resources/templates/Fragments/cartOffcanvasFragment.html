@@ -18,7 +18,7 @@
             </div>
             <div class="offcanvas-body">
 
-                <a class="btn btn-primary mb-3">Fazer compra</a>
+                <a class="btn btn-primary mb-3" th:href="@{/sales/makeOrder/{clientId}(clientId=${clientId})}">Prosseguir para compra</a>
 
                 <div class="card mb-3" th:each="cartProduct : ${cart.cartProducts}">
                     <img th:src="@{/products/productPicture/{id}(id=${cartProduct.product.id})}" class="card-img-top">
@@ -29,7 +29,16 @@
 
                         <a th:href="@{/products/specificProduct/{id}(id=${cartProduct.product.id})}" class="btn btn-primary">Visualizar produto</a>
 
-                        <input type="number" class="form-control" step="1" min="1"  th:field="${cartProduct.productQuantity}" required>
+                        <form th:action="@{cart/changeProductQuantity/{productId}/{clientId}(productId = ${cartProduct.product.id}, clientId=${clientId})}" method="POST"
+                        th:if="${cartProductDTO == null}" th:with="cartProductDTO=${new CartsProductsDTO()}">
+                            <input type="hidden" name="_method" value="PUT">
+                            <input type="number" class="form-control" step="1" min="1"  th:field="${cartProduct.productQuantity}" required>
+                            <button type="submit" class="btn btn-primary">Mudar quantidade</button>
+                        </form>
+
+
+
+
 
 
                         <form th:action="@{/cart/removeProductFromCart/{productId}/{clientId}(productId=${cartProduct.product.id}, clientId=${clientId})}" method="POST">

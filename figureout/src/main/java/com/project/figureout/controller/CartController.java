@@ -29,7 +29,6 @@ public class CartController {
     @Autowired
     private CartsProductsRepository cartsProductsRepository;
 
-
     @GetMapping("/getCartByClientId/{id}")
     public Cart getSpecificCart(@PathVariable Long id) {
         return cartService.getCartByClientId(id);
@@ -47,10 +46,8 @@ public class CartController {
 
     @PostMapping("/addProductToCart/{productId}/{clientId}")
     public String addProductToCart(@PathVariable Long productId, @PathVariable Long clientId,
-                                   @ModelAttribute CartProductDTO cartProductDTO,
-                                   Model model, HttpServletRequest request) {
+                                   @ModelAttribute CartProductDTO cartProductDTO, HttpServletRequest request) {
         Product product = productService.getProductById(productId);
-        Client client = clientService.getClientById(clientId);
         Cart cart = cartService.getCartByClientId(clientId);
 
         cartService.addProductToCart(cart, product, cartProductDTO);
@@ -78,11 +75,13 @@ public class CartController {
 
     @PostMapping("/changeProductQuantity/{productId}/{clientId}")
     public String changeProductQuantity(@PathVariable Long productId, @PathVariable Long clientId,
-                                   @ModelAttribute StockDTO stockDTO,
-                                   Model model, HttpServletRequest request) {
+                                   @ModelAttribute CartProductDTO cartProductDTO, HttpServletRequest request) {
         Product product = productService.getProductById(productId);
         Client client = clientService.getClientById(clientId);
         Cart cart = cartService.getCartByClientId(clientId);
+
+        CartsProducts cartProduct = cartsProductsRepository.getCartsProductsByProductId(productId);
+        cartProduct.setProductQuantity(cartProduct.getProductQuantity());
 
         // Get the previous page URL from the Referer header
         String referer = request.getHeader("Referer");
