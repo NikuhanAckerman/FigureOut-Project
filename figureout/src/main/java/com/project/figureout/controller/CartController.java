@@ -1,6 +1,8 @@
 package com.project.figureout.controller;
 
 import com.project.figureout.dto.CartProductDTO;
+import com.project.figureout.dto.ChangeCartProductQuantityDTO;
+import com.project.figureout.dto.MultipleCartProductDTO;
 import com.project.figureout.dto.StockDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartsProductsRepository;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/cart")
@@ -35,7 +39,6 @@ public class CartController {
     }
 
     @GetMapping("/{clientId}")
-    @ResponseBody
     public Cart showCart(@PathVariable Long id, Model model) {
         Cart cart = cartService.getCartByClientId(id);
 
@@ -73,15 +76,28 @@ public class CartController {
         return "redirect:" + referer;
     }
 
-    @PostMapping("/changeProductQuantity/{productId}/{clientId}")
+    @PutMapping("/changeProductQuantity/{productId}/{clientId}")
     public String changeProductQuantity(@PathVariable Long productId, @PathVariable Long clientId,
-                                   @ModelAttribute CartProductDTO cartProductDTO, HttpServletRequest request) {
+                                        @ModelAttribute ChangeCartProductQuantityDTO changeCartProductQuantityDTO, HttpServletRequest request) {
+
+        System.out.println("This is running!! wow!");
         Product product = productService.getProductById(productId);
         Client client = clientService.getClientById(clientId);
         Cart cart = cartService.getCartByClientId(clientId);
 
-        CartsProducts cartProduct = cartsProductsRepository.getCartsProductsByProductId(productId);
-        cartProduct.setProductQuantity(cartProduct.getProductQuantity());
+
+        for(CartsProducts cartsProducts: cart.getCartProducts()) {
+
+            if(cartsProducts.getProduct().getId() == product.getId()) {
+
+                cartsProducts.setProductQuantity(changeCartProductQuantityDTO.getQuantity());
+                cartsProductsRepository.save(cartsProducts);
+
+            }
+
+        }
+
+        System.out.println(changeCartProductQuantityDTO.getQuantity());
 
         // Get the previous page URL from the Referer header
         String referer = request.getHeader("Referer");

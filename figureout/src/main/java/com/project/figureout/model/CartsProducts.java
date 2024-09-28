@@ -30,6 +30,4 @@ public class CartsProducts {
     @Column(name = "cpr_datahora_produto_adicionado")
     private LocalDateTime productAddedTime;
 
-    @Column(name = "cpr_preco_produto")
-    private double productPrice;
 }

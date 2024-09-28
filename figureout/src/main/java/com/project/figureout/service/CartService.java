@@ -59,14 +59,12 @@ public class CartService {
         cartProduct.setCart(cart);
         cartProduct.setProduct(product);
         cartProduct.setProductQuantity(cartProductDTO.getProductQuantityAvailable());
-        cartProduct.setProductPrice(product.getPurchaseAmount());
 
         LocalDateTime now = LocalDateTime.now();
         cartProduct.setProductAddedTime(now);
 
         cart.getCartProducts().add(cartProduct);
 
-        cartsProductsRepository.save(cartProduct);
         saveCart(cart);
     }
 

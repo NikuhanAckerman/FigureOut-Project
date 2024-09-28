@@ -1,5 +1,8 @@
 package com.project.figureout.controller;
 
+import com.project.figureout.dto.CartProductDTO;
+import com.project.figureout.dto.ChangeCartProductQuantityDTO;
+import com.project.figureout.dto.MultipleCartProductDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.PromotionalCouponRepository;
 import com.project.figureout.service.CartService;
@@ -11,8 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -46,12 +51,26 @@ public class SaleController {
         Cart cart = cartService.getCartByClientId(clientId);
         List<Address> addressClientList = client.getAddresses();
         List<CreditCard> creditCardClientList = client.getCreditCards();
+        ChangeCartProductQuantityDTO changeCartProductQuantityDTO = new ChangeCartProductQuantityDTO();
 
+        List<CartsProducts> cartsProductsList = cart.getCartProducts();
+
+        HashMap<Long, Double> cartProductTotalPrices = new HashMap<>();
+
+        for(CartsProducts cartsProducts : cartsProductsList) {
+            // multiply product price by product quantity
+            cartProductTotalPrices.put(cartsProducts.getProduct().getId(), cartsProducts.getProduct().getPrice() * cartsProducts.getProductQuantity());
+        }
+
+        model.addAttribute("clientId", clientId);
         model.addAttribute("cart", cart);
+        model.addAttribute("cartProductTotalPrices", cartProductTotalPrices);
         model.addAttribute("addressClientList", addressClientList);
         model.addAttribute("creditCardClientList", creditCardClientList);
+        model.addAttribute("changeCartProductQuantityDTO", changeCartProductQuantityDTO);
 
         return "makeOrder";
     }
+
 
 }
