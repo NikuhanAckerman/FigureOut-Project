@@ -9,7 +9,7 @@ import lombok.Setter;
 import java.util.Date;
 
 @Getter @Setter
-@OnlyOnePreferentialCreditCard
+// @OnlyOnePreferentialCreditCard will try to do later
 public class CreditCardDTO {
     @NotNull
     private long clientId;

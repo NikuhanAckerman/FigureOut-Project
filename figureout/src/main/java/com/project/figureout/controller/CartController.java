@@ -85,19 +85,17 @@ public class CartController {
         Client client = clientService.getClientById(clientId);
         Cart cart = cartService.getCartByClientId(clientId);
 
-
         for(CartsProducts cartsProducts: cart.getCartProducts()) {
 
             if(cartsProducts.getProduct().getId() == product.getId()) {
 
                 cartsProducts.setProductQuantity(changeCartProductQuantityDTO.getQuantity());
-                cartsProductsRepository.save(cartsProducts);
 
             }
 
         }
 
-        System.out.println(changeCartProductQuantityDTO.getQuantity());
+        cartService.setCartTotal(cart);
 
         // Get the previous page URL from the Referer header
         String referer = request.getHeader("Referer");
@@ -105,12 +103,5 @@ public class CartController {
         // Redirect back to the same page
         return "redirect:" + referer;
     }
-
-
-
-
-
-
-
 
 }

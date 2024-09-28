@@ -3,22 +3,23 @@ package com.project.figureout.controller;
 import com.project.figureout.dto.CartProductDTO;
 import com.project.figureout.dto.ChangeCartProductQuantityDTO;
 import com.project.figureout.dto.MultipleCartProductDTO;
+import com.project.figureout.dto.PromotionalCouponDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.PromotionalCouponRepository;
 import com.project.figureout.service.CartService;
 import com.project.figureout.service.ClientService;
 import com.project.figureout.service.ProductService;
 import com.project.figureout.service.SaleService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/sales")
@@ -35,6 +36,9 @@ public class SaleController {
 
     @Autowired
     private SaleService saleService;
+
+    @Autowired
+    private PromotionalCouponRepository promotionalCouponRepository;
 
     @GetMapping("")
     public String showSalesGet(Model model) {
@@ -68,8 +72,45 @@ public class SaleController {
         model.addAttribute("addressClientList", addressClientList);
         model.addAttribute("creditCardClientList", creditCardClientList);
         model.addAttribute("changeCartProductQuantityDTO", changeCartProductQuantityDTO);
+        model.addAttribute("orderTotalPrice", cart.getTotalPrice());
 
         return "makeOrder";
+    }
+
+    @PutMapping("/addPromotionalCoupon/{clientId}")
+    public String addPromotionalCoupon(@PathVariable long clientId, @ModelAttribute PromotionalCouponDTO promotionalCouponDTO, HttpServletRequest request) {
+        Cart cart = cartService.getCartByClientId(clientId);
+
+        /* extremely nested code, basically what it does is if the coupon typed is correct,
+         i reset the price of the products back to the original price * quantity,
+         then apply the new coupon's discount
+         (will potentially write it better when i transfer this to CartService and/or SaleService) */
+        for(PromotionalCoupon promotionalCoupon: promotionalCouponRepository.findAll()) {
+
+            if(promotionalCouponDTO.getCouponName().equals(promotionalCoupon.getCouponName())) {
+
+                for(CartsProducts cartsProducts : cart.getCartProducts()) {
+
+                    if(cart.getPromotionalCoupon() != null) {
+
+                        cartsProducts.setPriceToPay(cartsProducts.getProduct().getPrice() * cartsProducts.getProductQuantity());
+
+                    }
+
+                    cart.setPromotionalCoupon(promotionalCouponRepository.findById(promotionalCouponDTO.getCouponId()).orElseThrow(() -> new NoSuchElementException("Cupom promocional não encontrado com base no ID.")));
+                    cartsProducts.setPriceToPay(cartsProducts.getPriceToPay() * (promotionalCoupon.getCouponDiscount()/100));
+
+                }
+
+            }
+
+        }
+
+        cartService.setCartTotal(cart);
+
+        String referer = request.getHeader("Referer");
+
+        return "redirect:" + referer;
     }
 
 

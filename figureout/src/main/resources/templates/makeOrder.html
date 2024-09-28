@@ -17,8 +17,8 @@
 <div class="container mt-5">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.html">Início</a></li>
-            <li class="breadcrumb-item"><a href="shop.html">Loja</a></li>
+            <li class="breadcrumb-item"><a href="/index">Início</a></li>
+            <li class="breadcrumb-item"><a href="/products/shop">Loja</a></li>
             <li class="breadcrumb-item active" aria-current="page">Carrinho</li>
         </ol>
     </nav>
@@ -26,8 +26,13 @@
     <h1>Carrinho</h1>
     <p><b>Cupom de desconto:</b></p>
     <div class="mb-3">
-        <input type="text" id="cupom-input" class="form-control" placeholder="Digite seu cupom de desconto">
-        <button class="btn btn-primary mt-2" onclick="aplicarCupom()">Aplicar Cupom</button>
+        <form th:action="@{/sales/addPromotionalCoupon/{clientId}" th:object="${promotionalCouponDTO}" method="POST">
+            <input type="hidden" name="_method" value="PUT"/>
+            <input type="text" id="cupom-input" class="form-control" th:field="*{couponName}" placeholder="Digite seu cupom de desconto">
+            <button type="submit" class="btn btn-primary mt-2">Aplicar Cupom</button>
+        </form>
+
+
     </div>
 
     <table class="table table-striped">
@@ -40,8 +45,6 @@
             <!-- <th scope="col">Ação</th> -->
         </tr>
         </thead>
-
-
 
         <tbody>
 
@@ -66,7 +69,7 @@
             </td>
 
             <td>
-                <form th:action="@{cart/removeProductFromCart/{productId}/{clientId}(productId = ${cartProduct.product.id}, clientId = ${clientId})}" method="POST">
+                <form th:action="@{/cart/removeProductFromCart/{productId}/{clientId}(productId = ${cartProduct.product.id}, clientId = ${clientId})}" method="POST">
                     <input type="hidden" name="_method" value="DELETE"/>
                     <button class="btn btn-danger" onclick="return confirm ('Tem certeza?')">Remover do carrinho</button>
                 </form>
@@ -75,17 +78,19 @@
         </tbody>
     </table>
 
+    <h3 th:text="'Preço Total: R$' + ${orderTotalPrice}"></h3>
+
     <!-- Seção de Cartões de Crédito -->
+
     <p><b>Selecione um ou mais Cartões de Crédito:</b></p>
     <div id="cartao-dropdown-container" class="mb-3">
-        <select id="cartao-dropdown" class="form-control">
-            <option value="" disabled selected>Selecione um cartão</option>
+        <select multiple class="form-control">
+            <option value="" disabled selected>Selecione o(s) cartão(ões)</option>
             <option th:each="creditCard : ${creditCardClientList}" th:value="${creditCard.id}" th:text="${creditCard.cardNumber}"></option>
         </select>
     </div>
 
     <div class="mb-3">
-        <button class="btn btn-secondary" onclick="adicionarCartaoDropdown()">Adicionar mais um cartão</button>
         <a th:href="@{/createCreditCard/{clientId}(clientId = ${clientId})}" class="btn btn-success">Adicionar um novo cartão de crédito</a>
     </div>
 
@@ -106,7 +111,6 @@
     <div class="text-center">
         <a href="/products/shop" class="btn btn-secondary mt-3">Continuar Comprando</a>
         <button id="btn-finalizar" class="btn btn-primary mt-3">Finalizar Compra</button>
-
     </div>
 </div>
 

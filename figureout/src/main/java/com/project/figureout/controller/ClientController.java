@@ -143,6 +143,8 @@ public class ClientController {
         creditCardDTO.setClientId(id); // necessary to pre-set this in the form via hidden field
         //System.out.println("GET METHOD: " + creditCardDTO.getClientId());
 
+        System.out.println(id);
+
         model.addAttribute("creditCardDTO", creditCardDTO);
         model.addAttribute("clientId", id);
         model.addAttribute("creditCardBrandList", creditCardBrandList);

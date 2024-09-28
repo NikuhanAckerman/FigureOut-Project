@@ -1,5 +1,6 @@
 package com.project.figureout.model;
 
+import com.project.figureout.dto.PromotionalCouponDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,5 +36,9 @@ public class Sale {
 
     @Enumerated(EnumType.ORDINAL)
     private Status status;
+
+    @ManyToOne
+    @JoinColumn(name = "ven_cupom_promocional_aplicado")
+    private PromotionalCoupon promotionalCouponApplied;
 
 }

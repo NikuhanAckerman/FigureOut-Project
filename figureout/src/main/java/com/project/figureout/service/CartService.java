@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -48,7 +49,7 @@ public class CartService {
 
     public void deleteProductFromCart(Cart cart, Product product) {
         cart.getCartProducts().removeIf(cartProduct -> cartProduct.getProduct().getId() == (product.getId()));
-        saveCart(cart);
+        setCartTotal(cart);
     }
 
     public void addProductToCart(Cart cart, Product product, CartProductDTO cartProductDTO) {
@@ -58,13 +59,34 @@ public class CartService {
         cartProduct.setId(cartsProductsKey);
         cartProduct.setCart(cart);
         cartProduct.setProduct(product);
+
         cartProduct.setProductQuantity(cartProductDTO.getProductQuantityAvailable());
+        cartProduct.setPriceToPay(product.getPrice() * cartProductDTO.getProductQuantityAvailable());
 
         LocalDateTime now = LocalDateTime.now();
         cartProduct.setProductAddedTime(now);
 
         cart.getCartProducts().add(cartProduct);
 
+        setCartTotal(cart);
+    }
+
+    public void setCartTotal(Cart cart) {
+        double total = 0;
+
+        // Get the list of products in the cart
+        List<CartsProducts> cartProducts = cart.getCartProducts();
+
+        // Loop through each product in the cart and calculate the total price
+        for (CartsProducts cartsProduct : cartProducts) {
+            double productTotal = cartsProduct.getProduct().getPrice() * cartsProduct.getProductQuantity();
+            total += productTotal;
+        }
+
+        // Set the total price in the cart
+        cart.setTotalPrice(total);
+
+        // Save the cart with the updated total
         saveCart(cart);
     }
 

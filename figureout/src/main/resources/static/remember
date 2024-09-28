@@ -1,2 +1,6 @@
 do creditcard validation later using OnlyOnePreferentialCreditCard
 finish updates and start development on the next assignment as quickly as possible
+
+Create a Admin control panel page, with the CRUDs
+then, create a button thats like "See client-only pages" and show the list of clients, make the admin choose one of the clients
+to navigate the client-only pages as a specific client (that way, we dont need to have authentication)

@@ -200,8 +200,7 @@ public class AppInitializer implements CommandLineRunner {
             ArrayList<PromotionalCoupon> promotionalCouponList = new ArrayList<>();
 
             Collections.addAll(promotionalCouponList,
-                    new PromotionalCoupon("FIGUREOUT10", 10.0),
-                    new PromotionalCoupon("GENSHINIMPACT5", 5.0)
+                    new PromotionalCoupon("FIGUREOUT95", 95.0)
             );
 
             promotionalCouponRepository.saveAll(promotionalCouponList);
