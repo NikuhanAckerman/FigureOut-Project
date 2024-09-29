@@ -49,11 +49,11 @@ public class CartController {
 
     @PostMapping("/addProductToCart/{productId}/{clientId}")
     public String addProductToCart(@PathVariable Long productId, @PathVariable Long clientId,
-                                   @ModelAttribute CartProductDTO cartProductDTO, HttpServletRequest request) {
+                                   @ModelAttribute ChangeCartProductQuantityDTO changeCartProductQuantityDTO, HttpServletRequest request) {
         Product product = productService.getProductById(productId);
         Cart cart = cartService.getCartByClientId(clientId);
 
-        cartService.addProductToCart(cart, product, cartProductDTO);
+        cartService.addProductToCart(cart, product, changeCartProductQuantityDTO);
 
         // Get the previous page URL from the Referer header
         String referer = request.getHeader("Referer");

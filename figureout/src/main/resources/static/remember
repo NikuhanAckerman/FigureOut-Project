@@ -6,3 +6,7 @@ then, create a button thats like "See client-only pages" and show the list of cl
 to navigate the client-only pages as a specific client (that way, we dont need to have authentication)
 
 addressing fields in client forms are NOT using the correct special character regex (they are excluding accent characters like à^õ)
+
+stock should have a LocalDate and not LocalDateTime probably
+
+add expiry date for promotionalCoupons and later exchange (troca) coupons

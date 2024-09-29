@@ -9,6 +9,7 @@ import com.project.figureout.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -56,7 +57,9 @@ public class StockService {
         stock.setSupplier(supplierRepository.findById(productDTO.getSupplier()).orElseThrow(() -> new NoSuchElementException("Fornecedor não encontrado.")));
         stock.setProductQuantityAvailable(productDTO.getStockDTO().getProductQuantityAvailable());
         stock.setProductPurchaseAmount(product.getPurchaseAmount());
-        stock.setEntryDateTime(LocalDateTime.now());
+
+        stock.setEntryDate(productDTO.getStockDTO().getEntryInStockDate());
+
         stock.setProduct(product);
 
     }

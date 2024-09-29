@@ -75,6 +75,9 @@
                 <label><b>Quantidade disponível em estoque</b></label>
                 <input type="number" class="form-control" step="1" min="0" placeholder="Insira a largura do produto" th:field="*{stockDTO.productQuantityAvailable}" required>
 
+                <label><b>Data de entrada em estoque</b></label>
+                <input type="date" class="form-control" th:field="*{stockDTO.entryInStockDate}" required>
+
                 <div class="form-group">
                     <label>Fornecedor</label>
                     <select class="form-control" th:field="*{supplier}">

@@ -1,6 +1,7 @@
 package com.project.figureout.service;
 
 import com.project.figureout.dto.CartProductDTO;
+import com.project.figureout.dto.ChangeCartProductQuantityDTO;
 import com.project.figureout.dto.StockDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartRepository;
@@ -53,14 +54,14 @@ public class CartService {
         setCartTotal(cart);
     }
 
-    public void addProductToCart(Cart cart, Product product, CartProductDTO cartProductDTO) {
+    public void addProductToCart(Cart cart, Product product, ChangeCartProductQuantityDTO changeCartProductQuantityDTO) {
         CartsProductsKey cartsProductsKey = new CartsProductsKey(cart.getId(), product.getId());
 
         CartsProducts cartProduct = new CartsProducts();
         cartProduct.setId(cartsProductsKey);
         cartProduct.setCart(cart);
         cartProduct.setProduct(product);
-        cartProduct.setProductQuantity(cartProductDTO.getProductQuantityAvailable());
+        cartProduct.setProductQuantity(changeCartProductQuantityDTO.getQuantity());
         cartProduct.setPriceToPay(product.getPrice()); // setting a temporary price here so it doesnt come out as 0 when i check for promotional coupon
 
         if(cart.getPromotionalCoupon() != null) {

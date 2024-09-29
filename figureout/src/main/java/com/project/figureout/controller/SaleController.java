@@ -1,9 +1,6 @@
 package com.project.figureout.controller;
 
-import com.project.figureout.dto.CartProductDTO;
-import com.project.figureout.dto.ChangeCartProductQuantityDTO;
-import com.project.figureout.dto.MultipleCartProductDTO;
-import com.project.figureout.dto.PromotionalCouponDTO;
+import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.PromotionalCouponRepository;
 import com.project.figureout.service.CartService;
@@ -103,6 +100,14 @@ public class SaleController {
 
         return "redirect:" + referer;
     }
+
+    @GetMapping("/finishOrder/{clientId}")
+    public String finishOrderGet(@PathVariable long clientId, Model model) {
+
+
+        return "finishOrder";
+    }
+
 
 
 }

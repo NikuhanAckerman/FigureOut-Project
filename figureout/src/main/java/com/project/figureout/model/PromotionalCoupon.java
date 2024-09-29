@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "CuponsPromocionais")
@@ -22,9 +23,13 @@ public class PromotionalCoupon {
     @Column(name = "cup_desconto")
     private BigDecimal couponDiscount;
 
-    public PromotionalCoupon(String couponName, BigDecimal couponDiscount) {
+    @Column(name = "cup_data_expiracao")
+    private LocalDate couponExpirationDate;
+
+    public PromotionalCoupon(String couponName, BigDecimal couponDiscount, LocalDate couponExpirationDate) {
         this.setCouponName(couponName);
         this.setCouponDiscount(couponDiscount);
+        this.setCouponExpirationDate(couponExpirationDate);
     }
 
     public PromotionalCoupon() {}

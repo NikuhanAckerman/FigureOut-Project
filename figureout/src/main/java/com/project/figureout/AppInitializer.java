@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -200,8 +201,10 @@ public class AppInitializer implements CommandLineRunner {
 
             ArrayList<PromotionalCoupon> promotionalCouponList = new ArrayList<>();
 
+            LocalDate FIGUREOUT95expiryDate = LocalDate.of(2024, 12, 31);
+
             Collections.addAll(promotionalCouponList,
-                    new PromotionalCoupon("FIGUREOUT95", BigDecimal.valueOf(0.95))
+                    new PromotionalCoupon("FIGUREOUT95", BigDecimal.valueOf(0.95), FIGUREOUT95expiryDate)
             );
 
             promotionalCouponRepository.saveAll(promotionalCouponList);

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,6 +34,6 @@ public class Stock {
     private Supplier supplier;
 
     @Column(name = "est_data_entrada")
-    private LocalDateTime entryDateTime;
+    private LocalDate entryDate;
 
 }
