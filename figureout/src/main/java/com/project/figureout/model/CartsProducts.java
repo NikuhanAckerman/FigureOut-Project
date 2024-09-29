@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -31,6 +32,6 @@ public class CartsProducts {
     private LocalDateTime productAddedTime;
 
     @Column(name = "cpr_produto_preco_pagar")
-    private double priceToPay;
+    private BigDecimal priceToPay;
 
 }

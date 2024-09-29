@@ -8,6 +8,7 @@ import com.project.figureout.repository.CartsProductsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -59,9 +60,14 @@ public class CartService {
         cartProduct.setId(cartsProductsKey);
         cartProduct.setCart(cart);
         cartProduct.setProduct(product);
-
         cartProduct.setProductQuantity(cartProductDTO.getProductQuantityAvailable());
-        cartProduct.setPriceToPay(product.getPrice() * cartProductDTO.getProductQuantityAvailable());
+        cartProduct.setPriceToPay(product.getPrice()); // setting a temporary price here so it doesnt come out as 0 when i check for promotional coupon
+
+        if(cart.getPromotionalCoupon() != null) {
+            setPromotionalCouponDiscount(cartProduct, cart.getPromotionalCoupon());
+        } else {
+            cartProduct.setPriceToPay(product.getPrice());
+        }
 
         LocalDateTime now = LocalDateTime.now();
         cartProduct.setProductAddedTime(now);
@@ -71,8 +77,37 @@ public class CartService {
         setCartTotal(cart);
     }
 
+    public void setPromotionalCouponDiscount(CartsProducts cartProduct, PromotionalCoupon promotionalCoupon) {
+        BigDecimal cartProductOldPrice = cartProduct.getPriceToPay();
+
+        BigDecimal newPrice = cartProductOldPrice.subtract(cartProductOldPrice.multiply(promotionalCoupon.getCouponDiscount()));
+
+        cartProduct.setPriceToPay(newPrice);
+    }
+
+    public void applyPromotionalCoupon(Cart cart, PromotionalCoupon promotionalCoupon) {
+        List<CartsProducts> cartsProducts = cart.getCartProducts();
+
+        if(cart.getPromotionalCoupon() != null) {
+            System.out.println("sussybaka.. already applied a coupon didnt you?!");
+
+            for(CartsProducts cartProduct: cartsProducts) {
+                cartProduct.setPriceToPay(cartProduct.getPriceToPay().multiply(BigDecimal.valueOf(cartProduct.getProductQuantity())));
+            }
+
+        }
+
+        cart.setPromotionalCoupon(promotionalCoupon);
+
+        for(CartsProducts cartProduct: cartsProducts) {
+            setPromotionalCouponDiscount(cartProduct, promotionalCoupon);
+        }
+
+        setCartTotal(cart);
+    }
+
     public void setCartTotal(Cart cart) {
-        double total = 0;
+        BigDecimal total = new BigDecimal(0);
         System.out.println("calling setCartTotal");
 
         // Get the list of products in the cart
@@ -80,9 +115,9 @@ public class CartService {
 
         // Loop through each product in the cart and calculate the total price
         for (CartsProducts cartsProduct : cartProducts) {
-            double productTotal = cartsProduct.getPriceToPay() * cartsProduct.getProductQuantity();
+            BigDecimal productTotal = cartsProduct.getPriceToPay().multiply(BigDecimal.valueOf(cartsProduct.getProductQuantity()));
             System.out.println(productTotal);
-            total += productTotal;
+            total = total.add(productTotal);
         }
 
         // Set the total price in the cart

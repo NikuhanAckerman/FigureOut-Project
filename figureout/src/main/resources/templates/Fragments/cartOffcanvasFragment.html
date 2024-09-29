@@ -21,11 +21,18 @@
                 <a class="btn btn-primary mb-3" th:href="@{/sales/makeOrder/{clientId}(clientId=${clientId})}">Prosseguir para compra</a>
                 <p class="card-text">(você poderá mudar as quantidades na página de compra.)</p>
 
+                <div th:if="${cart.promotionalCoupon} != null">
+                    <p class="text-primary" th:text="'Cupom aplicado neste carrinho: ' + ${cart.promotionalCoupon.couponName}"></p>
+                    <p class="text-primary" th:text="'Desconto: ' + ${cart.promotionalCoupon.couponDiscount * 100} + '%'"></p>
+                </div>
+
+                <p class="text-success" th:text="'Total do carrinho: R$' + ${cart.totalPrice}"></p>
+
                 <div class="card mb-3" th:each="cartProduct : ${cart.cartProducts}">
                     <img th:src="@{/products/productPicture/{id}(id=${cartProduct.product.id})}" class="card-img-top">
                     <div class="card-body">
                         <h5 class="card-title" th:text="${cartProduct.product.name}"></h5>
-                        <p class="card-text" th:text="'R$' + ${cartProduct.product.price}"></p>
+                        <p class="card-text" th:text="'por unidade: R$' + ${cartProduct.priceToPay}"></p>
                         <p class="card-text" th:text="'Quantidade: ' + ${cartProduct.productQuantity}"></p>
 
                         <a th:href="@{/products/specificProduct/{id}(id=${cartProduct.product.id})}" class="btn btn-primary">Visualizar produto</a>

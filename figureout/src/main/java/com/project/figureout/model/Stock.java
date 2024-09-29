@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -25,9 +26,9 @@ public class Stock {
     private int productQuantityAvailable;
 
     @Column(name = "est_valor_custo")
-    private double productPurchaseAmount;
+    private BigDecimal productPurchaseAmount;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "est_for_id") // Foreign key for the Supplier
     private Supplier supplier;
 

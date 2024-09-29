@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -46,7 +47,7 @@ public class ClientService {
     public void registerClient(Client client, ClientDTO clientDTO) {
 
         clientBasicDataSetter(client, clientDTO.getClientBasicDataDTO());
-        client.getCart().setTotalPrice(0.0);
+        client.getCart().setTotalPrice(BigDecimal.valueOf(0));
         saveClient(client);
 
         AddressDTO clientDTOAddress = clientDTO.getAddressDTO();

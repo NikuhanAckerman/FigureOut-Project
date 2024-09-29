@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "CuponsPromocionais")
 @Getter @Setter
@@ -18,9 +20,9 @@ public class PromotionalCoupon {
     private String couponName;
 
     @Column(name = "cup_desconto")
-    private double couponDiscount;
+    private BigDecimal couponDiscount;
 
-    public PromotionalCoupon(String couponName, double couponDiscount) {
+    public PromotionalCoupon(String couponName, BigDecimal couponDiscount) {
         this.setCouponName(couponName);
         this.setCouponDiscount(couponDiscount);
     }

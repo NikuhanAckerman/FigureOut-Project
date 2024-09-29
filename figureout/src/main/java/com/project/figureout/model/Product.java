@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
@@ -35,7 +36,7 @@ public class Product {
     private float length;
 
     @Column(name = "pro_valor_compra")
-    private double purchaseAmount;
+    private BigDecimal purchaseAmount;
 
     @ManyToMany
     @JoinTable(
@@ -50,7 +51,7 @@ public class Product {
     private PricingGroup pricingGroup;
 
     @Column(name = "pro_preco_venda")
-    private double price;
+    private BigDecimal price;
 
     @Lob
     @Column(name = "pro_foto", columnDefinition = "MEDIUMBLOB") // 16mb max size, .JPG/JPEG only

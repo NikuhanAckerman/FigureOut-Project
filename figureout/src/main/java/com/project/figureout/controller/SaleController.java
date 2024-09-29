@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,11 +61,11 @@ public class SaleController {
 
         List<CartsProducts> cartsProductsList = cart.getCartProducts();
 
-        HashMap<Long, Double> cartProductTotalPrices = new HashMap<>();
+        HashMap<Long, BigDecimal> cartProductTotalPrices = new HashMap<>();
 
         for(CartsProducts cartsProducts : cartsProductsList) {
             // multiply product price by product quantity
-            cartProductTotalPrices.put(cartsProducts.getProduct().getId(), cartsProducts.getProduct().getPrice() * cartsProducts.getProductQuantity());
+            cartProductTotalPrices.put(cartsProducts.getProduct().getId(), cartsProducts.getPriceToPay().multiply(BigDecimal.valueOf(cartsProducts.getProductQuantity())));
         }
 
         model.addAttribute("clientId", clientId);
@@ -91,25 +92,12 @@ public class SaleController {
         for(PromotionalCoupon promotionalCoupon: promotionalCouponRepository.findAll()) {
 
             if(promotionalCouponDTO.getCouponName().equals(promotionalCoupon.getCouponName())) {
-                System.out.println("wow, couponname is equal to the promotional coupon!");
-                for(CartsProducts cartsProducts : cart.getCartProducts()) {
 
-                    if(cart.getPromotionalCoupon() != null) {
-                        System.out.println("sussybaka.. already applied a coupon didnt you?!");
-                        cartsProducts.setPriceToPay(cartsProducts.getProduct().getPrice() * cartsProducts.getProductQuantity());
-
-                    }
-                    System.out.println("anyway, put the fries in the bag lil bro, heres a discount:");
-                    cart.setPromotionalCoupon(promotionalCouponRepository.findById(promotionalCoupon.getId()).orElseThrow(() -> new NoSuchElementException("Cupom promocional não encontrado com base no ID.")));
-                    cartsProducts.setPriceToPay(cartsProducts.getPriceToPay() - (cartsProducts.getPriceToPay() * (promotionalCoupon.getCouponDiscount()/100)));
-                    cartService.setCartTotal(cart);
-                }
+                cartService.applyPromotionalCoupon(cart, promotionalCoupon);
 
             }
 
         }
-
-
 
         String referer = request.getHeader("Referer");
 
