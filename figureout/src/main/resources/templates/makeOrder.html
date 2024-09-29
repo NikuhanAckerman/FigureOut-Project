@@ -26,7 +26,7 @@
     <h1>Carrinho</h1>
     <p><b>Cupom de desconto:</b></p>
     <div class="mb-3">
-        <form th:action="@{/sales/addPromotionalCoupon/{clientId}" th:object="${promotionalCouponDTO}" method="POST">
+        <form th:action="@{/sales/addPromotionalCoupon/{clientId}(clientId = ${clientId})}" th:object="${promotionalCouponDTO}" method="POST">
             <input type="hidden" name="_method" value="PUT"/>
             <input type="text" id="cupom-input" class="form-control" th:field="*{couponName}" placeholder="Digite seu cupom de desconto">
             <button type="submit" class="btn btn-primary mt-2">Aplicar Cupom</button>

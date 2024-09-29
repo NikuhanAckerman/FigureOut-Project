@@ -56,6 +56,7 @@ public class SaleController {
         List<Address> addressClientList = client.getAddresses();
         List<CreditCard> creditCardClientList = client.getCreditCards();
         ChangeCartProductQuantityDTO changeCartProductQuantityDTO = new ChangeCartProductQuantityDTO();
+        PromotionalCouponDTO promotionalCouponDTO = new PromotionalCouponDTO();
 
         List<CartsProducts> cartsProductsList = cart.getCartProducts();
 
@@ -72,6 +73,7 @@ public class SaleController {
         model.addAttribute("addressClientList", addressClientList);
         model.addAttribute("creditCardClientList", creditCardClientList);
         model.addAttribute("changeCartProductQuantityDTO", changeCartProductQuantityDTO);
+        model.addAttribute("promotionalCouponDTO", promotionalCouponDTO);
         model.addAttribute("orderTotalPrice", cart.getTotalPrice());
 
         return "makeOrder";
@@ -85,28 +87,29 @@ public class SaleController {
          i reset the price of the products back to the original price * quantity,
          then apply the new coupon's discount
          (will potentially write it better when i transfer this to CartService and/or SaleService) */
+
         for(PromotionalCoupon promotionalCoupon: promotionalCouponRepository.findAll()) {
 
             if(promotionalCouponDTO.getCouponName().equals(promotionalCoupon.getCouponName())) {
-
+                System.out.println("wow, couponname is equal to the promotional coupon!");
                 for(CartsProducts cartsProducts : cart.getCartProducts()) {
 
                     if(cart.getPromotionalCoupon() != null) {
-
+                        System.out.println("sussybaka.. already applied a coupon didnt you?!");
                         cartsProducts.setPriceToPay(cartsProducts.getProduct().getPrice() * cartsProducts.getProductQuantity());
 
                     }
-
-                    cart.setPromotionalCoupon(promotionalCouponRepository.findById(promotionalCouponDTO.getCouponId()).orElseThrow(() -> new NoSuchElementException("Cupom promocional não encontrado com base no ID.")));
-                    cartsProducts.setPriceToPay(cartsProducts.getPriceToPay() * (promotionalCoupon.getCouponDiscount()/100));
-
+                    System.out.println("anyway, put the fries in the bag lil bro, heres a discount:");
+                    cart.setPromotionalCoupon(promotionalCouponRepository.findById(promotionalCoupon.getId()).orElseThrow(() -> new NoSuchElementException("Cupom promocional não encontrado com base no ID.")));
+                    cartsProducts.setPriceToPay(cartsProducts.getPriceToPay() - (cartsProducts.getPriceToPay() * (promotionalCoupon.getCouponDiscount()/100)));
+                    cartService.setCartTotal(cart);
                 }
 
             }
 
         }
 
-        cartService.setCartTotal(cart);
+
 
         String referer = request.getHeader("Referer");
 

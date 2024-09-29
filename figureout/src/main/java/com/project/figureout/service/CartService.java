@@ -73,13 +73,15 @@ public class CartService {
 
     public void setCartTotal(Cart cart) {
         double total = 0;
+        System.out.println("calling setCartTotal");
 
         // Get the list of products in the cart
         List<CartsProducts> cartProducts = cart.getCartProducts();
 
         // Loop through each product in the cart and calculate the total price
         for (CartsProducts cartsProduct : cartProducts) {
-            double productTotal = cartsProduct.getProduct().getPrice() * cartsProduct.getProductQuantity();
+            double productTotal = cartsProduct.getPriceToPay() * cartsProduct.getProductQuantity();
+            System.out.println(productTotal);
             total += productTotal;
         }
 
