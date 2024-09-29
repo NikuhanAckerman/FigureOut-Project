@@ -1,6 +1,6 @@
 package com.project.figureout.dto;
 
-import com.project.figureout.model.Product;
+import com.project.figureout.model.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,8 +9,10 @@ import java.util.List;
 @Getter @Setter
 public class SaleDTO {
 
-    private List<CartProductDTO> cartProductDTO;
+    private List<SalesCards> salesCards;
 
-    private PromotionalCouponDTO promotionalCouponDTO;
+    private Cart saleCart;
+
+    private Address deliveryAddress;
 
 }

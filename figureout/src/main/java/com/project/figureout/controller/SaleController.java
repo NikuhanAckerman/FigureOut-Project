@@ -65,6 +65,7 @@ public class SaleController {
             cartProductTotalPrices.put(cartsProducts.getProduct().getId(), cartsProducts.getPriceToPay().multiply(BigDecimal.valueOf(cartsProducts.getProductQuantity())));
         }
 
+        model.addAttribute("saleDTO", new SaleDTO());
         model.addAttribute("clientId", clientId);
         model.addAttribute("cart", cart);
         model.addAttribute("cartProductTotalPrices", cartProductTotalPrices);
@@ -75,6 +76,15 @@ public class SaleController {
         model.addAttribute("orderTotalPrice", cart.getTotalPrice());
 
         return "makeOrder";
+    }
+
+    @PostMapping("/makeOrder/{clientId}")
+    public String makeOrderPost(@PathVariable long clientId, @ModelAttribute SaleDTO saleDTO, Model model) {
+        model.addAttribute("saleCart", saleDTO.getSaleCart());
+        model.addAttribute("chosenCreditCards", saleDTO.getSalesCards());
+        model.addAttribute("deliveryAddress", saleDTO.getDeliveryAddress());
+
+        return "finishOrder";
     }
 
     @PutMapping("/addPromotionalCoupon/{clientId}")
@@ -101,12 +111,8 @@ public class SaleController {
         return "redirect:" + referer;
     }
 
-    @GetMapping("/finishOrder/{clientId}")
-    public String finishOrderGet(@PathVariable long clientId, Model model) {
 
 
-        return "finishOrder";
-    }
 
 
 

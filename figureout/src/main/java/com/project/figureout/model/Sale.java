@@ -26,6 +26,9 @@ public class Sale {
     @JoinColumn(name = "ven_end_id")
     private Address deliveryAddress;
 
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SalesCards> cardsUsedInThisSale = new ArrayList<>();
+
     private enum Status {
         PAGAMENTO_REJEITADO,
         PAGAMENTO_REALIZADO,

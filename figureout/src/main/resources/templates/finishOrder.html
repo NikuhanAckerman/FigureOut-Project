@@ -70,7 +70,7 @@
 
   <div th:each="creditCard : chosenCreditCards">
     <p th:text="${creditCard.cardNumber}"><b></b></p>
-    <input type="number" class="form-control" step="0.01" min="0.01" placeholder="Insira o valor pago por este cartão" required>
+    <input type="number" class="form-control" step="0.01" min="0.01" placeholder="Insira o valor pago por este cartão" th:value="${}" required>
   </div>
 
   <p><b>Endereço de entrega selecionado:</b></p>
