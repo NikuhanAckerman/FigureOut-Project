@@ -46,7 +46,7 @@ public class CartService {
         setCartTotal(cart);
     }
 
-    public void addProductToCart(Cart cart, Product product, ChangeCartProductQuantityDTO changeCartProductQuantityDTO, Client client) {
+    public void addProductToCart(Cart cart, Product product, ChangeCartProductQuantityDTO changeCartProductQuantityDTO) {
         CartsProductsKey cartsProductsKey = new CartsProductsKey(cart.getId(), product.getId());
 
         CartsProducts cartProduct = new CartsProducts();

@@ -45,7 +45,7 @@
       <!-- href="makeOrder.html" -->
       <h5 class="mt-3" th:text=" 'Disponível em estoque: ' + ${stock.productQuantityAvailable}"></h5>
 
-      <form th:action="@{/cart/addProductToCart/{productId}/{cartId}(productId=${product.id}, cartId=${cartId})}" method="POST" th:object="${changeCartProductQuantityDTO}">
+      <form th:action="@{/cart/addProductToCart/{productId}/{cartId}(productId=${product.id}, cartId=${cart.id})}" method="POST" th:object="${changeCartProductQuantityDTO}">
         <input type="number" class="form-control" step="1" min="1" th:field="*{quantity}" required>
 
         <button class="btn btn-primary btn-lg" type="submit" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">

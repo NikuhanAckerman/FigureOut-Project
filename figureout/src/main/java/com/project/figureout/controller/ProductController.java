@@ -132,7 +132,6 @@ public class ProductController {
         model.addAttribute("changeCartProductQuantityDTO", new ChangeCartProductQuantityDTO());
         model.addAttribute("product", product);
         model.addAttribute("cart", client.getCartList().getFirst());
-        model.addAttribute("clientId", 1);
 
         return "product";
     }
