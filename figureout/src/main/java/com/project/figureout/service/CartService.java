@@ -33,18 +33,6 @@ public class CartService {
         return cartRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Carrinho não encontrado com base no ID."));
     }
 
-    public Cart getCartByClientId(long id) {
-
-        for(Client client: clientService.getAllClients()) {
-            if(client.getId() == id) {
-                return getCartById(client.getId());
-            }
-
-        }
-
-        throw new NoSuchElementException("Carrinho não encontrado com base no ID do cliente.");
-    }
-
     public void saveCart(Cart cart) {
         cartRepository.save(cart);
     }

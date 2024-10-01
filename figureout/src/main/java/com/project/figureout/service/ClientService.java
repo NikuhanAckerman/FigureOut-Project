@@ -47,7 +47,7 @@ public class ClientService {
     public void registerClient(Client client, ClientDTO clientDTO) {
 
         clientBasicDataSetter(client, clientDTO.getClientBasicDataDTO());
-        client.getCart().setTotalPrice(BigDecimal.valueOf(0));
+        client.getCartList().add(new Cart());
         saveClient(client);
 
         AddressDTO clientDTOAddress = clientDTO.getAddressDTO();

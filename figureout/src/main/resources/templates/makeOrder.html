@@ -23,7 +23,7 @@
         </ol>
     </nav>
 
-    <form th:action="@{sales/makeOrder/{clientId}(clientId = ${clientId})}" th:object="${saleDTO}" method="POST">
+
 
         <h1>Carrinho</h1>
         <p><b>Cupom de desconto:</b></p>
@@ -34,12 +34,12 @@
                 <button type="submit" class="btn btn-primary mt-2">Aplicar Cupom</button>
             </form>
 
-            <div th:if="${cart.promotionalCoupon} != null">
-                <p class="text-primary" th:text="'Cupom promocional aplicado: ' + ${cart.promotionalCoupon.couponName}"></p>
-                <p class="text-primary" th:text="'Desconto: ' + ${cart.promotionalCoupon.couponDiscount * 100} + '%'"></p>
 
-                <input type="hidden" th:value="${cart.promotionalCoupon.id}" th:field="*{saleCart.promotionalCoupon.couponId}">
-            </div>
+        </div>
+
+        <div th:if="${cart.promotionalCoupon} != null">
+            <p class="text-primary" th:text="'Cupom promocional aplicado: ' + ${cart.promotionalCoupon.couponName}"></p>
+            <p class="text-primary" th:text="'Desconto: ' + ${cart.promotionalCoupon.couponDiscount * 100} + '%'"></p>
         </div>
 
         <table class="table table-striped">
@@ -94,6 +94,12 @@
             </tbody>
         </table>
 
+    <form th:action="@{/sales/makeOrder/{clientId}(clientId = ${clientId})}" th:object="${saleDTO}" method="POST">
+
+        <div th:if="${cart.promotionalCoupon} != null">
+            <input type="hidden" th:value="${cart.promotionalCoupon.id}" th:field="*{saleCartId}">
+        </div>
+
         <h3 th:text="'Preço Total: R$' + ${orderTotalPrice}"></h3>
 
         <!-- Seção de Cartões de Crédito -->
@@ -102,7 +108,7 @@
         <div id="cartao-dropdown-container" class="mb-3">
             <select multiple class="form-control">
                 <option value="" disabled selected>Selecione o(s) cartão(ões)</option>
-                <option th:each="creditCard : ${creditCardClientList}" th:value="${creditCard.id}" th:text="${creditCard.cardNumber}" th:field="*{salesCards}"></option>
+                <option th:each="creditCard : ${creditCardClientList}" th:value="${creditCard.id}" th:text="${creditCard.cardNumber}" th:field="*{salesCardsIds}"></option>
             </select>
         </div>
 
@@ -115,7 +121,7 @@
         <div class="mb-3">
             <select id="address-dropdown" class="form-control">
                 <option value="" disabled selected>Selecione um endereço</option>
-                <option th:each="address : ${addressClientList}" th:value="${address.id}" th:text="${address.nickname}" th:field="*{deliveryAddress}">Casa em Poá</option>
+                <option th:each="address : ${addressClientList}" th:value="${address.id}" th:text="${address.nickname}" th:field="*{deliveryAddressId}">Casa em Poá</option>
             </select>
         </div>
 
@@ -123,7 +129,7 @@
             <a th:href="@{/createAddress/{clientId}(clientId = ${clientId})}" class="btn btn-success">Adicionar um novo endereço</a>
         </div>
 
-        <input type="hidden" value="${cart}" th:field="*{cart}">
+        <input type="hidden" value="${cart.id}" th:field="*{saleCartId}">
 
         <!-- Botões de finalizar compra e continuar comprando -->
         <div class="text-center">
@@ -131,9 +137,10 @@
             <button type="submit" id="btn-finalizar" class="btn btn-primary mt-3">Prosseguir</button>
         </div>
 
-
-
     </form>
+
+
+
 
 </div>
 

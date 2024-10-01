@@ -9,10 +9,10 @@ import java.util.List;
 @Getter @Setter
 public class SaleDTO {
 
-    private List<SalesCards> salesCards;
+    private List<Long> salesCardsIds;
 
-    private Cart saleCart;
+    private long saleCartId;
 
-    private Address deliveryAddress;
+    private long deliveryAddressId;
 
 }

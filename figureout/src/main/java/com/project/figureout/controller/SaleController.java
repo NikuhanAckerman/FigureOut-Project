@@ -3,10 +3,7 @@ package com.project.figureout.controller;
 import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.PromotionalCouponRepository;
-import com.project.figureout.service.CartService;
-import com.project.figureout.service.ClientService;
-import com.project.figureout.service.ProductService;
-import com.project.figureout.service.SaleService;
+import com.project.figureout.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,10 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Controller
 @RequestMapping("/sales")
@@ -37,6 +31,12 @@ public class SaleController {
 
     @Autowired
     private PromotionalCouponRepository promotionalCouponRepository;
+
+    @Autowired
+    private CreditCardService creditCardService;
+
+    @Autowired
+    private AddressService addressService;
 
     @GetMapping("")
     public String showSalesGet(Model model) {
@@ -80,9 +80,24 @@ public class SaleController {
 
     @PostMapping("/makeOrder/{clientId}")
     public String makeOrderPost(@PathVariable long clientId, @ModelAttribute SaleDTO saleDTO, Model model) {
-        model.addAttribute("saleCart", saleDTO.getSaleCart());
-        model.addAttribute("chosenCreditCards", saleDTO.getSalesCards());
-        model.addAttribute("deliveryAddress", saleDTO.getDeliveryAddress());
+        Cart cart = cartService.getCartByClientId(clientId);
+        Address deliveryAddress = addressService.getAddressById(saleDTO.getDeliveryAddressId());
+        List<SalesCards> salesCardsList = new ArrayList<>();
+
+        for(long creditCardId: saleDTO.getSalesCardsIds()) {
+            SalesCards currentSaleCard = new SalesCards();
+            currentSaleCard.setCreditCard(creditCardService.getCreditCardById(creditCardId));
+            salesCardsList.add(currentSaleCard);
+        }
+
+        if(salesCardsList.size() == 1) {
+            salesCardsList.getFirst().setAmountPaid(cart.getTotalPrice());
+        }
+
+        model.addAttribute("saleCart", cart);
+        model.addAttribute("chosenCreditCards", salesCardsList);
+        model.addAttribute("deliveryAddress", deliveryAddress);
+        model.addAttribute("orderTotalPrice", cart.getTotalPrice());
 
         return "finishOrder";
     }
@@ -111,7 +126,12 @@ public class SaleController {
         return "redirect:" + referer;
     }
 
+    @PostMapping("/finishOrder/{clientId}")
+    public String createSale(@PathVariable long clientId) {
 
+
+        return "shop";
+    }
 
 
 

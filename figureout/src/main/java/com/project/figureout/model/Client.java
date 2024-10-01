@@ -58,9 +58,8 @@ public class Client {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CreditCard> creditCards = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "cli_car_id")
-    private Cart cart = new Cart();
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Cart> cartList = new ArrayList<>();
 
     // Expressão regular para validar a senha
     // (Incluir no mínimo 8 caracteres, letra mínuscula, maiúscula e caractere especial).

@@ -27,6 +27,10 @@ public class Cart {
     private List<CartsProducts> cartProducts;
 
     @ManyToOne
+    @JoinColumn(name = "car_cli_id")
+    private Client client;
+
+    @ManyToOne
     @JoinColumn(name = "car_cupom_promocional_usado")
     private PromotionalCoupon promotionalCoupon;
 

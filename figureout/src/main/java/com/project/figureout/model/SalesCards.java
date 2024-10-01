@@ -1,9 +1,14 @@
 package com.project.figureout.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "VendasCartoesDeCredito")
+@Getter @Setter
 public class SalesCards {
 
     @EmbeddedId
@@ -20,6 +25,6 @@ public class SalesCards {
     private CreditCard creditCard;
 
     @Column(name = "vdc_valor_pago")
-    private double amountPaid;
+    private BigDecimal amountPaid;
 
 }

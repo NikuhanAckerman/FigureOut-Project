@@ -25,8 +25,10 @@
 
   <h1>Informações finais</h1>
 
-  <p th:text="'Cupom de desconto: ' + ${cart.promotionalCoupon.couponName}"><b></b></p>
-  <p th:text="'Desconto: ' + ${cart.promotionalCoupon.couponDiscount} + '%'"><b></b></p>
+  <div th:if="${cart.promotionalCoupon} != null">
+    <p th:text="'Cupom de desconto: ' + ${saleCart.promotionalCoupon.couponName}"><b></b></p>
+    <p th:text="'Desconto: ' + ${saleCart.promotionalCoupon.couponDiscount} + '%'"><b></b></p>
+  </div>
 
   <table class="table table-striped">
     <thead>
@@ -43,7 +45,7 @@
     <tbody>
 
     <!-- Inserir coisas do thymeleaf aqui -->
-    <tr th:each="cartProduct : ${cart.cartProducts}">
+    <tr th:each="cartProduct : ${saleCart.cartProducts}">
 
       <td>
         <img th:src="@{/products/productPicture/{id}(id=${cartProduct.product.id})}" class="card-img-top">
@@ -66,22 +68,30 @@
 
   <!-- Seção de Cartões de Crédito -->
 
-  <p><b>Cartões selecionados:</b></p>
+  <form th:action="@{/finishOrder/{clientId}(clientId = ${clientId})}"  method="POST" th:object="${saleCart}">
 
-  <div th:each="creditCard : chosenCreditCards">
-    <p th:text="${creditCard.cardNumber}"><b></b></p>
-    <input type="number" class="form-control" step="0.01" min="0.01" placeholder="Insira o valor pago por este cartão" th:value="${}" required>
-  </div>
+    <p><b>Cartões selecionados:</b></p>
 
-  <p><b>Endereço de entrega selecionado:</b></p>
+    <div th:each="creditCard : chosenCreditCards">
+      <p th:text="${creditCard.cardNumber}"><b></b></p>
 
-  <p th:text="${deliveryAddress.name}">
+      <input type="number" class="form-control" step="0.01" min="0.01" placeholder="Insira o valor pago por este cartão" th:value="*{}" required>
 
-  <!-- Botões de finalizar compra e continuar comprando -->
-  <div class="text-center">
-    <a href="/products/shop" class="btn btn-danger mt-3">Voltar para a loja</a>
-    <button id="btn-finalizar" class="btn btn-success mt-3">Finalizar compra</button>
-  </div>
+    </div>
+
+    <p><b>Endereço de entrega selecionado:</b></p>
+
+    <p th:text="${deliveryAddress.name}">
+
+    <!-- Botões de finalizar compra e continuar comprando -->
+    <div class="text-center">
+      <a href="/products/shop" class="btn btn-danger mt-3">Voltar para a loja</a>
+      <button type="submit" id="btn-finalizar" class="btn btn-success mt-3">Finalizar compra</button>
+    </div>
+
+  </form>
+
+
 </div>
 
 <footer id="footer">

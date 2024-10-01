@@ -33,25 +33,25 @@ public class CartController {
     @Autowired
     private CartsProductsRepository cartsProductsRepository;
 
-    @GetMapping("/getCartByClientId/{id}")
+    @GetMapping("/getCart/{cartId}")
     public Cart getSpecificCart(@PathVariable Long id) {
-        return cartService.getCartByClientId(id);
+        return cartService.getCartById(id);
     }
 
     @GetMapping("/{clientId}")
     public Cart showCart(@PathVariable Long id, Model model) {
-        Cart cart = cartService.getCartByClientId(id);
+        Cart cart = cartService.getCartById(id);
 
         model.addAttribute("cart", cart);
 
         return cart;
     }
 
-    @PostMapping("/addProductToCart/{productId}/{clientId}")
-    public String addProductToCart(@PathVariable Long productId, @PathVariable Long clientId,
+    @PostMapping("/addProductToCart/{productId}/{cartId}")
+    public String addProductToCart(@PathVariable Long productId, @PathVariable Long cartId,
                                    @ModelAttribute ChangeCartProductQuantityDTO changeCartProductQuantityDTO, HttpServletRequest request) {
         Product product = productService.getProductById(productId);
-        Cart cart = cartService.getCartByClientId(clientId);
+        Cart cart = cartService.getCartById(cartId);
 
         cartService.addProductToCart(cart, product, changeCartProductQuantityDTO);
 
@@ -62,10 +62,10 @@ public class CartController {
         return "redirect:" + referer;
     }
 
-    @DeleteMapping("/removeProductFromCart/{productId}/{clientId}")
-    public String removeProductFromCart(@PathVariable Long productId, @PathVariable Long clientId, Model model, HttpServletRequest request) {
+    @DeleteMapping("/removeProductFromCart/{productId}/{cartId}")
+    public String removeProductFromCart(@PathVariable Long productId, @PathVariable Long cartId, Model model, HttpServletRequest request) {
         Product product = productService.getProductById(productId);
-        Cart cart = cartService.getCartByClientId(clientId);
+        Cart cart = cartService.getCartById(cartId);
 
         cartService.deleteProductFromCart(cart, product);
 
@@ -76,14 +76,13 @@ public class CartController {
         return "redirect:" + referer;
     }
 
-    @PutMapping("/changeProductQuantity/{productId}/{clientId}")
-    public String changeProductQuantity(@PathVariable Long productId, @PathVariable Long clientId,
+    @PutMapping("/changeProductQuantity/{productId}/{cartId}")
+    public String changeProductQuantity(@PathVariable Long productId, @PathVariable Long cartId,
                                         @ModelAttribute ChangeCartProductQuantityDTO changeCartProductQuantityDTO, HttpServletRequest request) {
 
         System.out.println("This is running!! wow!");
         Product product = productService.getProductById(productId);
-        Client client = clientService.getClientById(clientId);
-        Cart cart = cartService.getCartByClientId(clientId);
+        Cart cart = cartService.getCartById(cartId);
 
         for(CartsProducts cartsProducts: cart.getCartProducts()) {
 
