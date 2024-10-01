@@ -33,6 +33,10 @@ public class CartService {
         return cartRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Carrinho não encontrado com base no ID."));
     }
 
+    public Client getClientByCart(Cart cart) {
+        return cart.getClient();
+    }
+
     public void saveCart(Cart cart) {
         cartRepository.save(cart);
     }
@@ -42,7 +46,7 @@ public class CartService {
         setCartTotal(cart);
     }
 
-    public void addProductToCart(Cart cart, Product product, ChangeCartProductQuantityDTO changeCartProductQuantityDTO) {
+    public void addProductToCart(Cart cart, Product product, ChangeCartProductQuantityDTO changeCartProductQuantityDTO, Client client) {
         CartsProductsKey cartsProductsKey = new CartsProductsKey(cart.getId(), product.getId());
 
         CartsProducts cartProduct = new CartsProducts();
@@ -63,6 +67,7 @@ public class CartService {
 
         cart.getCartProducts().add(cartProduct);
 
+        client.getCartList().add(cart);
         setCartTotal(cart);
     }
 

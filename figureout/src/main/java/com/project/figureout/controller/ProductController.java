@@ -115,8 +115,9 @@ public class ProductController {
     @GetMapping("/shop")
     public String showShop(Model model) {
         List<Product> products =  productService.getAllProducts();
+        Client client = clientService.getClientById(1);
         model.addAttribute("products", products);
-        model.addAttribute("cart", cartService.getCartByClientId(1));
+        model.addAttribute("cart", client.getCartList().getFirst());
         model.addAttribute("clientId", 1);
         return "shop";
     }
@@ -126,10 +127,11 @@ public class ProductController {
         Product product = productService.getProductById(id);
         Stock stock = stockService.getProductInStockByProductId(id);
         List<Category> productCategoryList = product.getCategories();
+        Client client = clientService.getClientById(1);
         model.addAttribute("stock", stock);
         model.addAttribute("changeCartProductQuantityDTO", new ChangeCartProductQuantityDTO());
         model.addAttribute("product", product);
-        model.addAttribute("cart", cartService.getCartByClientId(1));
+        model.addAttribute("cart", client.getCartList().getFirst());
         model.addAttribute("clientId", 1);
 
         return "product";

@@ -52,8 +52,9 @@ public class CartController {
                                    @ModelAttribute ChangeCartProductQuantityDTO changeCartProductQuantityDTO, HttpServletRequest request) {
         Product product = productService.getProductById(productId);
         Cart cart = cartService.getCartById(cartId);
+        Client client = cartService.getClientByCart(cart);
 
-        cartService.addProductToCart(cart, product, changeCartProductQuantityDTO);
+        cartService.addProductToCart(cart, product, changeCartProductQuantityDTO,client);
 
         // Get the previous page URL from the Referer header
         String referer = request.getHeader("Referer");

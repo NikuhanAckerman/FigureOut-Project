@@ -48,9 +48,9 @@ public class SaleController {
     }
 
     @GetMapping("/makeOrder/{clientId}")
-    public String makeOrderGet(@PathVariable long clientId, Model model) {
-        Client client = clientService.getClientById(clientId);
-        Cart cart = cartService.getCartByClientId(clientId);
+    public String makeOrderGet(@PathVariable long cartId, Model model) {
+        Cart cart = cartService.getCartById(cartId);
+        Client client = cartService.getClientByCart(cart);
         List<Address> addressClientList = client.getAddresses();
         List<CreditCard> creditCardClientList = client.getCreditCards();
         ChangeCartProductQuantityDTO changeCartProductQuantityDTO = new ChangeCartProductQuantityDTO();
@@ -66,7 +66,7 @@ public class SaleController {
         }
 
         model.addAttribute("saleDTO", new SaleDTO());
-        model.addAttribute("clientId", clientId);
+        model.addAttribute("clientId", client.getId());
         model.addAttribute("cart", cart);
         model.addAttribute("cartProductTotalPrices", cartProductTotalPrices);
         model.addAttribute("addressClientList", addressClientList);
@@ -78,9 +78,9 @@ public class SaleController {
         return "makeOrder";
     }
 
-    @PostMapping("/makeOrder/{clientId}")
-    public String makeOrderPost(@PathVariable long clientId, @ModelAttribute SaleDTO saleDTO, Model model) {
-        Cart cart = cartService.getCartByClientId(clientId);
+    @PostMapping("/makeOrder/{cartId}")
+    public String makeOrderPost(@PathVariable long cartId, @ModelAttribute SaleDTO saleDTO, Model model) {
+        Cart cart = cartService.getCartById(cartId);
         Address deliveryAddress = addressService.getAddressById(saleDTO.getDeliveryAddressId());
         List<SalesCards> salesCardsList = new ArrayList<>();
 
@@ -103,8 +103,8 @@ public class SaleController {
     }
 
     @PutMapping("/addPromotionalCoupon/{clientId}")
-    public String addPromotionalCoupon(@PathVariable long clientId, @ModelAttribute PromotionalCouponDTO promotionalCouponDTO, HttpServletRequest request) {
-        Cart cart = cartService.getCartByClientId(clientId);
+    public String addPromotionalCoupon(@PathVariable long cartId, @ModelAttribute PromotionalCouponDTO promotionalCouponDTO, HttpServletRequest request) {
+        Cart cart = cartService.getCartById(cartId);
 
         /* extremely nested code, basically what it does is if the coupon typed is correct,
          i reset the price of the products back to the original price * quantity,
