@@ -18,16 +18,16 @@
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="/index">Início</a></li>
       <li class="breadcrumb-item"><a href="/products/shop">Loja</a></li>
-      <li class="breadcrumb-item active"><a href="/sales/makeOrder/{clientId}">Carrinho</a></li>
+      <li class="breadcrumb-item active"><a href="/sales/makeOrder/{cartId}">Carrinho</a></li>
       <li class="breadcrumb-item active" aria-current="page">Finalizar compra</li>
     </ol>
   </nav>
 
   <h1>Informações finais</h1>
 
-  <div th:if="${cart.promotionalCoupon} != null">
+  <div th:if="${saleCart.promotionalCoupon} != null">
     <p th:text="'Cupom de desconto: ' + ${saleCart.promotionalCoupon.couponName}"><b></b></p>
-    <p th:text="'Desconto: ' + ${saleCart.promotionalCoupon.couponDiscount} + '%'"><b></b></p>
+    <p th:text="'Desconto: ' + ${saleCart.promotionalCoupon.couponDiscount * 100} + '%'"><b></b></p>
   </div>
 
   <table class="table table-striped">
@@ -38,7 +38,6 @@
       <th scope="col">Preço</th>
       <th scope="col">Quantidade</th>
       <th scope="col">Total</th>
-      <!-- <th scope="col">Ação</th> -->
     </tr>
     </thead>
 
@@ -68,20 +67,23 @@
 
   <!-- Seção de Cartões de Crédito -->
 
-  <form th:action="@{/finishOrder/{clientId}(clientId = ${clientId})}"  method="POST" th:object="${saleCart}">
+  <form th:action="@{/sales/finishOrder/{cartId}(cartId = ${cartId})}"  method="POST" th:object="${saleCardDTO}">
 
     <p><b>Cartões selecionados:</b></p>
 
-    <div th:each="creditCard : chosenCreditCards">
-      <p th:text="${creditCard.cardNumber}"><b></b></p>
+    <div th:each="saleCard : ${salesCardsList}">
+      <p th:text="'Número do cartão: ' + ${saleCard.creditCard.cardNumber}"><b></b></p>
 
-      <input type="number" class="form-control" step="0.01" min="0.01" placeholder="Insira o valor pago por este cartão" th:value="*{}" required>
-
+      <input type="number" class="form-control" step="0.01" min="0.01"
+             placeholder="Insira o valor pago por este cartão"
+             name="idAmountPaid['${idAmountPaid.key}']" value="${idAmountPaid.value}"
+             th:field="*{idAmountPaid}"/>
     </div>
 
     <p><b>Endereço de entrega selecionado:</b></p>
 
-    <p th:text="${deliveryAddress.name}">
+    <p th:text="${deliveryAddress.nickname}">
+
 
     <!-- Botões de finalizar compra e continuar comprando -->
     <div class="text-center">
@@ -90,7 +92,6 @@
     </div>
 
   </form>
-
 
 </div>
 

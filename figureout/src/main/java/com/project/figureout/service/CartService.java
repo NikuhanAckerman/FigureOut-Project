@@ -67,7 +67,6 @@ public class CartService {
 
         cart.getCartProducts().add(cartProduct);
 
-        client.getCartList().add(cart);
         setCartTotal(cart);
     }
 

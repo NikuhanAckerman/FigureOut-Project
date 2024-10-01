@@ -23,12 +23,10 @@
         </ol>
     </nav>
 
-
-
         <h1>Carrinho</h1>
         <p><b>Cupom de desconto:</b></p>
         <div class="mb-3">
-            <form th:action="@{/sales/addPromotionalCoupon/{clientId}(clientId = ${clientId})}" th:object="${promotionalCouponDTO}" method="POST">
+            <form th:action="@{/sales/addPromotionalCoupon/{cartId}(cartId = ${cartId})}" th:object="${promotionalCouponDTO}" method="POST">
                 <input type="hidden" name="_method" value="PUT"/>
                 <input type="text" id="cupom-input" class="form-control" th:field="*{couponName}" placeholder="Digite seu cupom de desconto">
                 <button type="submit" class="btn btn-primary mt-2">Aplicar Cupom</button>
@@ -73,7 +71,7 @@
                 <td th:text="'R$' + ${cartProductTotalPrices[cartProduct.product.id]}"></td>
 
                 <td>
-                    <form th:action="@{/cart/changeProductQuantity/{productId}/{clientId}(productId = ${cartProduct.product.id}, clientId = ${clientId})}" th:object="${changeCartProductQuantityDTO}" method="POST">
+                    <form th:action="@{/cart/changeProductQuantity/{productId}/{cartId}(productId = ${cartProduct.product.id}, cartId = ${cartId})}" th:object="${changeCartProductQuantityDTO}" method="POST">
                         <input type="hidden" name="_method" value="PUT"/>
 
                         <input type="number" class="form-control quantidade" value="1" min="1" th:field="*{quantity}">
@@ -94,11 +92,9 @@
             </tbody>
         </table>
 
-    <form th:action="@{/sales/makeOrder/{clientId}(clientId = ${clientId})}" th:object="${saleDTO}" method="POST">
+    <form th:action="@{/sales/makeOrder/{cartId}(cartId = ${cartId})}" th:object="${saleDTO}" method="POST">
 
-        <div th:if="${cart.promotionalCoupon} != null">
-            <input type="hidden" th:value="${cart.promotionalCoupon.id}" th:field="*{saleCartId}">
-        </div>
+        <input type="hidden" th:value="${cart.id}" th:field="*{saleCartId}">
 
         <h3 th:text="'Preço Total: R$' + ${orderTotalPrice}"></h3>
 
@@ -106,9 +102,9 @@
 
         <p><b>Selecione um ou mais Cartões de Crédito:</b></p>
         <div id="cartao-dropdown-container" class="mb-3">
-            <select multiple class="form-control">
+            <select multiple class="form-control" th:field="*{salesCardsIds}">
                 <option value="" disabled selected>Selecione o(s) cartão(ões)</option>
-                <option th:each="creditCard : ${creditCardClientList}" th:value="${creditCard.id}" th:text="${creditCard.cardNumber}" th:field="*{salesCardsIds}"></option>
+                <option th:each="creditCard : ${creditCardClientList}" th:value="${creditCard.id}" th:text="${creditCard.cardNumber}"></option>
             </select>
         </div>
 
@@ -119,9 +115,9 @@
         <!-- Seção de Endereço -->
         <p><b>Selecione um Endereço:</b></p>
         <div class="mb-3">
-            <select id="address-dropdown" class="form-control">
-                <option value="" disabled selected>Selecione um endereço</option>
-                <option th:each="address : ${addressClientList}" th:value="${address.id}" th:text="${address.nickname}" th:field="*{deliveryAddressId}">Casa em Poá</option>
+            <select id="address-dropdown" class="form-control" th:field="*{deliveryAddressId}">
+                <option value="0" disabled selected>Selecione um endereço</option>
+                <option th:each="address : ${addressClientList}" th:value="${address.id}" th:text="${address.nickname}"></option>
             </select>
         </div>
 
@@ -138,9 +134,6 @@
         </div>
 
     </form>
-
-
-
 
 </div>
 

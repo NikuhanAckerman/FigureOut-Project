@@ -38,7 +38,7 @@ public class CartController {
         return cartService.getCartById(id);
     }
 
-    @GetMapping("/{clientId}")
+    @GetMapping("/{cartId}")
     public Cart showCart(@PathVariable Long id, Model model) {
         Cart cart = cartService.getCartById(id);
 
@@ -54,7 +54,7 @@ public class CartController {
         Cart cart = cartService.getCartById(cartId);
         Client client = cartService.getClientByCart(cart);
 
-        cartService.addProductToCart(cart, product, changeCartProductQuantityDTO,client);
+        cartService.addProductToCart(cart, product, changeCartProductQuantityDTO, client);
 
         // Get the previous page URL from the Referer header
         String referer = request.getHeader("Referer");
@@ -64,7 +64,7 @@ public class CartController {
     }
 
     @DeleteMapping("/removeProductFromCart/{productId}/{cartId}")
-    public String removeProductFromCart(@PathVariable Long productId, @PathVariable Long cartId, Model model, HttpServletRequest request) {
+    public String removeProductFromCart(@PathVariable Long productId, @PathVariable Long cartId, HttpServletRequest request) {
         Product product = productService.getProductById(productId);
         Cart cart = cartService.getCartById(cartId);
 

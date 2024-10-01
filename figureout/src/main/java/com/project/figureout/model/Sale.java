@@ -29,16 +29,8 @@ public class Sale {
     @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SalesCards> cardsUsedInThisSale = new ArrayList<>();
 
-    private enum Status {
-        PAGAMENTO_REJEITADO,
-        PAGAMENTO_REALIZADO,
-        EM_PROCESSAMENTO,
-        EM_TRANSPORTE,
-        ENTREGUE
-    }
-
     @Enumerated(EnumType.ORDINAL)
-    private Status status;
+    private SaleStatusEnum status;
 
     @ManyToOne
     @JoinColumn(name = "ven_cupom_promocional_aplicado")

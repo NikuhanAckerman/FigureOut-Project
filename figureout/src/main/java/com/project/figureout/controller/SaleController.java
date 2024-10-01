@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -47,7 +48,7 @@ public class SaleController {
         return "adminSalesView";
     }
 
-    @GetMapping("/makeOrder/{clientId}")
+    @GetMapping("/makeOrder/{cartId}")
     public String makeOrderGet(@PathVariable long cartId, Model model) {
         Cart cart = cartService.getCartById(cartId);
         Client client = cartService.getClientByCart(cart);
@@ -79,12 +80,15 @@ public class SaleController {
     }
 
     @PostMapping("/makeOrder/{cartId}")
-    public String makeOrderPost(@PathVariable long cartId, @ModelAttribute SaleDTO saleDTO, Model model) {
+    public String makeOrderPost(@PathVariable long cartId, @ModelAttribute SaleDTO saleDTO, RedirectAttributes redirectAttributes) {
         Cart cart = cartService.getCartById(cartId);
+        System.out.println("addres in saleDTO: " + saleDTO.getDeliveryAddressId());
         Address deliveryAddress = addressService.getAddressById(saleDTO.getDeliveryAddressId());
+
         List<SalesCards> salesCardsList = new ArrayList<>();
 
         for(long creditCardId: saleDTO.getSalesCardsIds()) {
+            System.out.println(creditCardId);
             SalesCards currentSaleCard = new SalesCards();
             currentSaleCard.setCreditCard(creditCardService.getCreditCardById(creditCardId));
             salesCardsList.add(currentSaleCard);
@@ -94,15 +98,30 @@ public class SaleController {
             salesCardsList.getFirst().setAmountPaid(cart.getTotalPrice());
         }
 
-        model.addAttribute("saleCart", cart);
-        model.addAttribute("chosenCreditCards", salesCardsList);
-        model.addAttribute("deliveryAddress", deliveryAddress);
-        model.addAttribute("orderTotalPrice", cart.getTotalPrice());
+        SaleCardDTO saleCardDTO = new SaleCardDTO();
 
-        return "finishOrder";
+        List<CartsProducts> cartsProductsList = cart.getCartProducts();
+
+        HashMap<Long, BigDecimal> cartProductTotalPrices = new HashMap<>();
+
+        for(CartsProducts cartsProducts : cartsProductsList) {
+            // multiply product price by product quantity
+            cartProductTotalPrices.put(cartsProducts.getProduct().getId(), cartsProducts.getPriceToPay().multiply(BigDecimal.valueOf(cartsProducts.getProductQuantity())));
+        }
+
+        System.out.println("Lista de salescards: " + salesCardsList);
+
+        redirectAttributes.addFlashAttribute("saleCart", cart);
+        redirectAttributes.addFlashAttribute("cartProductTotalPrices", cartProductTotalPrices);
+        redirectAttributes.addFlashAttribute("salesCardsList", salesCardsList);
+        redirectAttributes.addFlashAttribute("deliveryAddress", deliveryAddress);
+        redirectAttributes.addFlashAttribute("orderTotalPrice", cart.getTotalPrice());
+        redirectAttributes.addFlashAttribute("saleCardDTO", saleCardDTO);
+
+        return "redirect:/sales/finishOrder/" + cartId;
     }
 
-    @PutMapping("/addPromotionalCoupon/{clientId}")
+    @PutMapping("/addPromotionalCoupon/{cartId}")
     public String addPromotionalCoupon(@PathVariable long cartId, @ModelAttribute PromotionalCouponDTO promotionalCouponDTO, HttpServletRequest request) {
         Cart cart = cartService.getCartById(cartId);
 
@@ -126,11 +145,53 @@ public class SaleController {
         return "redirect:" + referer;
     }
 
-    @PostMapping("/finishOrder/{clientId}")
-    public String createSale(@PathVariable long clientId) {
+    @GetMapping("/finishOrder/{cartId}")
+    public String finishOrderGet(@PathVariable long cartId, Model model) {
+        Cart cart = cartService.getCartById(cartId);
+        Client client = cartService.getClientByCart(cart);
+        Address deliveryAddress = (Address) model.getAttribute("deliveryAddress");
+        System.out.println(deliveryAddress.getNickname());
+        List<CreditCard> creditCardClientList = client.getCreditCards();
+        List<SalesCards> listSalesCards = (List<SalesCards>) model.getAttribute("salesCardsList");
 
 
-        return "shop";
+        return "finishOrder";
+    }
+
+    @PostMapping("/finishOrder/{cartId}")
+    public String createSale(@PathVariable long cartId, @ModelAttribute SaleCardDTO saleCardDTO, Model model) {
+        System.out.println("O post do finish order rodou lol");
+        Cart cart = cartService.getCartById(cartId);
+
+        Sale sale = new Sale();
+
+        sale.setCart(cart);
+
+        Address deliveryAddress = (Address) model.getAttribute("deliveryAddress");
+
+        sale.setDeliveryAddress(deliveryAddress);
+
+        List<SalesCards> listSalesCards = (List<SalesCards>) model.getAttribute("salesCardsList");
+
+        for(SalesCards saleCard: listSalesCards) {
+            sale.getCardsUsedInThisSale().add(saleCard);
+
+            for (Map.Entry<Long, BigDecimal> entry : saleCardDTO.getIdAmountPaid().entrySet()) {
+                Long key = entry.getKey();
+                BigDecimal value = entry.getValue();
+
+                saleCard.setCreditCard(creditCardService.getCreditCardById(key));
+                saleCard.setAmountPaid(value);
+
+            }
+
+        }
+
+        sale.setStatus(SaleStatusEnum.PAGAMENTO_REALIZADO);
+
+        sale.setPromotionalCouponApplied(sale.getCart().getPromotionalCoupon());
+
+        return "redirect:/shop";
     }
 
 

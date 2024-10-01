@@ -9,7 +9,7 @@
         <button type="button" class="nav-link bi bi-cart" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart"></button>
     </div>
 
-    <div th:fragment="cartOffcanvasFragment(clientId, cart)">
+    <div th:fragment="cartOffcanvasFragment(cart)">
 
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
             <div class="offcanvas-header">
@@ -20,7 +20,7 @@
 
                 <div th:if="${!cart.cartProducts.isEmpty()}">
 
-                    <a class="btn btn-primary mb-3" th:href="@{/sales/makeOrder/{clientId}(clientId=${clientId})}">Prosseguir para compra</a>
+                    <a class="btn btn-primary mb-3" th:href="@{/sales/makeOrder/{cartId}(cartId=${cart.id})}">Prosseguir para compra</a>
                     <p class="card-text">(você poderá mudar as quantidades na página de compra.)</p>
 
                     <div th:if="${cart.promotionalCoupon} != null">
@@ -39,7 +39,7 @@
 
                             <a th:href="@{/products/specificProduct/{id}(id=${cartProduct.product.id})}" class="btn btn-primary">Visualizar produto</a>
 
-                            <form th:action="@{/cart/removeProductFromCart/{productId}/{clientId}(productId=${cartProduct.product.id}, clientId=${clientId})}" method="POST">
+                            <form th:action="@{/cart/removeProductFromCart/{productId}/{cartId}(productId=${cartProduct.product.id}, cartId=${cart.id})}" method="POST">
                                 <input type="hidden" name="_method" value="DELETE"/>
                                 <button class="btn btn-danger" type="submit" onclick="return confirm('Tem certeza?')">Tirar do carrinho</button>
                             </form>
@@ -52,6 +52,8 @@
                 <div th:unless="${!cart.cartProducts.isEmpty()}">
                     <p class="text-secondary">Sem items no carrinho</p>
                 </div>
+
+
 
             </div>
         </div>
