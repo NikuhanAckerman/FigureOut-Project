@@ -9,5 +9,4 @@ import java.util.HashMap;
 @Getter @Setter
 public class SaleCardDTO {
     private HashMap<Long, BigDecimal> idAmountPaid;
-
 }

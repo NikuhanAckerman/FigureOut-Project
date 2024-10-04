@@ -82,7 +82,7 @@ public class SaleController {
     @PostMapping("/makeOrder/{cartId}")
     public String makeOrderPost(@PathVariable long cartId, @ModelAttribute SaleDTO saleDTO, RedirectAttributes redirectAttributes) {
         Cart cart = cartService.getCartById(cartId);
-        System.out.println("addres in saleDTO: " + saleDTO.getDeliveryAddressId());
+        System.out.println("address in saleDTO: " + saleDTO.getDeliveryAddressId());
         Address deliveryAddress = addressService.getAddressById(saleDTO.getDeliveryAddressId());
 
         List<SalesCards> salesCardsList = new ArrayList<>();
@@ -162,6 +162,8 @@ public class SaleController {
     public String createSale(@PathVariable long cartId, @ModelAttribute SaleCardDTO saleCardDTO, Model model) {
         System.out.println("O post do finish order rodou lol");
         Cart cart = cartService.getCartById(cartId);
+
+        System.out.println("LOOOL" + saleCardDTO.getIdAmountPaid().values());
 
         Sale sale = new Sale();
 
