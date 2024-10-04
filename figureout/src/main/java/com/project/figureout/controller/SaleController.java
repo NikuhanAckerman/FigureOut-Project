@@ -88,17 +88,15 @@ public class SaleController {
         List<SalesCards> salesCardsList = new ArrayList<>();
 
         for(long creditCardId: saleDTO.getSalesCardsIds()) {
-            System.out.println(creditCardId);
             SalesCards currentSaleCard = new SalesCards();
             currentSaleCard.setCreditCard(creditCardService.getCreditCardById(creditCardId));
+
             salesCardsList.add(currentSaleCard);
         }
 
         if(salesCardsList.size() == 1) {
             salesCardsList.getFirst().setAmountPaid(cart.getTotalPrice());
         }
-
-        SaleCardDTO saleCardDTO = new SaleCardDTO();
 
         List<CartsProducts> cartsProductsList = cart.getCartProducts();
 
@@ -116,7 +114,6 @@ public class SaleController {
         redirectAttributes.addFlashAttribute("salesCardsList", salesCardsList);
         redirectAttributes.addFlashAttribute("deliveryAddress", deliveryAddress);
         redirectAttributes.addFlashAttribute("orderTotalPrice", cart.getTotalPrice());
-        redirectAttributes.addFlashAttribute("saleCardDTO", saleCardDTO);
 
         return "redirect:/sales/finishOrder/" + cartId;
     }
@@ -154,6 +151,17 @@ public class SaleController {
         List<CreditCard> creditCardClientList = client.getCreditCards();
         List<SalesCards> listSalesCards = (List<SalesCards>) model.getAttribute("salesCardsList");
 
+        List<SaleCardDTO> saleCardDTOList = new ArrayList<>();
+
+        for(SalesCards saleCard: listSalesCards) {
+            SaleCardDTO saleCardDTO = new SaleCardDTO();
+            saleCardDTO.setCardId(saleCard.getCreditCard().getId());
+
+            saleCardDTOList.add(saleCardDTO);
+        }
+
+        model.addAttribute("saleCardDTOList", saleCardDTOList);
+
 
         return "finishOrder";
     }
@@ -163,7 +171,7 @@ public class SaleController {
         System.out.println("O post do finish order rodou lol");
         Cart cart = cartService.getCartById(cartId);
 
-        System.out.println("LOOOL" + saleCardDTO.getIdAmountPaid().values());
+        System.out.println("LOOOL" + saleCardDTO.getAmountPaid());
 
         Sale sale = new Sale();
 
@@ -178,14 +186,9 @@ public class SaleController {
         for(SalesCards saleCard: listSalesCards) {
             sale.getCardsUsedInThisSale().add(saleCard);
 
-            for (Map.Entry<Long, BigDecimal> entry : saleCardDTO.getIdAmountPaid().entrySet()) {
-                Long key = entry.getKey();
-                BigDecimal value = entry.getValue();
 
-                saleCard.setCreditCard(creditCardService.getCreditCardById(key));
-                saleCard.setAmountPaid(value);
+            saleCard.setAmountPaid(saleCardDTO.getAmountPaid());
 
-            }
 
         }
 
