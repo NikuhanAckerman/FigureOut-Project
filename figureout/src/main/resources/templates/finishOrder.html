@@ -67,30 +67,20 @@
 
   <!-- Seção de Cartões de Crédito -->
 
-  <form th:action="@{/sales/finishOrder/{cartId}(cartId = ${cartId})}"  method="POST" th:object="${saleCardDTO}">
+  <form th:action="@{/sales/finishOrder/{cartId}(cartId = ${cartId})}"  method="POST" th:object="${saleCardDTOList}">
 
     <p><b>Cartões selecionados:</b></p>
 
     <div th:each="saleCard : ${salesCardsList}">
+      
       <p th:text="'Número do cartão: ' + ${saleCard.creditCard.cardNumber}"><b></b></p>
 
-      <div th:each="saleCardDTO : ${saleCardDTO.idAmountPaid.entrySet()}">
+      <div th:each="saleCardDTO : ${saleCardDTOList}">
 
-          <input type="hidden" class="form-control" th:field="*{idAmountPaid['__${saleCardDTO.key}__']}" />
-          <input type="number" class="form-control" th:field="*{idAmountPaid['__${saleCardDTO.value}__']}" />
+        <input type="number" class="form-control" th:field="*{[__${saleCardDTO}__].amountPaid}" step="0.01" min="0.01"/>
 
       </div>
 
-      <!--
-      <input type="hidden" th:value="${saleCard.creditCard.id}" name="idAmountPaid"/>
-      <input type="number" class="form-control" step="0.01" min="0.01"
-             placeholder="Insira o valor pago por este cartão"
-             name="idAmountPaid" th:field="*{idAmountPaid[${saleCard.creditCard.id}]}"/>
-
-      <input type="number" class="form-control" step="0.01" min="0.01"
-             placeholder="Insira o valor pago por este cartão"
-             name="idAmountPaid['${idAmountPaid.key}']" value="${idAmountPaid.value}"
-             th:field="*{idAmountPaid}"/>-->
     </div>
 
     <p><b>Endereço de entrega selecionado:</b></p>
