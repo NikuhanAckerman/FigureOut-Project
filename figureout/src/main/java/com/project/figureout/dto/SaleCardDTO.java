@@ -11,8 +11,6 @@ import java.util.List;
 @Getter @Setter
 public class SaleCardDTO {
 
-    private long cardId;
-
-    private BigDecimal amountPaid;
+    HashMap<Long, BigDecimal> amountPaid = new HashMap<>();
 
 }

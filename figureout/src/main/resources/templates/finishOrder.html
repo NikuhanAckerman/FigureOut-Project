@@ -67,20 +67,16 @@
 
   <!-- Seção de Cartões de Crédito -->
 
-  <form th:action="@{/sales/finishOrder/{cartId}(cartId = ${cartId})}"  method="POST" th:object="${saleCardDTOList}">
+  <form th:action="@{/sales/finishOrder/{cartId}(cartId = ${cartId})}"  method="POST" th:object="${saleCardDTO}">
 
     <p><b>Cartões selecionados:</b></p>
 
     <div th:each="saleCard : ${salesCardsList}">
-      
       <p th:text="'Número do cartão: ' + ${saleCard.creditCard.cardNumber}"><b></b></p>
 
-      <div th:each="saleCardDTO : ${saleCardDTOList}">
-
-        <input type="number" class="form-control" th:field="*{[__${saleCardDTO}__].amountPaid}" step="0.01" min="0.01"/>
-
+      <div>
+        <input type="number" class="form-control" th:field="*{amountPaid[__${saleCard.creditCard.id}__]}" step="0.01" min="0.01" />
       </div>
-
     </div>
 
     <p><b>Endereço de entrega selecionado:</b></p>

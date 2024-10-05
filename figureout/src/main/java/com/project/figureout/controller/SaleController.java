@@ -3,6 +3,8 @@ package com.project.figureout.controller;
 import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.PromotionalCouponRepository;
+import com.project.figureout.repository.SaleRepository;
+import com.project.figureout.repository.SalesCardsRepository;
 import com.project.figureout.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/sales")
+@SessionAttributes({"salesCardsList"})
 public class SaleController {
 
     @Autowired
@@ -80,7 +83,7 @@ public class SaleController {
     }
 
     @PostMapping("/makeOrder/{cartId}")
-    public String makeOrderPost(@PathVariable long cartId, @ModelAttribute SaleDTO saleDTO, RedirectAttributes redirectAttributes) {
+    public String makeOrderPost(@PathVariable long cartId, @ModelAttribute SaleDTO saleDTO, Model model, RedirectAttributes redirectAttributes) {
         Cart cart = cartService.getCartById(cartId);
         System.out.println("address in saleDTO: " + saleDTO.getDeliveryAddressId());
         Address deliveryAddress = addressService.getAddressById(saleDTO.getDeliveryAddressId());
@@ -89,9 +92,11 @@ public class SaleController {
 
         for(long creditCardId: saleDTO.getSalesCardsIds()) {
             SalesCards currentSaleCard = new SalesCards();
+
             currentSaleCard.setCreditCard(creditCardService.getCreditCardById(creditCardId));
 
             salesCardsList.add(currentSaleCard);
+
         }
 
         if(salesCardsList.size() == 1) {
@@ -107,11 +112,13 @@ public class SaleController {
             cartProductTotalPrices.put(cartsProducts.getProduct().getId(), cartsProducts.getPriceToPay().multiply(BigDecimal.valueOf(cartsProducts.getProductQuantity())));
         }
 
+        model.addAttribute("salesCardsList", salesCardsList); // sessionattribute, to keep data for more than 2 request
+
         System.out.println("Lista de salescards: " + salesCardsList);
+
 
         redirectAttributes.addFlashAttribute("saleCart", cart);
         redirectAttributes.addFlashAttribute("cartProductTotalPrices", cartProductTotalPrices);
-        redirectAttributes.addFlashAttribute("salesCardsList", salesCardsList);
         redirectAttributes.addFlashAttribute("deliveryAddress", deliveryAddress);
         redirectAttributes.addFlashAttribute("orderTotalPrice", cart.getTotalPrice());
 
@@ -148,20 +155,18 @@ public class SaleController {
         Client client = cartService.getClientByCart(cart);
         Address deliveryAddress = (Address) model.getAttribute("deliveryAddress");
         System.out.println(deliveryAddress.getNickname());
-        List<CreditCard> creditCardClientList = client.getCreditCards();
         List<SalesCards> listSalesCards = (List<SalesCards>) model.getAttribute("salesCardsList");
 
-        List<SaleCardDTO> saleCardDTOList = new ArrayList<>();
+        SaleCardDTO saleCardDTO = new SaleCardDTO();
+        model.addAttribute("saleCardDTO", saleCardDTO);
 
         for(SalesCards saleCard: listSalesCards) {
-            SaleCardDTO saleCardDTO = new SaleCardDTO();
-            saleCardDTO.setCardId(saleCard.getCreditCard().getId());
 
-            saleCardDTOList.add(saleCardDTO);
+            saleCardDTO.getAmountPaid().put(saleCard.getCreditCard().getId(), null);
+
         }
 
-        model.addAttribute("saleCardDTOList", saleCardDTOList);
-
+        System.out.println(saleCardDTO.getAmountPaid());
 
         return "finishOrder";
     }
@@ -182,13 +187,27 @@ public class SaleController {
         sale.setDeliveryAddress(deliveryAddress);
 
         List<SalesCards> listSalesCards = (List<SalesCards>) model.getAttribute("salesCardsList");
+        System.out.println(listSalesCards);
 
-        for(SalesCards saleCard: listSalesCards) {
-            sale.getCardsUsedInThisSale().add(saleCard);
+        for (Map.Entry<Long, BigDecimal> entry : saleCardDTO.getAmountPaid().entrySet()) {
+            Long key = entry.getKey();
+            BigDecimal value = entry.getValue();
 
+            for(SalesCards saleCard: listSalesCards) {
 
-            saleCard.setAmountPaid(saleCardDTO.getAmountPaid());
+                if(saleCard.getCreditCard().getId() == key) {
+                    System.out.println("it is equal lol");
+                    SalesCardsKey salesCardsKey = new SalesCardsKey();
+                    salesCardsKey.setCreditCardId(creditCardService.getCreditCardById(key).getId());
+                    salesCardsKey.setSaleId(sale.getId());
+                    saleCard.setId(salesCardsKey);
 
+                    saleCard.setAmountPaid(value);
+                    saleCard.setSale(sale);
+                    sale.getCardsUsedInThisSale().add(saleCard);
+                }
+
+            }
 
         }
 
@@ -196,7 +215,9 @@ public class SaleController {
 
         sale.setPromotionalCouponApplied(sale.getCart().getPromotionalCoupon());
 
-        return "redirect:/shop";
+        saleService.saveSale(sale);
+
+        return "redirect:/products/shop";
     }
 
 

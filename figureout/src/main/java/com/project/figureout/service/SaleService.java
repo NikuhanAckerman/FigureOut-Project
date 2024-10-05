@@ -35,7 +35,7 @@ public class SaleService {
         saleRepository.deleteById(id); // add exception throwing to this later, apparently this doesnt throw EmptyResultDataAccessException anymore
     }
 
-    public void saveClient(Sale sale) {
+    public void saveSale(Sale sale) {
         saleRepository.save(sale);
     }
 
