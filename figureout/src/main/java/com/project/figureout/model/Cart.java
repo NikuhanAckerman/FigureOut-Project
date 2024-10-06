@@ -1,5 +1,6 @@
 package com.project.figureout.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.figureout.dto.PromotionalCouponDTO;
 import com.project.figureout.service.CartService;
 import jakarta.persistence.*;

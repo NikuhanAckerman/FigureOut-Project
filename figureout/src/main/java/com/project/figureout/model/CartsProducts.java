@@ -1,5 +1,6 @@
 package com.project.figureout.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class CartsProducts {
     @ManyToOne
     @MapsId("cartId")
     @JoinColumn(name = "cpr_car_id")
+    @JsonIgnore
     private Cart cart;
 
     @ManyToOne

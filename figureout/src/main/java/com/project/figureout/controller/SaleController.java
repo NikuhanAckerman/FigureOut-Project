@@ -246,11 +246,28 @@ public class SaleController {
         return "redirect:/sales/seeSales";
     }
 
-    @GetMapping("/getSaleCart/{saleId}")
+    @GetMapping("/getSaleCartProducts/{saleId}")
     @ResponseBody
-    public Cart getSaleCart(@PathVariable long saleId, Model model) {
+    public List<CartsProducts> getSaleCartProducts(@PathVariable long saleId, Model model) {
         Sale sale = saleService.getSaleById(saleId);
-        return sale.getCart();
+
+        return sale.getCart().getCartProducts();
+    }
+
+    @GetMapping("/getSaleClient/{saleId}")
+    @ResponseBody
+    public String getSaleClient(@PathVariable long saleId, Model model) {
+        Sale sale = saleService.getSaleById(saleId);
+
+        return sale.getCart().getClient().getName();
+    }
+
+    @GetMapping("/getSaleTotal/{saleId}")
+    @ResponseBody
+    public BigDecimal getSaleTotal(@PathVariable long saleId, Model model) {
+        Sale sale = saleService.getSaleById(saleId);
+
+        return sale.getCart().getTotalPrice();
     }
 
 
