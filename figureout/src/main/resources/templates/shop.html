@@ -32,46 +32,117 @@
   </div>
 </nav>
 
-<div class="container mt-5">
-  <h1 class="text-center">Catálogo de Produtos</h1>
-
-  <!-- Filtro de categorias
-  <div class="mb-4">
-    <label for="categorySelect" class="form-label">Categorias:</label>
-    <select class="form-select" id="categorySelect">
-      <option selected>Todos os produtos</option>
-      <option value="1">Chaveiros</option>
-      <option value="2">Pré-pintado</option>
-      <option value="3">Model Kit</option>
-      <option value="4">Miniatura</option>
-    </select>
-
-    <label for="sizeSelect" class="form-label">Tamanho:</label>
-    <select class="form-select" id="sizeSelect">
-      <option selected>Todos os tamanhos</option>
-      <option value="1">1/4</option>
-      <option value="2">1/6</option>
-      <option value="3">1/7</option>
-      <option value="4">1/8</option>
-      <option value="5">1/16</option>
-    </select>
-
-  </div>-->
-
+<div class="container">
   <div class="row">
+    <div class="col-md-3">
 
-    <div class="col-md-4 mb-4" th:each="product : ${products}">
-      <div class="card">
-        <img th:src="@{/products/productPicture/{id}(id=${product.id})}" class="card-img-top">   <!--alt="Produto 1"-->
-        <div class="card-body">
-          <h5 class="card-title" th:text="${product.name}"></h5>
-          <p class="card-text" th:text="'R$' +  ${product.price}"><strong></strong></p>
-          <a th:href="@{/products/specificProduct/{id}(id=${product.id})}" class="btn btn-primary">Visualizar produto</a>
+      <h2>Filtros</h2>
+      <form id="filterForm">
+
+        <h5>Preço</h5>
+        <input type="range" class="form-range" id="priceRange" min="50" max="5000" step="50" value="50">
+        <label for="priceRange" class="form-label" style="display:inline;">
+          <span id="priceLabel">Até R$ <span id="priceValue">50</span></span>
+          <span id="priceAboveLabel" style="display:none;"> Acima de R$ <span id="priceAboveValue">0</span></span>
+        </label>
+
+        <h5>Categorias</h5>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="category1">
+          <label class="form-check-label" for="category1">Chaveiro</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="category2">
+          <label class="form-check-label" for="category2">Pré-pintado</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="category3">
+          <label class="form-check-label" for="category3">Model Kit</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="category4">
+          <label class="form-check-label" for="category4">Nendoroid</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="category5">
+          <label class="form-check-label" for="category5">Pelúcia</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="category6">
+          <label class="form-check-label" for="category6">Amiibo</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="category7">
+          <label class="form-check-label" for="category7">Figura de ação</label>
+        </div>
+
+
+        <h5>Fabricantes</h5>
+        <select class="form-select" id="supplierSelect">
+          <option value="all">Todos</option>
+          <option>Bandai</option>
+          <option>Medicom</option>
+          <option>TakaraTomy</option>
+          <option>Kaiyodo</option>
+          <option>Good Smile</option>
+        </select>
+
+        <h5>Tamanhos</h5>
+        <select class="form-select" id="sizeSelect">
+          <option value="all">Todos</option>
+          <option>1/4</option>
+          <option>1/6</option>
+          <option>1/7</option>
+          <option>1/8</option>
+          <option>1/16</option>
+        </select>
+
+        <div class="d-flex justify-content-end mt-3">
+          <button type="submit" class="btn btn-primary">Filtrar</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-md-9">
+      <h2>Catálogo de produtos</h2>
+      <div class="row">
+        <div class="col-md-4 mb-4" th:each="product : ${products}">
+          <div class="card">
+            <img th:src="@{/products/productPicture/{id}(id=${product.id})}" class="card-img-top">   <!--alt="Produto 1"-->
+            <div class="card-body">
+              <h5 class="card-title" th:text="${product.name}"></h5>
+              <p class="card-text" th:text="'R$ ' + ${product.price}"><strong></strong></p>
+              <a th:href="@{/products/specificProduct/{id}(id=${product.id})}" class="btn btn-primary">Visualizar produto</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-
   </div>
+</div>
+
+<script>
+  const priceRange = document.getElementById('priceRange');
+  const priceValue = document.getElementById('priceValue');
+  const priceLabel = document.getElementById('priceLabel');
+  const priceAboveLabel = document.getElementById('priceAboveLabel');
+  const priceAboveValue = document.getElementById('priceAboveValue');
+
+  priceRange.addEventListener('input', () => {
+      const value = priceRange.value;
+      priceValue.textContent = value;
+
+      if (value >= 5000) {
+          priceAboveLabel.style.display = 'inline'; // Mostra "Acima de R$"
+          priceAboveValue.textContent = value;
+          priceLabel.style.display = 'none'; // Oculta "Até R$"
+      } else {
+          priceAboveLabel.style.display = 'none'; // Oculta "Acima de R$"
+          priceLabel.style.display = 'inline'; // Mostra "Até R$"
+      }
+  });
+</script>
+
 
 </div>
 
