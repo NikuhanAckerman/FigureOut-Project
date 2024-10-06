@@ -42,7 +42,7 @@
         <h5>Preço</h5>
         <input type="range" class="form-range" id="priceRange" min="50" max="5000" step="50" value="50">
         <label for="priceRange" class="form-label" style="display:inline;">
-          <span id="priceLabel">Até R$ <span id="priceValue">50</span></span>
+          <span id="priceLabel">Qualquer preço</span>
           <span id="priceAboveLabel" style="display:none;"> Acima de R$ <span id="priceAboveValue">0</span></span>
         </label>
 
@@ -123,22 +123,30 @@
 
 <script>
   const priceRange = document.getElementById('priceRange');
-  const priceValue = document.getElementById('priceValue');
   const priceLabel = document.getElementById('priceLabel');
   const priceAboveLabel = document.getElementById('priceAboveLabel');
   const priceAboveValue = document.getElementById('priceAboveValue');
 
+  // Exibir "Qualquer preço" por padrão
+  priceLabel.textContent = "Qualquer preço";
+
   priceRange.addEventListener('input', () => {
       const value = priceRange.value;
-      priceValue.textContent = value;
 
       if (value >= 5000) {
           priceAboveLabel.style.display = 'inline'; // Mostra "Acima de R$"
           priceAboveValue.textContent = value;
-          priceLabel.style.display = 'none'; // Oculta "Até R$"
+          priceLabel.style.display = 'none'; // Oculta "Qualquer preço"
       } else {
           priceAboveLabel.style.display = 'none'; // Oculta "Acima de R$"
-          priceLabel.style.display = 'inline'; // Mostra "Até R$"
+          priceLabel.style.display = 'inline'; // Garante que "Até R$" esteja visível
+
+          // Se o valor for o mínimo, exibe "Qualquer preço"
+          if (value <= 50) {
+              priceLabel.textContent = "Qualquer preço"; // Atualiza para "Qualquer preço"
+          } else {
+              priceLabel.textContent = "Até R$ " + value; // Atualiza para "Até R$ X"
+          }
       }
   });
 </script>
