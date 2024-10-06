@@ -18,7 +18,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/sales")
-@SessionAttributes({"salesCardsList"})
+@SessionAttributes({"salesCardsList", "deliveryAddress"})
 public class SaleController {
 
     @Autowired
@@ -112,14 +112,14 @@ public class SaleController {
             cartProductTotalPrices.put(cartsProducts.getProduct().getId(), cartsProducts.getPriceToPay().multiply(BigDecimal.valueOf(cartsProducts.getProductQuantity())));
         }
 
-        model.addAttribute("salesCardsList", salesCardsList); // sessionattribute, to keep data for more than 2 request
+        model.addAttribute("salesCardsList", salesCardsList); // sessionattribute, to keep data for more than 1 request
+        model.addAttribute("deliveryAddress", deliveryAddress);
 
         System.out.println("Lista de salescards: " + salesCardsList);
 
 
         redirectAttributes.addFlashAttribute("saleCart", cart);
         redirectAttributes.addFlashAttribute("cartProductTotalPrices", cartProductTotalPrices);
-        redirectAttributes.addFlashAttribute("deliveryAddress", deliveryAddress);
         redirectAttributes.addFlashAttribute("orderTotalPrice", cart.getTotalPrice());
 
         return "redirect:/sales/finishOrder/" + cartId;
@@ -189,17 +189,21 @@ public class SaleController {
         List<SalesCards> listSalesCards = (List<SalesCards>) model.getAttribute("salesCardsList");
         System.out.println(listSalesCards);
 
+        saleService.saveSale(sale);
+
         for (Map.Entry<Long, BigDecimal> entry : saleCardDTO.getAmountPaid().entrySet()) {
             Long key = entry.getKey();
             BigDecimal value = entry.getValue();
 
             for(SalesCards saleCard: listSalesCards) {
+                System.out.println(saleCard.getCreditCard().getId());
 
                 if(saleCard.getCreditCard().getId() == key) {
                     System.out.println("it is equal lol");
                     SalesCardsKey salesCardsKey = new SalesCardsKey();
                     salesCardsKey.setCreditCardId(creditCardService.getCreditCardById(key).getId());
                     salesCardsKey.setSaleId(sale.getId());
+
                     saleCard.setId(salesCardsKey);
 
                     saleCard.setAmountPaid(value);
@@ -220,7 +224,34 @@ public class SaleController {
         return "redirect:/products/shop";
     }
 
+    @GetMapping("/seeSales")
+    public String seeSales(Model model) {
 
+        model.addAttribute("changeSaleStatusDTO", new ChangeSaleStatusDTO());
+        model.addAttribute("sales", saleService.getAllSales());
+
+        return "adminSalesView";
+    }
+
+    @PutMapping("/seeSales/changeSaleStatus/{saleId}")
+    public String changeSaleStatus(@PathVariable long saleId, @ModelAttribute ChangeSaleStatusDTO changeSaleStatusDTO) {
+        Sale sale = saleService.getSaleById(saleId);
+        System.out.println(changeSaleStatusDTO.getStatus());
+
+        sale.setStatus(changeSaleStatusDTO.getStatus());
+        System.out.println(sale.getStatus().name());
+
+        saleService.saveSale(sale);
+
+        return "redirect:/sales/seeSales";
+    }
+
+    @GetMapping("/getSaleCart/{saleId}")
+    @ResponseBody
+    public Cart getSaleCart(@PathVariable long saleId, Model model) {
+        Sale sale = saleService.getSaleById(saleId);
+        return sale.getCart();
+    }
 
 
 }

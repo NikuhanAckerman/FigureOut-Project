@@ -27,58 +27,112 @@
         <thead class="table-dark">
         <tr>
             <th scope="col">ID da Venda</th>
-            <th scope="col">Produto</th>
-            <th scope="col">Quantidade</th>
-            <th scope="col">Total</th>
+            <th scope="col">Endereço de entrega</th>
+            <th scope="col">Carrinho</th>
             <th scope="col">Status</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td class="id-venda">001</td>
-            <td>Produto A</td>
-            <td>2</td>
-            <td>R$ 50,00</td>
+        <tr th:each="sale : ${sales}">
+            <td class="id-venda" th:text="${sale.id}"></td>
+            <td th:text="${sale.deliveryAddress}"></td>
             <td>
-                <select class="form-control" onchange="atualizarStatus(this)">
-                    <option value="PAGAMENTO REALIZADO">PAGAMENTO REALIZADO</option>
-                    <option value="PAGAMENTO REJEITADO">PAGAMENTO REJEITADO</option>
-                    <option value="EM TRANSPORTE">EM TRANSPORTE</option>
-                    <option value="ENTREGUE">ENTREGUE</option>
-                </select>
+                <button type="button" class="btn btn-secondary" th:data-bs-cart-id = "${sale.cart.id}" data-bs-toggle="modal" data-bs-target="#seeCartModal" >Ver carrinho</button>
             </td>
-        </tr>
-        <tr>
-            <td class="id-venda">002</td>
-            <td>Produto B</td>
-            <td>1</td>
-            <td>R$ 30,00</td>
             <td>
-                <select class="form-control" onchange="atualizarStatus(this)">
-                    <option value="PAGAMENTO REALIZADO">PAGAMENTO REALIZADO</option>
-                    <option value="PAGAMENTO REJEITADO">PAGAMENTO REJEITADO</option>
-                    <option value="EM TRANSPORTE">EM TRANSPORTE</option>
-                    <option value="ENTREGUE">ENTREGUE</option>
-                </select>
+                <p class="text-primary" th:text="${sale.status}"></p>
+                <form th:action="@{/sales/seeSales/changeSaleStatus/{saleId}(saleId=${sale.id})}" method="POST" th:object="${changeSaleStatusDTO}">
+                    <input type="hidden" name="_method" value="PUT">
+
+                    <select name="status" class="form-control" th:field="*{status}" onchange="this.form.submit()">
+                        <option th:each="status : ${T(com.project.figureout.model.SaleStatusEnum).values()}"
+                                th:value="${status.name()}" th:text="${status.name()}"
+                                th:selected="${sale.status.name() == status.name()}">
+                        </option>
+                    </select>
+                </form>
             </td>
+
         </tr>
-        <tr>
-            <td class="id-venda">003</td>
-            <td>Produto C</td>
-            <td>3</td>
-            <td>R$ 90,00</td>
-            <td>
-                <select class="form-control" onchange="atualizarStatus(this)">
-                    <option value="PAGAMENTO REALIZADO">PAGAMENTO REALIZADO</option>
-                    <option value="PAGAMENTO REJEITADO">PAGAMENTO REJEITADO</option>
-                    <option value="EM TRANSPORTE">EM TRANSPORTE</option>
-                    <option value="ENTREGUE">ENTREGUE</option>
-                </select>
-            </td>
-        </tr>
+
         </tbody>
     </table>
 </div>
+
+<div id="seeCartModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Carrinho</h3>
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <h1 id="cartId"></h1>
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h2 class="card-title">Produtos</h2>
+                            <div id="productListDiv">
+
+                            </div>
+                            <h2 class="card-title" id="promotionalCouponId"></h2>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    const seeCartModal = document.getElementById("seeCartModal");
+
+    seeCartModal.addEventListener('show.bs.modal', function (event) {
+        console.log("mostrou modal de carrinho")
+        const button = event.relatedTarget
+
+        const cartId = button.getAttribute('data-bs-cart-id');
+
+        const elementWithId = document.getElementById('cartId');
+        elementWithId.textContent = 'ID do carrinho: '
+        elementWithId.textContent = elementWithId.textContent + " " + cartId;
+
+        const productListDiv = document.getElementById('productListDiv');
+        productListDiv.innerHTML = '';
+
+        fetch(`/sales/getSaleCart/${saleId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erro ao retornar carrinho.");
+                }
+                return response.json();
+            })
+            .then(cart => {
+
+                let productList = '';
+
+
+
+                cart.forEach(product => {
+                    const productItem = `<p><b>${product.name}</b></p>
+
+                    `;
+                    categoryList += categoryItem;
+                });
+
+                productListDiv.insertAdjacentHTML("beforeend", productList);
+
+            })
+
+    })
+
+</script>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
