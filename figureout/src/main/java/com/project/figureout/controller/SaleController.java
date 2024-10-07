@@ -215,11 +215,19 @@ public class SaleController {
 
         }
 
-        sale.setStatus(SaleStatusEnum.PAGAMENTO_REALIZADO);
+        sale.setStatus(SaleStatusEnum.EM_PROCESSAMENTO);
 
         sale.setPromotionalCouponApplied(sale.getCart().getPromotionalCoupon());
 
+
+
         saleService.saveSale(sale);
+
+        Client client = clientService.getClientById(1);
+
+        Cart newCart = new Cart();
+        client.getCartList().add(newCart);
+        newCart.setClient(client);
 
         return "redirect:/products/shop";
     }
@@ -254,9 +262,17 @@ public class SaleController {
         return sale.getCart().getCartProducts();
     }
 
-    @GetMapping("/getSaleClient/{saleId}")
+    @GetMapping("/getSaleClientId/{saleId}")
     @ResponseBody
-    public String getSaleClient(@PathVariable long saleId, Model model) {
+    public long getSaleClientId(@PathVariable long saleId, Model model) {
+        Sale sale = saleService.getSaleById(saleId);
+
+        return sale.getCart().getClient().getId();
+    }
+
+    @GetMapping("/getSaleClientName/{saleId}")
+    @ResponseBody
+    public String getSaleClientName(@PathVariable long saleId, Model model) {
         Sale sale = saleService.getSaleById(saleId);
 
         return sale.getCart().getClient().getName();
@@ -268,6 +284,14 @@ public class SaleController {
         Sale sale = saleService.getSaleById(saleId);
 
         return sale.getCart().getTotalPrice();
+    }
+
+    @GetMapping("/getPromotionalCoupon/{saleId}")
+    @ResponseBody
+    public PromotionalCoupon getPromotionalCoupon(@PathVariable long saleId, Model model) {
+        Sale sale = saleService.getSaleById(saleId);
+
+        return sale.getCart().getPromotionalCoupon();
     }
 
 

@@ -78,8 +78,11 @@
                     <h1 id="saleId"></h1>
                     <div class="card mt-3">
                         <div class="card-body">
+                            <h2 id="clientIdId">ID do cliente:</h2>
                             <h2 class="text-primary" id="clientId"></h2>
                             <h2 class="text-success" id="totalPriceId"></h2>
+                            <h2 class="text-secondary" id="promotionalCouponNameId"></h2>
+                            <h2 class="text-secondary" id="promotionalCouponDiscountId"></h2>
                             <div id="cartDiv">
 
                             </div>
@@ -89,7 +92,7 @@
 
                             </div>
 
-                            <h2 class="card-title" id="promotionalCouponId"></h2>
+
 
                         </div>
                     </div>
@@ -118,9 +121,29 @@
         elementWithId.textContent = elementWithId.textContent + " " + saleId;
 
         const productListDiv = document.getElementById('productListDiv');
+        const clientIdElement = document.getElementById('clientIdId');
         const clientNameElement = document.getElementById('clientId');
         const totalPriceElement = document.getElementById('totalPriceId');
+        const promotionalCouponNameElement = document.getElementById('promotionalCouponNameId');
+        const promotionalCouponDiscountElement = document.getElementById('promotionalCouponDiscountId');
         productListDiv.innerHTML = '';
+
+        fetch(`/sales/getSaleClientId/${saleId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erro ao retornar ID do cliente.");
+                }
+                return response.json();  // Expecting the response to be a long (number)
+            })
+            .then(clientId => {
+                console.log("ID do cliente:", clientId);  // Log the client ID for inspection
+
+
+                clientIdElement.innerHTML = 'ID do cliente: ' + clientId;
+            })
+            .catch(error => {
+                console.error(error);
+            });
 
         fetch(`/sales/getSaleClient/${saleId}`)
             .then(response => {
@@ -167,6 +190,9 @@
 
                 cartProducts.forEach(cartProduct => {
                     const product = cartProduct.product;  // Access the Product within CartsProducts
+                    const productTotal = (cartProduct.priceToPay * cartProduct.productQuantity).toFixed(2);
+                    const productQuantity = cartProduct.productQuantity;
+                    const priceToPay = cartProduct.priceToPay.toFixed(2);
 
                     const productItem = `
                         <div class="card mt-3">
@@ -174,9 +200,9 @@
 							    <h3 class="card-title">ID: ${product.id}</h3>
 							    <!--<img th:src="@{/products/productPicture/{id}(id=${product.id})}" style="width: 200px;"/> -->
                                 <p><b>${product.name}</b></p>
-                                <p>Quantidade comprada: ${cartProduct.productQuantity}</p>
-                                <p>Preço unitário: ${cartProduct.priceToPay}</p>
-                                <p>Preço total: ${cartProduct.priceToPay * cartProduct.productQuantity}</p>
+                                <p>Quantidade comprada: ${productQuantity}</p>
+                                <p>Preço unitário: R$${priceToPay}</p>
+                                <p>Preço total: R$${productTotal}</p>
                             </div>
                         </div>
             `;
@@ -188,6 +214,26 @@
             .catch(error => {
                 console.error(error);
             });
+
+            fetch(`/sales/getPromotionalCoupon/${saleId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Erro ao retornar cupom promocional.");
+                    }
+                    return response.json();  // Assuming PromotionalCoupon is a JSON object
+                })
+                .then(promotionalCoupon => {
+                    console.log(promotionalCoupon);  // Log the PromotionalCoupon object for inspection
+
+
+
+                    // Assuming the PromotionalCoupon has fields like 'code' and 'discount'
+                    promotionalCouponNameElement.innerHTML = 'Cupom: ' + promotionalCoupon.couponName
+                    promotionalCouponDiscountElement.innerHTML = 'Desconto: ' + promotionalCoupon.couponDiscount*100 + '%'
+                })
+                .catch(error => {
+                    console.error(error);
+                });
 
 
 
