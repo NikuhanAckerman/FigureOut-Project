@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -119,5 +120,69 @@ public class CartService {
         // Save the cart with the updated total
         saveCart(cart);
     }
+
+    public void changeClientCart(Client client) {
+        LocalDateTime now = LocalDateTime.now();
+        Cart newCart = new Cart(now);
+
+        for(Cart currentCart: client.getCartList()) {
+
+            currentCart.setBeingUsed(false);
+
+        }
+
+        client.getCartList().add(newCart);
+
+        newCart.setClient(client);
+        newCart.setBeingUsed(true);
+
+        saveCart(newCart);
+    }
+
+    public void expireClientCart(Client client) {
+
+        for(Cart currentCart: client.getCartList()) {
+
+            if(currentCart.isBeingUsed()) {
+
+                LocalDateTime now = LocalDateTime.now();
+
+                LocalDateTime expirationTime = currentCart.getDateOfCreation().plusMinutes(1);
+
+                if(now.isAfter(expirationTime)) { // if now is later than 1 minute later than the creation of the cart
+                    System.out.println("is later");
+
+                    changeClientCart(client);
+
+                }
+
+            }
+
+        }
+
+    }
+
+    public void startCartExpirationCheck() {
+        Thread cartExpirationThread = new Thread(() -> {
+            while (true) {
+                try {
+
+                    for(Client currentClient: clientService.getAllClients()) {
+                        expireClientCart(currentClient);
+                    }
+                    Thread.sleep(60000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
+                    break;
+                }
+            }
+        });
+
+        cartExpirationThread.start();
+    }
+
+
+
 
 }

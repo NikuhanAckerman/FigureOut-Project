@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -25,6 +26,8 @@ public class ClientService {
 
     @Autowired
     private GenderRepository genderRepository;
+    @Autowired
+    private CartService cartService;
 
     // Client Methods
 
@@ -48,11 +51,9 @@ public class ClientService {
 
         clientBasicDataSetter(client, clientDTO.getClientBasicDataDTO());
 
-        Cart cart = new Cart();
-        client.getCartList().add(cart);
-
         saveClient(client);
-        cart.setClient(client);
+
+        cartService.changeClientCart(client);
 
         AddressDTO clientDTOAddress = clientDTO.getAddressDTO();
         addressService.registerAddress(client, clientDTOAddress);

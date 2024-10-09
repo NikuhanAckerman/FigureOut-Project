@@ -2,6 +2,8 @@ package com.project.figureout;
 
 import com.project.figureout.model.*;
 import com.project.figureout.repository.*;
+import com.project.figureout.service.CartService;
+import com.project.figureout.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -47,6 +49,12 @@ public class AppInitializer implements CommandLineRunner {
 
     @Autowired
     private PromotionalCouponRepository promotionalCouponRepository;
+
+    @Autowired
+    CartService cartService;
+
+    @Autowired
+    ClientService clientService;
 
     @Override
     public void run(String... args) throws Exception {
@@ -211,6 +219,9 @@ public class AppInitializer implements CommandLineRunner {
 
             System.out.println("Tabela de cupons promocionais populada.");
         }
+
+
+        cartService.startCartExpirationCheck();
 
     }
 

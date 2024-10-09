@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -20,6 +21,12 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "car_id")
     private long id;
+
+    @Column(name = "car_sendo_usado")
+    private boolean beingUsed;
+
+    @Column(name = "data_criacao")
+    private LocalDateTime dateOfCreation;
 
     @Column(name = "car_preco_total")
     private BigDecimal totalPrice;
@@ -34,5 +41,11 @@ public class Cart {
     @ManyToOne
     @JoinColumn(name = "car_cupom_promocional_usado")
     private PromotionalCoupon promotionalCoupon;
+
+    public Cart(LocalDateTime dateOfCreation) {
+        this.setDateOfCreation(dateOfCreation);
+    }
+
+    public Cart() {}
 
 }
