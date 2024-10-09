@@ -178,6 +178,10 @@ public class SaleController {
 
         System.out.println(saleCardDTO.getAmountPaid());
 
+        BigDecimal saleFinalPrice = cart.getTotalPrice().add(cart.getTotalPrice().multiply(deliveryAddress.getState().getFreight()));
+
+        model.addAttribute("saleFinalPrice", saleFinalPrice);
+
         return "finishOrder";
     }
 
@@ -250,7 +254,7 @@ public class SaleController {
 
         }
 
-        BigDecimal finalPrice = cart.getTotalPrice().add(cart.getTotalPrice().multiply(deliveryAddress.getState().getFreight()));
+        BigDecimal finalPrice = (BigDecimal) model.getAttribute("saleFinalPrice");
 
         sale.setFinalPrice(finalPrice);
 
