@@ -117,7 +117,7 @@ public class ProductController {
         List<Product> products =  productService.getAllProducts();
         Client client = clientService.getClientById(1);
         model.addAttribute("products", products);
-        model.addAttribute("cart", client.getCartList().getFirst());
+        model.addAttribute("cart", client.getCartList().getLast()); // always get the last card added to the client's cart list
         model.addAttribute("clientId", 1);
         return "shop";
     }
@@ -131,7 +131,7 @@ public class ProductController {
         model.addAttribute("stock", stock);
         model.addAttribute("changeCartProductQuantityDTO", new ChangeCartProductQuantityDTO());
         model.addAttribute("product", product);
-        model.addAttribute("cart", client.getCartList().getFirst());
+        model.addAttribute("cart", client.getCartList().getLast());
 
         return "product";
     }

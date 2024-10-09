@@ -7,7 +7,9 @@ import com.project.figureout.repository.SaleRepository;
 import com.project.figureout.repository.SalesCardsRepository;
 import com.project.figureout.service.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +44,9 @@ public class SaleController {
     @Autowired
     private AddressService addressService;
 
+    @Autowired
+    private StockService stockService;
+
     @GetMapping("")
     public String showSalesGet(Model model) {
 
@@ -53,6 +58,7 @@ public class SaleController {
 
     @GetMapping("/makeOrder/{cartId}")
     public String makeOrderGet(@PathVariable long cartId, Model model) {
+
         Cart cart = cartService.getCartById(cartId);
         Client client = cartService.getClientByCart(cart);
         List<Address> addressClientList = client.getAddresses();
@@ -151,6 +157,7 @@ public class SaleController {
 
     @GetMapping("/finishOrder/{cartId}")
     public String finishOrderGet(@PathVariable long cartId, Model model) {
+
         Cart cart = cartService.getCartById(cartId);
         Client client = cartService.getClientByCart(cart);
         Address deliveryAddress = (Address) model.getAttribute("deliveryAddress");
@@ -219,15 +226,26 @@ public class SaleController {
 
         sale.setPromotionalCouponApplied(sale.getCart().getPromotionalCoupon());
 
-
-
         saleService.saveSale(sale);
 
         Client client = clientService.getClientById(1);
 
-        Cart newCart = new Cart();
-        client.getCartList().add(newCart);
-        newCart.setClient(client);
+        cartService.changeClientCart(client);
+
+        for(CartsProducts productInCart: cart.getCartProducts()) {
+
+            for(Stock productInStock: stockService.getAllProductsInStock()) {
+
+                if(productInCart.getProduct().getId() == productInStock.getProduct().getId()) {
+
+                    productInStock.setProductQuantityAvailable(productInStock.getProductQuantityAvailable() - productInCart.getProductQuantity());
+
+                }
+
+            }
+
+
+        }
 
         return "redirect:/products/shop";
     }
@@ -288,10 +306,14 @@ public class SaleController {
 
     @GetMapping("/getPromotionalCoupon/{saleId}")
     @ResponseBody
-    public PromotionalCoupon getPromotionalCoupon(@PathVariable long saleId, Model model) {
+    public ResponseEntity<?> getPromotionalCoupon(@PathVariable long saleId, Model model) {
         Sale sale = saleService.getSaleById(saleId);
+        PromotionalCoupon coupon = sale.getCart().getPromotionalCoupon();
 
-        return sale.getCart().getPromotionalCoupon();
+        if (coupon == null) {
+            return ResponseEntity.ok().body(Collections.emptyMap()); // Return an empty map if the coupon is null
+        }
+        return ResponseEntity.ok(coupon); // Otherwise, return the coupon
     }
 
 

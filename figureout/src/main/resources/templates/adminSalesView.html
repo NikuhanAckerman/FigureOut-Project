@@ -225,11 +225,19 @@
                 .then(promotionalCoupon => {
                     console.log(promotionalCoupon);  // Log the PromotionalCoupon object for inspection
 
+                    if (promotionalCoupon == null || Object.keys(promotionalCoupon).length === 0) {
+                        console.log("nenhum cupom utilizado")
+                        promotionalCouponNameElement.innerHTML = 'Nenhum cupom utilizado.'
+                        promotionalCouponDiscountElement.innerHTML = ''
 
+                    } else {
+                        console.log("cupom utilizado")
+                        promotionalCouponNameElement.innerHTML = 'Cupom: ' + promotionalCoupon.couponName
+                        promotionalCouponDiscountElement.innerHTML = 'Desconto: ' + promotionalCoupon.couponDiscount*100 + '%'
+                    }
 
                     // Assuming the PromotionalCoupon has fields like 'code' and 'discount'
-                    promotionalCouponNameElement.innerHTML = 'Cupom: ' + promotionalCoupon.couponName
-                    promotionalCouponDiscountElement.innerHTML = 'Desconto: ' + promotionalCoupon.couponDiscount*100 + '%'
+
                 })
                 .catch(error => {
                     console.error(error);

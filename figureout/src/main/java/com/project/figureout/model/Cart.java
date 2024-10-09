@@ -31,7 +31,7 @@ public class Cart {
     @Column(name = "car_preco_total")
     private BigDecimal totalPrice;
 
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartsProducts> cartProducts;
 
     @ManyToOne

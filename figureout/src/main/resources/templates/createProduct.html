@@ -63,7 +63,7 @@
                         <option
                                 th:each="pricingGroup : ${pricingGroupList}"
                                 th:value="${pricingGroup.id}"
-                                th:text="${pricingGroup.name} + ' (' + ${pricingGroup.percentage} + '%)' "
+                                th:text="${pricingGroup.name} + ' (' + ${pricingGroup.percentage * 100} + '%)' "
                         ></option>
                     </select>
                 </div>

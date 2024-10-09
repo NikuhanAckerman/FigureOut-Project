@@ -10,3 +10,5 @@ addressing fields in client forms are NOT using the correct special character re
 stock should have a LocalDate and not LocalDateTime probably
 
 add expiry date for promotionalCoupons and later exchange (troca) coupons
+
+add check to see if the client is in a buying page, and if it is, dont let the cart expire

@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +23,9 @@ public class State {
     private String name;
 
     @Column(name = "est_frete")
-    private double frete;
+    private BigDecimal frete;
 
-    public State(String name, double frete) {
+    public State(String name, BigDecimal frete) {
         this.setName(name);
         this.setFrete(frete);
     }

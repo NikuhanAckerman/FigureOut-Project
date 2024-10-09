@@ -6,12 +6,18 @@ import com.project.figureout.dto.StockDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartRepository;
 import com.project.figureout.repository.CartsProductsRepository;
+import com.project.figureout.repository.ClientRepository;
+import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -20,13 +26,14 @@ import java.util.NoSuchElementException;
 public class CartService {
 
     @Autowired
-    private ClientService clientService;
+    private ClientRepository clientRepository;
 
     @Autowired
     private ProductService productService;
 
     @Autowired
     private CartRepository cartRepository;
+
     @Autowired
     private CartsProductsRepository cartsProductsRepository;
 
@@ -126,7 +133,7 @@ public class CartService {
         Cart newCart = new Cart(now);
 
         for(Cart currentCart: client.getCartList()) {
-
+            System.out.println("Setting " + currentCart.getId() + " cart to false");
             currentCart.setBeingUsed(false);
 
         }
@@ -139,47 +146,54 @@ public class CartService {
         saveCart(newCart);
     }
 
-    public void expireClientCart(Client client) {
+    public Client getClientWithCarts(long clientId) {
+        Client client = clientRepository.findById(clientId).orElseThrow();
+        Hibernate.initialize(client.getCartList());  // Ensure the cartList is initialized within the session
+        return client;
+    }
 
-        for(Cart currentCart: client.getCartList()) {
+    public void expireClientCart(long id) {
+        Client client = getClientWithCarts(id);
+        System.out.println(client.getName());
 
-            if(currentCart.isBeingUsed()) {
+        // Create a copy of the cartList to avoid modifying the original list while iterating
+        List<Cart> cartListCopy = new ArrayList<>(client.getCartList());
 
-                LocalDateTime now = LocalDateTime.now();
+        for (Cart currentCart : cartListCopy) {
+            if (currentCart.isBeingUsed()) {
 
-                LocalDateTime expirationTime = currentCart.getDateOfCreation().plusMinutes(1);
+                List<CartsProducts> cartProductsCopy = new ArrayList<>(currentCart.getCartProducts());
 
-                if(now.isAfter(expirationTime)) { // if now is later than 1 minute later than the creation of the cart
-                    System.out.println("is later");
-
-                    changeClientCart(client);
-
+                if(cartProductsCopy.isEmpty()) {
+                    return;
                 }
 
-            }
+                LocalDateTime now = LocalDateTime.now();
+                LocalDateTime expirationTime = currentCart.getDateOfCreation().plusMinutes(1);
 
+                if (now.isAfter(expirationTime)) {
+                    System.out.println("Cart expired");
+
+                    changeClientCart(client);  // Handle expired cart
+                }
+            }
         }
 
     }
 
-    public void startCartExpirationCheck() {
-        Thread cartExpirationThread = new Thread(() -> {
-            while (true) {
-                try {
+    private static final int QNT_MINUTES_TO_EXPIRE = 1;  // Set to 20 minutes
+    private static final long EXPIRATION_RATE_MS = QNT_MINUTES_TO_EXPIRE * 60 * 1000; // Convert to milliseconds
 
-                    for(Client currentClient: clientService.getAllClients()) {
-                        expireClientCart(currentClient);
-                    }
-                    Thread.sleep(60000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    Thread.currentThread().interrupt();
-                    break;
-                }
+    @Scheduled(fixedRate = EXPIRATION_RATE_MS)  // Run every minute (60000 ms)
+    public void checkForExpiredCarts() {
+
+        List<Client> clients = clientRepository.findAll();
+
+        if (!clients.isEmpty()) {
+            for (Client currentClient : clients) {
+                expireClientCart(currentClient.getId());
             }
-        });
-
-        cartExpirationThread.start();
+        }
     }
 
 

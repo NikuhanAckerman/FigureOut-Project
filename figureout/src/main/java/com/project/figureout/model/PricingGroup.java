@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "GruposDePrecificacao")
 @Getter @Setter
@@ -18,9 +20,9 @@ public class PricingGroup {
     private String name;
 
     @Column(name = "gdp_percentual")
-    private double percentage;
+    private BigDecimal percentage;
 
-    public PricingGroup(String name, double percentage) {
+    public PricingGroup(String name, BigDecimal percentage) {
         this.setName(name);
         this.setPercentage(percentage);
     }
