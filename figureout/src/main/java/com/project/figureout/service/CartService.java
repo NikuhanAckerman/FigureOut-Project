@@ -128,6 +128,7 @@ public class CartService {
         saveCart(cart);
     }
 
+    @Transactional
     public void changeClientCart(Client client) {
         LocalDateTime now = LocalDateTime.now();
         Cart newCart = new Cart(now);
@@ -135,7 +136,7 @@ public class CartService {
         for(Cart currentCart: client.getCartList()) {
             System.out.println("Setting " + currentCart.getId() + " cart to false");
             currentCart.setBeingUsed(false);
-
+            saveCart(currentCart);
         }
 
         client.getCartList().add(newCart);

@@ -153,8 +153,8 @@ public class AppInitializer implements CommandLineRunner {
             Collections.addAll(pricingGroupList,
                     new PricingGroup("Ouro", BigDecimal.valueOf(0.20)),
                     new PricingGroup("Prata", BigDecimal.valueOf(0.15)),
-                    new PricingGroup("Ferro", BigDecimal.valueOf(0.10)),
-                    new PricingGroup("Bronze", BigDecimal.valueOf(0.05))
+                    new PricingGroup("Bronze", BigDecimal.valueOf(0.10)),
+                    new PricingGroup("Ferro", BigDecimal.valueOf(0.05))
             );
 
             pricingGroupRepository.saveAll(pricingGroupList);
