@@ -107,6 +107,10 @@ public class CartService {
         setCartTotal(cart);
     }
 
+    public void applyFreight(Cart cart, BigDecimal freight) {
+
+    }
+
     public void setCartTotal(Cart cart) {
         BigDecimal total = new BigDecimal(0);
         System.out.println("calling setCartTotal");

@@ -81,7 +81,8 @@
 
     <p><b>Endereço de entrega selecionado:</b></p>
 
-    <p th:text="${deliveryAddress.nickname}">
+    <p th:text="${deliveryAddress.nickname}"></p>
+    <p th:text="Frete: ${freight * 100}"></p>
 
     <!-- Botões de finalizar compra e continuar comprando -->
     <div class="text-center">

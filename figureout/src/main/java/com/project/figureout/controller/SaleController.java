@@ -167,6 +167,9 @@ public class SaleController {
         SaleCardDTO saleCardDTO = new SaleCardDTO();
         model.addAttribute("saleCardDTO", saleCardDTO);
 
+        BigDecimal freight = deliveryAddress.getState().getFreight();
+        model.addAttribute("freight", freight);
+
         for(SalesCards saleCard: listSalesCards) {
 
             saleCardDTO.getAmountPaid().put(saleCard.getCreditCard().getId(), null);
@@ -246,6 +249,10 @@ public class SaleController {
 
 
         }
+
+        BigDecimal finalPrice = cart.getTotalPrice().add(cart.getTotalPrice().multiply(deliveryAddress.getState().getFreight()));
+
+        sale.setFinalPrice(finalPrice);
 
         return "redirect:/products/shop";
     }

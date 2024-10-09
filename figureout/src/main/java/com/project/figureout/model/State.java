@@ -23,11 +23,11 @@ public class State {
     private String name;
 
     @Column(name = "est_frete")
-    private BigDecimal frete;
+    private BigDecimal freight;
 
-    public State(String name, BigDecimal frete) {
+    public State(String name, BigDecimal freight) {
         this.setName(name);
-        this.setFrete(frete);
+        this.setFreight(freight);
     }
 
     public State() {}
