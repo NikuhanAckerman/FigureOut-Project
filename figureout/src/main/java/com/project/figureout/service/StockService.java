@@ -1,17 +1,17 @@
 package com.project.figureout.service;
 
 import com.project.figureout.dto.ProductDTO;
-import com.project.figureout.model.Category;
-import com.project.figureout.model.PricingGroup;
-import com.project.figureout.model.Product;
-import com.project.figureout.model.Stock;
+import com.project.figureout.model.*;
 import com.project.figureout.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Service
@@ -61,6 +61,25 @@ public class StockService {
         stock.setEntryDate(productDTO.getStockDTO().getEntryInStockDate());
 
         stock.setProduct(product);
+
+    }
+
+    public void dropInStock(Stock stock, int quantity) {
+
+        stock.setProductQuantityAvailable(stock.getProductQuantityAvailable() - quantity);
+        saveProductInStock(stock);
+
+    }
+
+    public void dropInStockList(HashMap<Stock, Integer> stockProductsQuantityDrop) {
+
+        for (Map.Entry<Stock, Integer> entry : stockProductsQuantityDrop.entrySet()) {
+            Stock key = entry.getKey();
+            Integer value = entry.getValue();
+
+            dropInStock(key, value);
+
+        }
 
     }
 

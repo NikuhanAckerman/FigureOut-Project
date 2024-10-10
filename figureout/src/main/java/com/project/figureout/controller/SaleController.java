@@ -236,24 +236,10 @@ public class SaleController {
 
         sale.setStatus(SaleStatusEnum.EM_PROCESSAMENTO);
 
+
         sale.setPromotionalCouponApplied(sale.getCart().getPromotionalCoupon());
 
         Client client = clientService.getClientById(1);
-
-        for(CartsProducts productInCart: cart.getCartProducts()) {
-
-            for(Stock productInStock: stockService.getAllProductsInStock()) {
-
-                if(productInCart.getProduct().getId() == productInStock.getProduct().getId()) {
-
-                    productInStock.setProductQuantityAvailable(productInStock.getProductQuantityAvailable() - productInCart.getProductQuantity());
-                    stockService.saveProductInStock(productInStock);
-
-                }
-
-            }
-
-        }
 
         BigDecimal finalPrice = (BigDecimal) model.getAttribute("saleFinalPrice");
 
@@ -278,10 +264,27 @@ public class SaleController {
     @PutMapping("/seeSales/changeSaleStatus/{saleId}")
     public String changeSaleStatus(@PathVariable long saleId, @ModelAttribute ChangeSaleStatusDTO changeSaleStatusDTO) {
         Sale sale = saleService.getSaleById(saleId);
-        System.out.println(changeSaleStatusDTO.getStatus());
+
+        if(sale.getStatus().equals(SaleStatusEnum.EM_PROCESSAMENTO)) {
+
+            if(changeSaleStatusDTO.getStatus().equals(SaleStatusEnum.PAGAMENTO_REALIZADO)) {
+                HashMap<Stock, Integer> cartProductQuantityToDrop = new HashMap<>();
+
+                for(CartsProducts cartProduct : sale.getCart().getCartProducts()) {
+                    cartProductQuantityToDrop.put(stockService.getProductInStockByProductId(cartProduct.getProduct().getId()), cartProduct.getProductQuantity());
+                }
+
+                stockService.dropInStockList(cartProductQuantityToDrop);
+            }
+
+        }
 
         sale.setStatus(changeSaleStatusDTO.getStatus());
-        System.out.println(sale.getStatus().name());
+
+
+
+
+
 
         saleService.saveSale(sale);
 
