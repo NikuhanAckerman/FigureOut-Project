@@ -186,10 +186,10 @@ public class CartService {
 
     }
 
-    private static final int QNT_MINUTES_TO_EXPIRE = 1;  // Set to 20 minutes
-    private static final long EXPIRATION_RATE_MS = QNT_MINUTES_TO_EXPIRE * 60 * 1000; // Convert to milliseconds
+    private static final int qntMinutesExpire = 20;  // Set to 20 minutes
+    private static final long qntMinutesExpireInMs = qntMinutesExpire * 60 * 1000; // Convert to milliseconds
 
-    @Scheduled(fixedRate = EXPIRATION_RATE_MS)  // Run every minute (60000 ms)
+    @Scheduled(fixedRate = qntMinutesExpireInMs)  // Run every minute (60000 ms)
     public void checkForExpiredCarts() {
 
         List<Client> clients = clientRepository.findAll();
@@ -200,8 +200,5 @@ public class CartService {
             }
         }
     }
-
-
-
 
 }

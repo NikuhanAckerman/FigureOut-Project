@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 
 @Controller
@@ -178,7 +179,9 @@ public class SaleController {
 
         System.out.println(saleCardDTO.getAmountPaid());
 
-        BigDecimal saleFinalPrice = cart.getTotalPrice().add(cart.getTotalPrice().multiply(deliveryAddress.getState().getFreight()));
+        BigDecimal amountFreight = cart.getTotalPrice().multiply(freight);
+
+        BigDecimal saleFinalPrice = cart.getTotalPrice().add(amountFreight).setScale(2, RoundingMode.HALF_EVEN);
 
         model.addAttribute("saleFinalPrice", saleFinalPrice);
 
@@ -229,15 +232,13 @@ public class SaleController {
 
         }
 
+        saleService.saveSale(sale);
+
         sale.setStatus(SaleStatusEnum.EM_PROCESSAMENTO);
 
         sale.setPromotionalCouponApplied(sale.getCart().getPromotionalCoupon());
 
-        saleService.saveSale(sale);
-
         Client client = clientService.getClientById(1);
-
-        cartService.changeClientCart(client);
 
         for(CartsProducts productInCart: cart.getCartProducts()) {
 
@@ -246,17 +247,21 @@ public class SaleController {
                 if(productInCart.getProduct().getId() == productInStock.getProduct().getId()) {
 
                     productInStock.setProductQuantityAvailable(productInStock.getProductQuantityAvailable() - productInCart.getProductQuantity());
+                    stockService.saveProductInStock(productInStock);
 
                 }
 
             }
-
 
         }
 
         BigDecimal finalPrice = (BigDecimal) model.getAttribute("saleFinalPrice");
 
         sale.setFinalPrice(finalPrice);
+
+        saleService.saveSale(sale);
+
+        cartService.changeClientCart(client);
 
         return "redirect:/products/shop";
     }
@@ -312,7 +317,7 @@ public class SaleController {
     public BigDecimal getSaleTotal(@PathVariable long saleId, Model model) {
         Sale sale = saleService.getSaleById(saleId);
 
-        return sale.getCart().getTotalPrice();
+        return sale.getFinalPrice();
     }
 
     @GetMapping("/getPromotionalCoupon/{saleId}")
