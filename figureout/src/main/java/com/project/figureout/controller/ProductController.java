@@ -83,7 +83,6 @@ public class ProductController {
         Stock stock = new Stock();
 
         productService.productDataSetter(product, productDTO);
-        productService.saveProduct(product);
 
         stockService.productInStockDataSetter(stock, product, productDTO);
         stockService.saveProductInStock(stock);

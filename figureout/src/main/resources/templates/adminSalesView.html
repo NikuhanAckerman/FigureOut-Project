@@ -163,6 +163,7 @@
 
         fetch(`/sales/getSaleTotal/${saleId}`)
             .then(response => {
+                console.log(response);  // Log the raw response to check
                 if (!response.ok) {
                     throw new Error("Erro ao retornar total da venda.");
                 }
@@ -171,7 +172,8 @@
             .then(totalPrice => {
                 console.log(totalPrice);  // Log the total price for inspection
 
-                totalPriceElement.innerHTML = 'Total da venda: R$ ' + totalPrice.toFixed(2);  // Format to 2 decimal places
+                // Update the element to display the formatted price
+                totalPriceElement.innerHTML = 'Total da venda: R$ ' + totalPrice.toFixed(2);
             })
             .catch(error => {
                 console.error(error);

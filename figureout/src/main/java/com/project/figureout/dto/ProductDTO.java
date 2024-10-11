@@ -13,6 +13,10 @@ import java.util.List;
 @Getter @Setter
 public class ProductDTO {
 
+    private boolean active;
+
+    private String reasonForInactivation;
+
     private String name;
 
     private String description;

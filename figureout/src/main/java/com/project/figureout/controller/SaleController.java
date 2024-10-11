@@ -242,6 +242,7 @@ public class SaleController {
         Client client = clientService.getClientById(1);
 
         BigDecimal finalPrice = (BigDecimal) model.getAttribute("saleFinalPrice");
+        System.out.println(finalPrice);
 
         sale.setFinalPrice(finalPrice);
 
@@ -271,10 +272,17 @@ public class SaleController {
                 HashMap<Stock, Integer> cartProductQuantityToDrop = new HashMap<>();
 
                 for(CartsProducts cartProduct : sale.getCart().getCartProducts()) {
-                    cartProductQuantityToDrop.put(stockService.getProductInStockByProductId(cartProduct.getProduct().getId()), cartProduct.getProductQuantity());
+                    Stock stock = stockService.getProductInStockByProductId(cartProduct.getProduct().getId());
+
+                    cartProductQuantityToDrop.put(stock, cartProduct.getProductQuantity());
+
+                    if(cartProduct.getProductQuantity() >= stock.getProductQuantityAvailable()) {
+                        productService.inactivateProduct(stock.getProduct());
+                    }
                 }
 
                 stockService.dropInStockList(cartProductQuantityToDrop);
+
             }
 
         }

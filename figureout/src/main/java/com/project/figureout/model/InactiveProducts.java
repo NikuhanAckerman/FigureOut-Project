@@ -16,8 +16,9 @@ public class InactiveProducts {
     @Column(name = "ina_id")
     private long id;
 
+    @ManyToOne
     @JoinColumn(name = "ina_pro_id")
-    private long productId;
+    private Product product;
 
     @Column(name = "ina_razao_inativacao")
     private String reasonForInactivation;

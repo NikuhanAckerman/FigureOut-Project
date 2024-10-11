@@ -3,10 +3,7 @@ package com.project.figureout.service;
 import com.project.figureout.dto.ClientBasicDataDTO;
 import com.project.figureout.dto.ProductDTO;
 import com.project.figureout.model.*;
-import com.project.figureout.repository.CategoryRepository;
-import com.project.figureout.repository.PricingGroupRepository;
-import com.project.figureout.repository.ProductRepository;
-import com.project.figureout.repository.StockRepository;
+import com.project.figureout.repository.*;
 import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -37,6 +35,9 @@ public class ProductService {
 
     @Autowired
     private StockRepository stockRepository;
+
+    @Autowired
+    private InactiveProductsRepository inactiveProductsRepository;
 
     public List<Product> getAllProducts() {
         return productRepository.findAll();
@@ -64,6 +65,7 @@ public class ProductService {
 
     public void productDataSetter(Product product, ProductDTO productDTO) {
         System.out.println("calling product data setter");
+        product.setActive(productDTO.isActive());
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
         product.setHeight(productDTO.getHeight());
@@ -82,6 +84,19 @@ public class ProductService {
         product.setPrice(productDTO.getPrice());
 
         product.setPicture(saveProductPicture(productDTO));
+
+        saveProduct(product);
+
+        if(!product.isActive()) {
+            LocalDateTime now = LocalDateTime.now();
+
+            InactiveProducts inactiveProduct = new InactiveProducts();
+            inactiveProduct.setProduct(product);
+            inactiveProduct.setDateTimeInactivation(now);
+            inactiveProduct.setReasonForInactivation(productDTO.getReasonForInactivation());
+
+            inactiveProductsRepository.save(inactiveProduct);
+        }
 
     }
 
@@ -103,6 +118,7 @@ public class ProductService {
 
     public void populateProductDTO(ProductDTO productDTO, Product product) {
 
+        productDTO.setActive(product.isActive());
         productDTO.setName(product.getName());
         productDTO.setDescription(product.getDescription());
         productDTO.setHeight(product.getHeight());
@@ -131,6 +147,11 @@ public class ProductService {
     public void updateProduct(Product product, ProductDTO productDTO) {
         productDataSetter(product, productDTO);
 
+        saveProduct(product);
+    }
+
+    public void inactivateProduct(Product product) {
+        product.setActive(false);
         saveProduct(product);
     }
 
