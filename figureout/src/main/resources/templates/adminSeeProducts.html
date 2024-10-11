@@ -92,6 +92,7 @@
             <tr>
                 <th>ID</th>
                 <th>Foto</th>
+                <th>Ativo</th>
                 <th>Nome</th>
                 <th>Descrição</th>
                 <th>Altura</th>
@@ -113,13 +114,16 @@
                 <td>
                     <img th:src="@{/products/productPicture/{id}(id=${product.id})}" style="width: 200px;"/>
                 </td>
+                <td>
+                    <input type="checkbox" th:checked="${product.active}" disabled>
+                </td>
                 <td th:text = "${product.name}"></td>
                 <td th:text = "${product.description}"></td>
                 <td th:text = "${product.height}"></td>
                 <td th:text = "${product.width}"></td>
                 <td th:text = "${product.weight}"></td>
                 <td th:text = "${product.length}"></td>
-                <td th:text = "${product.purchaseAmount}"></td>
+                <td th:text = "'R$' + ${product.purchaseAmount}"></td>
                 <td>
                     <button type="button" class="btn btn-secondary" th:data-bs-product-id = "${product.id}" data-bs-toggle="modal" data-bs-target="#seeCategoriesModal" >Ver categorias</button>
                 </td>
