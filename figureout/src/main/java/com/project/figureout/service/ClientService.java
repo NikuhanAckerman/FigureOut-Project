@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,6 +66,25 @@ public class ClientService {
         clientBasicDataSetter(client, clientBasicDataDTO);
 
         saveClient(client);
+    }
+
+    // Serviço para mudar a senha.
+    public boolean changePassword(Long id, ClientChangePasswordDTO changePasswordDTO) {
+        // Pegar o usuário pelo ID.
+        Client client = getClientById(id);
+
+        // Checar se a velha senha bate.
+        if (client != null && client.getPassword().equals(changePasswordDTO.getOldPassword())) {
+            // Checar se a nova senha e a confimação batem.
+            if (changePasswordDTO.getNewPassword().equals(changePasswordDTO.getConfirmPassword())) {
+                // Atualizar a senha.
+                client.setPassword(changePasswordDTO.getNewPassword());
+                saveClient(client);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public List<Address> getClientAddresses(long id) {

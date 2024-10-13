@@ -42,7 +42,7 @@
 							uma letra maiúscula;
 							uma letra minúscula;
 							um número;
-							um caracter especial. (#, @, $, %, !, ?, etc.)</p>
+							um caractere especial. (#, @, $, %, !, ?, etc.)</p>
 						<input class="form-control" placeholder="Insira uma senha forte!" th:field="*{password}" required>
 						<ul style="list-style-type: none;">
 							<li th:each="err : ${#fields.errors('password')}" th:text="${err}" class="text-danger"/>

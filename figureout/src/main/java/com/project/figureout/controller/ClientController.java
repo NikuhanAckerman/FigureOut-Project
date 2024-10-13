@@ -14,7 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -247,6 +249,31 @@ public class ClientController {
 
         return "redirect:/index";
     }
+
+    // Método no controller pra página de trocar de senha.
+    @GetMapping("/changePassword/{clientId}")
+    public String showChangePasswordForm(@ModelAttribute ClientChangePasswordDTO changePasswordDTO,
+                                         @PathVariable Long clientId,
+                                         Model model) {
+        model.addAttribute("changePasswordDTO", new ClientChangePasswordDTO());
+        return "/changePassword/" + clientId; // Template do thymeleaf
+    }
+
+    /*@PostMapping("/changePassword/{clientId}")
+    public String changePassword(@ModelAttribute ClientChangePasswordDTO changePasswordDTO,
+                                 @PathVariable Long clientId,
+                                 Model model) {
+        // Chamar o serviço para mudar a senha.
+        boolean success = clientService.changePassword(clientId, changePasswordDTO);
+
+        /*if (!success) {
+            model.addAttribute("error", "Password change failed. Please check your inputs.");
+            return "changePassword"; // Mostrar o formulário de novo com um erro
+        }*/
+
+        /*model.addAttribute("message", "Password changed successfully!");
+        return "/changePassword/" + clientId; // Redirecionar para uma página de sucesso.
+    }*/
 
 
     @GetMapping("/updateClient/{id}")

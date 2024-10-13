@@ -11,9 +11,12 @@ import lombok.Setter;
 @PasswordsMatch
 public class ClientChangePasswordDTO {
 
+    @NotBlank(message = "Old password is required")
+    private String oldPassword;
+
     @NotBlank(message = "A senha não pode estar vazia.")
     @Pattern(message = "A senha digitada é inválida.", regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*\\p{Punct})[A-Za-z\\d\\p{Punct}]{8,}$")
-    private String password;
+    private String newPassword;
 
     @NotBlank(message = "A confirmação de senha não pode estar vazia.")
     @Pattern(message = "A senha digitada é inválida.", regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*\\p{Punct})[A-Za-z\\d\\p{Punct}]{8,}$")
