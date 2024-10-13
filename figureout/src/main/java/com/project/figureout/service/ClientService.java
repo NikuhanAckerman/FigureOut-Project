@@ -75,6 +75,7 @@ public class ClientService {
 
         // Checar se a velha senha bate.
         if (client != null && client.getPassword().equals(changePasswordDTO.getOldPassword())) {
+            System.out.println("nao é nulo e senha igual a senha velha do dto");
             // Checar se a nova senha e a confimação batem.
             if (changePasswordDTO.getNewPassword().equals(changePasswordDTO.getConfirmPassword())) {
                 // Atualizar a senha.

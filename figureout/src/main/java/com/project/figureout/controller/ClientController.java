@@ -256,15 +256,19 @@ public class ClientController {
                                          @PathVariable Long clientId,
                                          Model model) {
         model.addAttribute("changePasswordDTO", new ClientChangePasswordDTO());
-        return "/changePassword/" + clientId; // Template do thymeleaf
+        model.addAttribute("clientId", clientId);
+
+        return "changePassword"; // Template do thymeleaf
     }
 
-    /*@PostMapping("/changePassword/{clientId}")
+    @PostMapping("/changePassword/{clientId}")
     public String changePassword(@ModelAttribute ClientChangePasswordDTO changePasswordDTO,
                                  @PathVariable Long clientId,
                                  Model model) {
         // Chamar o serviço para mudar a senha.
-        boolean success = clientService.changePassword(clientId, changePasswordDTO);
+        clientService.changePassword(clientId, changePasswordDTO);
+        //boolean success =
+        return "redirect:/index";
 
         /*if (!success) {
             model.addAttribute("error", "Password change failed. Please check your inputs.");
@@ -273,7 +277,9 @@ public class ClientController {
 
         /*model.addAttribute("message", "Password changed successfully!");
         return "/changePassword/" + clientId; // Redirecionar para uma página de sucesso.
-    }*/
+
+         */
+    }
 
 
     @GetMapping("/updateClient/{id}")

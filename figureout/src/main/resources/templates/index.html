@@ -133,8 +133,9 @@
 						<tr th:each="client : ${clients}">
 							<td th:text = "${client.id}"></td>
 							<td th:text = "${client.name}"></td>
-							<td th:text = "${client.password}">
-							<button th:href="@{/changePassword/{clientId}(clientId=${client.id})}" type="button" class="btn btn-secondary" >Alterar senha</button>
+							<td>
+								<p th:text="${client.password}"></p>
+								<a th:href="@{/changePassword/{clientId}(clientId=${client.id})}" type="button" class="btn btn-danger" >Alterar senha</a>
 							</td>
 							<td th:text = "${client.gender.genderType}"></td>
 							<td th:text = "${#temporals.format(client.birthday, 'dd-MM-yyyy')}"></td>

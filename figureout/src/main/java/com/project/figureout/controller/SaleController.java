@@ -289,11 +289,6 @@ public class SaleController {
 
         sale.setStatus(changeSaleStatusDTO.getStatus());
 
-
-
-
-
-
         saleService.saveSale(sale);
 
         return "redirect:/sales/seeSales";
