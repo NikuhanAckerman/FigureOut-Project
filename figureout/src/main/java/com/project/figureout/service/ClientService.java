@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class ClientService {
@@ -125,6 +126,17 @@ public class ClientService {
     public String addMaskToCpf(String cpf) {
         // 123.456.789-00
         return cpf.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
+    }
+
+
+    // Método para filtrar por nome o cliente.
+    public List<Client> filterClients(String name, String email) {
+        if (name != null && !name.isEmpty()) {
+            return clientRepository.findByNameContainingIgnoreCase(name);
+        } else if (email != null && !email.isEmpty()) {
+            return clientRepository.findByEmailContainingIgnoreCase(email);
+        }
+        return getAllClients();
     }
 
 }

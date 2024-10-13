@@ -293,4 +293,17 @@ public class ClientController {
         return "redirect:/index";
     }
 
+
+    // Filtro de clientes no CRUD de clientes
+    @GetMapping("/clients")
+    public String getClients(@RequestParam(required = false) String name,
+                             @RequestParam(required = false) String email,
+                             Model model) {
+        List<Client> clients = clientService.filterClients(name, email);
+        model.addAttribute("clients", clients);
+        model.addAttribute("filterName", name);
+        model.addAttribute("filterEmail", email);
+        return "index"; // Atualizar esta linha com o nome da página ;)
+    }
+
 }

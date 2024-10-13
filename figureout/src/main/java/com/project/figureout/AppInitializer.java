@@ -162,7 +162,7 @@ public class AppInitializer implements CommandLineRunner {
             System.out.println("Tabela de grupos de precificação populada.");
         }
 
-        if(categoryRepository.count() == 0) {
+        /*if(categoryRepository.count() == 0) {
             System.out.println("Populando tabela de categorias...");
 
             ArrayList<Category> categoryList = new ArrayList<>();
@@ -188,8 +188,8 @@ public class AppInitializer implements CommandLineRunner {
 
              */
 
-            System.out.println("Tabela de categorias populada.");
-        }
+           /* System.out.println("Tabela de categorias populada.");
+        }*/
 
         if(supplierRepository.count() == 0) {
             System.out.println("Populando tabela de fornecedores...");
