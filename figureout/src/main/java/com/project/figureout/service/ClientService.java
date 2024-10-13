@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -129,18 +130,38 @@ public class ClientService {
     }
 
 
-    // Método para filtrar por nome o cliente.
-    public List<Client> filterClients(String name, String email, String password, String cpf) {
-        if (name != null && !name.isEmpty()) {
-            return clientRepository.findByNameContainingIgnoreCase(name);
-        } else if (email != null && !email.isEmpty()) {
-            return clientRepository.findByEmailContainingIgnoreCase(email);
-        } else if (password != null && !password.isEmpty()) {
-            return clientRepository.findByPasswordContainingIgnoreCase(password);
-        } else if (cpf != null && !cpf.isEmpty()) {
-            return clientRepository.findByCpfContainingIgnoreCase(cpf);
+    // Método para filtrar os atributos do cliente.
+    public List<Client> filterClients(String name, String email, String password, String cpf, Long id) {
+        List<Client> clients = getAllClients();
+
+        if (id != null && id > 0) {
+            clients = clients.stream()
+                    .filter(client -> client.getId() == id) // Comparação direta
+                    .collect(Collectors.toList());
         }
-        return getAllClients();
+        if (name != null && !name.isEmpty()) {
+            clients = clients.stream()
+                    .filter(client -> client.getName().toLowerCase().contains(name.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+        if (email != null && !email.isEmpty()) {
+            clients = clients.stream()
+                    .filter(client -> client.getEmail().toLowerCase().contains(email.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+        if (password != null && !password.isEmpty()) {
+            clients = clients.stream()
+                    .filter(client -> client.getPassword().toLowerCase().contains(password.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+        if (cpf != null && !cpf.isEmpty()) {
+            clients = clients.stream()
+                    .filter(client -> client.getCpf().toLowerCase().contains(cpf.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+        return clients.isEmpty() ? new ArrayList<>() : clients; // Retornar uma lista vazia se nenhum filtro bater
     }
+
+
 
 }

@@ -300,14 +300,16 @@ public class ClientController {
                              @RequestParam(required = false) String email,
                              @RequestParam(required = false) String password,
                              @RequestParam(required = false) String cpf,
+                             @RequestParam(required = false) Long id,
                              Model model) {
-        List<Client> clients = clientService.filterClients(name, email, password, cpf);
+        List<Client> clients = clientService.filterClients(name, email, password, cpf, id);
         model.addAttribute("clients", clients);
         model.addAttribute("filterName", name);
         model.addAttribute("filterEmail", email);
         model.addAttribute("filterPassword", password);
         model.addAttribute("filterCpf", cpf);
-        return "index"; // Atualizar esta linha com o nome da página ;)
+        model.addAttribute("filterId", id);
+        return "index";
     }
 
 }
