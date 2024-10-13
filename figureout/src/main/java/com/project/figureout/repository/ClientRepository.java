@@ -10,4 +10,6 @@ import java.util.List;
 public interface ClientRepository extends JpaRepository<Client, Long> {
     List<Client> findByNameContainingIgnoreCase(String name);
     List<Client> findByEmailContainingIgnoreCase(String email);
+    List<Client> findByPasswordContainingIgnoreCase(String password);
+    List<Client> findByCpfContainingIgnoreCase(String cpf);
 }

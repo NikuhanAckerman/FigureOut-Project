@@ -52,10 +52,10 @@
 							<input type="text" class="form-control" id="filterID" placeholder="Filtrar por ID">
 						</div>
 						<div class="mb-3">
-							<input type="text" name="name" class="form-control" th:value="${filterName}" placeholder="Filtrar por Nome Completo">
+							<input type="text" name="name" id="filterName" class="form-control" th:value="${filterName}" placeholder="Filtrar por Nome Completo">
 						</div>
 						<div class="mb-3">
-							<input type="text" class="form-control" id="filterPassword" placeholder="Filtrar por Senha">
+							<input type="text" name="password" id="filterPassword" class="form-control" th:value="${filterPassword}" placeholder="Filtrar por Senha">
 						</div>
 
 						<div class="mb-3 d-flex align-items-center">
@@ -82,10 +82,10 @@
 						</div>
 
 						<div class="mb-3">
-							<input type="text" class="form-control" id="filterCPF" placeholder="Filtrar por CPF">
+							<input type="text" name="cpf" id="filterCpf" class="form-control" th:value="${filterCpf}" placeholder="Filtrar por CPF">
 						</div>
 						<div class="mb-3">
-							<input type="text" name="email" class="form-control" th:value="${filterEmail}" placeholder="Filtrar por Email">
+							<input type="text" name="email" id="filterEmail" class="form-control" th:value="${filterEmail}" placeholder="Filtrar por Email">
 						</div>
 						<div class="mb-3">
 							<input type="text" class="form-control" id="filterPhone" placeholder="Filtrar por Telefone">

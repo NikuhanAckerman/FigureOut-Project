@@ -130,11 +130,15 @@ public class ClientService {
 
 
     // Método para filtrar por nome o cliente.
-    public List<Client> filterClients(String name, String email) {
+    public List<Client> filterClients(String name, String email, String password, String cpf) {
         if (name != null && !name.isEmpty()) {
             return clientRepository.findByNameContainingIgnoreCase(name);
         } else if (email != null && !email.isEmpty()) {
             return clientRepository.findByEmailContainingIgnoreCase(email);
+        } else if (password != null && !password.isEmpty()) {
+            return clientRepository.findByPasswordContainingIgnoreCase(password);
+        } else if (cpf != null && !cpf.isEmpty()) {
+            return clientRepository.findByCpfContainingIgnoreCase(cpf);
         }
         return getAllClients();
     }
