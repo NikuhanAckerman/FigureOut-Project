@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -172,6 +173,31 @@ public class ProductController {
     @ResponseBody
     public List<Category> getProductCategories(@PathVariable Long id) {
         return productService.getProductById(id).getCategories();
+    }
+
+    // Filtro de produtos no CRUD de produtos
+    @GetMapping("/products/seeProducts")
+    public String getProducts(@RequestParam(required = false) Long id,
+                              @RequestParam(required = false) String name,
+                              @RequestParam(required = false) Float height,
+                              @RequestParam(required = false) Float width,
+                              @RequestParam(required = false) Float weight,
+                              @RequestParam(required = false) Float length,
+                              @RequestParam(required = false) BigDecimal purchaseAmount,
+                              @RequestParam(required = false) BigDecimal price,
+
+                              Model model) {
+        List<Product> products = productService.filterProducts(id, name, height, width, weight, length, purchaseAmount, price);
+        model.addAttribute("products", products);
+        model.addAttribute("filterId", id);
+        model.addAttribute("filterName", name);
+        model.addAttribute("filterHeight", height);
+        model.addAttribute("filterWidth", width);
+        model.addAttribute("filterWeight", weight);
+        model.addAttribute("filterLength", length);
+        model.addAttribute("filterPurchaseAmount", purchaseAmount);
+        model.addAttribute("filterPrice", price);
+        return "adminSeeProducts";
     }
 
 }

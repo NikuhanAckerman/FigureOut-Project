@@ -21,7 +21,7 @@ public class ProductDTO {
     @NotNull
     private boolean active;
 
-    //@NotBlank(message = "A razão para inativação do produto não pode estar em branco.")
+    @NotBlank(message = "A razão para inativação do produto não pode estar em branco.")
     private String reasonForInactivation;
 
     @NotBlank(message = "O nome do produto não pode estar em branco.")

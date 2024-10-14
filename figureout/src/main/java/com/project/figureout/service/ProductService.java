@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -153,6 +154,60 @@ public class ProductService {
     public void inactivateProduct(Product product) {
         product.setActive(false);
         saveProduct(product);
+    }
+
+    // Método para filtrar os atributos dos produtos.
+    public List<Product> filterProducts(Long id,
+                                        String name,
+                                        Float height,
+                                        Float width,
+                                        Float weight,
+                                        Float length,
+                                        BigDecimal purchaseAmount,
+                                        BigDecimal price) {
+        List<Product> products = getAllProducts();
+
+        if (id != null && id > 0) {
+            products = products.stream()
+                    .filter(product -> product.getId() == id) // Comparação direta
+                    .collect(Collectors.toList());
+        }
+        if (name != null && !name.isEmpty()) {
+            products = products.stream()
+                    .filter(product -> product.getName().toLowerCase().contains(name.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+        if (height != null && height > 0) {
+            products = products.stream()
+                    .filter(product -> product.getHeight() >= height)
+                    .collect(Collectors.toList());
+        }
+        if (width != null && width > 0) {
+            products = products.stream()
+                    .filter(product -> product.getWidth() >= width)
+                    .collect(Collectors.toList());
+        }
+        if (weight != null && weight > 0) {
+            products = products.stream()
+                    .filter(product -> product.getWeight() >= weight)
+                    .collect(Collectors.toList());
+        }
+        if (length != null && length > 0) {
+            products = products.stream()
+                    .filter(product -> product.getLength() >= length)
+                    .collect(Collectors.toList());
+        }
+        if (purchaseAmount != null) {
+            products = products.stream()
+                    .filter(product -> product.getPurchaseAmount() != null && product.getPurchaseAmount().compareTo(purchaseAmount) >= 0)
+                    .collect(Collectors.toList());
+        }
+        if (price != null) {
+            products = products.stream()
+                    .filter(product -> product.getPrice() != null && product.getPrice().compareTo(price) >= 0)
+                    .collect(Collectors.toList());
+        }
+        return products.isEmpty() ? new ArrayList<>() : products; // Retornar uma lista vazia se nenhum filtro bater
     }
 
 

@@ -34,6 +34,6 @@ public class StockDTO {
     @PastOrPresent(message = "A data de entrada deve estar no passado ou no presente.")
     @NotNull(message = "O campo de data de entrada não pode ser nulo.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate entryDate;
+    private LocalDate entryInStockDate;
 
 }

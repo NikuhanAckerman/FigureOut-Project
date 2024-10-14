@@ -32,10 +32,14 @@
 
 <div class="container mt-5">
 
+    <!--BOTÃO DE FILTRAR -->
+
     <a class="btn btn-outline-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
             <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
         </svg> Filtrar</a>
+
+    <!--COMEÇA O FILTRO -->
 
     <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
         <div class="offcanvas-header">
@@ -44,48 +48,51 @@
         </div>
         <div class="offcanvas-body">
             <div>
-                <div class="mb-3">
-                    <input type="text" class="form-control" id="filterID" placeholder="Filtrar por ID">
-                </div>
-                <div class="mb-3">
-                    <input type="text" class="form-control" id="filterName" placeholder="Filtrar por Nome">
-                </div>
-                <div class="mb-3 d-flex align-items-center">
-                    <div class="col-md-3">
-                        <input type="text" class="form-control" id="filterHeight" placeholder="Altura">
+                <form action="#" th:action="@{/products/seeProducts}" method="get" class="mb-3">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="filterID" th:value="${filterId}" placeholder="Filtrar por ID">
                     </div>
-                    <div class="col-md-3">
-                        <input type="text" class="form-control" id="filterWidth" placeholder="Largura">
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="filterName" th:value="${filterName}" placeholder="Filtrar por Nome">
                     </div>
-                    <div class="col-md-3">
-                        <input type="text" class="form-control" id="filterWeight" placeholder="Peso">
+                    <div class="mb-3 d-flex align-items-center">
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="filterHeight" th:value="${filterHeight}" placeholder="Altura">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="filterWidth" th:value="${filterWidth}" placeholder="Largura">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="filterWeight" th:value="${filterWeight}" placeholder="Peso">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" id="filterLength" th:value="${filterLength}" placeholder="Comprimento">
+                        </div>
                     </div>
-                    <div class="col-md-3">
-                        <input type="text" class="form-control" id="filterLength" placeholder="Comprimento">
-                    </div>
-                </div>
 
-                <div class="mb-3">
-                    <input type="text" class="form-control" id="filterPurchaseValue" placeholder="Filtrar por Valor de compra">
-                </div>
-                <div class="mb-3">
-                    <select id="Pricing-dropdown" class="form-control">
-                        <option value="0" disabled selected>Selecione um Grupo de precificação</option>
-                        <option value="1">Ouro</option>
-                        <option value="2">Prata</option>
-                        <option value="3">Bronze</option>
-                        <option value="4">Ferro</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <input type="text" class="form-control" id="filterSellingValue" placeholder="Filtrar por Valor de venda">
-                </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="filterPurchaseValue" th:value="${filterPurchaseAmount}" placeholder="Filtrar por Valor de compra">
+                    </div>
+                    <div class="mb-3">
+                        <select id="Pricing-dropdown" class="form-control">
+                            <option value="0" disabled selected>Selecione um Grupo de precificação</option>
+                            <option value="1">Ouro</option>
+                            <option value="2">Prata</option>
+                            <option value="3">Bronze</option>
+                            <option value="4">Ferro</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="filterSellingValue" th:value="${filterPrice}" placeholder="Filtrar por Valor de venda">
+                    </div>
 
-                <button class="btn btn-primary" id="btnFilter">Filtrar</button>
-
+                    <button type="submit" class="btn btn-primary" id="btnFilter">Filtrar</button>
+                </form>
             </div>
         </div>
     </div>
+
+    <!--TERMINA O FILTRO -->
 
     <div style="max-width: 1200px; margin: 0 auto">
         <table class="table table-striped table-hover">
