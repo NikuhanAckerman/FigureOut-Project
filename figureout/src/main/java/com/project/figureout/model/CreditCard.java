@@ -18,7 +18,7 @@ public class CreditCard {
     private long id;
 
     @Column(name = "cre_preferido", nullable = false)
-    private boolean preferido;
+    private boolean preferential;
 
     @Column(name = "cre_numero", nullable = false, length = 20)
     private String cardNumber;
