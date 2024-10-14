@@ -58,7 +58,7 @@ public class StockService {
         stock.setProductQuantityAvailable(productDTO.getStockDTO().getProductQuantityAvailable());
         stock.setProductPurchaseAmount(product.getPurchaseAmount());
 
-        stock.setEntryDate(productDTO.getStockDTO().getEntryInStockDate());
+        stock.setEntryDate(productDTO.getStockDTO().getEntryDate());
 
         stock.setProduct(product);
 
