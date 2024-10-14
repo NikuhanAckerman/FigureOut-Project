@@ -187,10 +187,12 @@ public class ClientController {
     public String updateClientCreditCardGet(@PathVariable long id, Model model) {
         CreditCard creditCard = creditCardService.getCreditCardById(id);
         CreditCardDTO creditCardDTO = new CreditCardDTO();
+        List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
 
         creditCardService.populateCreditCardDTO(creditCardDTO, creditCard);
 
         model.addAttribute("creditCardDTO", creditCardDTO);
+        model.addAttribute("creditCardBrandList", creditCardBrandList);
         model.addAttribute("creditCardId", id);
 
         return "updateCreditCard";
@@ -200,9 +202,11 @@ public class ClientController {
     @PutMapping("updateCreditCard/{id}")
     public String updateClientCreditCardPut(@PathVariable long id, @Valid @ModelAttribute CreditCardDTO creditCardDTO, BindingResult result, Model model) {
         CreditCard creditCardToUpdate = creditCardService.getCreditCardById(id);
+        List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
 
         if(result.hasErrors()) {
             model.addAttribute("creditCardId", id);
+            model.addAttribute("creditCardBrandList", creditCardBrandList);
 
             return "updateCreditCard";
         }
@@ -229,7 +233,6 @@ public class ClientController {
 
     @PostMapping("/createClient")
     public String addClientPost(@Valid @ModelAttribute("clientDTO") ClientDTO clientDTO, BindingResult result, Model model) {
-
 
         Client client = new Client();
 

@@ -36,7 +36,7 @@ public class OnlyOnePreferentialCreditCardValidator implements ConstraintValidat
             List<CreditCard> clientCreditCardList = client.getCreditCards();
 
             long preferentialCount = clientCreditCardList.stream()
-                    .filter(CreditCard::isPreferido)
+                    .filter(CreditCard::isPreferential)
                     .count();
 
             return (preferentialCount <= 1);

@@ -17,6 +17,7 @@ import java.util.Set;
 @Entity
 @Table(name = "Clientes")
 @Getter @Setter
+@OnlyOnePreferentialCreditCard
 public class Client {
 
     @Id

@@ -32,10 +32,10 @@
 
       <div>
         <label><b>Preferencial?</b></label>
-        <input class="form-check-input" type="checkbox" th:field="*{preferido}">
+        <input class="form-check-input" type="checkbox" th:field="*{preferential}">
 
         <ul style="list-style-type: none;">
-          <li th:each="err : ${#fields.errors('preferido')}" th:text="${err}" class="text-danger"/>
+          <li th:each="err : ${#fields.errors('preferential')}" th:text="${err}" class="text-danger"/>
         </ul>
       </div>
 
@@ -59,7 +59,7 @@
             <option th:each="brand : ${creditCardBrandList}" th:value="${brand.id}" th:text="${brand.name}">
           </select>
           <ul style="list-style-type: none;">
-            <li th:each="err : ${#fields.errors('countryDTO.id')}" th:text="${err}" class="text-danger"/>
+            <li th:each="err : ${#fields.errors('creditCardBrandDTO')}" th:text="${err}" class="text-danger"/>
           </ul>
         </div>
 

@@ -53,7 +53,7 @@ public class CreditCardService {
     }
 
     public void insertDataIntoCreditCard(CreditCard creditCard, CreditCardDTO creditCardDTO) {
-        creditCard.setPreferido(creditCardDTO.isPreferido());
+        creditCard.setPreferential(creditCardDTO.isPreferential());
         creditCard.setCardNumber(creditCardDTO.getCardNumber());
         creditCard.setPrintedName(creditCardDTO.getPrintedName());
 
@@ -85,7 +85,7 @@ public class CreditCardService {
 
     public void populateCreditCardDTO(CreditCardDTO creditCardDTO, CreditCard creditCard) {
 
-        creditCardDTO.setPreferido(creditCard.isPreferido());
+        creditCardDTO.setPreferential(creditCard.isPreferential());
         creditCardDTO.setCardNumber(creditCard.getCardNumber());
         creditCardDTO.setPrintedName(creditCard.getPrintedName());
 
