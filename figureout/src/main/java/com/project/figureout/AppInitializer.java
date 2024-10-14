@@ -51,9 +51,6 @@ public class AppInitializer implements CommandLineRunner {
     private PromotionalCouponRepository promotionalCouponRepository;
 
     @Autowired
-    CartService cartService;
-
-    @Autowired
     ClientService clientService;
 
     @Override
@@ -213,16 +210,18 @@ public class AppInitializer implements CommandLineRunner {
 
             ArrayList<PromotionalCoupon> promotionalCouponList = new ArrayList<>();
 
-            LocalDate FIGUREOUT95expiryDate = LocalDate.of(2024, 12, 31);
+            LocalDate standardExpiryDate = LocalDate.of(2024, 12, 31);
 
             Collections.addAll(promotionalCouponList,
-                    new PromotionalCoupon("FIGUREOUT95", BigDecimal.valueOf(0.95), FIGUREOUT95expiryDate)
+                    new PromotionalCoupon("FIGUREOUT90", BigDecimal.valueOf(0.90), standardExpiryDate),
+                    new PromotionalCoupon("FIGUREOUT10", BigDecimal.valueOf(0.10), standardExpiryDate)
             );
 
             promotionalCouponRepository.saveAll(promotionalCouponList);
 
             System.out.println("Tabela de cupons promocionais populada.");
         }
+
 
     }
 

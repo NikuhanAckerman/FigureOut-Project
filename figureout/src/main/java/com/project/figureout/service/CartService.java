@@ -90,12 +90,15 @@ public class CartService {
         List<CartsProducts> cartsProducts = cart.getCartProducts();
 
         if(cart.getPromotionalCoupon() != null) {
-            System.out.println("sussybaka.. already applied a coupon didnt you?!");
-
-            for(CartsProducts cartProduct: cartsProducts) {
-                cartProduct.setPriceToPay(cartProduct.getPriceToPay().multiply(BigDecimal.valueOf(cartProduct.getProductQuantity())));
+            if(cart.getPromotionalCoupon().equals(promotionalCoupon)) {
+                return;
             }
 
+            for(CartsProducts cartProduct: cartsProducts) {
+                System.out.println(cartProduct.getPriceToPay());
+                cartProduct.setPriceToPay(cartProduct.getProduct().getPrice());
+                System.out.println(cartProduct.getPriceToPay());
+            }
         }
 
         cart.setPromotionalCoupon(promotionalCoupon);

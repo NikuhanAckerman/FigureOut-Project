@@ -12,3 +12,10 @@ stock should have a LocalDate and not LocalDateTime probably
 add expiry date for promotionalCoupons and later exchange (troca) coupons
 
 add check to see if the client is in a buying page, and if it is, dont let the cart expire
+
+// bugs to fix
+
+-> promotional coupon infinite discount // apparently fixed lol
+-> sale page not showing total price
+-> DTO of product not loading image or date
+-> inactivation reason for product creation page doesnt appear by default (make the input checked by default)

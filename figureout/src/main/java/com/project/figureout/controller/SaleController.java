@@ -132,29 +132,7 @@ public class SaleController {
         return "redirect:/sales/finishOrder/" + cartId;
     }
 
-    @PutMapping("/addPromotionalCoupon/{cartId}")
-    public String addPromotionalCoupon(@PathVariable long cartId, @ModelAttribute PromotionalCouponDTO promotionalCouponDTO, HttpServletRequest request) {
-        Cart cart = cartService.getCartById(cartId);
 
-        /* extremely nested code, basically what it does is if the coupon typed is correct,
-         i reset the price of the products back to the original price * quantity,
-         then apply the new coupon's discount
-         (will potentially write it better when i transfer this to CartService and/or SaleService) */
-
-        for(PromotionalCoupon promotionalCoupon: promotionalCouponRepository.findAll()) {
-
-            if(promotionalCouponDTO.getCouponName().equals(promotionalCoupon.getCouponName())) {
-
-                cartService.applyPromotionalCoupon(cart, promotionalCoupon);
-
-            }
-
-        }
-
-        String referer = request.getHeader("Referer");
-
-        return "redirect:" + referer;
-    }
 
     @GetMapping("/finishOrder/{cartId}")
     public String finishOrderGet(@PathVariable long cartId, Model model) {
@@ -288,11 +266,6 @@ public class SaleController {
         }
 
         sale.setStatus(changeSaleStatusDTO.getStatus());
-
-
-
-
-
 
         saleService.saveSale(sale);
 

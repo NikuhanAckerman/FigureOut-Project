@@ -1,11 +1,9 @@
 package com.project.figureout.controller;
 
-import com.project.figureout.dto.CartProductDTO;
-import com.project.figureout.dto.ChangeCartProductQuantityDTO;
-import com.project.figureout.dto.MultipleCartProductDTO;
-import com.project.figureout.dto.StockDTO;
+import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartsProductsRepository;
+import com.project.figureout.repository.PromotionalCouponRepository;
 import com.project.figureout.service.CartService;
 import com.project.figureout.service.ClientService;
 import com.project.figureout.service.ProductService;
@@ -32,6 +30,9 @@ public class CartController {
 
     @Autowired
     private CartsProductsRepository cartsProductsRepository;
+
+    @Autowired
+    private PromotionalCouponRepository promotionalCouponRepository;
 
     @GetMapping("/getCart/{cartId}")
     public Cart getSpecificCart(@PathVariable Long id) {
@@ -100,6 +101,30 @@ public class CartController {
         String referer = request.getHeader("Referer");
 
         // Redirect back to the same page
+        return "redirect:" + referer;
+    }
+
+    @PutMapping("/addPromotionalCoupon/{cartId}")
+    public String addPromotionalCoupon(@PathVariable long cartId, @ModelAttribute PromotionalCouponDTO promotionalCouponDTO, HttpServletRequest request) {
+        Cart cart = cartService.getCartById(cartId);
+
+        /* extremely nested code, basically what it does is if the coupon typed is correct,
+         i reset the price of the products back to the original price * quantity,
+         then apply the new coupon's discount
+         (will potentially write it better when i transfer this to CartService and/or SaleService) */
+
+        for(PromotionalCoupon promotionalCoupon: promotionalCouponRepository.findAll()) {
+
+            if(promotionalCouponDTO.getCouponName().equals(promotionalCoupon.getCouponName())) {
+
+                cartService.applyPromotionalCoupon(cart, promotionalCoupon);
+
+            }
+
+        }
+
+        String referer = request.getHeader("Referer");
+
         return "redirect:" + referer;
     }
 
