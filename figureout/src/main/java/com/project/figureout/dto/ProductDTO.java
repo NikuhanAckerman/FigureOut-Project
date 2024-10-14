@@ -3,6 +3,11 @@ package com.project.figureout.dto;
 import com.project.figureout.model.Category;
 import com.project.figureout.model.PricingGroup;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,34 +18,53 @@ import java.util.List;
 @Getter @Setter
 public class ProductDTO {
 
+    @NotNull
     private boolean active;
 
+    //@NotBlank(message = "A razão para inativação do produto não pode estar em branco.")
     private String reasonForInactivation;
 
+    @NotBlank(message = "O nome do produto não pode estar em branco.")
     private String name;
 
     private String description;
 
+    @NotNull(message = "O campo de altura do produto não pode ser nulo.")
+    @Positive(message = "A altura do produto deve ser maior que zero.")
     private float height;
 
+    @NotNull(message = "O campo de largura do produto não pode ser nulo.")
+    @Positive(message = "A largura do produto deve ser maior que zero.")
     private float width;
 
+    @NotNull(message = "O campo de peso do produto não pode ser nulo.")
+    @Positive(message = "O peso do produto deve ser maior que zero.")
     private float weight;
 
+    @NotNull(message = "O campo de comprimento do produto não pode ser nulo.")
+    @Positive(message = "O comprimento do produto deve ser maior que zero.")
     private float length;
 
+    @NotNull(message = "O valor de compra do produto não pode ser nulo")
+    @Positive(message = "O valor de compra deve ser maior que zero.")
     private BigDecimal purchaseAmount;
 
+    @NotNull(message = "O(s) id(s) de categoria não deve(m) ser nulo(s).")
     private List<Long> categoriesIds;
 
+    @NotNull(message = "O id do grupo de precificação não pode ser nulo.")
     private long pricingGroup;
 
+    @NotNull(message = "O preço de venda do produto não pode ser nulo.")
+    @PositiveOrZero(message = "O preço de venda do produto não deve ser menor que zero.")
     private BigDecimal price;
 
     private MultipartFile productImage;
 
+    @Valid
     private StockDTO stockDTO;
 
+    @NotNull(message = "O id do fornecedor não pode ser nulo.")
     private long supplier;
 
 }

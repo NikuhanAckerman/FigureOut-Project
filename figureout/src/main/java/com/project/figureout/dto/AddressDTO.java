@@ -21,11 +21,11 @@ public class AddressDTO {
     private String nickname;
 
     @NotBlank(message = "O tipo de residência não pode estar vazio.")
-    @Pattern(message = "Tipo de residência inválido. Não insira números e nem caracteres especiais.", regexp = "^[A-Za-z\\s]*$") // letras, espaços
+    @Pattern(message = "Tipo de residência inválido. Não insira números e nem caracteres especiais.", regexp = "^[A-Za-zÀ-ÖØ-Ýà-öø-ÿ\\s]*$") // letras, espaços
     private String typeOfResidence;
 
     @NotBlank(message = "O logradouro não pode estar vazio.")
-    @Pattern(message = "Logradouro inválido. Não insira caracteres especiais.", regexp = "^[A-Za-z\\d\\s]*$")
+    @Pattern(message = "Logradouro inválido. Não insira caracteres especiais.", regexp = "^[A-Za-zÀ-ÖØ-Ýà-öø-ÿ\\s]*$")
     private String addressing;
 
     @NotBlank(message = "O número de residência não pode estar vazio.")
@@ -34,11 +34,11 @@ public class AddressDTO {
     private String houseNumber;
 
     @NotBlank(message = "O bairro não pode estar vazio.")
-    @Pattern(message = "Bairro inválido. Não insira caracteres especiais.", regexp = "^[A-Za-z\\d\\s]*$")
+    @Pattern(message = "Bairro inválido. Não insira caracteres especiais.", regexp = "^[A-Za-zÀ-ÖØ-Ýà-öø-ÿ\\s]*$")
     private String neighbourhood;
 
     @NotBlank(message = "O tipo de logradouro não pode estar vazio.")
-    @Pattern(message = "Tipo de logradouro inválido. Não insira números e nem caracteres especiais.", regexp = "^[A-Za-z\\s]*$")
+    @Pattern(message = "Tipo de logradouro inválido. Não insira números e nem caracteres especiais.", regexp = "^[A-Za-zÀ-ÖØ-Ýà-öø-ÿ\\s]*$")
     private String addressingType;
 
     @NotBlank(message = "O CEP não pode estar vazio.")
@@ -46,7 +46,7 @@ public class AddressDTO {
     private String cep;
 
     @NotBlank(message = "A cidade não pode estar vazia.")
-    @Pattern(message = "Cidade inválida. Não insira números e nem caracteres especiais.", regexp = "^[A-Za-z\\s]*$")
+    @Pattern(message = "Cidade inválida. Não insira números e nem caracteres especiais.", regexp = "^[A-Za-zÀ-ÖØ-Ýà-öø-ÿ\\s]*$")
     private String city;
 
     @Valid
