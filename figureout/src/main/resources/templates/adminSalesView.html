@@ -190,10 +190,11 @@
                 return response.json();  // Handle the response as JSON (since BigDecimal is numeric)
             })
             .then(freight => {
-                console.log(freight);  // Log the total price for inspection
+                console.log(freight);  // Log the freight for inspection
 
-                // Update the element to display the formatted price
-                freightElement.innerHTML = 'Frete: ' + freight*100 + '% do preço da compra.';
+                let totalPrice = totalPriceElement.innerHTML.match(/\d+(\.\d+)?/);
+
+                freightElement.innerHTML = 'Frete: ' + (freight * 100) + '% do preço da compra';
             })
             .catch(error => {
                 console.error(error);
