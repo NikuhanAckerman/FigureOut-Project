@@ -23,19 +23,31 @@ class ProductFormTest(unittest.TestCase):
         
         # Preenche os campos do formulário.
         self.driver.find_element(By.ID, "name").send_keys("Test Product")
+        time.sleep(1)
         self.driver.find_element(By.ID, "height").send_keys("10.5")
+        time.sleep(1)
         self.driver.find_element(By.ID, "width").send_keys("5.5")
+        time.sleep(1)
         self.driver.find_element(By.ID, "length").send_keys("15.0")
+        time.sleep(1)
         self.driver.find_element(By.ID, "weight").send_keys("2.0")
+        time.sleep(1)
         self.driver.find_element(By.ID, "purchaseAmount").send_keys("20.0")
-
+        time.sleep(1)
+        
         Select(self.driver.find_element(By.ID, "categorySelect")).select_by_visible_text("Chaveiro")
+        time.sleep(1)
         Select(self.driver.find_element(By.ID, "pricingGroupSelect")).select_by_visible_text("Ferro (5.00%)")
+        time.sleep(1)
         Select(self.driver.find_element(By.ID, "supplier")).select_by_visible_text("Fornecedor A")
+        time.sleep(1)
         
         self.driver.find_element(By.ID, "price").send_keys("80.0")
+        time.sleep(1)
         self.driver.find_element(By.ID, "productQuantityAvailable").send_keys("5")
+        time.sleep(1)
         self.driver.find_element(By.ID, "entryInStockDate").send_keys("06-10-2023")
+        time.sleep(1)
 
         # Código imenso para ter certeza que ele vai enviar a imagem.
         # Pega o caminho absoluto do diretório do script
@@ -45,11 +57,11 @@ class ProductFormTest(unittest.TestCase):
         file_path = os.path.join(script_dir, "Images", "image.png")
 
         # Garantir que o caminho do arquivo está certo.
-        print("File path: ", file_path)
+        print("Caminho do arquivo: ", file_path)
 
         # Checar se o arquivo existe.
         if not os.path.exists(file_path):
-            print("File does not exist!")
+            print("O arquivo não existe!")
         else:
             # Localizar o <input> do tipo file por seu ID e fazer o upload do arquivo.
             self.driver.find_element(By.ID, "fileInput").send_keys(file_path)
@@ -59,7 +71,7 @@ class ProductFormTest(unittest.TestCase):
         self.driver.execute_script("arguments[0].click();", element)
 
         # Espera alguns segundos para o resultado.
-        time.sleep(2)
+        time.sleep(10)
 
     def tearDown(self):
         # Fecha o browser
