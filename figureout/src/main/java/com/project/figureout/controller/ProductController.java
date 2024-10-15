@@ -52,6 +52,7 @@ public class ProductController {
         List<Product> products =  productService.getAllProducts();
         model.addAttribute("products", products);
 
+
         return "adminSeeProducts";
     }
 
@@ -176,7 +177,7 @@ public class ProductController {
     }
 
     // Filtro de produtos no CRUD de produtos
-    @GetMapping("/products/seeProducts")
+    @GetMapping("/filterProducts")
     public String getProducts(@RequestParam(required = false) Long id,
                               @RequestParam(required = false) String name,
                               @RequestParam(required = false) Float height,
@@ -185,9 +186,9 @@ public class ProductController {
                               @RequestParam(required = false) Float length,
                               @RequestParam(required = false) BigDecimal purchaseAmount,
                               @RequestParam(required = false) BigDecimal price,
-
                               Model model) {
         List<Product> products = productService.filterProducts(id, name, height, width, weight, length, purchaseAmount, price);
+
         model.addAttribute("products", products);
         model.addAttribute("filterId", id);
         model.addAttribute("filterName", name);
@@ -197,6 +198,7 @@ public class ProductController {
         model.addAttribute("filterLength", length);
         model.addAttribute("filterPurchaseAmount", purchaseAmount);
         model.addAttribute("filterPrice", price);
+
         return "adminSeeProducts";
     }
 

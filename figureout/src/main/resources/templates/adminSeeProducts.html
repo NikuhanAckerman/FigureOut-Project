@@ -48,30 +48,30 @@
         </div>
         <div class="offcanvas-body">
             <div>
-                <form action="#" th:action="@{/products/seeProducts}" method="get" class="mb-3">
+                <form th:action="@{/products/filterProducts}" method="GET" class="mb-3">
                     <div class="mb-3">
-                        <input type="text" class="form-control" id="filterID" th:value="${filterId}" placeholder="Filtrar por ID">
+                        <input type="text" name="id" class="form-control" id="filterID" th:value="${filterId}" placeholder="Filtrar por ID">
                     </div>
                     <div class="mb-3">
-                        <input type="text" class="form-control" id="filterName" th:value="${filterName}" placeholder="Filtrar por Nome">
+                        <input type="text" name="name" class="form-control" id="filterName" th:value="${filterName}" placeholder="Filtrar por Nome">
                     </div>
                     <div class="mb-3 d-flex align-items-center">
                         <div class="col-md-3">
-                            <input type="text" class="form-control" id="filterHeight" th:value="${filterHeight}" placeholder="Altura">
+                            <input type="text" name="height" class="form-control" id="filterHeight" th:value="${filterHeight}" placeholder="Altura">
                         </div>
                         <div class="col-md-3">
-                            <input type="text" class="form-control" id="filterWidth" th:value="${filterWidth}" placeholder="Largura">
+                            <input type="text" name="width" class="form-control" id="filterWidth" th:value="${filterWidth}" placeholder="Largura">
                         </div>
                         <div class="col-md-3">
-                            <input type="text" class="form-control" id="filterWeight" th:value="${filterWeight}" placeholder="Peso">
+                            <input type="text" name="weight" class="form-control" id="filterWeight" th:value="${filterWeight}" placeholder="Peso">
                         </div>
                         <div class="col-md-3">
-                            <input type="text" class="form-control" id="filterLength" th:value="${filterLength}" placeholder="Comprimento">
+                            <input type="text" name="length" class="form-control" id="filterLength" th:value="${filterLength}" placeholder="Comprimento">
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <input type="text" class="form-control" id="filterPurchaseValue" th:value="${filterPurchaseAmount}" placeholder="Filtrar por Valor de compra">
+                        <input type="text" name="purchaseAmount" class="form-control" id="filterPurchaseValue" th:value="${filterPurchaseAmount}" placeholder="Filtrar por Valor de compra">
                     </div>
                     <div class="mb-3">
                         <select id="Pricing-dropdown" class="form-control">
@@ -83,7 +83,7 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <input type="text" class="form-control" id="filterSellingValue" th:value="${filterPrice}" placeholder="Filtrar por Valor de venda">
+                        <input type="text" name="price" class="form-control" id="filterSellingValue" th:value="${filterPrice}" placeholder="Filtrar por Valor de venda">
                     </div>
 
                     <button type="submit" class="btn btn-primary" id="btnFilter">Filtrar</button>

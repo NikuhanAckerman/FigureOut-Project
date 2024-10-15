@@ -167,7 +167,17 @@ public class ProductService {
                                         BigDecimal price) {
         List<Product> products = getAllProducts();
 
+        System.out.println(id);
+        System.out.println(name);
+        System.out.println(height);
+        System.out.println(width);
+        System.out.println(weight);
+        System.out.println(length);
+        System.out.println(purchaseAmount);
+        System.out.println(price);
+
         if (id != null && id > 0) {
+            System.out.println("id is not null and bigger than 0" + id);
             products = products.stream()
                     .filter(product -> product.getId() == id) // Comparação direta
                     .collect(Collectors.toList());
@@ -207,6 +217,13 @@ public class ProductService {
                     .filter(product -> product.getPrice() != null && product.getPrice().compareTo(price) >= 0)
                     .collect(Collectors.toList());
         }
+
+        if(products.isEmpty()) {
+            System.out.println("no filter");
+        } else {
+            System.out.println("filter");
+        }
+
         return products.isEmpty() ? new ArrayList<>() : products; // Retornar uma lista vazia se nenhum filtro bater
     }
 

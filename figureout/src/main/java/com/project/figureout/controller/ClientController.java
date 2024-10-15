@@ -40,7 +40,7 @@ public class ClientController {
     @GetMapping({"", "/", "/index"})
     public String showClientsGet(Model model) {
 
-        List<Client> clients =  clientService.getAllClients();
+        List<Client> clients = clientService.getAllClients();
         model.addAttribute("clients", clients);
 
         return "index";
