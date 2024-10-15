@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -138,7 +139,7 @@ public class ProductController {
     }
 
     @GetMapping("/updateProduct/{id}")
-    public String updateProductGet(@PathVariable Long id, Model model) {
+    public String updateProductGet(@PathVariable Long id, Model model) throws IOException {
         Product product = productService.getProductById(id);
         List<Supplier> supplierList = supplierRepository.findAll();
 

@@ -1,21 +1,14 @@
 package com.project.figureout.service;
 
-import com.project.figureout.dto.ClientBasicDataDTO;
 import com.project.figureout.dto.ProductDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.*;
-import jakarta.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,7 +110,7 @@ public class ProductService {
         return null;
     }
 
-    public void populateProductDTO(ProductDTO productDTO, Product product) {
+    public void populateProductDTO(ProductDTO productDTO, Product product) throws IOException {
 
         productDTO.setActive(product.isActive());
         productDTO.setName(product.getName());
@@ -136,11 +129,12 @@ public class ProductService {
         productDTO.setPricingGroup(product.getPricingGroup().getId());
         productDTO.setPrice(product.getPrice());
 
-        // find the Stock table by the product
+        //byte[] productImage = product.getPicture();
 
         Stock stock = stockRepository.findByProductId(product.getId());
 
         productDTO.getStockDTO().setProductQuantityAvailable(stock.getProductQuantityAvailable());
+        productDTO.getStockDTO().setEntryInStockDate(stock.getEntryDate());
         productDTO.setSupplier(stock.getSupplier().getId());
 
     }
