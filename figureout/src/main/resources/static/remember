@@ -18,5 +18,5 @@ add check to see if the client is in a buying page, and if it is, dont let the c
 -> promotional coupon infinite discount // apparently fixed lol
 -> sale page not showing total price
 -> DTO of product not loading image or date
--> inactivation reason for product creation page doesnt appear by default (make the input checked by default)
--> cant use decimals in width, height length in product and productDTO due to float type apparently
+-> inactivation reason for product creation page doesnt appear by default (make the input checked by default) // fixed
+-> cant use decimals in width, height length in product and productDTO due to float type apparently // fixed

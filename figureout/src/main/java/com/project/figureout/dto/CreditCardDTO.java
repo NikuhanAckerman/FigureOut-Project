@@ -20,7 +20,7 @@ public class CreditCardDTO {
     private boolean preferential;
 
     @NotBlank(message = "O número do cartão não pode estar vazio.")
-    @CreditCardNumber(message = "Insira um número de cartão de crédito válido.")
+    //@CreditCardNumber(message = "Insira um número de cartão de crédito válido.")
     //@Pattern(message = "Não insira letras, caracteres especiais, ou espaços.", regexp = "^[\\d]+$")
     private String cardNumber;
 

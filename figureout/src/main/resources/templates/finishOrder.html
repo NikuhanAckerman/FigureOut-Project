@@ -69,6 +69,8 @@
   <!-- Seção de Cartões de Crédito -->
 
   <form th:action="@{/sales/finishOrder/{cartId}(cartId = ${cartId})}"  method="POST" th:object="${saleCardDTO}">
+    <input type="hidden" th:name="freight" th:value="${freight}" />
+    <input type="hidden" th:name="saleFinalPrice" th:value="${saleFinalPrice}" />
 
     <p><b>Cartões selecionados:</b></p>
 

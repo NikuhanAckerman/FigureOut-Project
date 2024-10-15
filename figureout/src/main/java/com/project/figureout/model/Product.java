@@ -18,7 +18,7 @@ public class Product {
     private long id;
 
     @Column(name = "pro_ativo")
-    private boolean active;
+    private boolean active = true;
 
     @Column(name = "pro_nome")
     private String name;

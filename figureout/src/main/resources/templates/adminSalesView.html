@@ -81,6 +81,7 @@
                             <h2 id="clientIdId">ID do cliente:</h2>
                             <h2 class="text-primary" id="clientId"></h2>
                             <h2 class="text-success" id="totalPriceId"></h2>
+                            <h2 class="text-primary" id="freightId"></h2>
                             <h2 class="text-secondary" id="promotionalCouponNameId"></h2>
                             <h2 class="text-secondary" id="promotionalCouponDiscountId"></h2>
                             <div id="cartDiv">
@@ -124,6 +125,7 @@
         const clientIdElement = document.getElementById('clientIdId');
         const clientNameElement = document.getElementById('clientId');
         const totalPriceElement = document.getElementById('totalPriceId');
+        const freightElement = document.getElementById('freightId');
         const promotionalCouponNameElement = document.getElementById('promotionalCouponNameId');
         const promotionalCouponDiscountElement = document.getElementById('promotionalCouponDiscountId');
         productListDiv.innerHTML = '';
@@ -173,7 +175,25 @@
                 console.log(totalPrice);  // Log the total price for inspection
 
                 // Update the element to display the formatted price
-                totalPriceElement.innerHTML = 'Total da venda: R$ ' + totalPrice.toFixed(2);
+                totalPriceElement.innerHTML = 'Total da venda: R$' + totalPrice.toFixed(2);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        fetch(`/sales/getFreight/${saleId}`)
+            .then(response => {
+                console.log(response);  // Log the raw response to check
+                if (!response.ok) {
+                    throw new Error("Erro ao retornar frete.");
+                }
+                return response.json();  // Handle the response as JSON (since BigDecimal is numeric)
+            })
+            .then(freight => {
+                console.log(freight);  // Log the total price for inspection
+
+                // Update the element to display the formatted price
+                freightElement.innerHTML = 'Frete: ' + freight*100 + '% do preço da compra.';
             })
             .catch(error => {
                 console.error(error);
