@@ -132,8 +132,6 @@ public class SaleController {
         return "redirect:/sales/finishOrder/" + cartId;
     }
 
-
-
     @GetMapping("/finishOrder/{cartId}")
     public String finishOrderGet(@PathVariable long cartId, Model model) {
 
@@ -161,13 +159,17 @@ public class SaleController {
 
         BigDecimal saleFinalPrice = cart.getTotalPrice().add(amountFreight).setScale(2, RoundingMode.HALF_EVEN);
 
+        System.out.println(saleFinalPrice);
+
         model.addAttribute("saleFinalPrice", saleFinalPrice);
 
         return "finishOrder";
     }
 
     @PostMapping("/finishOrder/{cartId}")
-    public String createSale(@PathVariable long cartId, @ModelAttribute SaleCardDTO saleCardDTO, Model model) {
+    public String createSale(@PathVariable long cartId, @ModelAttribute SaleCardDTO saleCardDTO, Model model,
+                             @RequestParam("freight") BigDecimal freight,
+                             @RequestParam("saleFinalPrice") BigDecimal saleFinalPrice) {
         System.out.println("O post do finish order rodou lol");
         Cart cart = cartService.getCartById(cartId);
 
@@ -183,6 +185,9 @@ public class SaleController {
 
         List<SalesCards> listSalesCards = (List<SalesCards>) model.getAttribute("salesCardsList");
         System.out.println(listSalesCards);
+
+        sale.setFreight(freight);
+        System.out.println(sale.getFreight());
 
         saleService.saveSale(sale);
 
@@ -214,15 +219,12 @@ public class SaleController {
 
         sale.setStatus(SaleStatusEnum.EM_PROCESSAMENTO);
 
-
         sale.setPromotionalCouponApplied(sale.getCart().getPromotionalCoupon());
 
         Client client = clientService.getClientById(1);
 
-        BigDecimal finalPrice = (BigDecimal) model.getAttribute("saleFinalPrice");
-        System.out.println(finalPrice);
-
-        sale.setFinalPrice(finalPrice);
+        sale.setFinalPrice(saleFinalPrice);
+        System.out.println(sale.getFinalPrice());
 
         saleService.saveSale(sale);
 
@@ -301,7 +303,17 @@ public class SaleController {
     public BigDecimal getSaleTotal(@PathVariable long saleId, Model model) {
         Sale sale = saleService.getSaleById(saleId);
 
+        System.out.println(sale.getFinalPrice());
+
         return sale.getFinalPrice();
+    }
+
+    @GetMapping("/getFreight/{saleId}")
+    @ResponseBody
+    public BigDecimal getFreight(@PathVariable long saleId, Model model) {
+        Sale sale = saleService.getSaleById(saleId);
+
+        return sale.getFreight();
     }
 
     @GetMapping("/getPromotionalCoupon/{saleId}")

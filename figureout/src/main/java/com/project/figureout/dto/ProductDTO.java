@@ -19,7 +19,7 @@ import java.util.List;
 public class ProductDTO {
 
     @NotNull
-    private boolean active;
+    private boolean active = true;
 
     @NotBlank(message = "A razão para inativação do produto não pode estar em branco.")
     private String reasonForInactivation;
