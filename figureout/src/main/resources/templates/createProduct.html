@@ -41,16 +41,16 @@
                 <textarea class="form-control" rows="2" th:field="*{description}"></textarea>
 
                 <label><b>Altura (cm)</b></label>
-                <input type="number" class="form-control" placeholder="Insira a altura do produto" th:field="*{height}" required>
+                <input type="number" class="form-control" step="0.01" min="0" placeholder="Insira a altura do produto" th:field="*{height}" required>
 
                 <label><b>Largura (cm)</b></label>
-                <input type="number" class="form-control" placeholder="Insira a largura do produto" th:field="*{width}" required>
+                <input type="number" class="form-control" step="0.01" min="0" placeholder="Insira a largura do produto" th:field="*{width}" required>
 
                 <label><b>Comprimento (cm)</b></label>
-                <input type="number" class="form-control" placeholder="Insira o comprimento do produto" th:field="*{length}" required>
+                <input type="number" class="form-control" step="0.01" min="0" placeholder="Insira o comprimento do produto" th:field="*{length}" required>
 
                 <label><b>Peso (g)</b></label>
-                <input type="number" class="form-control" placeholder="Insira o peso do produto" th:field="*{weight}" required>
+                <input type="number" class="form-control" step="0.01" min="0" placeholder="Insira o peso do produto" th:field="*{weight}" required>
 
                 <label><b>Preço de compra</b></label>
                 <input type="number" class="form-control" step="0.01" min="0" placeholder="Insira a largura do produto" th:field="*{purchaseAmount}" required>
