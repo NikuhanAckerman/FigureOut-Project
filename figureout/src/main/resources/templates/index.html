@@ -369,8 +369,10 @@
 																	<i class="bi bi-chevron-down"></i>
 																</button>
 																<div id="creditCardInfo_${creditCard.id}" class="collapse">
-																	<input type="checkbox" id="creditCardPreferredField_${creditCard.id}" data-bs-creditCard-id="${creditCard.id}" disabled>
-																	<p>Preferencial? </p>
+																	<div>
+																		<p style="display: inline;">Preferencial? </p>
+																		<input type="checkbox" id="creditCardPreferredField_${creditCard.id}" data-bs-creditCard-id="${creditCard.id}" disabled style="display: inline;">
+																	</div>
 																	<p>Número do cartão: ${creditCard.cardNumber}</p>
 																	<p>Nome impresso no cartão: ${creditCard.printedName}</p>
 																	<p>Bandeira do cartão: ${creditCard.brand.name}</p>
