@@ -33,6 +33,9 @@ public class ProductService {
     @Autowired
     private InactiveProductsRepository inactiveProductsRepository;
 
+    @Autowired
+    private ActiveProductsRepository activeProductsRepository;
+
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
@@ -81,15 +84,22 @@ public class ProductService {
 
         saveProduct(product);
 
-        if(!product.isActive()) {
-            LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
 
+        if(!product.isActive()) {
             InactiveProducts inactiveProduct = new InactiveProducts();
             inactiveProduct.setProduct(product);
             inactiveProduct.setDateTimeInactivation(now);
             inactiveProduct.setReasonForInactivation(productDTO.getReasonForInactivation());
 
             inactiveProductsRepository.save(inactiveProduct);
+        } else {
+            ActiveProducts activeProduct = new ActiveProducts();
+            activeProduct.setProduct(product);
+            activeProduct.setDateTimeActivation(now);
+            activeProduct.setReasonForActivation("Produto ativado quando registrado ao sistema.");
+
+            activeProductsRepository.save(activeProduct);
         }
 
     }

@@ -45,9 +45,6 @@ public class ProductController {
     @Autowired
     private SupplierRepository supplierRepository;
 
-    //long clientId = 1;
-    //Client client = clientService.getClientById(clientId);
-
     @GetMapping("/seeProducts")
     public String showProductsGet(Model model) {
         List<Product> products =  productService.getAllProducts();

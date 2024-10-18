@@ -23,6 +23,7 @@ public class InactiveProducts {
     @Column(name = "ina_razao_inativacao")
     private String reasonForInactivation;
 
+    @Column(name = "ati_data_inativacao")
     private LocalDateTime dateTimeInactivation;
 }
 

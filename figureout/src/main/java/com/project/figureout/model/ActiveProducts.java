@@ -16,12 +16,14 @@ public class ActiveProducts {
     @Column(name = "ina_id")
     private long id;
 
+    @ManyToOne
     @JoinColumn(name = "ati_pro_id")
-    private long productId;
+    private Product product;
 
     @Column(name = "ati_razao_ativacao")
     private String reasonForActivation;
 
+    @Column(name = "ati_data_ativacao")
     private LocalDateTime dateTimeActivation;
 
 }
