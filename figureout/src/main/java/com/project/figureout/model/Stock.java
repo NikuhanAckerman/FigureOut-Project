@@ -24,7 +24,7 @@ public class Stock {
     private Product product;
 
     @Column(name = "est_quantidade")
-    private int productQuantityAvailable;
+    private Integer productQuantityAvailable;
 
     @Column(name = "est_valor_custo")
     private BigDecimal productPurchaseAmount;

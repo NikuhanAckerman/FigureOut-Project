@@ -24,9 +24,15 @@
     <div class="form-group">
 
       <div>
+
         <div>
           <label><b>Ativo?</b></label>
-          <input class="form-check-input" type="checkbox" th:field="*{active}">
+          <input class="form-check-input" id="activeCheckbox" type="checkbox" th:field="*{active}" th:checked="*{active}">
+        </div>
+
+        <div id="inactiveProductReason" style="display:none;">
+          <label for="reasonForInactivation">Razão para inativação?</label>
+          <input type="text" class="form-control" th:field="*{reasonForInactivation}" id="reasonForInactivation">
         </div>
 
         <label><b>Nome</b></label>
@@ -113,6 +119,19 @@
 <footer id="footer">
   <img src="/Images/figureoutlogo1.svg">
 </footer>
+
+<script>
+  document.getElementById('activeCheckbox').addEventListener('change', function() {
+    var inputContainer = document.getElementById('inactiveProductReason');
+
+    // Show the input field if checkbox is unchecked (meaning inactive)
+    if (!this.checked) {
+      inputContainer.style.display = 'block';
+    } else {
+      inputContainer.style.display = 'none';
+    }
+  });
+</script>
 
 
 </body>
