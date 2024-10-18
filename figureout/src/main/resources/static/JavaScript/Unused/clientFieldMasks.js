@@ -26,7 +26,7 @@ function password() {
 }
 
 function cpfMask() {
-    document.getElementById('cpf-input').addEventListener('input', function() {
+    document.getElementById('cpf').addEventListener('input', function() {
         let value = this.value.replace(/\D/g, ''); //Remove caracteres que não sejam dígitos.
         if (value.length > 11) value = value.slice(0, 11); // Limita para 11 dígitos no máximo.
 

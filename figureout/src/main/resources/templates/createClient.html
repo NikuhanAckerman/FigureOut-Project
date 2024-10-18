@@ -33,13 +33,13 @@
 					<div>
 						<label><b>Nome completo</b></label>
 						<p class="text-primary" style="display: inline;">o nome não pode possuir caracteres especiais ou números, e deve ser o nome completo.</p>
-						<input type="text" class="form-control" placeholder="Insira o seu nome completo" th:field="*{clientBasicDataDTO.name}" required>
+						<input type="text" class="form-control" id="name" placeholder="Insira o seu nome completo" th:field="*{clientBasicDataDTO.name}" required>
 						<ul style="list-style-type: none;">
 							<li th:each="err : ${#fields.errors('clientBasicDataDTO.name')}" th:text="${err}" class="text-danger"/>
 						</ul>
 
 						<label><b>Email</b></label>
-						<input class="form-control" placeholder="Insira o seu email" th:field="*{clientBasicDataDTO.email}" required>
+						<input class="form-control" placeholder="Insira o seu email" id="email" th:field="*{clientBasicDataDTO.email}" required>
 						<ul style="list-style-type: none;">
 							<li th:each="err : ${#fields.errors('clientBasicDataDTO.email')}" th:text="${err}" class="text-danger"/>
 						</ul>
@@ -51,25 +51,25 @@
 						   uma letra minúscula;
 						   um número;
 						   um caracter especial. (#, @, $, %, !, ?, etc.)</p>
-						<input class="form-control" placeholder="Insira uma senha forte!" th:field="*{clientBasicDataDTO.password}" required>
+						<input class="form-control" placeholder="Insira uma senha forte!" id="password" th:field="*{clientBasicDataDTO.password}" required>
 						<ul style="list-style-type: none;">
 							<li th:each="err : ${#fields.errors('clientBasicDataDTO.password')}" th:text="${err}" class="text-danger"/>
 						</ul>
 
 						<label><b>Confirme sua senha</b></label>
-						<input class="form-control" placeholder="Confirme sua senha!" th:field="*{clientBasicDataDTO.confirmPassword}" required>
+						<input class="form-control" placeholder="Confirme sua senha!" id="confirmPassword" th:field="*{clientBasicDataDTO.confirmPassword}" required>
 						<ul style="list-style-type: none;">
 							<li th:each="err : ${#fields.errors('clientBasicDataDTO.confirmPassword')}" th:text="${err}" class="text-danger"/>
 						</ul>
 
 						<label><b>Data de Nascimento</b></label>
-						<input type="date" class="form-control" th:field="*{clientBasicDataDTO.birthday}" required>
+						<input type="date" class="form-control" id="birthday" th:field="*{clientBasicDataDTO.birthday}" required>
 						<ul style="list-style-type: none;">
 							<li th:each="err : ${#fields.errors('clientBasicDataDTO.birthday')}" th:text="${err}" class="text-danger"/>
 						</ul>
 
-						<label for="cpf-input"><b>CPF</b></label>
-						<input type="text" id="cpf-input" class="form-control" placeholder="Insira seu CPF" th:field="*{clientBasicDataDTO.cpf}" required>
+						<label for="cpf"><b>CPF</b></label>
+						<input type="text" id="cpf" class="form-control" placeholder="Insira seu CPF" th:field="*{clientBasicDataDTO.cpf}" required>
 						<ul style="list-style-type: none;">
 							<li th:each="err : ${#fields.errors('clientBasicDataDTO.cpf')}" th:text="${err}" class="text-danger"/>
 						</ul>
@@ -77,7 +77,7 @@
 
 					<div>
 						<label><b>Ativo?</b></label>
-						<input class="form-check-input" type="checkbox" th:field="*{clientBasicDataDTO.enabled}">
+						<input class="form-check-input" type="checkbox" id="enabled" th:field="*{clientBasicDataDTO.enabled}">
 						<ul style="list-style-type: none;">
 							<li th:each="err : ${#fields.errors('clientBasicDataDTO.enabled')}" th:text="${err}" class="text-danger"/>
 						</ul>
@@ -85,7 +85,7 @@
 
 					<label><b>Gênero</b></label>
 					<div class="radio-group" th:each="gender : ${genderList}">
-						<input type="radio" th:field="*{clientBasicDataDTO.genderDTO.id}" th:value="${gender.id}" th:text="${gender.genderType}" required/>
+						<input type="radio" th:field="*{clientBasicDataDTO.genderDTO.id}" id="gender" th:value="${gender.id}" th:text="${gender.genderType}" required/>
 					</div>
 					<ul style="list-style-type: none;">
 						<li th:each="err : ${#fields.errors('clientBasicDataDTO.genderDTO.id')}" th:text="${err}" class="text-danger"/>
@@ -94,8 +94,8 @@
 					<div>
 						<label><b>Tipo de telefone</b></label>
 						<div class="radio-group">
-							<label><input type="radio" th:field="*{clientBasicDataDTO.phoneDTO.cellphone}" value="false"/> Fixo</label>
-							<label><input type="radio" th:field="*{clientBasicDataDTO.phoneDTO.cellphone}" value="true"/> Celular</label>
+							<label><input type="radio" id="phoneFalse" th:field="*{clientBasicDataDTO.phoneDTO.cellphone}" value="false"/> Fixo</label>
+							<label><input type="radio" id="phoneTrue" th:field="*{clientBasicDataDTO.phoneDTO.cellphone}" value="true"/> Celular</label>
 							<ul style="list-style-type: none;">
 								<li th:each="err : ${#fields.errors('clientBasicDataDTO.phoneDTO.cellphone')}" th:text="${err}" class="text-danger"/>
 							</ul>
@@ -108,7 +108,7 @@
 						</ul>
 
 						<label><b>Número de telefone</b></label>
-						<input type="text" id="phone" class="form-control" placeholder="Digite o número de telefone" th:field="*{clientBasicDataDTO.phoneDTO.phoneNumber}" maxlength="10" required>
+						<input type="text" id="phoneNumber" class="form-control" placeholder="Digite o número de telefone" th:field="*{clientBasicDataDTO.phoneDTO.phoneNumber}" maxlength="10" required>
 						<ul style="list-style-type: none;">
 							<li th:each="err : ${#fields.errors('clientBasicDataDTO.phoneDTO.phoneNumber')}" th:text="${err}" class="text-danger"/>
 						</ul>
@@ -125,14 +125,14 @@
 								<label><b>Tipo:</b></label>
 
 								<label><b>Entrega</b></label>
-								<input class="form-check-input" type="checkbox" th:field="*{addressDTO.deliveryAddress}">
+								<input class="form-check-input" id="deliveryAddress" type="checkbox" th:field="*{addressDTO.deliveryAddress}">
 
 								<ul style="list-style-type: none;">
 									<li th:each="err : ${#fields.errors('addressDTO.deliveryAddress')}" th:text="${err}" class="text-danger"/>
 								</ul>
 
 								<label><b>Cobrança</b></label>
-								<input class="form-check-input" type="checkbox" th:field="*{addressDTO.chargingAddress}">
+								<input class="form-check-input" id="chargingAddress" type="checkbox" th:field="*{addressDTO.chargingAddress}">
 
 								<ul style="list-style-type: none;">
 									<li th:each="err : ${#fields.errors('addressDTO.chargingAddress')}" th:text="${err}" class="text-danger"/>
@@ -144,7 +144,7 @@
 
 						<div>
 							<label><b>Apelido</b></label>
-							<input type="text" class="form-control" placeholder="Digite o apelido" th:field="*{addressDTO.nickname}" required>
+							<input type="text" class="form-control" id="nickname" placeholder="Digite o apelido" th:field="*{addressDTO.nickname}" required>
 							<ul style="list-style-type: none;">
 								<li th:each="err : ${#fields.errors('addressDTO.nickname')}" th:text="${err}" class="text-danger"/>
 							</ul>
@@ -152,7 +152,7 @@
 
 						<div>
 							<label><b>Tipo de Residência</b></label>
-							<input type="text" class="form-control" placeholder="(Casa, apartamento, etc...)" th:field="*{addressDTO.typeOfResidence}" required>
+							<input type="text" class="form-control" id="typeOfResidence" placeholder="(Casa, apartamento, etc...)" th:field="*{addressDTO.typeOfResidence}" required>
 							<ul style="list-style-type: none;">
 								<li th:each="err : ${#fields.errors('addressDTO.typeOfResidence')}" th:text="${err}" class="text-danger"/>
 							</ul>
@@ -160,7 +160,7 @@
 
 						<div>
 							<label><b>Tipo de logradouro</b></label>
-							<input type="text" class="form-control" placeholder="(Rua, Avenida, etc...)" th:field="*{addressDTO.addressingType}" required>
+							<input type="text" class="form-control" id="addressingType" placeholder="(Rua, Avenida, etc...)" th:field="*{addressDTO.addressingType}" required>
 							<ul style="list-style-type: none;">
 								<li th:each="err : ${#fields.errors('addressDTO.addressingType')}" th:text="${err}" class="text-danger"/>
 							</ul>
@@ -168,7 +168,7 @@
 
 						<div>
 							<label><b>Logradouro</b></label>
-							<input type="text" class="form-control" placeholder="Insira o logradouro" th:field="*{addressDTO.addressing}" required>
+							<input type="text" class="form-control" id="addressing" placeholder="Insira o logradouro" th:field="*{addressDTO.addressing}" required>
 							<ul style="list-style-type: none;">
 								<li th:each="err : ${#fields.errors('addressDTO.addressing')}" th:text="${err}" class="text-danger"/>
 							</ul>
@@ -176,7 +176,7 @@
 
 						<div>
 							<label><b>Nº de residência</b></label>
-							<input type="text" class="form-control" placeholder="Insira o número da residência" th:field="*{addressDTO.houseNumber}" maxlength="5" required>
+							<input type="text" class="form-control" id="houseNumber" placeholder="Insira o número da residência" th:field="*{addressDTO.houseNumber}" maxlength="5" required>
 							<ul style="list-style-type: none;">
 								<li th:each="err : ${#fields.errors('addressDTO.houseNumber')}" th:text="${err}" class="text-danger"/>
 							</ul>
@@ -184,7 +184,7 @@
 
 						<div>
 							<label><b>CEP</b></label>
-							<input type="text" class="form-control" placeholder="00000-000" th:field="*{addressDTO.cep}" maxlength="10" required>
+							<input type="text" class="form-control" id="cep" placeholder="00000-000" th:field="*{addressDTO.cep}" maxlength="10" required>
 							<ul style="list-style-type: none;">
 								<li th:each="err : ${#fields.errors('addressDTO.cep')}" th:text="${err}" class="text-danger"/>
 							</ul>
@@ -192,7 +192,7 @@
 
 						<div>
 							<label><b>Bairro</b></label>
-							<input type="text" class="form-control" placeholder="Insira o bairro" th:field="*{addressDTO.neighbourhood}" required>
+							<input type="text" class="form-control" id="neighbourhood" placeholder="Insira o bairro" th:field="*{addressDTO.neighbourhood}" required>
 							<ul style="list-style-type: none;">
 								<li th:each="err : ${#fields.errors('addressDTO.neighbourhood')}" th:text="${err}" class="text-danger"/>
 							</ul>
@@ -200,7 +200,7 @@
 
 						<div>
 							<label><b>Cidade</b></label>
-							<input type="text" class="form-control" placeholder="Insira a cidade" th:field="*{addressDTO.city}" required>
+							<input type="text" class="form-control" id="city" placeholder="Insira a cidade" th:field="*{addressDTO.city}" required>
 							<ul style="list-style-type: none;">
 								<li th:each="err : ${#fields.errors('addressDTO.city')}" th:text="${err}" class="text-danger"/>
 							</ul>
@@ -208,7 +208,7 @@
 
 						<div>
 							<label><b>Estado</b></label>
-							<select class="form-select" aria-label="Escolha um estado" th:field="*{addressDTO.stateDTO.id}">
+							<select class="form-select" aria-label="Escolha um estado" id="stateSelect" th:field="*{addressDTO.stateDTO.id}">
                                 <option value="0" selected>Adicione o estado</option>
 								<option th:each="state : ${stateList}" th:value="${state.id}" th:text="${state.name}">
 							</select>
@@ -219,7 +219,7 @@
 
 						<div>
 							<label><b>País</b></label>
-							<select class="form-select" aria-label="Escolha um país" th:field="*{addressDTO.countryDTO.id}">
+							<select class="form-select" aria-label="Escolha um país" id="countrySelect" th:field="*{addressDTO.countryDTO.id}">
 								<option value="0" selected>Adicione o país</option>
 								<option th:each="country : ${countryList}" th:value="${country.id}" th:text="${country.name}">
 							</select>
@@ -237,7 +237,7 @@
 
 						<div>
 							<label><b>Observação</b></label>
-							<input type="text" class="form-control" placeholder="Insira uma observação (opcional)" th:field="*{addressDTO.observation}">
+							<input type="text" class="form-control" placeholder="Insira uma observação (opcional)" id="observation" th:field="*{addressDTO.observation}">
 							<ul style="list-style-type: none;">
 								<li th:each="err : ${#fields.errors('addressDTO.observation')}" th:text="${err}" class="text-danger"/>
 							</ul>
@@ -246,8 +246,8 @@
 
 				</div>
 
-				<button type="submit" class="btn btn-primary add-delete-button">Criar</button>
-				<a class="btn btn-danger add-delete-button" th:href="@{/index}">Voltar</a>
+				<button type="submit" id="createButton" class="btn btn-primary add-delete-button">Criar</button>
+				<a class="btn btn-danger add-delete-button" id="backButton" th:href="@{/index}">Voltar</a>
 
 			</form>
 
