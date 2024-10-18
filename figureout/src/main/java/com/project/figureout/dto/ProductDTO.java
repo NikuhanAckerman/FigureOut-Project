@@ -31,19 +31,19 @@ public class ProductDTO {
 
     @NotNull(message = "O campo de altura do produto não pode ser nulo.")
     @Positive(message = "A altura do produto deve ser maior que zero.")
-    private float height;
+    private Float height;
 
     @NotNull(message = "O campo de largura do produto não pode ser nulo.")
     @Positive(message = "A largura do produto deve ser maior que zero.")
-    private float width;
+    private Float width;
 
     @NotNull(message = "O campo de peso do produto não pode ser nulo.")
     @Positive(message = "O peso do produto deve ser maior que zero.")
-    private float weight;
+    private Float weight;
 
     @NotNull(message = "O campo de comprimento do produto não pode ser nulo.")
     @Positive(message = "O comprimento do produto deve ser maior que zero.")
-    private float length;
+    private Float length;
 
     @NotNull(message = "O valor de compra do produto não pode ser nulo")
     @Positive(message = "O valor de compra deve ser maior que zero.")

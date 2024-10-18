@@ -20,3 +20,4 @@ add check to see if the client is in a buying page, and if it is, dont let the c
 -> DTO of product not loading image or date // loading date, will have to fix image later
 -> inactivation reason for product creation page doesnt appear by default (make the input checked by default) // fixed
 -> cant use decimals in width, height length in product and productDTO due to float type apparently // fixed
+-> 0 default value in product fields

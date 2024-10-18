@@ -27,16 +27,16 @@ public class Product {
     private String description;
 
     @Column(name = "pro_altura")
-    private float height;
+    private Float height;
 
     @Column(name = "pro_largura")
-    private float width;
+    private Float width;
 
     @Column(name = "pro_peso")
-    private float weight;
+    private Float weight;
 
     @Column(name = "pro_comprimento")
-    private float length;
+    private Float length;
 
     @Column(name = "pro_valor_compra")
     private BigDecimal purchaseAmount;

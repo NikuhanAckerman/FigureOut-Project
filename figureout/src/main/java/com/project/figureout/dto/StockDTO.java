@@ -22,7 +22,7 @@ public class StockDTO {
 
     @NotNull(message = "O campo de produtos disponíveis não pode ser nulo.")
     @PositiveOrZero(message = "A quantidade de produtos disponíveis não pode ser menor que zero.")
-    private int productQuantityAvailable;
+    private Integer productQuantityAvailable;
 
     @NotNull(message = "O campo de valor de compra não pode ser nulo.")
     @Positive(message = "O valor de compra deve ser positivo e acima de zero.")
