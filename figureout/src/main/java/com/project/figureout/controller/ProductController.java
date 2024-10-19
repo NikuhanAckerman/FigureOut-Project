@@ -1,5 +1,6 @@
 package com.project.figureout.controller;
 
+import com.project.figureout.ClientNavigator;
 import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartRepository;
@@ -48,6 +49,8 @@ public class ProductController {
     @Autowired
     private SizeService sizeService;
 
+    private ClientNavigator clientNavigator;
+
     @GetMapping("/seeProducts")
     public String showProductsGet(Model model) {
         List<Product> products =  productService.getAllProducts();
@@ -90,6 +93,7 @@ public class ProductController {
         Stock stock = new Stock();
 
         productService.productDataSetter(product, productDTO);
+        System.out.println(product.getName());
 
         stockService.productInStockDataSetter(stock, product, productDTO);
         stockService.saveProductInStock(stock);
@@ -121,10 +125,10 @@ public class ProductController {
     @GetMapping("/shop")
     public String showShop(Model model) {
         List<Product> products =  productService.getAllProducts();
-        Client client = clientService.getClientById(1);
+        Client client = clientService.getClientById(clientNavigator.getInstance().getClientId());
         model.addAttribute("products", products);
         model.addAttribute("cart", client.getCartList().getLast()); // always get the last card added to the client's cart list
-        model.addAttribute("clientId", 1);
+        model.addAttribute("clientId", clientNavigator.getInstance().getClientId());
         return "shop";
     }
 
@@ -133,7 +137,7 @@ public class ProductController {
         Product product = productService.getProductById(id);
         Stock stock = stockService.getProductInStockByProductId(id);
         List<Category> productCategoryList = product.getCategories();
-        Client client = clientService.getClientById(1);
+        Client client = clientService.getClientById(clientNavigator.getInstance().getClientId());
         model.addAttribute("stock", stock);
         model.addAttribute("changeCartProductQuantityDTO", new ChangeCartProductQuantityDTO());
         model.addAttribute("product", product);

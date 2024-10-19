@@ -62,6 +62,8 @@ public class StockService {
 
         stock.setProduct(product);
 
+        product.getStocks().add(stock);
+
     }
 
     public void dropInStock(Stock stock, int quantity) {

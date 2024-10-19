@@ -77,14 +77,14 @@ public class ClientController {
 
         addressService.registerAddress(client, addressDTO);
 
-        return "redirect:/showClients";
+        return "redirect:/showAllClients";
     }
 
     @DeleteMapping("index/{id}/addresses/delete")
     public String deleteClientAddress(@PathVariable long id) {
         addressService.deleteAddress(id);
 
-        return "redirect:/showClients";
+        return "redirect:/showAllClients";
     }
 
     @GetMapping("updateAddress/{addressId}")
@@ -121,7 +121,7 @@ public class ClientController {
 
         addressService.updateAddress(addressId, addressDTO);
 
-        return "redirect:/showClients";
+        return "redirect:/showAllClients";
     }
 
     @GetMapping("index/{id}/creditCards")
@@ -165,7 +165,7 @@ public class ClientController {
 
         creditCardService.registerCreditCard(client, creditCardDTO);
 
-        return "redirect:/showClients";
+        return "redirect:/showAllClients";
 
     }
 
@@ -173,7 +173,7 @@ public class ClientController {
     public String deleteClientCreditCard(@PathVariable long id) {
         creditCardService.deleteCreditCard(id);
 
-        return "redirect:/showClients";
+        return "redirect:/showAllClients";
     }
 
 
@@ -207,7 +207,7 @@ public class ClientController {
 
         creditCardService.updateCreditCard(creditCardToUpdate, creditCardDTO);
 
-        return "redirect:/showClients";
+        return "redirect:/showAllClients";
     }
 
     @GetMapping("/createClient")
@@ -244,7 +244,7 @@ public class ClientController {
 
         clientService.registerClient(client, clientDTO);
 
-        return "redirect:/showClients";
+        return "redirect:/showAllClients";
     }
 
     // Método no controller pra página de trocar de senha.
@@ -265,7 +265,7 @@ public class ClientController {
         // Chamar o serviço para mudar a senha.
         clientService.changePassword(clientId, changePasswordDTO);
         //boolean success =
-        return "redirect:/showClients";
+        return "redirect:/showAllClients";
 
         /*if (!success) {
             model.addAttribute("error", "Password change failed. Please check your inputs.");
@@ -312,7 +312,7 @@ public class ClientController {
 
         clientService.updateClient(clientToUpdate, clientBasicDataDTO);
 
-        return "redirect:/showClients";
+        return "redirect:/showAllClients";
 
     }
 
@@ -320,7 +320,7 @@ public class ClientController {
     public String deleteClient(@PathVariable long id) {
         clientService.deleteClientById(id);
 
-        return "redirect:/showClients";
+        return "redirect:/showAllClients";
     }
 
 

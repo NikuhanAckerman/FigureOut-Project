@@ -88,9 +88,9 @@ public class ProductService {
 
         product.setPicture(saveProductPicture(productDTO));
 
-        saveProduct(product);
-
         LocalDateTime now = LocalDateTime.now();
+
+        saveProduct(product);
 
         if(!product.isActive()) {
             InactiveProducts inactiveProduct = new InactiveProducts();
@@ -110,7 +110,11 @@ public class ProductService {
 
         product.setManufacturer(manufacturerRepository.findById(productDTO.getManufacturer()).orElseThrow(() -> new NoSuchElementException("Fabricante não encontrada.")));
         product.setSize(sizeRepository.findById(productDTO.getSize()).orElseThrow(() -> new NoSuchElementException("Tamanho de produto não encontrado.")));
+
+        saveProduct(product);
     }
+
+
 
     public byte[] saveProductPicture(ProductDTO productDTO) {
 

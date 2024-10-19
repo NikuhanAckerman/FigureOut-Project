@@ -1,5 +1,6 @@
 package com.project.figureout.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,8 +20,9 @@ public class Stock {
     @Column(name = "est_id")
     private long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "est_pro_id")
+    @JsonIgnore
     private Product product;
 
     @Column(name = "est_quantidade")

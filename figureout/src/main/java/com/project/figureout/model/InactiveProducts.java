@@ -1,5 +1,6 @@
 package com.project.figureout.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ public class InactiveProducts {
 
     @ManyToOne
     @JoinColumn(name = "ina_pro_id")
+    @JsonIgnore
     private Product product;
 
     @Column(name = "ina_razao_inativacao")

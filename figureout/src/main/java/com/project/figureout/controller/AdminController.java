@@ -1,15 +1,14 @@
 package com.project.figureout.controller;
 
 import com.project.figureout.ClientNavigator;
+import com.project.figureout.dto.ChangeClientNavigatorDTO;
+import com.project.figureout.model.Client;
 import com.project.figureout.repository.PromotionalCouponRepository;
 import com.project.figureout.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/")
@@ -33,19 +32,33 @@ public class AdminController {
     @Autowired
     PromotionalCouponRepository promotionalCouponRepository;
 
-    ClientNavigator clientNavigator;
-
+    private ClientNavigator clientNavigator;
 
     @GetMapping({"","/","/index"})
     public String getControlPanel(Model model) {
         model.addAttribute("clientList", clientService.getAllClients());
+        model.addAttribute("changeClientNavigatorDTO", new ChangeClientNavigatorDTO());
+
+        model.addAttribute("isClientIdNull", false);
+
+        if(clientNavigator.getInstance().getClientId() == 0) {
+            System.out.println("é zero lol");
+            model.addAttribute("isClientIdNull", true);
+        } else {
+            Client client = clientService.getClientById(clientNavigator.getInstance().getClientId());
+            model.addAttribute("currentClientNavigator", client);
+        }
+
 
         return "adminControlPanel";
     }
 
-    @PutMapping("/changeClientNavigator/{id}")
-    public String changeClientNavigator(Model model, @PathVariable long id) {
-        clientNavigator.setClientId(id);
+    @PutMapping("/changeClientNavigator/")
+    public String changeClientNavigator(Model model, @ModelAttribute ChangeClientNavigatorDTO changeClientNavigatorDTO) {
+
+        clientNavigator.getInstance().setClientId(changeClientNavigatorDTO.getClientId());
+
+        System.out.println(clientNavigator.getInstance().getClientId());
 
         return "redirect:/index";
     }

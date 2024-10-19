@@ -6,7 +6,7 @@ import lombok.Setter;
 public class ClientNavigator {
     private static final ClientNavigator clientNavigator = new ClientNavigator();
 
-    private volatile long clientId;
+    private volatile long clientId = 0;
 
     public static ClientNavigator getInstance() {
         return clientNavigator;

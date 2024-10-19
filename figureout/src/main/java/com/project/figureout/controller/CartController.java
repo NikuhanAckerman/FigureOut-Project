@@ -1,5 +1,6 @@
 package com.project.figureout.controller;
 
+import com.project.figureout.ClientNavigator;
 import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartsProductsRepository;
@@ -33,6 +34,8 @@ public class CartController {
 
     @Autowired
     private PromotionalCouponRepository promotionalCouponRepository;
+
+    private ClientNavigator clientNavigator;
 
     @GetMapping("/getCart/{cartId}")
     public Cart getSpecificCart(@PathVariable Long id) {

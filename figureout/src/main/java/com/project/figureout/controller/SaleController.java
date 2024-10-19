@@ -1,5 +1,6 @@
 package com.project.figureout.controller;
 
+import com.project.figureout.ClientNavigator;
 import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.PromotionalCouponRepository;
@@ -47,6 +48,8 @@ public class SaleController {
 
     @Autowired
     private StockService stockService;
+
+    private ClientNavigator clientNavigator;
 
     @GetMapping("")
     public String showSalesGet(Model model) {
@@ -221,7 +224,7 @@ public class SaleController {
 
         sale.setPromotionalCouponApplied(sale.getCart().getPromotionalCoupon());
 
-        Client client = clientService.getClientById(1);
+        Client client = clientService.getClientById(clientNavigator.getInstance().getClientId());
 
         sale.setFinalPrice(saleFinalPrice);
         System.out.println(sale.getFinalPrice());
