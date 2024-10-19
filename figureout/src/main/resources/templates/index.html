@@ -142,10 +142,10 @@
 							<td th:text = "${client.cpf}"></td>
 							<td th:text = "${client.email}"></td>
 							<td>
-								<button type="button" class="btn btn-secondary" th:data-bs-client-id = "${client.id}" data-bs-toggle="modal" data-bs-target="#seeAddressModal" >Ver endereços</button>
+								<button type="button" class="btn btn-secondary" id="seeAddresses" th:data-bs-client-id = "${client.id}" data-bs-toggle="modal" data-bs-target="#seeAddressModal" >Ver endereços</button>
 							</td>
 							<td>
-								<button type="button" class="btn btn-secondary" th:data-bs-client-id = "${client.id}" data-bs-toggle="modal" data-bs-target="#seeCreditCardModal" >Ver cartões</button>
+								<button type="button" class="btn btn-secondary" id="seeCreditCards" th:data-bs-client-id = "${client.id}" data-bs-toggle="modal" data-bs-target="#seeCreditCardModal" >Ver cartões</button>
 							</td>
 
 							<td th:text = "${client.phone.phoneNumber}"></td>
@@ -180,7 +180,7 @@
 					<div class="modal-body">
 						<div>
 							<h1 id="clientIdAddress"></h1>
-							<a class="btn btn-success" href="#" id="addAddressButton">Adicionar endereço</a>
+							<a class="btn btn-success" id="createAddress" href="#">Adicionar endereço</a>
 							<div class="card mt-3">
 								<div class="card-body">
 									<h2 class="card-title">Endereços</h2>
@@ -192,7 +192,7 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
+						<button type="button" class="btn btn-danger" id="closeAddressButton" data-bs-dismiss="modal">Fechar</button>
 					</div>
 				</div>
 			</div>
@@ -222,7 +222,7 @@
 						</div>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
+						<button type="button" class="btn btn-danger" id="closeSeeCreditCards" data-bs-dismiss="modal">Fechar</button>
 					</div>
 				</div>
 			</div>
@@ -231,7 +231,7 @@
 		<script>
 
 			const seeAddressModal = document.getElementById("seeAddressModal");
-			const addAddressButton = document.getElementById("addAddressButton");
+			const createAddress = document.getElementById("createAddress");
 
 			const seeCreditCardModal = document.getElementById("seeCreditCardModal");
 			const addCreditCardButton = document.getElementById("addCreditCardButton");
@@ -246,7 +246,7 @@
 				elementWithId.textContent = 'ID do cliente: '
 				elementWithId.textContent = elementWithId.textContent + " " + clientId;
 
-				addAddressButton.setAttribute('href', `/createAddress/${clientId}`);
+				createAddress.setAttribute('href', `/createAddress/${clientId}`);
 
 				const addressListDiv = document.getElementById('addressListDiv');
 				addressListDiv.innerHTML = '';
@@ -268,7 +268,7 @@
 															<div class="card-body">
 																<h3 class="card-title">ID: ${address.id}</h3>
 																<h4>${address.nickname}</h4>
-																<button class="btn collapseAddress" data-bs-toggle="collapse" data-bs-target="#addressInfo_${address.id}">
+																<button class="btn collapseAddress" data-bs-toggle="collapse" id="addressCollapse" data-bs-target="#addressInfo_${address.id}">
 																	<i class="bi bi-chevron-down"></i>
 																</button>
 																<div id="addressInfo_${address.id}" class="collapse">
@@ -287,10 +287,10 @@
 
 																	<form action="index/${address.id}/addresses/delete" method="POST" style="display: inline;">
 																		<input type="hidden" name="_method" value="DELETE"/>
-																		<button type="submit" class="btn btn-danger btn-delete" onclick="return confirm('Tem certeza?')">Deletar</button>
+																		<button type="submit" class="btn btn-danger btn-delete" id="deleteAddress" onclick="return confirm('Tem certeza?')">Deletar</button>
 																	</form>
 
-																	<a class="btn btn-primary updateAddressButton" data-bs-address-id="${address.id}" href="#">Atualizar</a>
+																	<a class="btn btn-primary updateAddressButton" id="updateAddress" data-bs-address-id="${address.id}" href="#">Atualizar</a>
 
 																</div>
 															</div>
@@ -365,7 +365,7 @@
 														<div class="card mt-3">
 															<div class="card-body">
 																<h3 class="card-title">ID: ${creditCard.id}</h3>
-																<button class="btn" data-bs-toggle="collapse" data-bs-target="#creditCardInfo_${creditCard.id}">
+																<button class="btn" data-bs-toggle="collapse" id="creditCardCollapse" data-bs-target="#creditCardInfo_${creditCard.id}">
 																	<i class="bi bi-chevron-down"></i>
 																</button>
 																<div id="creditCardInfo_${creditCard.id}" class="collapse">
@@ -380,10 +380,10 @@
 
 																	<form action="index/${creditCard.id}/creditCards/delete" method="POST" style="display: inline;">
 																		<input type="hidden" name="_method" value="DELETE"/>
-																		<button type="submit" class="btn btn-danger btn-delete" onclick="return confirm('Tem certeza?')">Deletar</button>
+																		<button type="submit" class="btn btn-danger btn-delete" id="deleteCreditCard" onclick="return confirm('Tem certeza?')">Deletar</button>
 																	</form>
 
-																	<a class="btn btn-primary updateCreditCardButton" data-bs-creditCard-id="${creditCard.id}" href="#">Atualizar</a>
+																	<a class="btn btn-primary updateCreditCardButton" id="updateCreditCard" data-bs-creditCard-id="${creditCard.id}" href="#">Atualizar</a>
 
 																</div>
 															</div>
