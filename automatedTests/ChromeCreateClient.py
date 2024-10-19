@@ -73,8 +73,6 @@ class ProductFormTest(unittest.TestCase):
             element = self.driver.find_element(By.ID, "chargingAddress")
             self.driver.execute_script("arguments[0].click();", element)
             time.sleep(1)
-        #if not self.driver.find_element(By.ID, "chargingAddress").is_selected():
-         #   self.driver.find_element(By.ID, "chargingAddress").click()
 
         self.driver.find_element(By.ID, "nickname").send_keys("Casa")
         time.sleep(1)
