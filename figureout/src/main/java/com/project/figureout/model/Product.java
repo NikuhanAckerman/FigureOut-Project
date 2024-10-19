@@ -60,4 +60,12 @@ public class Product {
     @Column(name = "pro_foto", columnDefinition = "MEDIUMBLOB") // 16mb max size, .JPG/JPEG only
     private byte[] picture;
 
+    @ManyToOne
+    @JoinColumn(name = "pro_fab_id")
+    private Manufacturer manufacturer;
+
+    @ManyToOne
+    @JoinColumn(name = "pro_tam_id")
+    private Size size;
+
 }

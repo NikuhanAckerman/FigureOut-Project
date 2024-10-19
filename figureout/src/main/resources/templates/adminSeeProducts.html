@@ -100,17 +100,9 @@
             <tr>
                 <th>ID</th>
                 <th>Foto</th>
+                <th>Informações gerais</th>
                 <th>Ativo</th>
-                <th>Nome</th>
-                <th>Descrição</th>
-                <th>Altura</th>
-                <th>Largura</th>
-                <th>Peso</th>
-                <th>Comprimento</th>
-                <th>Valor de compra</th>
                 <th>Categorias</th>
-                <th>Grupo de precificação</th>
-                <th>Valor de venda</th>
                 <th>Atualizar</th>
                 <th>Deletar</th>
 
@@ -123,20 +115,14 @@
                     <img th:src="@{/products/productPicture/{id}(id=${product.id})}" style="width: 200px;"/>
                 </td>
                 <td>
+                    <button type="button" class="btn btn-secondary" th:data-bs-product-id = "${product.id}" data-bs-toggle="modal" data-bs-target="#seeGeneralInfoModal" >Ver informações gerais</button>
+                </td>
+                <td>
                     <input type="checkbox" th:checked="${product.active}" disabled>
                 </td>
-                <td th:text = "${product.name}"></td>
-                <td th:text = "${product.description}"></td>
-                <td th:text = "${product.height}"></td>
-                <td th:text = "${product.width}"></td>
-                <td th:text = "${product.weight}"></td>
-                <td th:text = "${product.length}"></td>
-                <td th:text = "'R$' + ${product.purchaseAmount}"></td>
                 <td>
                     <button type="button" class="btn btn-secondary" th:data-bs-product-id = "${product.id}" data-bs-toggle="modal" data-bs-target="#seeCategoriesModal" >Ver categorias</button>
                 </td>
-                <td th:text = "${product.pricingGroup.name}"></td>
-                <td th:text = "${product.price}"></td>
 
                 <td>
                     <a class="btn btn-primary" th:href="@{/products/updateProduct/{id}(id=${product.id})}">Atualizar</a>
@@ -182,9 +168,97 @@
     </div>
 </div>
 
+<div id="seeGeneralInfoModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Ver informações gerais</h3>
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <h1 id="productIdGeneralInformation"></h1>
+
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h2 class="card-title">Informações gerais</h2>
+                            <div id="generalInformationDiv">
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 
+    const seeGeneralInfoModal = document.getElementById("seeGeneralInfoModal");
     const seeCategoriesModal = document.getElementById("seeCategoriesModal");
+
+    seeGeneralInfoModal.addEventListener('show.bs.modal', function (event) {
+        console.log("mostrou modal de informações gerais")
+
+        const button = event.relatedTarget
+
+        const productId = button.getAttribute('data-bs-product-id');
+
+        const elementWithId = document.getElementById('productIdGeneralInformation');
+        elementWithId.textContent = 'ID do produto: '
+        elementWithId.textContent = elementWithId.textContent + " " + productId;
+
+        const generalInformationDiv = document.getElementById('generalInformationDiv');
+        generalInformationDiv.innerHTML = '';
+
+        fetch(`/products/getProductGeneralInfo/${productId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erro ao retornar produto.");
+                }
+                return response.json();
+            })
+            .then(product => {
+
+                    const productPurchaseAmount = product.purchaseAmount.toFixed(2);
+                    const productPrice = product.price.toFixed(2);
+                    const productPricingGroup = product.pricingGroup.name;
+                    const productPricingGroupPercentage = (product.pricingGroup.percentage * 100).toFixed(2)
+
+                    const generalInformation = `
+
+                    <button class="btn collapseGeneralInfo" data-bs-toggle="collapse" data-bs-target="#generalInfo">
+						<i class="bi bi-chevron-down"></i>
+					</button>
+
+                    <div id="generalInfo" class="collapse">
+						<p>Nome: ${product.name}</p>
+                        <p>Descrição: ${product.description}</p>
+                        <p>Altura: ${product.height}cm</p>
+                        <p>Largura: ${product.width}cm</p>
+                        <p>Peso: ${product.weight}cm</p>
+                        <p>Comprimento: ${product.length}cm</p>
+                        <p>Preço de compra: R$${productPurchaseAmount}</p>
+                        <p>Grupo de precificação: ${productPricingGroup} (${productPricingGroupPercentage}%)</p>
+                        <p>Preço de venda: R$${productPrice}</p>
+                        <p>Fabricante: ${product.manufacturer.name}</p>
+                        <p>Tamanho: ${product.size.name}</p>
+					</div>
+
+                    `;
+
+                generalInformationDiv.insertAdjacentHTML("beforeend", generalInformation);
+
+            })
+
+
+    })
 
     seeCategoriesModal.addEventListener('show.bs.modal', function (event) {
       console.log("mostrou modal de categoria")

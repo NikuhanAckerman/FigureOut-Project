@@ -51,7 +51,11 @@ public class AppInitializer implements CommandLineRunner {
     private PromotionalCouponRepository promotionalCouponRepository;
 
     @Autowired
-    ClientService clientService;
+    private ManufacturerRepository manufacturerRepository;
+
+    @Autowired
+    private SizeRepository sizeRepository;
+
 
     @Override
     public void run(String... args) throws Exception {
@@ -220,6 +224,41 @@ public class AppInitializer implements CommandLineRunner {
             promotionalCouponRepository.saveAll(promotionalCouponList);
 
             System.out.println("Tabela de cupons promocionais populada.");
+        }
+
+        if(manufacturerRepository.count() == 0) {
+            System.out.println("Populando tabela de fabricantes...");
+
+            ArrayList<Manufacturer> manufacturerList = new ArrayList<>();
+
+            Collections.addAll(manufacturerList,
+                    new Manufacturer("Bandai"),
+                    new Manufacturer("Medicom"),
+                    new Manufacturer("TakaraTomy"),
+                    new Manufacturer("Kaiyodo"),
+                    new Manufacturer("Good Smile")
+            );
+
+            manufacturerRepository.saveAll(manufacturerList);
+
+            System.out.println("Tabela de fabricantes populada.");
+        }
+
+        if(sizeRepository.count() == 0) {
+            System.out.println("Populando tabela de tamanhos de produto...");
+
+            ArrayList<Size> sizeList = new ArrayList<>();
+
+            Collections.addAll(sizeList,
+                    new Size("1/6"),
+                    new Size("1/7"),
+                    new Size("1/8"),
+                    new Size("1/16")
+            );
+
+            sizeRepository.saveAll(sizeList);
+
+            System.out.println("Tabela de tamanhos de produto populada.");
         }
 
 

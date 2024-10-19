@@ -1,6 +1,7 @@
 package com.project.figureout.dto;
 
 import com.project.figureout.model.Category;
+import com.project.figureout.model.Manufacturer;
 import com.project.figureout.model.PricingGroup;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
@@ -66,5 +67,11 @@ public class ProductDTO {
 
     @NotNull(message = "O id do fornecedor não pode ser nulo.")
     private long supplier;
+
+    @NotNull(message = "O fabricante não pode ser nulo.")
+    private long manufacturer;
+
+    @NotNull(message = "O tamanho do produto não pode ser nulo.")
+    private long size;
 
 }

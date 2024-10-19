@@ -2,23 +2,17 @@ package com.project.figureout.controller;
 
 import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
-import com.project.figureout.repository.*;
 import com.project.figureout.service.AddressService;
 import com.project.figureout.service.ClientService;
 import com.project.figureout.service.CreditCardService;
 import com.project.figureout.service.StateAndCountryService;
 import jakarta.validation.Valid;
-import jakarta.validation.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.security.Principal;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -37,13 +31,13 @@ public class ClientController {
     @Autowired
     private CreditCardService creditCardService;
 
-    @GetMapping({"", "/", "/index"})
+    @GetMapping("/showAllClients")
     public String showClientsGet(Model model) {
 
         List<Client> clients = clientService.getAllClients();
         model.addAttribute("clients", clients);
 
-        return "index";
+        return "showClients";
     }
 
     @GetMapping("index/{id}/addresses") // exemplo de paranaue com javascript (o codigo js ta na pagina index)
@@ -83,14 +77,14 @@ public class ClientController {
 
         addressService.registerAddress(client, addressDTO);
 
-        return "redirect:/index";
+        return "redirect:/showClients";
     }
 
     @DeleteMapping("index/{id}/addresses/delete")
     public String deleteClientAddress(@PathVariable long id) {
         addressService.deleteAddress(id);
 
-        return "redirect:/index";
+        return "redirect:/showClients";
     }
 
     @GetMapping("updateAddress/{addressId}")
@@ -127,7 +121,7 @@ public class ClientController {
 
         addressService.updateAddress(addressId, addressDTO);
 
-        return "redirect:/index";
+        return "redirect:/showClients";
     }
 
     @GetMapping("index/{id}/creditCards")
@@ -171,7 +165,7 @@ public class ClientController {
 
         creditCardService.registerCreditCard(client, creditCardDTO);
 
-        return "redirect:/index";
+        return "redirect:/showClients";
 
     }
 
@@ -179,7 +173,7 @@ public class ClientController {
     public String deleteClientCreditCard(@PathVariable long id) {
         creditCardService.deleteCreditCard(id);
 
-        return "redirect:/index";
+        return "redirect:/showClients";
     }
 
 
@@ -213,7 +207,7 @@ public class ClientController {
 
         creditCardService.updateCreditCard(creditCardToUpdate, creditCardDTO);
 
-        return "redirect:/index";
+        return "redirect:/showClients";
     }
 
     @GetMapping("/createClient")
@@ -250,7 +244,7 @@ public class ClientController {
 
         clientService.registerClient(client, clientDTO);
 
-        return "redirect:/index";
+        return "redirect:/showClients";
     }
 
     // Método no controller pra página de trocar de senha.
@@ -271,7 +265,7 @@ public class ClientController {
         // Chamar o serviço para mudar a senha.
         clientService.changePassword(clientId, changePasswordDTO);
         //boolean success =
-        return "redirect:/index";
+        return "redirect:/showClients";
 
         /*if (!success) {
             model.addAttribute("error", "Password change failed. Please check your inputs.");
@@ -318,7 +312,7 @@ public class ClientController {
 
         clientService.updateClient(clientToUpdate, clientBasicDataDTO);
 
-        return "redirect:/index";
+        return "redirect:/showClients";
 
     }
 
@@ -326,7 +320,7 @@ public class ClientController {
     public String deleteClient(@PathVariable long id) {
         clientService.deleteClientById(id);
 
-        return "redirect:/index";
+        return "redirect:/showClients";
     }
 
 
@@ -345,7 +339,7 @@ public class ClientController {
         model.addAttribute("filterPassword", password);
         model.addAttribute("filterCpf", cpf);
         model.addAttribute("filterId", id);
-        return "index";
+        return "showClients";
     }
 
 }

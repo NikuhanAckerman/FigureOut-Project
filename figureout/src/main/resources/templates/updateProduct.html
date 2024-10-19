@@ -91,13 +91,37 @@
         <input type="date" class="form-control" th:field="*{stockDTO.entryInStockDate}" required>
 
         <div class="form-group">
-          <label>Fornecedor</label>
+          <label><b>Fornecedor</b></label>
           <select class="form-control" th:field="*{supplier}">
             <option selected value="0">Selecione um fornecedor</option>
             <option
                     th:each="supplier : ${supplierList}"
                     th:value="${supplier.id}"
                     th:text="${supplier.name}"
+            ></option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label><b>Fabricante</b></label>
+          <select class="form-control" id="manufacturer" th:field="*{manufacturer}">
+            <option selected value="0">Selecione uma fabricante</option>
+            <option
+                    th:each="manufacturer : ${manufacturerList}"
+                    th:value="${manufacturer.id}"
+                    th:text="${manufacturer.name}"
+            ></option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label><b>Tamanho do produto</b></label>
+          <select class="form-control" id="size" th:field="*{size}">
+            <option selected value="0">Selecione uma fabricante</option>
+            <option
+                    th:each="size : ${sizeList}"
+                    th:value="${size.id}"
+                    th:text="${size.name}"
             ></option>
           </select>
         </div>

@@ -35,9 +35,9 @@
             <div class="card">
 
                 <div class="card-body">
-                    <h5 class="card-title">CRUD de Cliente</h5>
+                    <h5 class="card-title">Clientes</h5>
                     <p class="card-text">Gerenciar clientes cadastrados.</p>
-                    <a href="index" class="btn btn-primary">Acessar</a>
+                    <a th:href="@{/showAllClients}" class="btn btn-primary">Acessar</a>
                 </div>
             </div>
         </div>
@@ -47,9 +47,9 @@
             <div class="card">
 
                 <div class="card-body">
-                    <h5 class="card-title">CRUD de Produto</h5>
+                    <h5 class="card-title">Produtos</h5>
                     <p class="card-text">Gerenciar produtos.</p>
-                    <a href="adminSeeProducts" class="btn btn-primary">Acessar</a>
+                    <a th:href="@{/products/seeProducts}" class="btn btn-primary">Acessar</a>
                 </div>
             </div>
         </div>
@@ -59,9 +59,9 @@
             <div class="card">
 
                 <div class="card-body">
-                    <h5 class="card-title">CRUD de Estoque</h5>
+                    <h5 class="card-title">Estoque</h5>
                     <p class="card-text">Gerenciar estoque de produtos</p>
-                    <a href="stock" class="btn btn-primary">Acessar</a>
+                    <a class="btn btn-primary">Acessar</a>
                 </div>
             </div>
         </div>
@@ -71,7 +71,7 @@
             <div class="card">
 
                 <div class="card-body">
-                    <h5 class="card-title">CRUD de Cupom</h5>
+                    <h5 class="card-title">Cupons</h5>
                     <p class="card-text">(em breve)</p>
                     <a href="#" class="btn btn-primary">Acessar</a>
                 </div>
@@ -83,24 +83,41 @@
             <div class="card">
 
                 <div class="card-body">
-                    <h5 class="card-title">Gerenciar vendas</h5>
+                    <h5 class="card-title">Vendas</h5>
                     <p class="card-text">Controlar e mudar status de pedidos.</p>
-                    <a href="adminSalesView" class="btn btn-primary">Acessar</a>
+                    <a th:href="@{sales/seeSales}" class="btn btn-primary">Acessar</a>
                 </div>
             </div>
         </div>
 
-        <!-- Card 6 -->
+        <!-- Card 7 -->
         <div class="col-md-4 mb-4">
             <div class="card">
 
                 <div class="card-body">
-                    <h5 class="card-title">Gráfico de vendas</h5>
-                    <p class="card-text">(em breve)</p>
-                    <a href="#" class="btn btn-primary">Acessar</a>
+                    <h5 class="card-title">Fornecedores</h5>
+                    <p class="card-text">Controlar e mudar atuais fornecedores.</p>
+                    <a class="btn btn-primary">Acessar</a>
                 </div>
             </div>
         </div>
+
+        <form th:action="@{admin/changeClientNavigator/{id}()}">
+
+            <div class="form-group">
+                <label><b>Escolha um cliente para navegar na loja.</b></label>
+                <select class="form-control" id="clientNavigate" onchange="this.form.submit()">
+                    <option selected value="0">Selecione um cliente</option>
+                    <option
+                            th:each="client : ${clientList}"
+                            th:value="${client.id}"
+                            th:text="'ID: ' + ${client.id} + 'Nome: ' + ${client.name}"
+                    ></option>
+                </select>
+            </div>
+
+        </form>
+
     </div>
 </div>
 

@@ -5,10 +5,7 @@ import com.project.figureout.model.*;
 import com.project.figureout.repository.CartRepository;
 import com.project.figureout.repository.StockRepository;
 import com.project.figureout.repository.SupplierRepository;
-import com.project.figureout.service.CartService;
-import com.project.figureout.service.ClientService;
-import com.project.figureout.service.ProductService;
-import com.project.figureout.service.StockService;
+import com.project.figureout.service.*;
 import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -45,6 +42,12 @@ public class ProductController {
     @Autowired
     private SupplierRepository supplierRepository;
 
+    @Autowired
+    private ManufacturerService manufacturerService;
+
+    @Autowired
+    private SizeService sizeService;
+
     @GetMapping("/seeProducts")
     public String showProductsGet(Model model) {
         List<Product> products =  productService.getAllProducts();
@@ -67,12 +70,16 @@ public class ProductController {
         List<Category> categoryList = productService.getAllCategories();
         List<PricingGroup> pricingGroupList = productService.getAllPricingGroups();
         List<Supplier> supplierList = supplierRepository.findAll();
+        List<Manufacturer> manufacturerList = manufacturerService.getAllManufacturers();
+        List<Size> sizeList = sizeService.getAllSizes();
         ProductDTO productDTO = new ProductDTO();
 
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("pricingGroupList", pricingGroupList);
         model.addAttribute("supplierList", supplierList);
         model.addAttribute("productDTO", productDTO);
+        model.addAttribute("manufacturerList", manufacturerList);
+        model.addAttribute("sizeList", sizeList);
 
         return "createProduct";
     }
@@ -147,12 +154,16 @@ public class ProductController {
 
         List<Category> categoryList = productService.getAllCategories();
         List<PricingGroup> pricingGroupList = productService.getAllPricingGroups();
+        List<Manufacturer> manufacturerList = manufacturerService.getAllManufacturers();
+        List<Size> sizeList = sizeService.getAllSizes();
 
         model.addAttribute("productDTO", productDTO);
         model.addAttribute("productId", id);
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("pricingGroupList", pricingGroupList);
         model.addAttribute("supplierList", supplierList);
+        model.addAttribute("manufacturerList", manufacturerList);
+        model.addAttribute("sizeList", sizeList);
 
         return "updateProduct";
     }
@@ -172,6 +183,12 @@ public class ProductController {
     @ResponseBody
     public List<Category> getProductCategories(@PathVariable Long id) {
         return productService.getProductById(id).getCategories();
+    }
+
+    @GetMapping("/getProductGeneralInfo/{id}")
+    @ResponseBody
+    public Product getProductGeneralInfo(@PathVariable Long id) {
+        return productService.getProductById(id);
     }
 
     // Filtro de produtos no CRUD de produtos

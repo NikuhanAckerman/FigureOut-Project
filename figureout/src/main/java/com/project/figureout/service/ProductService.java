@@ -36,6 +36,12 @@ public class ProductService {
     @Autowired
     private ActiveProductsRepository activeProductsRepository;
 
+    @Autowired
+    private ManufacturerRepository manufacturerRepository;
+
+    @Autowired
+    private SizeRepository sizeRepository;
+
     public List<Product> getAllProducts() {
         return productRepository.findAll();
     }
@@ -102,6 +108,8 @@ public class ProductService {
             activeProductsRepository.save(activeProduct);
         }
 
+        product.setManufacturer(manufacturerRepository.findById(productDTO.getManufacturer()).orElseThrow(() -> new NoSuchElementException("Fabricante não encontrada.")));
+        product.setSize(sizeRepository.findById(productDTO.getSize()).orElseThrow(() -> new NoSuchElementException("Tamanho de produto não encontrado.")));
     }
 
     public byte[] saveProductPicture(ProductDTO productDTO) {
@@ -146,6 +154,8 @@ public class ProductService {
         productDTO.getStockDTO().setProductQuantityAvailable(stock.getProductQuantityAvailable());
         productDTO.getStockDTO().setEntryInStockDate(stock.getEntryDate());
         productDTO.setSupplier(stock.getSupplier().getId());
+        productDTO.setManufacturer(product.getManufacturer().getId());
+        productDTO.setSize(product.getSize().getId());
 
     }
 
