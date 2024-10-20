@@ -25,7 +25,6 @@ public class AddressDTO {
     private String typeOfResidence;
 
     @NotBlank(message = "O logradouro não pode estar vazio.")
-    @Pattern(message = "Logradouro inválido. Não insira caracteres especiais.", regexp = "^[A-Za-zÀ-ÖØ-Ýà-öø-ÿ\\s]*$")
     private String addressing;
 
     @NotBlank(message = "O número de residência não pode estar vazio.")
