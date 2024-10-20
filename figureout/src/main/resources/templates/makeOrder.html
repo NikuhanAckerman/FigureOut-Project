@@ -29,7 +29,7 @@
             <form th:action="@{/cart/addPromotionalCoupon/{cartId}(cartId = ${cartId})}" th:object="${promotionalCouponDTO}" method="POST">
                 <input type="hidden" name="_method" value="PUT"/>
                 <input type="text" id="cupom-input" class="form-control" th:field="*{couponName}" placeholder="Digite seu cupom de desconto">
-                <button type="submit" class="btn btn-primary mt-2">Aplicar Cupom</button>
+                <button id="applyCupom" type="submit" class="btn btn-primary mt-2">Aplicar Cupom</button>
             </form>
 
 

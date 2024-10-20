@@ -32,6 +32,26 @@ def check_checkbox(self, element_id):
 def select_option(self, element_id, value):
     Select(self.driver.find_element(By.ID, element_id)).select_by_visible_text(value)
 
+# Seleciona opção de menu dropdown pelo valor.
+def select_option_by_value(self, element_id, value):
+    Select(self.driver.find_element(By.ID, element_id)).select_by_value(value)
+
+# Seleciona um produto da loja.
+def select_product(self, product):
+    card_bodies = self.driver.find_elements(By.CLASS_NAME, 'card-body')
+
+    # Define o produto que será filtrado.
+    product_to_select = product
+
+    # Passa pelos card-bodies até achar o produto específico.
+    for card_body in card_bodies:
+        card_title = card_body.find_element(By.CLASS_NAME, 'card-title')
+        if card_title.text == product_to_select:
+            # Localiza o botão no mesmo card-body
+            button = card_body.find_element(By.ID, 'seeProduct')
+            button.click()
+            break  # Stop after clicking the desired product
+
 # Busca por uma imagem e manda ela.
 def send_image(self, element_id, folder, image_file):
     # Pega o caminho absoluto do diretório do script

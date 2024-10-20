@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.CreditCardNumber;
 import java.util.Date;
 
 @Getter @Setter
-@OnlyOnePreferentialCreditCard
+//@OnlyOnePreferentialCreditCard
 public class CreditCardDTO {
 
     @NotNull

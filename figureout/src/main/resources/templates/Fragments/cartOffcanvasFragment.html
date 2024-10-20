@@ -6,7 +6,7 @@
 <body>
 
     <div th:fragment="cartButtonFragment">
-        <button type="button" class="nav-link bi bi-cart" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart"></button>
+        <button id="cart" type="button" class="nav-link bi bi-cart" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart"></button>
     </div>
 
     <div th:fragment="cartOffcanvasFragment(cart)">
@@ -20,7 +20,7 @@
 
                 <div th:if="${!cart.cartProducts.isEmpty()}">
 
-                    <a class="btn btn-primary mb-3" th:href="@{/sales/makeOrder/{cartId}(cartId=${cart.id})}">Prosseguir para compra</a>
+                    <a id="proceedToCheckout" class="btn btn-primary mb-3" th:href="@{/sales/makeOrder/{cartId}(cartId=${cart.id})}">Prosseguir para compra</a>
                     <p class="card-text">(você poderá mudar as quantidades na página de compra.)</p>
 
                     <div th:if="${cart.promotionalCoupon} != null">

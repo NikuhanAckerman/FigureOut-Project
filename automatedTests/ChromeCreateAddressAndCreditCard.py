@@ -93,7 +93,7 @@ class ProductFormTest(unittest.TestCase):
         input_string(self, "cardNumber", "1234567891012")
         time.sleep(1)
         
-        input_string(self, "printedName", "Renan L")
+        input_string(self, "printedName", "Cartao Roxo")
         time.sleep(1)
         
         select_option(self, "brand", "MasterCard")
@@ -104,6 +104,24 @@ class ProductFormTest(unittest.TestCase):
 
         click_button(self, "createButton")
         time.sleep(1)
+
+        ## CRIAÇÃO DE CARTÃO DE CRÉDITO 2 (rápido)
+        # Clica no botão de "Ver cartões"
+        click_button(self, "seeCreditCards")
+        
+        # Clica no botão "Adicionar cartão"
+        click_button(self, "addCreditCardButton")
+
+        # Preenche os campos do formulário de criar cartão de crédito.
+        input_string(self, "cardNumber", "987654321987")
+        
+        input_string(self, "printedName", "Cartao Laranja")
+        
+        select_option(self, "brand", "Visa")
+        
+        input_string(self, "securityCode", "456")
+
+        click_button(self, "createButton")
         
         # Espera alguns segundos para o resultado.
         time.sleep(10)
