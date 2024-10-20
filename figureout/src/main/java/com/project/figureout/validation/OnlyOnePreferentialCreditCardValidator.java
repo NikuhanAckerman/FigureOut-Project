@@ -7,12 +7,14 @@ import com.project.figureout.service.ClientService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
+@Component
 public class OnlyOnePreferentialCreditCardValidator implements ConstraintValidator<OnlyOnePreferentialCreditCard, Object> {
 
     @Autowired
@@ -25,15 +27,22 @@ public class OnlyOnePreferentialCreditCardValidator implements ConstraintValidat
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext constraintValidatorContext) {
-        if(obj instanceof CreditCardDTO){
-            CreditCardDTO creditCardDTO = (CreditCardDTO) obj;
+        if(obj instanceof CreditCard){
+            CreditCard creditCard = (CreditCard) obj;
 
-            long id = creditCardDTO.getClientId();
-            System.out.println(id);
+            Client client = creditCard.getClient();
 
-            Client client = clientService.getClientById(id);
+            System.out.println("CreditCardValidator: " + client.getId());
 
             List<CreditCard> clientCreditCardList = client.getCreditCards();
+
+            for(CreditCard currentCreditCard : clientCreditCardList) {
+
+                if(currentCreditCard.getId() == creditCard.getId()){
+                    return true;
+                }
+
+            }
 
             long preferentialCount = clientCreditCardList.stream()
                     .filter(CreditCard::isPreferential)

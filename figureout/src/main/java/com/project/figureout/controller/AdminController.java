@@ -49,7 +49,6 @@ public class AdminController {
             model.addAttribute("currentClientNavigator", client);
         }
 
-
         return "adminControlPanel";
     }
 

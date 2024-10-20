@@ -10,11 +10,10 @@ import org.hibernate.validator.constraints.CreditCardNumber;
 import java.util.Date;
 
 @Getter @Setter
-@OnlyOnePreferentialCreditCard
 public class CreditCardDTO {
 
     @NotNull
-    private long clientId = 1;
+    private long clientId;
 
     @NotNull(message = "O campo 'preferido' não pode ser nulo.")
     private boolean preferential;

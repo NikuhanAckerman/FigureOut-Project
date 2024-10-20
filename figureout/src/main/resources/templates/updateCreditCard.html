@@ -20,11 +20,13 @@
 
 <div class="container mt-5">
   <form th:action="@{/updateCreditCard/{id}(id=${creditCardId})}" th:object="${creditCardDTO}" method="POST">
+
     <input type="hidden" name="_method" value="PUT">
 
     <h1 th:text="'ID do cartão de crédito: ' + ${creditCardId}"></h1>
 
     <div class="form-group">
+      <input type="hidden" th:field="*{clientId}"/>
 
       <ul style="list-style-type: none;">
         <li th:each="err : ${#fields.errors('*')}" th:text="${err}" class="text-danger"></li>

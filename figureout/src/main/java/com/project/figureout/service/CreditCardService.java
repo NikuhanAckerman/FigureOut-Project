@@ -77,8 +77,6 @@ public class CreditCardService {
         creditCardRepository.save(creditCard);
     }
 
-
-
     // Population Methods
 
     // DTO Population Methods
@@ -90,7 +88,7 @@ public class CreditCardService {
         creditCardDTO.setPrintedName(creditCard.getPrintedName());
 
         CreditCardBrandDTO creditCardBrandDTO = new CreditCardBrandDTO();
-        creditCardBrandDTO.setId(creditCard.getId());
+        creditCardBrandDTO.setId(creditCard.getBrand().getId());
         creditCardDTO.setCreditCardBrandDTO(creditCardBrandDTO);
 
         creditCardDTO.setSecurityCode(creditCard.getSecurityCode());

@@ -1,6 +1,7 @@
 package com.project.figureout.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.figureout.validation.OnlyOnePreferentialCreditCard;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import java.util.Date;
 @Entity
 @Table(name = "Cartoes")
 @Getter @Setter
+@OnlyOnePreferentialCreditCard
 public class CreditCard {
 
     @Id

@@ -6,6 +6,7 @@ import com.project.figureout.service.AddressService;
 import com.project.figureout.service.ClientService;
 import com.project.figureout.service.CreditCardService;
 import com.project.figureout.service.StateAndCountryService;
+import com.project.figureout.validation.wrappers.CreditCardWrapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -132,16 +133,15 @@ public class ClientController {
 
     @GetMapping("createCreditCard/{id}")
     public String createClientCreditCardGet(@PathVariable long id, Model model) {
-        CreditCardDTO creditCardDTO = new CreditCardDTO();
+        CreditCardWrapper creditCardWrapper = new CreditCardWrapper();
+        creditCardWrapper.getCreditCardDTO().setClientId(id);
 
         List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
 
-        creditCardDTO.setClientId(id); // necessary to pre-set this in the form via hidden field
+         // necessary to pre-set this in the form via hidden field
         //System.out.println("GET METHOD: " + creditCardDTO.getClientId());
 
-        System.out.println(id);
-
-        model.addAttribute("creditCardDTO", creditCardDTO);
+        model.addAttribute("creditCardDTO", creditCardWrapper.getCreditCardDTO());
         model.addAttribute("clientId", id);
         model.addAttribute("creditCardBrandList", creditCardBrandList);
 
@@ -149,21 +149,20 @@ public class ClientController {
     }
 
     @PostMapping("createCreditCard/{id}")
-    public String createClientCreditCardPost(@PathVariable long id, @Valid @ModelAttribute CreditCardDTO creditCardDTO, BindingResult result, Model model) {
+    public String createClientCreditCardPost(@PathVariable long id, @Valid @ModelAttribute CreditCardWrapper creditCardWrapper, BindingResult result, Model model) {
         Client client = clientService.getClientById(id);
-
-
 
         if(result.hasErrors()) {
             List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
-            //System.out.println("POST Method Id output: " + id);
+
+            model.addAttribute("creditCardDTO", creditCardWrapper.getCreditCardDTO());
             model.addAttribute("clientId", id);
             model.addAttribute("creditCardBrandList", creditCardBrandList);
 
             return "createCreditCard";
         }
 
-        creditCardService.registerCreditCard(client, creditCardDTO);
+        creditCardService.registerCreditCard(client, creditCardWrapper.getCreditCardDTO());
 
         return "redirect:/showAllClients";
 
@@ -176,11 +175,14 @@ public class ClientController {
         return "redirect:/showAllClients";
     }
 
-
     @GetMapping("updateCreditCard/{id}")
     public String updateClientCreditCardGet(@PathVariable long id, Model model) {
         CreditCard creditCard = creditCardService.getCreditCardById(id);
+        Client client = creditCard.getClient();
+
         CreditCardDTO creditCardDTO = new CreditCardDTO();
+        creditCardDTO.setClientId(client.getId());
+
         List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
 
         creditCardService.populateCreditCardDTO(creditCardDTO, creditCard);
@@ -190,7 +192,6 @@ public class ClientController {
         model.addAttribute("creditCardId", id);
 
         return "updateCreditCard";
-
     }
 
     @PutMapping("updateCreditCard/{id}")
@@ -277,7 +278,6 @@ public class ClientController {
 
          */
     }
-
 
     @GetMapping("/updateClient/{id}")
     public String updateClientGet(@PathVariable long id, Model model) {
