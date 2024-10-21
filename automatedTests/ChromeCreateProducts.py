@@ -27,57 +27,77 @@ class ProductFormTest(unittest.TestCase):
         # select_option(self, id, valor): Seleciona opção de um menu dropdown.
         # send_image(self, id, pasta, arquivo): Envia uma imagem.
         
-        # Preenche os campos do formulário.
-        input_string(self, "name", "Test Product")
-        time.sleep(1)
+        # Criação do produto "Hu tao".
+        input_string(self, "name", "Hu Tao")
 
-        input_string(self, "description", "Descrição teste.")
-        time.sleep(1)
+        input_string(self, "description", "Action figure colecionável da personagem Hu Tao de Genshin Impact.")
         
         input_string(self, "height", "10.5")
-        time.sleep(1)
         
-        input_string(self, "width", "5.5")
-        time.sleep(1)
+        input_string(self, "width", "7.5")
         
-        input_string(self, "length", "15.0")
-        time.sleep(1)
+        input_string(self, "length", "5.6")
         
-        input_string(self, "weight", "2.0")
-        time.sleep(1)
+        input_string(self, "weight", "31.5")
         
-        input_string(self, "purchaseAmount", "20.0")
-        time.sleep(1)
+        input_string(self, "purchaseAmount", "195.56")
         
-        select_option(self, "categorySelect", "Chaveiro")
-        time.sleep(1)
+        select_option(self, "categorySelect", "Figura de ação")
         
         select_option(self, "pricingGroupSelect", "Ferro (5.00%)")
-        time.sleep(1)
 
-        input_string(self, "price", "80.0")
-        time.sleep(1)
+        input_string(self, "price", "210.89")
 
-        input_string(self, "productQuantityAvailable", "5")
-        time.sleep(1)
+        input_string(self, "productQuantityAvailable", "15")
 
         input_string(self, "entryInStockDate", "06-10-2023")
-        time.sleep(1)
         
         select_option(self, "supplier", "Fornecedor A")
-        time.sleep(1)
         
         select_option(self, "manufacturer", "Bandai")
-        time.sleep(1)
         
-        select_option(self, "size", "1/6")
-        time.sleep(1)
+        select_option(self, "size", "1/8")
 
-        send_image(self, "fileInput", "Images", "image.png")
-        time.sleep(1)
+        send_image(self, "fileInput", "Images", "hutao.jpg")
         
         click_button(self, "createButton")
-        time.sleep(1)
+
+        # Criação do produto "Paimon"
+        click_button(self, "createProduct")
+        
+        input_string(self, "name", "Paimon")
+
+        input_string(self, "description", "Action Figure da personagem principal de Genshin Impact Paimon.")
+        
+        input_string(self, "height", "8.5")
+        
+        input_string(self, "width", "5.5")
+        
+        input_string(self, "length", "5.0")
+        
+        input_string(self, "weight", "22.0")
+        
+        input_string(self, "purchaseAmount", "110.16")
+        
+        select_option(self, "categorySelect", "Figura de ação")
+        
+        select_option(self, "pricingGroupSelect", "Ferro (5.00%)")
+
+        input_string(self, "price", "129.90")
+
+        input_string(self, "productQuantityAvailable", "25")
+
+        input_string(self, "entryInStockDate", "06-10-2023")
+        
+        select_option(self, "supplier", "Fornecedor A")
+        
+        select_option(self, "manufacturer", "Bandai")
+        
+        select_option(self, "size", "1/8")
+
+        send_image(self, "fileInput", "Images", "paimon.jpg")
+        
+        click_button(self, "createButton")
 
         # Espera alguns segundos para antes de fechar o browser.
         time.sleep(10)

@@ -32,6 +32,26 @@ def check_checkbox(self, element_id):
 def select_option(self, element_id, value):
     Select(self.driver.find_element(By.ID, element_id)).select_by_visible_text(value)
 
+# Seleciona opção de menu dropdown pelo valor.
+def select_option_by_value(self, element_id, value):
+    Select(self.driver.find_element(By.ID, element_id)).select_by_value(value)
+
+# Seleciona um produto da loja.
+def select_product(self, product):
+    card_bodies = self.driver.find_elements(By.CLASS_NAME, 'card-body')
+
+    # Define o produto que será filtrado.
+    product_to_select = product
+
+    # Passa pelos card-bodies até achar o produto específico.
+    for card_body in card_bodies:
+        card_title = card_body.find_element(By.CLASS_NAME, 'card-title')
+        if card_title.text == product_to_select:
+            # Localiza o botão no mesmo card-body
+            button = card_body.find_element(By.ID, 'seeProduct')
+            button.click()
+            break  # Stop after clicking the desired product
+
 # Busca por uma imagem e manda ela.
 def send_image(self, element_id, folder, image_file):
     # Pega o caminho absoluto do diretório do script
@@ -50,6 +70,77 @@ def send_image(self, element_id, folder, image_file):
         # Localizar o <input> do tipo file por seu ID e fazer o upload do arquivo.
         self.driver.find_element(By.ID, element_id).send_keys(file_path)
 
+# Cria um cliente de forma automatizada (não contém endereço).
+def create_client(self, name, email, password, birthday, cpf, enabled, gender):
+    click_button(self, "createClientButton")
+        
+    input_string(self, "name", name)
+
+    input_string(self, "email", email)
+    
+    input_string(self, "password", password)
+    
+    input_string(self, "confirmPassword", password)
+
+    # Formato de data: mm-dd-yyyy
+    input_string(self, "birthday", birthday)
+    
+    input_string(self, "cpf", cpf)
+    
+    if enabled == "1":
+        check_checkbox(self, "enabled")
+        
+    # M = 1, F = 2, ? = 3
+    if gender == "1":
+        select_radio(self, "gender-1", "1")
+        
+    if gender == "2":
+        select_radio(self, "gender-2", "2")
+        
+    if gender == "3":
+        select_radio(self, "gender-3", "3")
+
+# Cria telefone de forma automatizada.
+def create_phone(self, landline, ddd, phoneNumber):
+    if landline == "1":
+        select_radio(self, "phoneFalse", "false")
+    else:
+        select_radio(self, "phoneTrue", "true")
+        
+    input_string(self, "ddd", ddd)
+
+    input_string(self, "phoneNumber", phoneNumber)
+
+# Cria endereço de na página de criação de cliente de forma automatizada.
+def create_address(self, delivery, charging, nickname, typeOfResidence, addressingType, addressing, houseNumber, cep, neighbourhood, city, state, observation):
+    if delivery == "1":
+        check_checkbox(self, "deliveryAddress")
+    if charging == "1":
+        check_checkbox(self, "chargingAddress")
+
+    input_string(self, "nickname", nickname)
+
+    input_string(self, "typeOfResidence", typeOfResidence)
+
+    input_string(self, "addressingType", addressingType)
+
+    input_string(self, "addressing", addressing)
+
+    input_string(self, "houseNumber", houseNumber)
+
+    input_string(self, "cep", cep)
+
+    input_string(self, "neighbourhood", neighbourhood)
+
+    input_string(self, "city", city)
+    
+    select_option(self, "stateSelect", state)
+
+    select_option(self, "countrySelect", "Brasil")
+
+    input_string(self, "observation", observation)
+    
+    click_button(self, "createButton")
 
 #if __name__ == "__main__":
 #   unittest.main()
