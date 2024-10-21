@@ -11,7 +11,6 @@ import java.util.Date;
 @Entity
 @Table(name = "Cartoes")
 @Getter @Setter
-@OnlyOnePreferentialCreditCard
 public class CreditCard {
 
     @Id

@@ -19,7 +19,7 @@
 </nav>
 
 <div class="container mt-5">
-  <form th:action="@{/updateCreditCard/{id}(id=${creditCardId})}" th:object="${creditCardDTO}" method="POST">
+  <form th:action="@{/updateCreditCard/{id}(id=${creditCardId})}" th:object="${updateCreditCardDTO}" method="POST">
 
     <input type="hidden" name="_method" value="PUT">
 
@@ -27,6 +27,7 @@
 
     <div class="form-group">
       <input type="hidden" th:field="*{clientId}"/>
+      <input type="hidden" th:field="*{creditCardId}"/>
 
       <ul style="list-style-type: none;">
         <li th:each="err : ${#fields.errors('*')}" th:text="${err}" class="text-danger"></li>

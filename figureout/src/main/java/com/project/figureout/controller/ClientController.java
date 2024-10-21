@@ -133,15 +133,15 @@ public class ClientController {
 
     @GetMapping("createCreditCard/{id}")
     public String createClientCreditCardGet(@PathVariable long id, Model model) {
-        CreditCardWrapper creditCardWrapper = new CreditCardWrapper();
-        creditCardWrapper.getCreditCardDTO().setClientId(id);
+        CreditCardDTO creditCardDTO = new CreditCardDTO();
+        creditCardDTO.setClientId(id);
 
         List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
 
          // necessary to pre-set this in the form via hidden field
         //System.out.println("GET METHOD: " + creditCardDTO.getClientId());
 
-        model.addAttribute("creditCardDTO", creditCardWrapper.getCreditCardDTO());
+        model.addAttribute("creditCardDTO", creditCardDTO);
         model.addAttribute("clientId", id);
         model.addAttribute("creditCardBrandList", creditCardBrandList);
 
@@ -149,20 +149,26 @@ public class ClientController {
     }
 
     @PostMapping("createCreditCard/{id}")
-    public String createClientCreditCardPost(@PathVariable long id, @Valid @ModelAttribute CreditCardWrapper creditCardWrapper, BindingResult result, Model model) {
+    public String createClientCreditCardPost(@PathVariable long id, @Valid @ModelAttribute CreditCardDTO creditCardDTO, BindingResult result, Model model) {
         Client client = clientService.getClientById(id);
+        String ANSI_RESET = "\u001B[0m";
+        String ANSI_RED = "\u001B[31m";
 
         if(result.hasErrors()) {
             List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
 
-            model.addAttribute("creditCardDTO", creditCardWrapper.getCreditCardDTO());
+            System.out.println(ANSI_RED + "there are errors in credit card creation" + ANSI_RESET);
+
+            model.addAttribute("creditCardDTO", creditCardDTO);
             model.addAttribute("clientId", id);
             model.addAttribute("creditCardBrandList", creditCardBrandList);
 
             return "createCreditCard";
         }
 
-        creditCardService.registerCreditCard(client, creditCardWrapper.getCreditCardDTO());
+        System.out.println(ANSI_RED + "no errors in credit card creation" + ANSI_RESET);
+
+        creditCardService.registerCreditCard(client, creditCardDTO);
 
         return "redirect:/showAllClients";
 
@@ -180,14 +186,15 @@ public class ClientController {
         CreditCard creditCard = creditCardService.getCreditCardById(id);
         Client client = creditCard.getClient();
 
-        CreditCardDTO creditCardDTO = new CreditCardDTO();
-        creditCardDTO.setClientId(client.getId());
+        UpdateCreditCardDTO updateCreditCardDTO = new UpdateCreditCardDTO();
+        updateCreditCardDTO.setClientId(client.getId());
+        updateCreditCardDTO.setCreditCardId(creditCard.getId());
 
         List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
 
-        creditCardService.populateCreditCardDTO(creditCardDTO, creditCard);
+        creditCardService.populateCreditCardDTO(updateCreditCardDTO, creditCard);
 
-        model.addAttribute("creditCardDTO", creditCardDTO);
+        model.addAttribute("updateCreditCardDTO", updateCreditCardDTO);
         model.addAttribute("creditCardBrandList", creditCardBrandList);
         model.addAttribute("creditCardId", id);
 
@@ -195,7 +202,7 @@ public class ClientController {
     }
 
     @PutMapping("updateCreditCard/{id}")
-    public String updateClientCreditCardPut(@PathVariable long id, @Valid @ModelAttribute CreditCardDTO creditCardDTO, BindingResult result, Model model) {
+    public String updateClientCreditCardPut(@PathVariable long id, @Valid @ModelAttribute UpdateCreditCardDTO updateCreditCardDTO, BindingResult result, Model model) {
         CreditCard creditCardToUpdate = creditCardService.getCreditCardById(id);
         List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
 
@@ -206,7 +213,7 @@ public class ClientController {
             return "updateCreditCard";
         }
 
-        creditCardService.updateCreditCard(creditCardToUpdate, creditCardDTO);
+        creditCardService.updateCreditCard(creditCardToUpdate, updateCreditCardDTO);
 
         return "redirect:/showAllClients";
     }

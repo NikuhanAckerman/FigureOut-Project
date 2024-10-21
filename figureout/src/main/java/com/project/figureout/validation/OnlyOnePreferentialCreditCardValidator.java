@@ -1,6 +1,7 @@
 package com.project.figureout.validation;
 
 import com.project.figureout.dto.CreditCardDTO;
+import com.project.figureout.dto.UpdateCreditCardDTO;
 import com.project.figureout.model.Client;
 import com.project.figureout.model.CreditCard;
 import com.project.figureout.service.ClientService;
@@ -27,28 +28,63 @@ public class OnlyOnePreferentialCreditCardValidator implements ConstraintValidat
 
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext constraintValidatorContext) {
-        if(obj instanceof CreditCard){
-            CreditCard creditCard = (CreditCard) obj;
+        if(obj instanceof CreditCardDTO){
+            CreditCardDTO creditCardDTO = (CreditCardDTO) obj;
 
-            Client client = creditCard.getClient();
+            if(creditCardDTO.isPreferential()) {
+                long clientId = creditCardDTO.getClientId();
 
-            System.out.println("CreditCardValidator: " + client.getId());
+                Client client = clientService.getClientById(clientId);
 
-            List<CreditCard> clientCreditCardList = client.getCreditCards();
+                List<CreditCard> clientCreditCardList = client.getCreditCards();
 
-            for(CreditCard currentCreditCard : clientCreditCardList) {
+                long preferentialCount = clientCreditCardList.stream()
+                        .filter(CreditCard::isPreferential)
+                        .count();
 
-                if(currentCreditCard.getId() == creditCard.getId()){
-                    return true;
-                }
-
+                return (preferentialCount < 1);
             }
 
-            long preferentialCount = clientCreditCardList.stream()
-                    .filter(CreditCard::isPreferential)
-                    .count();
+            return true;
+        } else if(obj instanceof UpdateCreditCardDTO) {
+            UpdateCreditCardDTO updateCreditCardDTO = (UpdateCreditCardDTO) obj;
+            long clientId = updateCreditCardDTO.getClientId();
+            long creditCardId = updateCreditCardDTO.getCreditCardId();
 
-            return (preferentialCount <= 1);
+            if(updateCreditCardDTO.isPreferential()) {
+                Client client = clientService.getClientById(clientId);
+
+                List<CreditCard> clientCreditCardList = client.getCreditCards();
+
+                CreditCard creditCardBeingUpdated = null;
+
+                long preferentialCount = clientCreditCardList.stream()
+                        .filter(CreditCard::isPreferential)
+                        .count();
+
+                for(CreditCard creditCard : clientCreditCardList){
+
+                    if(creditCard.getId() == creditCardId){
+
+                        creditCardBeingUpdated = creditCard;
+                        break;
+
+                    }
+
+                }
+
+                if(!creditCardBeingUpdated.isPreferential()) {
+
+                    if(preferentialCount >= 1) {
+                        return false;
+                    }
+
+                }
+
+                return (preferentialCount <= 1);
+            }
+
+            return true;
         }
 
         return false;

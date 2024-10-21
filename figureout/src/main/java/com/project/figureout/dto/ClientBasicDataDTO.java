@@ -15,6 +15,8 @@ import java.time.LocalDate;
 
 @Getter @Setter
 @PasswordsMatch
+@EmailCantBeUsedByMultipleAccounts
+@CpfCantBeUsedByMultipleAccounts
 public class ClientBasicDataDTO {
     @NotNull
     private long clientId;

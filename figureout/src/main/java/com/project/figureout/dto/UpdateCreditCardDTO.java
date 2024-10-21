@@ -1,20 +1,21 @@
 package com.project.figureout.dto;
 
 import com.project.figureout.validation.OnlyOnePreferentialCreditCard;
-import jakarta.persistence.Column;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.validator.constraints.CreditCardNumber;
-
-import java.util.Date;
 
 @OnlyOnePreferentialCreditCard
 @Getter @Setter
-public class CreditCardDTO {
+public class UpdateCreditCardDTO {
 
     @NotNull
     private long clientId;
+
+    @NotNull
+    private long creditCardId;
 
     @NotNull(message = "O campo 'preferido' não pode ser nulo.")
     private boolean preferential;
