@@ -27,45 +27,63 @@
         <li th:each="err : ${#fields.errors('*')}" th:text="${err}" class="text-danger"></li>
       </ul>
 
-      <div>
-        <label><b>Preferencial?</b></label>
-        <input class="form-check-input" type="checkbox" id="preferential" th:field="*{preferential}">
-
-        <ul style="list-style-type: none;">
-          <li th:each="err : ${#fields.errors('preferential')}" th:text="${err}" class="text-danger"/>
-        </ul>
-      </div>
-
-      <div>
-        <label><b>Número do cartão</b></label>
-        <input type="text" class="form-control" id="cardNumber" placeholder="Insira o número do cartão" th:field="*{cardNumber}" required>
-        <ul style="list-style-type: none;">
-          <li th:each="err : ${#fields.errors('cardNumber')}" th:text="${err}" class="text-danger"/>
-        </ul>
-
-        <label><b>Nome impresso no cartão</b></label>
-        <input type="text" class="form-control" id="printedName" placeholder="Insira o nome impresso no cartão" th:field="*{printedName}" required>
-        <ul style="list-style-type: none;">
-          <li th:each="err : ${#fields.errors('printedName')}" th:text="${err}" class="text-danger"/>
-        </ul>
-
-        <div>
-          <label><b>Bandeira do cartão</b></label>
-          <select class="form-select" aria-label="Escolha uma bandeira" id="brand" th:field="*{creditCardBrandDTO.id}">
-            <option value="0" selected>Escolha a bandeira</option>
-            <option th:each="brand : ${creditCardBrandList}" th:value="${brand.id}" th:text="${brand.name}">
-          </select>
-          <ul style="list-style-type: none;">
-            <li th:each="err : ${#fields.errors('creditCardBrandDTO.id')}" th:text="${err}" class="text-danger"/>
-          </ul>
+      <div class="card">
+        <div class="card-header">
+          <h3>Informações do Cartão</h3>
         </div>
+        <div class="card-body">
+          <!-- Preferencial? -->
+          <label><b>Preferencial?</b></label>
+          <input class="form-check-input" type="checkbox" id="preferential" th:field="*{preferential}">
+          <ul style="list-style-type: none;">
+            <li th:each="err : ${#fields.errors('preferential')}" th:text="${err}" class="text-danger"/>
+          </ul>
+          <!-- Nome impresso no cartão -->
+          <div class="mt-2">
+            <label><b>Nome impresso no cartão</b></label>
+            <input type="text" class="form-control" id="printedName" placeholder="Insira o nome impresso no cartão" th:field="*{printedName}" required>
+            <ul style="list-style-type: none;">
+              <li th:each="err : ${#fields.errors('printedName')}" th:text="${err}" class="text-danger"/>
+            </ul>
+          </div>
 
-        <label><b>Código de segurança (CVV/CVC)</b></label>
-        <input type="text" class="form-control" id="securityCode" placeholder="Insira o código de segurança do cartão" th:field="*{securityCode}" required>
-        <ul style="list-style-type: none;">
-          <li th:each="err : ${#fields.errors('securityCode')}" th:text="${err}" class="text-danger"/>
-        </ul>
+          <div class="row mt-3">
+            <!-- Número do cartão -->
+            <div class="col-md-4">
+              <label><b>Número do cartão</b></label>
+              <input type="text" class="form-control" id="cardNumber" placeholder="Insira o número do cartão" th:field="*{cardNumber}" required>
+              <ul style="list-style-type: none;">
+                <li th:each="err : ${#fields.errors('cardNumber')}" th:text="${err}" class="text-danger"/>
+              </ul>
+            </div>
+
+            <!-- Bandeira do cartão -->
+            <div class="col-md-4">
+              <label><b>Bandeira do cartão</b></label>
+              <select class="form-select" aria-label="Escolha uma bandeira" id="brand" th:field="*{creditCardBrandDTO.id}">
+                <option value="0" selected>Escolha a bandeira</option>
+                <option th:each="brand : ${creditCardBrandList}" th:value="${brand.id}" th:text="${brand.name}"></option>
+              </select>
+              <ul style="list-style-type: none;">
+                <li th:each="err : ${#fields.errors('creditCardBrandDTO.id')}" th:text="${err}" class="text-danger"/>
+              </ul>
+            </div>
+
+            <!-- Código de segurança (CVV/CVC) -->
+            <div class="col-md-4">
+              <label><b>Código de segurança (CVV/CVC)</b></label>
+              <input type="text" class="form-control" id="securityCode" placeholder="Insira o código de segurança do cartão" th:field="*{securityCode}" required>
+              <ul style="list-style-type: none;">
+                <li th:each="err : ${#fields.errors('securityCode')}" th:text="${err}" class="text-danger"/>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
+
+
+
+
 
     </div>
 
