@@ -17,6 +17,9 @@ import java.time.LocalDateTime;
 @Getter @Setter
 public class StockDTO {
 
+    @NotNull
+    private Long stockId;
+
     @NotNull(message = "O campo de produto não pode ser nulo.")
     private Long product;
 

@@ -88,12 +88,12 @@
       </tr>
       </thead>
       <tbody>
-      <tr th:each="product : ${products}">
+      <tr th:each="stock : ${products}">
         <td th:text = "${stock.id}"></td>
-        <td th:text = "${stock.product}"></td>
+        <td th:text = "${stock.product.name}"></td>
         <td th:text = "${stock.productQuantityAvailable}"></td>
-        <td th:text = "${stock.productPurchaseAmount}"></td>
-        <td th:text = "${stock.supplier}"></td>
+        <td th:text = "'R$' + ${stock.productPurchaseAmount}"></td>
+        <td th:text = "${stock.supplier.name}"></td>
         <td th:text = "${stock.entryDate}"></td>
 
         <td>
