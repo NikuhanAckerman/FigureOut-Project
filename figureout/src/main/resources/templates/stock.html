@@ -22,7 +22,7 @@
       <li class="nav-item">
         <a class="btn navbar-top-button" href="/products/createProduct">Adicionar produto</a>
         <a class="btn navbar-top-button" href="seeSales">Vendas</a>
-        <a class="btn btn-danger" href="/index">CRUD de clientes</a>
+        <a class="btn btn-danger" href="/index">Painel de Controle</a>
       </li>
     </ul>
 
@@ -79,7 +79,8 @@
         <th>ID</th>
         <th>Produto</th>
         <th>Quantidade</th>
-        <th>Valor de custo</th>
+        <th>Custo p/ unidade</th>
+        <th>Custo total</th>
         <th>Fornecedor</th>
         <th>Data de entrada</th>
         <th>Atualizar</th>
@@ -93,6 +94,7 @@
         <td th:text = "${stock.product.name}"></td>
         <td th:text = "${stock.productQuantityAvailable}"></td>
         <td th:text = "'R$' + ${stock.productPurchaseAmount}"></td>
+        <td th:text = "'R$' + ${stock.productPurchaseAmount} * ${stock.productQuantityAvailable}"></td>
         <td th:text = "${stock.supplier.name}"></td>
         <td th:text = "${stock.entryDate}"></td>
 
