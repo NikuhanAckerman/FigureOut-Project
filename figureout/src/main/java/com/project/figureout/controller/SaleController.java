@@ -109,6 +109,19 @@ public class SaleController {
 
         }
 
+        List<String> errors = new ArrayList<>();
+
+        if(salesCardsList.size() > 3) {
+            errors.add("Não se pode usar mais que 3 cartões de crédito numa compra.");
+        }
+
+        if(!errors.isEmpty()) {
+            model.addAttribute("errors", errors);
+            // gotta add the other attributes
+
+            return "makeOrder";
+        }
+
         if(salesCardsList.size() == 1) {
             salesCardsList.getFirst().setAmountPaid(cart.getTotalPrice());
         }

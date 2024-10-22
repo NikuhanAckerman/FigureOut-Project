@@ -24,19 +24,43 @@ public class EmailCantBeUsedByMultipleAccountsValidator implements ConstraintVal
     public boolean isValid(Object obj, ConstraintValidatorContext constraintValidatorContext) {
 
         if(obj instanceof ClientBasicDataDTO) {
+            constraintValidatorContext.disableDefaultConstraintViolation();
+
+            constraintValidatorContext.buildConstraintViolationWithTemplate(constraintValidatorContext.getDefaultConstraintMessageTemplate())
+                    .addPropertyNode("email").addConstraintViolation();
+
+
             ClientBasicDataDTO clientBasicDataDTO = (ClientBasicDataDTO) obj;
-            long id = clientBasicDataDTO.getClientId();
-            Client client = clientService.getClientById(id);
+            String clientBasicDataDTOEmail = clientBasicDataDTO.getEmail();
             List<Client> allClients = clientService.getAllClients();
+            long id = clientBasicDataDTO.getClientId();
 
-            for(Client clientObjectInsideList: allClients) {
+            if(id == 0) { // client creation or no client
+                for(Client currentClient: allClients) {
 
-                if(clientObjectInsideList.getEmail().equals(clientBasicDataDTO.getEmail())) {
-                    if(!clientObjectInsideList.equals(client)) {
+                    String email = currentClient.getEmail();
+
+                    if(email.equals(clientBasicDataDTOEmail)) {
                         return false;
                     }
-                }
 
+                }
+            } else { // client updating
+                Client client = clientService.getClientById(id);
+
+                for(Client currentClient: allClients) {
+
+                    String email = currentClient.getEmail();
+
+                    if(email.equals(clientBasicDataDTOEmail)) {
+
+                        if(!currentClient.equals(client)) {
+                            return false;
+                        }
+
+                    }
+
+                }
             }
 
             return true;

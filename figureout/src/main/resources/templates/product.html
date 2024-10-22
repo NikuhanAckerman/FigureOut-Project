@@ -45,6 +45,8 @@
       <!-- href="makeOrder.html" -->
       <h5 class="mt-3" th:text=" 'Disponível em estoque: ' + ${stock.productQuantityAvailable}"></h5>
 
+
+
       <form th:action="@{/cart/addProductToCart/{productId}/{cartId}(productId=${product.id}, cartId=${cart.id})}" method="POST" th:object="${changeCartProductQuantityDTO}">
         <input type="number" class="form-control" step="1" min="1" th:field="*{quantity}" required>
 
@@ -52,6 +54,12 @@
           Adicionar ao Carrinho
         </button>
       </form>
+
+      <div th:if="${errors != null}">
+        <div th:each="err : ${errors}">
+          <p class="text-danger" th:text="${err}"></p>
+        </div>
+      </div>
 
       <h5 class="mt-3">Descrição:</h5>
       <p th:text="${product.description}"><br></p>

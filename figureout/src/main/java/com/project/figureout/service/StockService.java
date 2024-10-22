@@ -30,8 +30,8 @@ public class StockService {
         return stockRepository.findAll();
     }
 
-    public Stock getProductInStockById(long id) {
-        return stockRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Produto não encontrado no estoque com base no ID."));
+    public Stock getStockById(long id) {
+        return stockRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Estoque não encontrado com base no id."));
     }
 
     public Stock getProductInStockByProductId(long id) {
@@ -43,7 +43,7 @@ public class StockService {
     }
 
     public void dropStockAmountByProductId(long id, int amount) {
-        Stock stock = getProductInStockById(id);
+        Stock stock = getStockById(id);
 
         stock.setProductQuantityAvailable(stock.getProductQuantityAvailable() - amount);
     }

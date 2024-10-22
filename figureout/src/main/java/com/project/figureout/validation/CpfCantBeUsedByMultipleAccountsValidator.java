@@ -23,23 +23,42 @@ public class CpfCantBeUsedByMultipleAccountsValidator implements ConstraintValid
     public boolean isValid(Object obj, ConstraintValidatorContext constraintValidatorContext) {
 
         if(obj instanceof ClientBasicDataDTO) {
+            constraintValidatorContext.disableDefaultConstraintViolation();
+
+            constraintValidatorContext.buildConstraintViolationWithTemplate(constraintValidatorContext.getDefaultConstraintMessageTemplate())
+                    .addPropertyNode("cpf").addConstraintViolation();
+
             ClientBasicDataDTO clientBasicDataDTO = (ClientBasicDataDTO) obj;
-            long id = clientBasicDataDTO.getClientId();
-            Client client = clientService.getClientById(id);
-            List<Client> allClients = clientService.getAllClients();
-
             String treatedClientBasicDataDTOCpf = clientService.treatMaskedCpf(clientBasicDataDTO.getCpf());
+            List<Client> allClients = clientService.getAllClients();
+            long id = clientBasicDataDTO.getClientId();
 
-            for(Client clientObjectInsideList: allClients) {
+            if(id == 0) { // creating client
+                for(Client currentClient: allClients) {
 
-                String treatedClientCpf = clientService.treatMaskedCpf(clientObjectInsideList.getCpf());
+                    String treatedClientCpf = clientService.treatMaskedCpf(currentClient.getCpf());
 
-                if(treatedClientCpf.equals(treatedClientBasicDataDTOCpf)) {
-                    if(!clientObjectInsideList.equals(client)) {
+                    if(treatedClientCpf.equals(treatedClientBasicDataDTOCpf)) {
                         return false;
                     }
-                }
 
+                }
+            } else { // updating client
+                Client client = clientService.getClientById(id);
+
+                for(Client currentClient: allClients) {
+
+                    String treatedClientCpf = clientService.treatMaskedCpf(currentClient.getCpf());
+
+                    if(treatedClientCpf.equals(treatedClientBasicDataDTOCpf)) {
+
+                        if(!currentClient.equals(client)) {
+                            return false;
+                        }
+
+                    }
+
+                }
             }
 
             return true;

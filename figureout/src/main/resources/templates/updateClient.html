@@ -21,20 +21,17 @@
 			<form  th:action="@{/updateClient/{id}(id=${clientId})}" th:object="${clientBasicDataDTO}" method="POST">
 				<input type="hidden" name="_method" value="PUT"/>
 				<div class="form-group">
+					<input type="hidden" th:field="*{clientId}">
 
 					<div>
 						<label><b>Nome completo</b></label>
 						<p class="text-primary" style="display: inline;">o nome não pode possuir caracteres especiais ou números, e deve ser o nome completo.</p>
 						<input type="text" class="form-control" placeholder="Insira o seu nome completo" th:field="*{name}" required>
-						<ul style="list-style-type: none;">
-							<li th:each="err : ${#fields.errors('name')}" th:text="${err}" class="text-danger"/>
-						</ul>
+						<p th:errors="*{name}" class="text-danger"></p>
 
 						<label><b>Email</b></label>
 						<input class="form-control" placeholder="Insira o seu email" th:field="*{email}" required>
-						<ul style="list-style-type: none;">
-							<li th:each="err : ${#fields.errors('email')}" th:text="${err}" class="text-danger"/>
-						</ul>
+						<p th:errors="*{email}" class="text-danger"></p>
 
 						<label><b>Senha</b></label>
 						<p class="text-primary" style="display: inline;">a senha deve possuir, no mínimo:
@@ -44,35 +41,25 @@
 							um número;
 							um caractere especial. (#, @, $, %, !, ?, etc.)</p>
 						<input class="form-control" placeholder="Insira uma senha forte!" th:field="*{password}" required>
-						<ul style="list-style-type: none;">
-							<li th:each="err : ${#fields.errors('password')}" th:text="${err}" class="text-danger"/>
-						</ul>
+						<p th:errors="*{password}" class="text-danger"></p>
 
 						<label><b>Confirme sua senha</b></label>
 						<input class="form-control" placeholder="Confirme sua senha!" th:field="*{confirmPassword}" required>
-						<ul style="list-style-type: none;">
-							<li th:each="err : ${#fields.errors('confirmPassword')}" th:text="${err}" class="text-danger"/>
-						</ul>
+						<p th:errors="*{confirmPassword}" class="text-danger"></p>
 
 						<label><b>Data de Nascimento</b></label>
 						<input type="date" class="form-control" th:field="*{birthday}" required>
-						<ul style="list-style-type: none;">
-							<li th:each="err : ${#fields.errors('birthday')}" th:text="${err}" class="text-danger"/>
-						</ul>
+						<p th:errors="*{birthday}" class="text-danger"></p>
 
 						<label for="cpf-input"><b>CPF</b></label>
 						<input type="text" id="cpf-input" class="form-control" placeholder="Insira seu CPF" th:field="*{cpf}" required>
-						<ul style="list-style-type: none;">
-							<li th:each="err : ${#fields.errors('cpf')}" th:text="${err}" class="text-danger"/>
-						</ul>
+						<p th:errors="*{cpf}" class="text-danger"></p>
 					</div>
 
 					<div>
 						<label><b>Ativo?</b></label>
 						<input class="form-check-input" type="checkbox" th:field="*{enabled}">
-						<ul style="list-style-type: none;">
-							<li th:each="err : ${#fields.errors('enabled')}" th:text="${err}" class="text-danger"/>
-						</ul>
+						<p th:errors="*{enabled}" class="text-danger"></p>
 					</div>
 
 					<label><b>Gênero</b></label>
@@ -81,37 +68,29 @@
 						<input type="radio" th:field="*{genderDTO.id}" th:value="${gender.id}" th:text="${gender.genderType}" required/>
 					</div> <!-- potential issue here -->
 
-					<ul style="list-style-type: none;">
-						<li th:each="err : ${#fields.errors('genderDTO.id')}" th:text="${err}" class="text-danger"/>
-					</ul>
+					<p th:errors="*{genderDTO.id}" class="text-danger"></p>
 
 					<div>
 						<label><b>Tipo de telefone</b></label>
 						<div class="radio-group">
 							<label><input type="radio" th:field="*{phoneDTO.cellphone}" value="false"/> Fixo</label>
 							<label><input type="radio" th:field="*{phoneDTO.cellphone}" value="true"/> Celular</label>
-							<ul style="list-style-type: none;">
-								<li th:each="err : ${#fields.errors('phoneDTO.cellphone')}" th:text="${err}" class="text-danger"/>
-							</ul>
+							<p th:errors="*{phoneDTO.cellphone}" class="text-danger"></p>
 						</div>
 
 						<label><b>DDD</b></label>
 						<input type="text" id="ddd" class="form-control" placeholder="(11)" th:field="*{phoneDTO.ddd}" maxlength="2" required>
-						<ul style="list-style-type: none;">
-							<li th:each="err : ${#fields.errors('phoneDTO.ddd')}" th:text="${err}" class="text-danger"/>
-						</ul>
+						<p th:errors="*{phoneDTO.ddd}" class="text-danger"></p>
 
 						<label><b>Número de telefone</b></label>
 						<input type="text" id="phone" class="form-control" placeholder="Digite o número de telefone" th:field="*{phoneDTO.phoneNumber}" maxlength="10" required>
-						<ul style="list-style-type: none;">
-							<li th:each="err : ${#fields.errors('phoneDTO.phoneNumber')}" th:text="${err}" class="text-danger"/>
-						</ul>
+						<p th:errors="*{phoneDTO.phoneNumber}" class="text-danger"></p>
 					</div>
 
 				</div>
 
 				<button type="submit" class="btn btn-primary add-delete-button">Atualizar</button>
-				<a class="btn btn-danger add-delete-button" th:href="@{/index}">Voltar</a>
+				<a class="btn btn-danger add-delete-button" th:href="@{/showAllClients}">Voltar</a>
 			</form>
 
 		</div>

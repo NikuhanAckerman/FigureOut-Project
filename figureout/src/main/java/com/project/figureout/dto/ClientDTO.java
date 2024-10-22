@@ -16,7 +16,7 @@ import java.util.Date;
 public class ClientDTO {
 
     @Valid
-    private ClientBasicDataDTO clientBasicDataDTO;
+    private ClientBasicDataDTO clientBasicDataDTO = new ClientBasicDataDTO();
 
     @Valid
     private AddressDTO addressDTO;

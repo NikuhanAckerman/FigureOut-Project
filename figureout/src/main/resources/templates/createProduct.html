@@ -23,36 +23,47 @@
         <div class="form-group">
 
             <div>
+                <p th:errors="${productDTO}" class="text-danger"></p>
+
                 <div>
                     <label><b>Ativo?</b></label>
                     <input class="form-check-input" id="activeCheckbox" type="checkbox" th:field="*{active}" th:checked="*{active}">
                 </div>
+                <p th:errors="*{active}" class="text-danger"></p>
 
                 <div id="inactiveProductReason" style="display:none;">
                     <label for="reasonForInactivation"><b>Razão para inativação?</b></label>
                     <input type="text" class="form-control" th:field="*{reasonForInactivation}" id="reasonForInactivation">
                 </div>
+                <p th:errors="*{reasonForInactivation}" class="text-danger"></p>
 
                 <label><b>Nome</b></label>
                 <input type="text" class="form-control" id="name" placeholder="Insira o nome do produto" th:field="*{name}" required>
+                <p th:errors="*{name}" class="text-danger"></p>
 
                 <label><b>Descrição</b></label>
                 <textarea class="form-control" id="description" placeholder="Insira uma descrição para o produto (opcional)" rows="2" th:field="*{description}"></textarea>
+                <p th:errors="*{description}" class="text-danger"></p>
 
                 <label><b>Altura (cm)</b></label>
                 <input type="number" class="form-control" id="height" step="0.01" min="0" placeholder="Insira a altura do produto" th:field="*{height}" required>
+                <p th:errors="*{height}" class="text-danger"></p>
 
                 <label><b>Largura (cm)</b></label>
                 <input type="number" class="form-control" id="width" step="0.01" min="0" placeholder="Insira a largura do produto" th:field="*{width}" required>
+                <p th:errors="*{width}" class="text-danger"></p>
 
                 <label><b>Comprimento (cm)</b></label>
                 <input type="number" class="form-control" id="length" step="0.01" min="0" placeholder="Insira o comprimento do produto" th:field="*{length}" required>
+                <p th:errors="*{length}" class="text-danger"></p>
 
                 <label><b>Peso (g)</b></label>
                 <input type="number" class="form-control" id="weight" step="0.01" min="0" placeholder="Insira o peso do produto" th:field="*{weight}" required>
+                <p th:errors="*{weight}" class="text-danger"></p>
 
                 <label><b>Preço de compra</b></label>
                 <input type="number" class="form-control" id="purchaseAmount" step="0.01" min="0" placeholder="Insira o preço de compra do produto" th:field="*{purchaseAmount}" required>
+                <p th:errors="*{purchaseAmount}" class="text-danger"></p>
 
                 <div class="form-group">
                     <label>Categorias</label>
@@ -64,6 +75,8 @@
                                 th:text="${category.name}"
                         ></option>
                     </select>
+
+                    <p th:errors="*{categoriesIds}" class="text-danger"></p>
                 </div>
 
                 <div class="form-group">
@@ -76,17 +89,22 @@
                                 th:text="${pricingGroup.name} + ' (' + ${pricingGroup.percentage * 100} + '%)' "
                         ></option>
                     </select>
+
+                    <p th:errors="*{pricingGroup}" class="text-danger"></p>
                 </div>
 
                 <label><b>Preço de venda</b></label>
                 <p class="text-primary" style="display: inline;">O valor do preço de venda não pode ser menor do que o preço de compra + o grupo de precificação.</p>
                 <input type="number" class="form-control" id="price" step="0.01" min="0" placeholder="Insira o preço de venda do produto" th:field="*{price}" required>
+                <p th:errors="*{price}" class="text-danger"></p>
 
                 <label><b>Quantidade disponível em estoque</b></label>
                 <input type="number" class="form-control" id="productQuantityAvailable" step="1" placeholder="Insira a quantidade disponível do produto em estoque" th:field="*{stockDTO.productQuantityAvailable}" required>
+                <p th:errors="*{stockDTO.productQuantityAvailable}" class="text-danger"></p>
 
                 <label><b>Data de entrada em estoque</b></label>
                 <input type="date" class="form-control" id="entryInStockDate" placeholder="Insira a data de entrada do produto no estoque" th:field="*{stockDTO.entryInStockDate}" required>
+                <p th:errors="*{stockDTO.entryInStockDate}" class="text-danger"></p>
 
                 <div class="form-group">
                     <label><b>Fornecedor</b></label>
@@ -98,6 +116,7 @@
                                 th:text="${supplier.name}"
                         ></option>
                     </select>
+                    <p th:errors="*{supplier}" class="text-danger"></p>
                 </div>
 
                 <div class="form-group">
@@ -110,6 +129,7 @@
                                 th:text="${manufacturer.name}"
                         ></option>
                     </select>
+                    <p th:errors="*{manufacturer}" class="text-danger"></p>
                 </div>
 
                 <div class="form-group">
@@ -122,6 +142,7 @@
                                 th:text="${size.name}"
                         ></option>
                     </select>
+                    <p th:errors="*{size}" class="text-danger"></p>
                 </div>
 
                 <label><b>Foto do produto</b></label>

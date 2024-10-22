@@ -29,10 +29,13 @@ public class OnlyOnePreferentialCreditCardValidator implements ConstraintValidat
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext constraintValidatorContext) {
         if(obj instanceof CreditCardDTO){
+
             CreditCardDTO creditCardDTO = (CreditCardDTO) obj;
 
             if(creditCardDTO.isPreferential()) {
+
                 long clientId = creditCardDTO.getClientId();
+                long creditCardId = creditCardDTO.getCreditCardId();
 
                 Client client = clientService.getClientById(clientId);
 
@@ -42,46 +45,35 @@ public class OnlyOnePreferentialCreditCardValidator implements ConstraintValidat
                         .filter(CreditCard::isPreferential)
                         .count();
 
-                return (preferentialCount < 1);
-            }
+                if(creditCardId == 0) { // creating credit card
+                    return (preferentialCount < 1);
+                } else { // updating credit card
+                    CreditCard creditCardBeingUpdated = null;
 
-            return true;
-        } else if(obj instanceof UpdateCreditCardDTO) {
-            UpdateCreditCardDTO updateCreditCardDTO = (UpdateCreditCardDTO) obj;
-            long clientId = updateCreditCardDTO.getClientId();
-            long creditCardId = updateCreditCardDTO.getCreditCardId();
+                    for(CreditCard creditCard : clientCreditCardList){
 
-            if(updateCreditCardDTO.isPreferential()) {
-                Client client = clientService.getClientById(clientId);
+                        if(creditCard.getId() == creditCardId){
 
-                List<CreditCard> clientCreditCardList = client.getCreditCards();
+                            creditCardBeingUpdated = creditCard;
+                            break;
 
-                CreditCard creditCardBeingUpdated = null;
-
-                long preferentialCount = clientCreditCardList.stream()
-                        .filter(CreditCard::isPreferential)
-                        .count();
-
-                for(CreditCard creditCard : clientCreditCardList){
-
-                    if(creditCard.getId() == creditCardId){
-
-                        creditCardBeingUpdated = creditCard;
-                        break;
+                        }
 
                     }
 
-                }
+                    if(!creditCardBeingUpdated.isPreferential()) {
 
-                if(!creditCardBeingUpdated.isPreferential()) {
+                        if(preferentialCount >= 1) {
+                            return false;
+                        }
 
-                    if(preferentialCount >= 1) {
-                        return false;
                     }
 
+                    return (preferentialCount <= 1);
+
                 }
 
-                return (preferentialCount <= 1);
+
             }
 
             return true;

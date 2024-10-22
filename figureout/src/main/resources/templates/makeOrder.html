@@ -40,6 +40,12 @@
             <p class="text-primary" th:text="'Desconto: ' + ${cart.promotionalCoupon.couponDiscount * 100} + '%'"></p>
         </div>
 
+        <div th:if="${errors != null}">
+            <div th:each="err : ${errors}">
+                <p class="text-danger" th:text="${err}"></p>
+            </div>
+        </div>
+
         <table class="table table-striped">
             <thead>
             <tr>

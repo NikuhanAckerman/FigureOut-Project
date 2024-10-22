@@ -17,18 +17,14 @@ import java.time.LocalDateTime;
 @Getter @Setter
 public class StockDTO {
 
-    @NotNull(message = "O campo de produto não pode ser nulo.")
     private Long product;
 
     @NotNull(message = "O campo de produtos disponíveis não pode ser nulo.")
     @PositiveOrZero(message = "A quantidade de produtos disponíveis não pode ser menor que zero.")
     private Integer productQuantityAvailable;
 
-    @NotNull(message = "O campo de valor de compra não pode ser nulo.")
-    @Positive(message = "O valor de compra deve ser positivo e acima de zero.")
     private BigDecimal productPurchaseAmount;
 
-    @NotBlank(message = "O campo de fornecedor não pode estar em branco.")
     private Long supplier;
 
     @PastOrPresent(message = "A data de entrada deve estar no passado ou no presente.")

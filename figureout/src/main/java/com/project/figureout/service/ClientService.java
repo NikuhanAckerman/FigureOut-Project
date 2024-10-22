@@ -69,11 +69,14 @@ public class ClientService {
     }
 
     // Serviço para mudar a senha.
-    public boolean changePassword(Long id, ClientChangePasswordDTO changePasswordDTO) {
+    public void changePassword(Long id, ClientChangePasswordDTO changePasswordDTO) {
         // Pegar o usuário pelo ID.
         Client client = getClientById(id);
 
-        // Checar se a velha senha bate.
+        client.setPassword(changePasswordDTO.getPassword());
+        saveClient(client);
+
+        /* Checar se a velha senha bate.
         if (client != null && client.getPassword().equals(changePasswordDTO.getOldPassword())) {
             System.out.println("nao é nulo e senha igual a senha velha do dto");
             // Checar se a nova senha e a confimação batem.
@@ -83,9 +86,8 @@ public class ClientService {
                 saveClient(client);
                 return true;
             }
-        }
+        }*/
 
-        return false;
     }
 
     public List<Address> getClientAddresses(long id) {
