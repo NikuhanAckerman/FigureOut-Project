@@ -8,15 +8,12 @@ import com.project.figureout.repository.PromotionalCouponRepository;
 import com.project.figureout.service.CartService;
 import com.project.figureout.service.ClientService;
 import com.project.figureout.service.ProductService;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -56,44 +53,9 @@ public class CartController {
 
     @PostMapping("/addProductToCart/{productId}/{cartId}")
     public String addProductToCart(@PathVariable Long productId, @PathVariable Long cartId,
-                                   @ModelAttribute ChangeCartProductQuantityDTO changeCartProductQuantityDTO, BindingResult result,
-                                   HttpServletRequest request,
-                                   Model model) {
+                                   @ModelAttribute ChangeCartProductQuantityDTO changeCartProductQuantityDTO, HttpServletRequest request) {
         Product product = productService.getProductById(productId);
         Cart cart = cartService.getCartById(cartId);
-
-        int quantity = changeCartProductQuantityDTO.getQuantity();
-        Stock latestProductStock = product.getStocks().getLast();
-        int productQuantityAvailable = latestProductStock.getProductQuantityAvailable();
-
-        List<String> errors = new ArrayList<>();
-
-        for(CartsProducts cartsProducts : cart.getCartProducts()) {
-
-            if(product.equals(cartsProducts.getProduct())) {
-                errors.add("Este produto já está no carrinho.");
-            }
-
-        }
-
-        if(quantity == 0) {
-            errors.add("Não é possível pedir 0 produtos.");
-        }
-
-        if(quantity > productQuantityAvailable) {
-            errors.add("Quantidade indisponível no estoque.");
-        }
-
-        if(!errors.isEmpty()) {
-            model.addAttribute("errors", errors);
-
-            model.addAttribute("stock", latestProductStock);
-            model.addAttribute("changeCartProductQuantityDTO", changeCartProductQuantityDTO);
-            model.addAttribute("product", product);
-            model.addAttribute("cart", cart);
-
-            return "product";
-        }
 
         cartService.addProductToCart(cart, product, changeCartProductQuantityDTO);
 

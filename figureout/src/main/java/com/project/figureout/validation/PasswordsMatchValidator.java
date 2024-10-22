@@ -30,13 +30,6 @@ public class PasswordsMatchValidator implements ConstraintValidator<PasswordsMat
             String passwordValue = (String) passwordField.get(obj);
             String confirmPasswordValue = (String) confirmPasswordField.get(obj);
 
-            constraintValidatorContext.disableDefaultConstraintViolation();
-
-            constraintValidatorContext.buildConstraintViolationWithTemplate(constraintValidatorContext.getDefaultConstraintMessageTemplate())
-                    .addPropertyNode("password").addConstraintViolation();
-            constraintValidatorContext.buildConstraintViolationWithTemplate(constraintValidatorContext.getDefaultConstraintMessageTemplate())
-                    .addPropertyNode("confirmPassword").addConstraintViolation();
-
             return (passwordValue != null && passwordValue.equals(confirmPasswordValue));
         } catch (Exception e) {
             e.printStackTrace();

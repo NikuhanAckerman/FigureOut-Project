@@ -6,6 +6,7 @@ import com.project.figureout.service.AddressService;
 import com.project.figureout.service.ClientService;
 import com.project.figureout.service.CreditCardService;
 import com.project.figureout.service.StateAndCountryService;
+import com.project.figureout.validation.wrappers.CreditCardWrapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -185,15 +186,15 @@ public class ClientController {
         CreditCard creditCard = creditCardService.getCreditCardById(id);
         Client client = creditCard.getClient();
 
-        CreditCardDTO creditCardDTO = new CreditCardDTO();
-        creditCardDTO.setClientId(client.getId());
-        creditCardDTO.setCreditCardId(creditCard.getId());
+        UpdateCreditCardDTO updateCreditCardDTO = new UpdateCreditCardDTO();
+        updateCreditCardDTO.setClientId(client.getId());
+        updateCreditCardDTO.setCreditCardId(creditCard.getId());
 
         List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
 
-        creditCardService.populateCreditCardDTO(creditCardDTO, creditCard);
+        creditCardService.populateCreditCardDTO(updateCreditCardDTO, creditCard);
 
-        model.addAttribute("creditCardDTO", creditCardDTO);
+        model.addAttribute("updateCreditCardDTO", updateCreditCardDTO);
         model.addAttribute("creditCardBrandList", creditCardBrandList);
         model.addAttribute("creditCardId", id);
 
@@ -201,7 +202,7 @@ public class ClientController {
     }
 
     @PutMapping("updateCreditCard/{id}")
-    public String updateClientCreditCardPut(@PathVariable long id, @Valid @ModelAttribute CreditCardDTO creditCardDTO, BindingResult result, Model model) {
+    public String updateClientCreditCardPut(@PathVariable long id, @Valid @ModelAttribute UpdateCreditCardDTO updateCreditCardDTO, BindingResult result, Model model) {
         CreditCard creditCardToUpdate = creditCardService.getCreditCardById(id);
         List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
 
@@ -212,7 +213,7 @@ public class ClientController {
             return "updateCreditCard";
         }
 
-        creditCardService.updateCreditCard(creditCardToUpdate, creditCardDTO);
+        creditCardService.updateCreditCard(creditCardToUpdate, updateCreditCardDTO);
 
         return "redirect:/showAllClients";
     }
@@ -223,8 +224,6 @@ public class ClientController {
         List<Gender> genderList = clientService.getAllGenders();
         List<State> stateList = stateAndCountryService.getAllStates();
         List<Country> countryList = stateAndCountryService.getAllCountries();
-
-        //clientDTO.getClientBasicDataDTO().setClientId(0); probably not necessary as longs have 0 value when not initialized
 
         model.addAttribute("clientDTO", clientDTO);
         model.addAttribute("genderList", genderList);
@@ -258,31 +257,33 @@ public class ClientController {
 
     // Método no controller pra página de trocar de senha.
     @GetMapping("/changePassword/{clientId}")
-    public String showChangePasswordForm(@PathVariable Long clientId, Model model) {
-        ClientChangePasswordDTO clientChangePasswordDTO = new ClientChangePasswordDTO();
-        clientChangePasswordDTO.setClientId(clientId);
-
-        model.addAttribute("clientChangePasswordDTO", clientChangePasswordDTO);
+    public String showChangePasswordForm(@ModelAttribute ClientChangePasswordDTO changePasswordDTO,
+                                         @PathVariable Long clientId,
+                                         Model model) {
+        model.addAttribute("changePasswordDTO", new ClientChangePasswordDTO());
         model.addAttribute("clientId", clientId);
 
-        return "changePassword";
+        return "changePassword"; // Template do thymeleaf
     }
 
-    @PutMapping("/changePassword/{clientId}")
-    public String changePassword(@Valid @ModelAttribute ClientChangePasswordDTO clientChangePasswordDTO,
-                                 BindingResult result,
+    @PostMapping("/changePassword/{clientId}")
+    public String changePassword(@ModelAttribute ClientChangePasswordDTO changePasswordDTO,
                                  @PathVariable Long clientId,
                                  Model model) {
-
-        if(result.hasErrors()) {
-            return "changePassword";
-        }
-
-        clientService.changePassword(clientId, clientChangePasswordDTO);
-
-
+        // Chamar o serviço para mudar a senha.
+        clientService.changePassword(clientId, changePasswordDTO);
+        //boolean success =
         return "redirect:/showAllClients";
 
+        /*if (!success) {
+            model.addAttribute("error", "Password change failed. Please check your inputs.");
+            return "changePassword"; // Mostrar o formulário de novo com um erro
+        }*/
+
+        /*model.addAttribute("message", "Password changed successfully!");
+        return "/changePassword/" + clientId; // Redirecionar para uma página de sucesso.
+
+         */
     }
 
     @GetMapping("/updateClient/{id}")
@@ -291,7 +292,6 @@ public class ClientController {
         Client client = clientService.getClientById(id);
 
         ClientBasicDataDTO clientBasicDataDTO = new ClientBasicDataDTO();
-        clientBasicDataDTO.setClientId(client.getId());
 
         clientService.populateClientBasicDataDTO(clientBasicDataDTO, client);
 

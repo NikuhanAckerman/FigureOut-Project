@@ -14,7 +14,6 @@ public class AddressAtLeastOneTypeValidator implements ConstraintValidator<Addre
     public void initialize(AddressAtLeastOneType constraintAnnotation) {
         this.deliveryAddressFieldName = "deliveryAddress";
         this.chargingAddressFieldName = "chargingAddress";
-
     }
 
     @Override

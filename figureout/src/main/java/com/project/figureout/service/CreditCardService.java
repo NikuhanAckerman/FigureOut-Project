@@ -64,6 +64,17 @@ public class CreditCardService {
         creditCard.setSecurityCode(creditCardDTO.getSecurityCode());
     }
 
+    public void insertDataIntoCreditCard(CreditCard creditCard, UpdateCreditCardDTO updateCreditCardDTO) {
+        creditCard.setPreferential(updateCreditCardDTO.isPreferential());
+        creditCard.setCardNumber(updateCreditCardDTO.getCardNumber());
+        creditCard.setPrintedName(updateCreditCardDTO.getPrintedName());
+
+        CreditCardBrand creditCardBrand = getCreditCardBrandById(updateCreditCardDTO.getCreditCardBrandDTO().getId());
+
+        creditCard.setBrand(creditCardBrand);
+        creditCard.setSecurityCode(updateCreditCardDTO.getSecurityCode());
+    }
+
     public void registerCreditCard(Client client, CreditCardDTO creditCardDTO) {
         CreditCard creditCard = new CreditCard();
 
@@ -72,8 +83,8 @@ public class CreditCardService {
         addCreditCardToClient(client, creditCard);
     }
 
-    public void updateCreditCard(CreditCard creditCard, CreditCardDTO creditCardDTO) {
-        insertDataIntoCreditCard(creditCard, creditCardDTO);
+    public void updateCreditCard(CreditCard creditCard, UpdateCreditCardDTO updateCreditCardDTO) {
+        insertDataIntoCreditCard(creditCard, updateCreditCardDTO);
 
         creditCardRepository.save(creditCard);
     }
@@ -82,17 +93,17 @@ public class CreditCardService {
 
     // DTO Population Methods
 
-    public void populateCreditCardDTO(CreditCardDTO creditCardDTO, CreditCard creditCard) {
+    public void populateCreditCardDTO(UpdateCreditCardDTO updateCreditCardDTO, CreditCard creditCard) {
 
-        creditCardDTO.setPreferential(creditCard.isPreferential());
-        creditCardDTO.setCardNumber(creditCard.getCardNumber());
-        creditCardDTO.setPrintedName(creditCard.getPrintedName());
+        updateCreditCardDTO.setPreferential(creditCard.isPreferential());
+        updateCreditCardDTO.setCardNumber(creditCard.getCardNumber());
+        updateCreditCardDTO.setPrintedName(creditCard.getPrintedName());
 
         CreditCardBrandDTO creditCardBrandDTO = new CreditCardBrandDTO();
         creditCardBrandDTO.setId(creditCard.getBrand().getId());
-        creditCardDTO.setCreditCardBrandDTO(creditCardBrandDTO);
+        updateCreditCardDTO.setCreditCardBrandDTO(creditCardBrandDTO);
 
-        creditCardDTO.setSecurityCode(creditCard.getSecurityCode());
+        updateCreditCardDTO.setSecurityCode(creditCard.getSecurityCode());
 
     }
 

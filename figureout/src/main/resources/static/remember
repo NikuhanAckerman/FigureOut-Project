@@ -21,14 +21,13 @@ add check to see if the client is in a buying page, and if it is, dont let the c
 -> inactivation reason for product creation page doesnt appear by default (make the input checked by default) // fixed
 -> cant use decimals in width, height length in product and productDTO due to float type apparently // fixed
 -> 0 default value in product fields
--> when trying to validate select list fields, if no value is chosen, validations dont even catch the exception
 
 // validations to do
 
--> CurrentPasswordCorrect (the current password passed in the form must be equal the actual current password) // done (OldPasswordCorrect)
--> ProductNameCantBeUsedByMultipleProducts (cant have the same name in multiple products) // done
--> CantOrderProductWithNoStock (cant order product with 0 stock) // done (local)
--> CantOrderProductExceedingStock (cant order an amount of product higher than its stock) // done (local)
+-> CurrentPasswordCorrect (the current password passed in the form must be equal the actual current password)
+-> ProductNameCantBeUsedByMultipleProducts (cant have the same name in multiple products)
+-> CantOrderProductWithNoStock (cant order product with 0 stock)
+-> CantOrderProductExceedingStock (cant order an amount of product higher than its stock)
 -> CantChooseMoreThanThreeCreditCards (cant choose more than 3 credit cards to buy)
 -> CantPayLessThanTenReaisWithoutCoupon (each card cant pay less than 10 reais without coupon)
 -> PaymentEqualToPurchaseAmount (the payment of the sale must be equal to the amount required, not more, not less)

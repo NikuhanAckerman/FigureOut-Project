@@ -22,135 +22,140 @@
     <form th:action="@{/products/createProduct}" th:object="${productDTO}" enctype="multipart/form-data" method="POST">
         <div class="form-group">
 
-            <div>
-                <p th:errors="${productDTO}" class="text-danger"></p>
-
-                <div>
-                    <label><b>Ativo?</b></label>
-                    <input class="form-check-input" id="activeCheckbox" type="checkbox" th:field="*{active}" th:checked="*{active}">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Informações Gerais</h3>
                 </div>
-                <p th:errors="*{active}" class="text-danger"></p>
+                <div class="card-body">
+                    <!-- Ativo checkbox -->
+                    <div>
+                        <label><b>Ativo?</b></label>
+                        <input class="form-check-input" id="activeCheckbox" type="checkbox" th:field="*{active}" th:checked="*{active}">
+                    </div>
 
-                <div id="inactiveProductReason" style="display:none;">
-                    <label for="reasonForInactivation"><b>Razão para inativação?</b></label>
-                    <input type="text" class="form-control" th:field="*{reasonForInactivation}" id="reasonForInactivation">
+                    <!-- Razão para inativação -->
+                    <div id="inactiveProductReason" style="display:none;">
+                        <label for="reasonForInactivation"><b>Razão para inativação?</b></label>
+                        <input type="text" class="form-control" th:field="*{reasonForInactivation}" id="reasonForInactivation">
+                    </div>
+
+                    <!-- Nome do produto -->
+                    <label><b>Nome</b></label>
+                    <input type="text" class="form-control" id="name" placeholder="Insira o nome do produto" th:field="*{name}" required>
+
+                    <!-- Descrição do produto -->
+                    <label><b>Descrição</b></label>
+                    <textarea class="form-control" id="description" placeholder="Insira uma descrição para o produto (opcional)" rows="2" th:field="*{description}"></textarea>
+
+                    <!-- Dimensões do produto -->
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label><b>Altura (cm)</b></label>
+                            <input type="number" class="form-control" id="height" step="0.01" min="0" placeholder="0,0" th:field="*{height}" required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label><b>Largura (cm)</b></label>
+                            <input type="number" class="form-control" id="width" step="0.01" min="0" placeholder="0,0" th:field="*{width}" required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label><b>Comprimento (cm)</b></label>
+                            <input type="number" class="form-control" id="length" step="0.01" min="0" placeholder="0,0" th:field="*{length}" required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label><b>Peso (g)</b></label>
+                            <input type="number" class="form-control" id="weight" step="0.01" min="0" placeholder="0,0" th:field="*{weight}" required>
+                        </div>
+                    </div>
+
+                    <!-- Categorias do produto -->
+                    <div class="form-group">
+                        <label>Categorias</label>
+                        <select multiple class="form-control" id="categorySelect" th:field="*{categoriesIds}">
+                            <option th:each="category : ${categoryList}" th:value="${category.id}" th:text="${category.name}"></option>
+                        </select>
+                    </div>
+
+                    <!-- Preço de compra e outros detalhes -->
+                    <div class="row">
+                        <div class="col-12 col-md-4">
+                            <label><b>Preço de compra</b></label>
+                            <input type="number" class="form-control" id="purchaseAmount" step="0.01" min="0" placeholder="R$0,00" th:field="*{purchaseAmount}" required>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <div class="form-group">
+                                <label><b>Grupo de precificação</b></label>
+                                <select class="form-control" id="pricingGroupSelect" th:field="*{pricingGroup}">
+                                    <option selected value="0">Selecione um grupo de precificação</option>
+                                    <option th:each="pricingGroup : ${pricingGroupList}" th:value="${pricingGroup.id}" th:text="${pricingGroup.name} + ' (' + ${pricingGroup.percentage * 100} + '%)'"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label><b>Quantidade disponível em estoque</b></label>
+                            <input type="number" class="form-control" id="productQuantityAvailable" step="1" placeholder="0" th:field="*{stockDTO.productQuantityAvailable}" required>
+                        </div>
+                    </div>
+
+                    <!-- Preço de venda e data de entrada em estoque -->
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <label><b>Preço de venda</b></label>
+                            <input type="number" class="form-control" id="price" step="0.01" min="0" placeholder="R$0,00" th:field="*{price}" required>
+                            <p class="text-primary" style="display: inline;">O valor do preço de venda não pode ser menor do que o preço de compra + o grupo de precificação.</p>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label><b>Data de entrada em estoque</b></label>
+                            <input type="date" class="form-control" id="entryInStockDate" placeholder="Insira a data de entrada do produto no estoque" th:field="*{stockDTO.entryInStockDate}" required>
+                        </div>
+                    </div>
+
+                    <!-- Fornecedor, fabricante e tamanho -->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label><b>Fornecedor</b></label>
+                                <select class="form-control" id="supplier" th:field="*{supplier}">
+                                    <option selected value="0">Selecione um fornecedor</option>
+                                    <option th:each="supplier : ${supplierList}" th:value="${supplier.id}" th:text="${supplier.name}"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label><b>Fabricante</b></label>
+                                <select class="form-control" id="manufacturer" th:field="*{manufacturer}">
+                                    <option selected value="0">Selecione um fabricante</option>
+                                    <option th:each="manufacturer : ${manufacturerList}" th:value="${manufacturer.id}" th:text="${manufacturer.name}"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label><b>Tamanho do produto</b></label>
+                                <select class="form-control" id="size" th:field="*{size}">
+                                    <option selected value="0">Selecione um tamanho</option>
+                                    <option th:each="size : ${sizeList}" th:value="${size.id}" th:text="${size.name}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Foto do produto -->
+                    <label><b>Foto do produto</b></label>
+                    <input type="file" class="form-control" id="fileInput" th:field="*{productImage}" required>
                 </div>
-                <p th:errors="*{reasonForInactivation}" class="text-danger"></p>
-
-                <label><b>Nome</b></label>
-                <input type="text" class="form-control" id="name" placeholder="Insira o nome do produto" th:field="*{name}" required>
-                <p th:errors="*{name}" class="text-danger"></p>
-
-                <label><b>Descrição</b></label>
-                <textarea class="form-control" id="description" placeholder="Insira uma descrição para o produto (opcional)" rows="2" th:field="*{description}"></textarea>
-                <p th:errors="*{description}" class="text-danger"></p>
-
-                <label><b>Altura (cm)</b></label>
-                <input type="number" class="form-control" id="height" step="0.01" min="0" placeholder="Insira a altura do produto" th:field="*{height}" required>
-                <p th:errors="*{height}" class="text-danger"></p>
-
-                <label><b>Largura (cm)</b></label>
-                <input type="number" class="form-control" id="width" step="0.01" min="0" placeholder="Insira a largura do produto" th:field="*{width}" required>
-                <p th:errors="*{width}" class="text-danger"></p>
-
-                <label><b>Comprimento (cm)</b></label>
-                <input type="number" class="form-control" id="length" step="0.01" min="0" placeholder="Insira o comprimento do produto" th:field="*{length}" required>
-                <p th:errors="*{length}" class="text-danger"></p>
-
-                <label><b>Peso (g)</b></label>
-                <input type="number" class="form-control" id="weight" step="0.01" min="0" placeholder="Insira o peso do produto" th:field="*{weight}" required>
-                <p th:errors="*{weight}" class="text-danger"></p>
-
-                <label><b>Preço de compra</b></label>
-                <input type="number" class="form-control" id="purchaseAmount" step="0.01" min="0" placeholder="Insira o preço de compra do produto" th:field="*{purchaseAmount}" required>
-                <p th:errors="*{purchaseAmount}" class="text-danger"></p>
-
-                <div class="form-group">
-                    <label>Categorias</label>
-
-                    <select multiple class="form-control" id="categorySelect" th:field="*{categoriesIds}">
-                        <option
-                                th:each="category : ${categoryList}"
-                                th:value="${category.id}"
-                                th:text="${category.name}"
-                        ></option>
-                    </select>
-
-                    <p th:errors="*{categoriesIds}" class="text-danger"></p>
-                </div>
-
-                <div class="form-group">
-                    <label><b>Grupo de precificação</b></label>
-                    <select class="form-control" id="pricingGroupSelect" th:field="*{pricingGroup}">
-                        <option selected value="0">Selecione um grupo de precificação</option>
-                        <option
-                                th:each="pricingGroup : ${pricingGroupList}"
-                                th:value="${pricingGroup.id}"
-                                th:text="${pricingGroup.name} + ' (' + ${pricingGroup.percentage * 100} + '%)' "
-                        ></option>
-                    </select>
-
-                    <p th:errors="*{pricingGroup}" class="text-danger"></p>
-                </div>
-
-                <label><b>Preço de venda</b></label>
-                <p class="text-primary" style="display: inline;">O valor do preço de venda não pode ser menor do que o preço de compra + o grupo de precificação.</p>
-                <input type="number" class="form-control" id="price" step="0.01" min="0" placeholder="Insira o preço de venda do produto" th:field="*{price}" required>
-                <p th:errors="*{price}" class="text-danger"></p>
-
-                <label><b>Quantidade disponível em estoque</b></label>
-                <input type="number" class="form-control" id="productQuantityAvailable" step="1" placeholder="Insira a quantidade disponível do produto em estoque" th:field="*{stockDTO.productQuantityAvailable}" required>
-                <p th:errors="*{stockDTO.productQuantityAvailable}" class="text-danger"></p>
-
-                <label><b>Data de entrada em estoque</b></label>
-                <input type="date" class="form-control" id="entryInStockDate" placeholder="Insira a data de entrada do produto no estoque" th:field="*{stockDTO.entryInStockDate}" required>
-                <p th:errors="*{stockDTO.entryInStockDate}" class="text-danger"></p>
-
-                <div class="form-group">
-                    <label><b>Fornecedor</b></label>
-                    <select class="form-control" id="supplier" th:field="*{supplier}">
-                        <option selected value="0">Selecione um fornecedor</option>
-                        <option
-                                th:each="supplier : ${supplierList}"
-                                th:value="${supplier.id}"
-                                th:text="${supplier.name}"
-                        ></option>
-                    </select>
-                    <p th:errors="*{supplier}" class="text-danger"></p>
-                </div>
-
-                <div class="form-group">
-                    <label><b>Fabricante</b></label>
-                    <select class="form-control" id="manufacturer" th:field="*{manufacturer}">
-                        <option selected value="0">Selecione uma fabricante</option>
-                        <option
-                                th:each="manufacturer : ${manufacturerList}"
-                                th:value="${manufacturer.id}"
-                                th:text="${manufacturer.name}"
-                        ></option>
-                    </select>
-                    <p th:errors="*{manufacturer}" class="text-danger"></p>
-                </div>
-
-                <div class="form-group">
-                    <label><b>Tamanho do produto</b></label>
-                    <select class="form-control" id="size" th:field="*{size}">
-                        <option selected value="0">Selecione o tamanho</option>
-                        <option
-                                th:each="size : ${sizeList}"
-                                th:value="${size.id}"
-                                th:text="${size.name}"
-                        ></option>
-                    </select>
-                    <p th:errors="*{size}" class="text-danger"></p>
-                </div>
-
-                <label><b>Foto do produto</b></label>
-                <input type="file" class="form-control" id="fileInput" th:field="*{productImage}" required>
-
             </div>
 
-        <button type="submit" class="btn btn-primary add-delete-button" id="createButton" >Criar</button>
+
+            <button type="submit" class="btn btn-primary add-delete-button" id="createButton" >Criar</button>
         <a class="btn btn-danger add-delete-button" id="backButton" th:href="@{/products/seeProducts}">Voltar</a>
 
         </div>

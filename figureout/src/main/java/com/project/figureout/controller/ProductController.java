@@ -11,13 +11,11 @@ import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -90,28 +88,9 @@ public class ProductController {
     }
 
     @PostMapping("/createProduct")
-    public String createProduct(@Valid @ModelAttribute ProductDTO productDTO, BindingResult result, Model model) {
+    public String createProduct(@ModelAttribute ProductDTO productDTO, Model model) {
         Product product = new Product();
         Stock stock = new Stock();
-
-        if(result.hasErrors()) {
-            System.out.println("LOOOOLOSALDAODLSAODLASODLSADAODLASDLASDALAO");
-            System.out.println(result.getAllErrors());
-
-            List<Category> categoryList = productService.getAllCategories();
-            List<PricingGroup> pricingGroupList = productService.getAllPricingGroups();
-            List<Supplier> supplierList = supplierRepository.findAll();
-            List<Manufacturer> manufacturerList = manufacturerService.getAllManufacturers();
-            List<Size> sizeList = sizeService.getAllSizes();
-
-            model.addAttribute("categoryList", categoryList);
-            model.addAttribute("pricingGroupList", pricingGroupList);
-            model.addAttribute("supplierList", supplierList);
-            model.addAttribute("manufacturerList", manufacturerList);
-            model.addAttribute("sizeList", sizeList);
-
-            return "createProduct";
-        }
 
         productService.productDataSetter(product, productDTO);
         System.out.println(product.getName());
@@ -156,10 +135,9 @@ public class ProductController {
     @GetMapping("/specificProduct/{id}")
     public String showSpecificProduct(@PathVariable Long id, Model model) {
         Product product = productService.getProductById(id);
-        Stock stock = product.getStocks().getLast();
+        Stock stock = stockService.getProductInStockByProductId(id);
         List<Category> productCategoryList = product.getCategories();
         Client client = clientService.getClientById(clientNavigator.getInstance().getClientId());
-
         model.addAttribute("stock", stock);
         model.addAttribute("changeCartProductQuantityDTO", new ChangeCartProductQuantityDTO());
         model.addAttribute("product", product);

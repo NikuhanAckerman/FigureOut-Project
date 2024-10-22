@@ -189,7 +189,7 @@ public class CartService {
 
     }
 
-    private static final int qntMinutesExpire = 20;  // Set to 1 minute
+    private static final int qntMinutesExpire = 20;  // Set to 20 minutes
     private static final long qntMinutesExpireInMs = qntMinutesExpire * 60 * 1000; // Convert to milliseconds
 
     @Scheduled(fixedRate = qntMinutesExpireInMs)  // Run every minute (60000 ms)
@@ -199,25 +199,9 @@ public class CartService {
 
         if (!clients.isEmpty()) {
             for (Client currentClient : clients) {
-
-                Cart lastCart = currentClient.getCartList().getLast();
-                List<CartsProducts> cartsProductsList = lastCart.getCartProducts();
-
-                if(!cartsProductsList.isEmpty()) {
-
-                    CartsProducts cartProduct = lastCart.getCartProducts().getLast();
-                    LocalDateTime lastProductAddedToCartTime = cartProduct.getProductAddedTime();
-                    LocalDateTime now = LocalDateTime.now();
-
-                    if(now.isAfter(lastProductAddedToCartTime.plusMinutes(20))) {
-                        expireClientCart(currentClient.getId());
-                    }
-
-                }
-
+                expireClientCart(currentClient.getId());
             }
         }
-
     }
 
 }
