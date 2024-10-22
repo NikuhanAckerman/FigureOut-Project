@@ -8,12 +8,16 @@ import com.project.figureout.repository.PromotionalCouponRepository;
 import com.project.figureout.service.CartService;
 import com.project.figureout.service.ClientService;
 import com.project.figureout.service.ProductService;
+import com.project.figureout.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -37,6 +41,9 @@ public class CartController {
 
     private ClientNavigator clientNavigator;
 
+    @Autowired
+    private StockService stockService;
+
     @GetMapping("/getCart/{cartId}")
     public Cart getSpecificCart(@PathVariable Long id) {
         return cartService.getCartById(id);
@@ -53,9 +60,49 @@ public class CartController {
 
     @PostMapping("/addProductToCart/{productId}/{cartId}")
     public String addProductToCart(@PathVariable Long productId, @PathVariable Long cartId,
-                                   @ModelAttribute ChangeCartProductQuantityDTO changeCartProductQuantityDTO, HttpServletRequest request) {
+                                   @ModelAttribute ChangeCartProductQuantityDTO changeCartProductQuantityDTO, HttpServletRequest request,
+                                   Model model) {
         Product product = productService.getProductById(productId);
         Cart cart = cartService.getCartById(cartId);
+
+        int quantityOrdered = changeCartProductQuantityDTO.getQuantity();
+        int availableQuantity = stockService.getProductInStockByProductId(productId).getProductQuantityAvailable();
+
+        List<String> errors = new ArrayList<>();
+
+        if(quantityOrdered > availableQuantity) {
+            errors.add("Quantidade indisponível em estoque.");
+        }
+
+        if(quantityOrdered == 0) {
+            errors.add("Não se pode pedir uma quantidade de 0.");
+        }
+
+        boolean isAlreadyInCart = false;
+        for(CartsProducts cartProduct: cart.getCartProducts()) {
+
+            if(cartProduct.getProduct().getId() == productId) {
+                isAlreadyInCart = true;
+            }
+
+        }
+
+        if(isAlreadyInCart) {
+            errors.add("Não se pode adicionar o mesmo produto no carrinho múltiplas vezes.");
+        }
+
+        if(!errors.isEmpty()) {
+            Stock stock = stockService.getProductInStockByProductId(productId);
+            List<Category> productCategoryList = product.getCategories();
+            Client client = clientService.getClientById(clientNavigator.getInstance().getClientId());
+            model.addAttribute("errors", errors);
+            model.addAttribute("stock", stock);
+            model.addAttribute("changeCartProductQuantityDTO", new ChangeCartProductQuantityDTO());
+            model.addAttribute("product", product);
+            model.addAttribute("cart", client.getCartList().getLast());
+
+            return "product";
+        }
 
         cartService.addProductToCart(cart, product, changeCartProductQuantityDTO);
 
@@ -82,11 +129,31 @@ public class CartController {
 
     @PutMapping("/changeProductQuantity/{productId}/{cartId}")
     public String changeProductQuantity(@PathVariable Long productId, @PathVariable Long cartId,
-                                        @ModelAttribute ChangeCartProductQuantityDTO changeCartProductQuantityDTO, HttpServletRequest request) {
+                                        @ModelAttribute ChangeCartProductQuantityDTO changeCartProductQuantityDTO, HttpServletRequest request,
+                                        Model model) {
 
-        System.out.println("This is running!! wow!");
         Product product = productService.getProductById(productId);
         Cart cart = cartService.getCartById(cartId);
+        String referer = request.getHeader("Referer");
+
+        int quantityOrdered = changeCartProductQuantityDTO.getQuantity();
+        int availableQuantity = stockService.getProductInStockByProductId(productId).getProductQuantityAvailable();
+
+        List<String> errors = new ArrayList<>();
+
+        if(quantityOrdered > availableQuantity) {
+            errors.add("Quantidade indisponível em estoque.");
+        }
+
+        if(quantityOrdered == 0) {
+            errors.add("Não se pode pedir uma quantidade de 0.");
+        }
+
+        if(!errors.isEmpty()) {
+            model.addAttribute("errors", errors);
+
+            return "redirect:" + referer;
+        }
 
         for(CartsProducts cartsProducts: cart.getCartProducts()) {
 
@@ -98,12 +165,12 @@ public class CartController {
 
         }
 
+
+
         cartService.setCartTotal(cart);
 
-        // Get the previous page URL from the Referer header
-        String referer = request.getHeader("Referer");
 
-        // Redirect back to the same page
+
         return "redirect:" + referer;
     }
 

@@ -22,7 +22,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/sales")
-@SessionAttributes({"salesCardsList", "deliveryAddress"})
+@SessionAttributes({"salesCardsList", "deliveryAddress", "cartProductTotalPrices"})
 public class SaleController {
 
     @Autowired
@@ -124,12 +124,12 @@ public class SaleController {
 
         model.addAttribute("salesCardsList", salesCardsList); // sessionattribute, to keep data for more than 1 request
         model.addAttribute("deliveryAddress", deliveryAddress);
+        model.addAttribute("cartProductTotalPrices", cartProductTotalPrices);
 
         System.out.println("Lista de salescards: " + salesCardsList);
 
-
         redirectAttributes.addFlashAttribute("saleCart", cart);
-        redirectAttributes.addFlashAttribute("cartProductTotalPrices", cartProductTotalPrices);
+
         redirectAttributes.addFlashAttribute("orderTotalPrice", cart.getTotalPrice());
 
         return "redirect:/sales/finishOrder/" + cartId;
@@ -192,7 +192,10 @@ public class SaleController {
         sale.setFreight(freight);
         System.out.println(sale.getFreight());
 
-        saleService.saveSale(sale);
+        //saleService.saveSale(sale);
+
+        BigDecimal totalPaidByCards = BigDecimal.valueOf(0);
+        List<String> errors = new ArrayList<>();
 
         for (Map.Entry<Long, BigDecimal> entry : saleCardDTO.getAmountPaid().entrySet()) {
             Long key = entry.getKey();
@@ -212,9 +215,53 @@ public class SaleController {
                     saleCard.setAmountPaid(value);
                     saleCard.setSale(sale);
                     sale.getCardsUsedInThisSale().add(saleCard);
+
+                    System.out.println("Quantia paga: " + saleCard.getAmountPaid());
+                    totalPaidByCards = totalPaidByCards.add(saleCard.getAmountPaid());
+
+                    if(sale.getPromotionalCouponApplied() == null) {
+
+                        if(saleCard.getAmountPaid().compareTo(BigDecimal.valueOf(10.00)) < 0) {
+                            errors.add("O valor pago pelo cartão " + saleCard.getCreditCard().getCardNumber() + " não pode ser inferior a R$10,00.");
+                        }
+
+                    }
+
+
+
                 }
 
             }
+
+        }
+
+
+
+
+        System.out.println("Preço final da venda: " + saleFinalPrice);
+        System.out.println("Total pago pelos cartões: " + totalPaidByCards);
+
+        if(totalPaidByCards.compareTo(saleFinalPrice) > 0 || totalPaidByCards.compareTo(saleFinalPrice) < 0) {
+
+            errors.add("O total pago pelos cartões é excedente ou insuficiente para pagar pela compra.");
+
+        }
+
+        HashMap<Long, BigDecimal> cartProductTotalPrice = (HashMap<Long, BigDecimal>) model.getAttribute("cartProductTotalPrice");
+
+        if(!errors.isEmpty()) {
+
+            model.addAttribute("errors", errors);
+            model.addAttribute("cartProductTotalPrice", cartProductTotalPrice);
+            model.addAttribute("saleCart", cart);
+            model.addAttribute("saleFinalPrice", saleFinalPrice);
+            model.addAttribute("freight", freight);
+            model.addAttribute("deliveryAddress", deliveryAddress);
+            model.addAttribute("salesCardsList", listSalesCards);
+            model.addAttribute("saleCardDTO", saleCardDTO);
+
+            return "finishOrder";
+
 
         }
 

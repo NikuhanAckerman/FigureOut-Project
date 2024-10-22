@@ -10,6 +10,6 @@ public class ChangeCartProductQuantityDTO {
 
     @NotNull(message = "A quantidade alterada não pode ser nula.")
     @PositiveOrZero(message = "A quantidade alterada não pode ser menor que zero.")
-    private int quantity;
+    private Integer quantity;
 
 }

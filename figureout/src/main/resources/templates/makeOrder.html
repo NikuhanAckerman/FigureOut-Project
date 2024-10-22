@@ -76,6 +76,12 @@
 
                         <input type="number" class="form-control quantidade" value="1" min="1" th:field="*{quantity}">
 
+                        <div th:if="${errors} != null">
+                            <div th:each="err : ${errors}">
+                                <p class="text-danger" th:text="${err}"></p>
+                            </div>
+                        </div>
+
                         <button type="submit" class="btn btn-danger" onclick="return confirm ('Tem certeza?')">Mudar quantidade</button>
                     </form>
                 </td>

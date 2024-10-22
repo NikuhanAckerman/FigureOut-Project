@@ -11,6 +11,8 @@ import lombok.Setter;
 @PasswordsMatch
 public class ClientChangePasswordDTO {
 
+    private long clientId;
+
     @NotBlank(message = "O campo de 'Senha Atual' não pode estar em branco.")
     private String oldPassword;
 
