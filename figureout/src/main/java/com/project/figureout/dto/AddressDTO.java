@@ -33,7 +33,7 @@ public class AddressDTO {
     private String houseNumber;
 
     @NotBlank(message = "O bairro não pode estar vazio.")
-    @Pattern(message = "Bairro inválido. Não insira caracteres especiais.", regexp = "^[A-Za-zÀ-ÖØ-Ýà-öø-ÿ\\s]*$")
+    @Pattern(message = "Bairro inválido. Não insira caracteres especiais.", regexp = "^[A-Za-zÀ-ÖØ-Ýà-öø-ÿ\\s\\d]*$")
     private String neighbourhood;
 
     @NotBlank(message = "O tipo de logradouro não pode estar vazio.")

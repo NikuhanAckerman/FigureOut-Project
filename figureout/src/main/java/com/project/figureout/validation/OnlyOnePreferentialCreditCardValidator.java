@@ -33,6 +33,7 @@ public class OnlyOnePreferentialCreditCardValidator implements ConstraintValidat
 
             if(creditCardDTO.isPreferential()) {
                 long clientId = creditCardDTO.getClientId();
+                long creditCardId = creditCardDTO.getCreditCardId();
 
                 Client client = clientService.getClientById(clientId);
 
@@ -41,47 +42,33 @@ public class OnlyOnePreferentialCreditCardValidator implements ConstraintValidat
                 long preferentialCount = clientCreditCardList.stream()
                         .filter(CreditCard::isPreferential)
                         .count();
+
+                if(creditCardDTO.getCreditCardId() != 0) { // if its an update
+                    CreditCard creditCardBeingUpdated = null;
+
+                    for(CreditCard creditCard : clientCreditCardList){
+
+                        if(creditCard.getId() == creditCardId){
+
+                            creditCardBeingUpdated = creditCard;
+                            break;
+
+                        }
+
+                    }
+
+                    if(!creditCardBeingUpdated.isPreferential()) {
+
+                        if(preferentialCount >= 1) {
+                            return false;
+                        }
+
+                    }
+
+                    return (preferentialCount <= 1);
+                }
 
                 return (preferentialCount < 1);
-            }
-
-            return true;
-        } else if(obj instanceof UpdateCreditCardDTO) {
-            UpdateCreditCardDTO updateCreditCardDTO = (UpdateCreditCardDTO) obj;
-            long clientId = updateCreditCardDTO.getClientId();
-            long creditCardId = updateCreditCardDTO.getCreditCardId();
-
-            if(updateCreditCardDTO.isPreferential()) {
-                Client client = clientService.getClientById(clientId);
-
-                List<CreditCard> clientCreditCardList = client.getCreditCards();
-
-                CreditCard creditCardBeingUpdated = null;
-
-                long preferentialCount = clientCreditCardList.stream()
-                        .filter(CreditCard::isPreferential)
-                        .count();
-
-                for(CreditCard creditCard : clientCreditCardList){
-
-                    if(creditCard.getId() == creditCardId){
-
-                        creditCardBeingUpdated = creditCard;
-                        break;
-
-                    }
-
-                }
-
-                if(!creditCardBeingUpdated.isPreferential()) {
-
-                    if(preferentialCount >= 1) {
-                        return false;
-                    }
-
-                }
-
-                return (preferentialCount <= 1);
             }
 
             return true;

@@ -192,15 +192,15 @@ public class ClientController {
         CreditCard creditCard = creditCardService.getCreditCardById(id);
         Client client = creditCard.getClient();
 
-        UpdateCreditCardDTO updateCreditCardDTO = new UpdateCreditCardDTO();
-        updateCreditCardDTO.setClientId(client.getId());
-        updateCreditCardDTO.setCreditCardId(creditCard.getId());
+        CreditCardDTO creditCardDTO = new CreditCardDTO();
+        creditCardDTO.setClientId(client.getId());
+        creditCardDTO.setCreditCardId(creditCard.getId());
 
         List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
 
-        creditCardService.populateCreditCardDTO(updateCreditCardDTO, creditCard);
+        creditCardService.populateCreditCardDTO(creditCardDTO, creditCard);
 
-        model.addAttribute("updateCreditCardDTO", updateCreditCardDTO);
+        model.addAttribute("creditCardDTO", creditCardDTO);
         model.addAttribute("creditCardBrandList", creditCardBrandList);
         model.addAttribute("creditCardId", id);
 
@@ -208,7 +208,7 @@ public class ClientController {
     }
 
     @PutMapping("updateCreditCard/{id}")
-    public String updateClientCreditCardPut(@PathVariable long id, @Valid @ModelAttribute UpdateCreditCardDTO updateCreditCardDTO, BindingResult result, Model model) {
+    public String updateClientCreditCardPut(@PathVariable long id, @Valid @ModelAttribute CreditCardDTO creditCardDTO, BindingResult result, Model model) {
         CreditCard creditCardToUpdate = creditCardService.getCreditCardById(id);
         List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
 
@@ -219,7 +219,7 @@ public class ClientController {
             return "updateCreditCard";
         }
 
-        creditCardService.updateCreditCard(creditCardToUpdate, updateCreditCardDTO);
+        creditCardService.updateCreditCard(creditCardToUpdate, creditCardDTO);
 
         return "redirect:/showAllClients";
     }

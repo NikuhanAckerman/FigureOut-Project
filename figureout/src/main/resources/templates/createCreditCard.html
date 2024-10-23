@@ -23,9 +23,7 @@
     <div class="form-group">
       <input type="hidden" th:field="*{clientId}"/>
 
-      <ul style="list-style-type: none;">
-        <li th:each="err : ${#fields.errors('*')}" th:text="${err}" class="text-danger"></li>
-      </ul>
+      <p class="text-danger" th:errors="${creditCardDTO}"></p>
 
       <div class="card">
         <div class="card-header">
@@ -35,23 +33,17 @@
           <!-- Preferencial? -->
           <label><b>Preferencial?</b></label>
           <input class="form-check-input" type="checkbox" id="preferential" th:field="*{preferential}">
-          <ul style="list-style-type: none;">
-            <li th:each="err : ${#fields.errors('preferential')}" th:text="${err}" class="text-danger"/>
-          </ul>
+          <p class="text-danger" th:errors="*{preferential}"></p>
 
           <label><b>Apelido do cartão</b></label>
           <input type="text" class="form-control"  placeholder="Insira o apelido do cartão de crédito" id="nickname" th:field="*{nickname}">
-          <ul style="list-style-type: none;">
-            <li th:each="err : ${#fields.errors('nickname')}" th:text="${err}" class="text-danger"/>
-          </ul>
+          <p class="text-danger" th:errors="*{nickname}"></p>
 
           <!-- Nome impresso no cartão -->
           <div class="mt-2">
             <label><b>Nome impresso no cartão</b></label>
             <input type="text" class="form-control" id="printedName" placeholder="Insira o nome impresso no cartão" th:field="*{printedName}" required>
-            <ul style="list-style-type: none;">
-              <li th:each="err : ${#fields.errors('printedName')}" th:text="${err}" class="text-danger"/>
-            </ul>
+            <p class="text-danger" th:errors="*{printedName}"></p>
           </div>
 
           <div class="row mt-3">
@@ -59,9 +51,7 @@
             <div class="col-md-4">
               <label><b>Número do cartão</b></label>
               <input type="text" class="form-control" id="cardNumber" placeholder="Insira o número do cartão" th:field="*{cardNumber}" required>
-              <ul style="list-style-type: none;">
-                <li th:each="err : ${#fields.errors('cardNumber')}" th:text="${err}" class="text-danger"/>
-              </ul>
+              <p class="text-danger" th:errors="*{cardNumber}"></p>
             </div>
 
             <!-- Bandeira do cartão -->
@@ -71,26 +61,18 @@
                 <option value="0" selected>Escolha a bandeira</option>
                 <option th:each="brand : ${creditCardBrandList}" th:value="${brand.id}" th:text="${brand.name}"></option>
               </select>
-              <ul style="list-style-type: none;">
-                <li th:each="err : ${#fields.errors('creditCardBrandDTO.id')}" th:text="${err}" class="text-danger"/>
-              </ul>
+              <p class="text-danger" th:errors="*{creditCardBrandDTO}"></p>
             </div>
 
             <!-- Código de segurança (CVV/CVC) -->
             <div class="col-md-4">
               <label><b>Código de segurança (CVV/CVC)</b></label>
               <input type="text" class="form-control" id="securityCode" placeholder="Insira o código de segurança do cartão" th:field="*{securityCode}" required>
-              <ul style="list-style-type: none;">
-                <li th:each="err : ${#fields.errors('securityCode')}" th:text="${err}" class="text-danger"/>
-              </ul>
+              <p class="text-danger" th:errors="*{securityCode}"></p>
             </div>
           </div>
         </div>
       </div>
-
-
-
-
 
     </div>
 

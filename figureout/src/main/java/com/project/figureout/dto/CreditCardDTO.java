@@ -16,6 +16,8 @@ public class CreditCardDTO {
     @NotNull
     private long clientId;
 
+    private long creditCardId;
+
     @NotNull(message = "O campo 'preferido' não pode ser nulo.")
     private boolean preferential;
 
