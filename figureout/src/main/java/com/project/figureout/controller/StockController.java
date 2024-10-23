@@ -1,7 +1,7 @@
 package com.project.figureout.controller;
 
-import com.project.figureout.model.Product;
-import com.project.figureout.model.Stock;
+import com.project.figureout.dto.ProductDTO;
+import com.project.figureout.model.*;
 import com.project.figureout.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +24,25 @@ public class StockController {
         model.addAttribute("products", products);
 
         return "stock";
+    }
+
+    @GetMapping("/createStock")
+    public String createProductGet(Model model) {
+        List<Category> categoryList = productService.getAllCategories();
+        List<PricingGroup> pricingGroupList = productService.getAllPricingGroups();
+        List<Supplier> supplierList = supplierRepository.findAll();
+        List<Manufacturer> manufacturerList = manufacturerService.getAllManufacturers();
+        List<Size> sizeList = sizeService.getAllSizes();
+        ProductDTO productDTO = new ProductDTO();
+
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("pricingGroupList", pricingGroupList);
+        model.addAttribute("supplierList", supplierList);
+        model.addAttribute("productDTO", productDTO);
+        model.addAttribute("manufacturerList", manufacturerList);
+        model.addAttribute("sizeList", sizeList);
+
+        return "createStock";
     }
 
 }
