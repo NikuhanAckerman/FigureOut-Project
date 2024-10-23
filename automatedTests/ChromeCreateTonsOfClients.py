@@ -69,10 +69,9 @@ class ProductFormTest(unittest.TestCase):
         create_address(self, "1", "1", "Meu apartamento", "Apartamento", "Rua", "Helcias Kerr Nogueira", "221", "17021-170", "Parque Residencial Castelo", "Bauru", "São Paulo", "Bloco 1, apt. 51")
 
         # Obs: Por algum motivo, a data de nascimento da Vanessa é bugada no Selenium e ele adiciona um "1" antes do "2003" sempre, então o dia tem que ter um caractere a menos.
-        create_client(self, "Vanessa Mota", "vanessa55@yahoo.com", "nMqo7#njupi", "02-21-2003", "796.678.528-90", "1", "2")
+        create_client(self, "Vanessa Mota", "vanessa55@yahoo.com", "nMqo7#njupi", "02-02-2003", "796.678.528-90", "1", "2")
         create_phone(self, "1", "19", "25887544")
         create_address(self, "1", "1", "Minha casa", "Casa", "Rua", "Itália", "939", "13411-508", "Santana", "Piracicaba", "São Paulo", "")
-
 
     def tearDown(self):
         # Fecha o browser

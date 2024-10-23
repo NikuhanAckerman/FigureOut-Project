@@ -2,6 +2,7 @@ package com.project.figureout.controller;
 
 import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
+import com.project.figureout.repository.SalesCardsRepository;
 import com.project.figureout.service.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(path = "/")
@@ -27,8 +31,12 @@ public class ClientController {
 
     @Autowired
     private CreditCardService creditCardService;
+
     @Autowired
     private SaleService saleService;
+
+    @Autowired
+    private SalesCardsRepository salesCardsRepository;
 
     @GetMapping("/showAllClients")
     public String showClientsGet(Model model) {
@@ -364,14 +372,40 @@ public class ClientController {
 
     @GetMapping("/clientProfilePurchases/{id}")
     public String seeClientProfilePurchases(@PathVariable long id, Model model) {
-        Client client = clientService.getClientById(id);
         List<Sale> clientSales = saleService.getClientSalesByClientId(id);
 
         model.addAttribute("id", id);
         model.addAttribute("sales", clientSales);
+
         model.addAttribute("saleStatus", SaleStatusEnum.values());
 
         return "clientProfilePurchases";
     }
+
+    @GetMapping("/clientProfileAddresses/{id}")
+    public String seeClientProfileAddresses(@PathVariable long id, Model model) {
+        List<Address> clientAddresses = clientService.getClientAddresses(id);
+
+        model.addAttribute("id", id);
+        model.addAttribute("addresses", clientAddresses);
+
+        return "clientProfileAddresses";
+
+    }
+
+    @GetMapping("/clientProfileCreditCards/{id}")
+    public String seeClientProfileCreditCards(@PathVariable long id, Model model) {
+        List<CreditCard> clientCreditCards = clientService.getClientCreditCards(id);
+
+        model.addAttribute("id", id);
+        model.addAttribute("creditCards", clientCreditCards);
+
+        return "clientProfileCreditCards";
+
+    }
+
+
+
+
 
 }

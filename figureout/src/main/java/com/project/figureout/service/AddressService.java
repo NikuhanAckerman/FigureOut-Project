@@ -23,6 +23,9 @@ public class AddressService {
     @Autowired
     private AddressRepository addressRepository;
 
+    @Autowired
+    private ClientRepository clientRepository;
+
     public void saveAddress(Address address) {
         addressRepository.save(address);
     }

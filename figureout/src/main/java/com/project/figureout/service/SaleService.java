@@ -3,9 +3,11 @@ package com.project.figureout.service;
 import com.project.figureout.model.Cart;
 import com.project.figureout.model.Client;
 import com.project.figureout.model.Sale;
+import com.project.figureout.model.SalesCards;
 import com.project.figureout.repository.CartRepository;
 import com.project.figureout.repository.ProductRepository;
 import com.project.figureout.repository.SaleRepository;
+import com.project.figureout.repository.SalesCardsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,9 @@ public class SaleService {
 
     @Autowired
     private SaleRepository saleRepository;
+
+    @Autowired
+    private SalesCardsRepository salesCardsRepository;
 
     public List<Sale> getAllSales() {
         return saleRepository.findAll();
@@ -50,6 +55,11 @@ public class SaleService {
 
         return clientSales;
 
+    }
+
+    public List<SalesCards> getSalesCardsBySaleId(long id) {
+
+        return salesCardsRepository.findSalesCardsBySaleId(id);
     }
 
     public void deleteSaleById(long id) {

@@ -42,6 +42,7 @@ public class ClientService {
         return clientRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Cliente não encontrado com base no ID."));
     }
 
+
     public void deleteClientById(long id) {
         clientRepository.deleteById(id); // add exception throwing to this later, apparently this doesnt throw EmptyResultDataAccessException anymore
     }
@@ -90,6 +91,10 @@ public class ClientService {
 
     public List<Address> getClientAddresses(long id) {
         return getClientById(id).getAddresses();
+    }
+
+    public List<CreditCard> getClientCreditCards(long id) {
+        return getClientById(id).getCreditCards();
     }
 
     public void clientBasicDataSetter(Client client, ClientBasicDataDTO clientBasicDataDTO) {

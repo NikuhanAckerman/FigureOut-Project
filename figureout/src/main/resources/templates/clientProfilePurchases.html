@@ -44,27 +44,34 @@
 </head>
 <body>
 <div class="sidebar">
-  <h4>Menu</h4>
+  <h4>Meu Perfil</h4>
   <ul class="list-unstyled">
     <li><a th:href="@{/clientProfileGeneral/{id}(id = ${id})}">Informações gerais</a></li>
     <li><a th:href="@{/clientProfilePurchases/{id}(id = ${id})}">Compras</a></li>
-    <li><a href="#">Endereços</a></li>
-    <li><a href="#">Cartões</a></li>
+    <li><a th:href="@{/clientProfileAddresses/{id}(id = ${id})}">Endereços</a></li>
+    <li><a th:href="@{/clientProfileCreditCards/{id}(id = ${id})}">Cartões</a></li>
     <li><a th:href="@{/products/shop}">Loja</a></li>
   </ul>
 </div>
 <div class="content">
   <h1>Compras</h1>
 
-  <div class="mb-3 d-flex align-items-center">
-    <p class="mb-0 me-2">Buscar por data: </p>
-    <div class="col-md-3">
-      <input type="date" class="form-control" id="filterDate">
-    </div>
-    <a href="#" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-    </svg></a>
+  <div th:if="${sales.isEmpty()}">
+    <p>Você ainda não comprou nada.</p>
+    <a class="btn btn-primary" th:href="@{/products/shop}">Ver loja</a>
   </div>
+
+  <div th:if="${!sales.isEmpty()}">
+
+    <div class="mb-3 d-flex align-items-center">
+      <p class="mb-0 me-2">Buscar por data: </p>
+      <div class="col-md-3">
+        <input type="date" class="form-control" id="filterDate">
+      </div>
+      <a href="#" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+      </svg></a>
+    </div>
 
   <div th:each="sale, i : ${sales}">
 
@@ -83,33 +90,49 @@
         >
         </span>
 
-        <div>
-          <br>
-          <button class="btn btn-primary" data-bs-toggle="collapse" th:attr="data-bs-target='#saleMoreInfoCollapse_' + ${sale.id}">Mais informações</button>
+          <div>
+            <br>
+            <button class="btn btn-primary" data-bs-toggle="collapse" th:attr="data-bs-target='#saleMoreInfoCollapse_' + ${sale.id}">Mais informações</button>
 
-            <div th:id="'saleMoreInfoCollapse_' + ${sale.id}" class="collapse">
+              <div th:id="'saleMoreInfoCollapse_' + ${sale.id}" class="collapse">
 
-              <p th:text="'Endereço de entrega: ' + ${sale.deliveryAddress.nickname}"></p>
-              <p th:text="'Frete: ' + ${sale.freight*100} + '% do total da compra'"></p>
+                <p th:text="'Endereço de entrega: ' + ${sale.deliveryAddress.nickname}"></p>
+                <p th:text="'Frete: ' + ${sale.freight*100} + '% do total da compra'"></p>
 
-              <p>Produtos pedidos no carrinho:</p>
+                <p th:text="${sale.promotionalCouponApplied} == null ? 'Nenhum cupom promocional usado.' : 'Cupom promocional usado: ' +
+                ${sale.promotionalCouponApplied.couponName} + ' Desconto: ' +
+                ${sale.promotionalCouponApplied.couponDiscount*100} + '%'"></p>
 
-              <div th:each="cartProduct : ${sale.cart.cartProducts}">
+                <p>Cartões usados na compra: </p>
 
-                <div class="card">
-                  <p th:text="'Nome: ' + ${cartProduct.product.name}"></p>
-                  <p th:text="'Preço unitário: ' + ${cartProduct.priceToPay}"></p>
-                  <p th:text="'Quantidade: ' + ${cartProduct.productQuantity}"></p>
-                  <p th:text="'Preço total: ' + ${cartProduct.productQuantity * cartProduct.priceToPay}"></p>
+                <div th:each="saleCard : ${sale.cardsUsedInThisSale}">
+                  <div class="card">
+                    <p th:text="'Apelido do cartão: ' + ${saleCard.creditCard.nickname}"></p>
+                    <p th:text="'Número do cartão: ' + ${saleCard.creditCard.cardNumber}"></p>
+                    <p th:text="'Quantia paga: R$' + ${saleCard.amountPaid}"></p>
+                  </div>
+                </div>
+
+                <p>Produtos pedidos no carrinho:</p>
+
+                <div th:each="cartProduct : ${sale.cart.cartProducts}">
+
+                  <div class="card">
+                    <p th:text="'Nome: ' + ${cartProduct.product.name}"></p>
+                    <p th:text="'Preço unitário: ' + ${cartProduct.priceToPay}"></p>
+                    <p th:text="'Quantidade: ' + ${cartProduct.productQuantity}"></p>
+                    <p th:text="'Preço total: ' + ${cartProduct.productQuantity * cartProduct.priceToPay}"></p>
+                  </div>
+
                 </div>
 
               </div>
 
-            </div>
+         </div>
 
-       </div>
+        </div>
 
-      </div>
+    </div>
 
   </div>
 

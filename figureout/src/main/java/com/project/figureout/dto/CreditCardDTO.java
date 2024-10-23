@@ -19,6 +19,9 @@ public class CreditCardDTO {
     @NotNull(message = "O campo 'preferido' não pode ser nulo.")
     private boolean preferential;
 
+    @NotNull(message = "O apelido não pode estar vazio.")
+    private String nickname;
+
     @NotBlank(message = "O número do cartão não pode estar vazio.")
     //@CreditCardNumber(message = "Insira um número de cartão de crédito válido.")
     //@Pattern(message = "Não insira letras, caracteres especiais, ou espaços.", regexp = "^[\\d]+$")

@@ -44,6 +44,13 @@
           <ul style="list-style-type: none;">
             <li th:each="err : ${#fields.errors('preferential')}" th:text="${err}" class="text-danger"/>
           </ul>
+
+          <label><b>Apelido do cartão</b></label>
+          <input type="text" class="form-control"  placeholder="Insira o apelido do cartão de crédito" id="nickname" th:field="*{nickname}">
+          <ul style="list-style-type: none;">
+            <li th:each="err : ${#fields.errors('nickname')}" th:text="${err}" class="text-danger"/>
+          </ul>
+
           <!-- Nome impresso no cartão -->
           <div class="mt-2">
             <label><b>Nome impresso no cartão</b></label>

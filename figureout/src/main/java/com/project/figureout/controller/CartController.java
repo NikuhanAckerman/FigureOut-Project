@@ -74,7 +74,7 @@ public class CartController {
             errors.add("Quantidade indisponível em estoque.");
         }
 
-        if(quantityOrdered == 0) {
+        if(quantityOrdered <= 0) {
             errors.add("Não se pode pedir uma quantidade de 0.");
         }
 
