@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -46,50 +46,29 @@
 <div class="sidebar">
     <h4>Menu</h4>
     <ul class="list-unstyled">
-        <li><a href="clientProfile">Histórico de Compras</a></li>
-        <li><a href="#">Endereços cadastrados</a></li>
-        <li><a href="#">Cartões cadastrados</a></li>
-        <li><a href="shop">Sair</a></li>
+        <li><a th:href="@{/clientProfileGeneral/{id}(id = ${id})}">Informações gerais</a></li>
+        <li><a th:href="@{/clientProfilePurchases/{id}(id = ${id})}">Compras</a></li>
+        <li><a href="#">Endereços</a></li>
+        <li><a href="#">Cartões</a></li>
+        <li><a th:href="@{/products/shop}">Loja</a></li>
     </ul>
 </div>
 <div class="content">
-    <h1>Histórico de Compras</h1>
+    <h1>Informações gerais</h1>
 
-    <div class="mb-3 d-flex align-items-center">
-        <p class="mb-0 me-2">Buscar por data: </p>
-        <div class="col-md-3">
-            <input type="date" class="form-control" id="filterDate">
-        </div>
-        <a href="#" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-        </svg></a>
-    </div>
-
-    <div class="purchase-card card mb-3">
+    <div class="card mb-3">
         <div class="card-body">
-            <h5 class="card-title">Compra #0001</h5>
-            <p class="card-text">Data: 10/10/2024</p>
-            <p class="card-text">Valor Total: R$ 150,00</p>
-            <span class="badge bg-success">ENTREGUE</span>
-            <div>
-                <br>
-                <a href="purchaseInfo" class="btn btn-primary">Mais informações</a>
-            </div>
+            <h5 class="card-title">Básico</h5>
+            <p class="card-text" th:text="'Nome: ' + ${name}">Nome: </p>
+            <p class="card-text" th:text="'Email: ' + ${email}">Email: </p>
+            <p class="card-text" th:text="'Senha: ' + ${password}">Senha: </p>
+            <p class="card-text" th:text="'Gênero: ' + ${gender.genderType}">Gênero: </p>
+            <p class="card-text" th:text="'CPF: ' + ${cpf}">CPF: </p>
+            <p class="card-text" th:if="${phone.cellphone} == true" th:text="'Tipo de telefone: Celular (' + ${phone.phoneNumber} + ')'">Telefone: </p>
+            <p class="card-text" th:if="${phone.cellphone} == false" th:text="'Tipo de telefone: Residencial (' + ${phone.phoneNumber} + ')'">Telefone: </p>
         </div>
     </div>
 
-    <div class="purchase-card card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">Compra #0002</h5>
-            <p class="card-text">Data: 05/09/2024</p>
-            <p class="card-text">Valor Total: R$ 75,00</p>
-            <span class="badge bg-warning">EM TRANSPORTE</span>
-            <div>
-                <br>
-                <a href="purchaseInfo" class="btn btn-primary">Mais informações</a>
-            </div>
-        </div>
-    </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

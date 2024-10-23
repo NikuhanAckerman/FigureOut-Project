@@ -2,10 +2,7 @@ package com.project.figureout.controller;
 
 import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
-import com.project.figureout.service.AddressService;
-import com.project.figureout.service.ClientService;
-import com.project.figureout.service.CreditCardService;
-import com.project.figureout.service.StateAndCountryService;
+import com.project.figureout.service.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +27,8 @@ public class ClientController {
 
     @Autowired
     private CreditCardService creditCardService;
+    @Autowired
+    private SaleService saleService;
 
     @GetMapping("/showAllClients")
     public String showClientsGet(Model model) {
@@ -346,6 +345,33 @@ public class ClientController {
         model.addAttribute("filterCpf", cpf);
         model.addAttribute("filterId", id);
         return "showClients";
+    }
+
+    @GetMapping("/clientProfileGeneral/{id}")
+    public String seeClientProfile(@PathVariable long id, Model model) {
+        Client client = clientService.getClientById(id);
+
+        model.addAttribute("id", id);
+        model.addAttribute("name", client.getName());
+        model.addAttribute("email", client.getEmail());
+        model.addAttribute("password", client.getPassword());
+        model.addAttribute("gender", client.getGender());
+        model.addAttribute("cpf", client.getCpf());
+        model.addAttribute("phone", client.getPhone());
+
+        return "clientProfile";
+    }
+
+    @GetMapping("/clientProfilePurchases/{id}")
+    public String seeClientProfilePurchases(@PathVariable long id, Model model) {
+        Client client = clientService.getClientById(id);
+        List<Sale> clientSales = saleService.getClientSalesByClientId(id);
+
+        model.addAttribute("id", id);
+        model.addAttribute("sales", clientSales);
+        model.addAttribute("saleStatus", SaleStatusEnum.values());
+
+        return "clientProfilePurchases";
     }
 
 }

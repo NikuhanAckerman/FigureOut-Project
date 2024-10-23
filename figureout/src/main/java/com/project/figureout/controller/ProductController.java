@@ -138,6 +138,7 @@ public class ProductController {
         Stock stock = stockService.getProductInStockByProductId(id);
         List<Category> productCategoryList = product.getCategories();
         Client client = clientService.getClientById(clientNavigator.getInstance().getClientId());
+        model.addAttribute("clientId", client.getId());
         model.addAttribute("stock", stock);
         model.addAttribute("changeCartProductQuantityDTO", new ChangeCartProductQuantityDTO());
         model.addAttribute("product", product);

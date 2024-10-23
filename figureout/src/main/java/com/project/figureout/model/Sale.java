@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,5 +43,8 @@ public class Sale {
 
     @JoinColumn(name = "ven_frete")
     private BigDecimal freight;
+
+    @Column(name = "ven_data_hora")
+    private LocalDateTime dateTimeSale;
 
 }

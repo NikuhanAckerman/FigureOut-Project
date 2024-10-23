@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+
+<div th:fragment="clientProfileButtonFragment(clientId)">
+    <a id="clientProfile" type="button" class="nav-link bi bi-person" th:href="@{/clientProfileGeneral/{id}(id=${clientId})}"></a>
+</div>
+
+</body>
+</html>

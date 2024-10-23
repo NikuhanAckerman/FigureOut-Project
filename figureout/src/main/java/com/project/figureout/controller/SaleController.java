@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
@@ -173,66 +174,50 @@ public class SaleController {
     public String createSale(@PathVariable long cartId, @ModelAttribute SaleCardDTO saleCardDTO, Model model,
                              @RequestParam("freight") BigDecimal freight,
                              @RequestParam("saleFinalPrice") BigDecimal saleFinalPrice) {
-        System.out.println("O post do finish order rodou lol");
-        Cart cart = cartService.getCartById(cartId);
 
-        System.out.println("LOOOL" + saleCardDTO.getAmountPaid());
+        Cart cart = cartService.getCartById(cartId);
 
         Sale sale = new Sale();
 
         sale.setCart(cart);
 
         Address deliveryAddress = (Address) model.getAttribute("deliveryAddress");
-
         sale.setDeliveryAddress(deliveryAddress);
 
         List<SalesCards> listSalesCards = (List<SalesCards>) model.getAttribute("salesCardsList");
-        System.out.println(listSalesCards);
 
         sale.setFreight(freight);
-        System.out.println(sale.getFreight());
-
-        //saleService.saveSale(sale);
-
+        sale.setPromotionalCouponApplied(sale.getCart().getPromotionalCoupon());
+        sale.setFinalPrice(saleFinalPrice);
 
         // declaring the total amount paid by the credit cards and
-        // errors list
         BigDecimal totalPaidByCards = BigDecimal.valueOf(0);
+        // errors list
         List<String> errors = new ArrayList<>();
 
         for (Map.Entry<Long, BigDecimal> entry : saleCardDTO.getAmountPaid().entrySet()) {
             Long key = entry.getKey();
             BigDecimal value = entry.getValue();
 
-            for(SalesCards saleCard: listSalesCards) {
-                System.out.println(saleCard.getCreditCard().getId());
-
-                if(saleCard.getCreditCard().getId() == key) {
-                    System.out.println("it is equal lol");
-                    SalesCardsKey salesCardsKey = new SalesCardsKey();
-                    salesCardsKey.setCreditCardId(creditCardService.getCreditCardById(key).getId());
-                    salesCardsKey.setSaleId(sale.getId());
-
-                    saleCard.setId(salesCardsKey);
+            for (SalesCards saleCard : listSalesCards) {
+                if (saleCard.getCreditCard().getId() == key) {
 
                     saleCard.setAmountPaid(value);
-                    saleCard.setSale(sale);
-                    sale.getCardsUsedInThisSale().add(saleCard);
-
-                    System.out.println("Quantia paga: " + saleCard.getAmountPaid());
 
                     // incrementing the variable according to each amount paid by the cards
                     totalPaidByCards = totalPaidByCards.add(saleCard.getAmountPaid());
 
-                    if(sale.getPromotionalCouponApplied() == null) {
+                }
+            }
+        }
 
-                        // checking if the value paid is bigger than R$10 if, and only if, there is no promotional coupon
-                        if(saleCard.getAmountPaid().compareTo(BigDecimal.valueOf(10.00)) < 0) {
-                            errors.add("O valor pago pelo cartão " + saleCard.getCreditCard().getCardNumber() + " não pode ser inferior a R$10,00.");
-                        }
+        if (sale.getPromotionalCouponApplied() == null) {
 
-                    }
+            for (SalesCards saleCard : listSalesCards) {
 
+                // checking if the value paid is bigger than R$10 if, and only if, there is no promotional coupon
+                if (saleCard.getAmountPaid().compareTo(BigDecimal.valueOf(10.00)) < 0) {
+                    errors.add("O valor pago pelo cartão " + saleCard.getCreditCard().getCardNumber() + " não pode ser inferior a R$10,00.");
                 }
 
             }
@@ -243,14 +228,14 @@ public class SaleController {
         System.out.println("Total pago pelos cartões: " + totalPaidByCards);
 
         // seeing if the value paid by cards is equal the total sale price
-        if(totalPaidByCards.compareTo(saleFinalPrice) != 0) { // 0 = (values are equal)
-            errors.add("O total pago pelos cartões é excedente ou insuficiente para pagar pela compra.");
 
+        if (totalPaidByCards.compareTo(saleFinalPrice) != 0) { // 0 = (values are equal)
+            errors.add("O total pago pelos cartões é excedente ou insuficiente para pagar pela compra.");
         }
 
         HashMap<Long, BigDecimal> cartProductTotalPrice = (HashMap<Long, BigDecimal>) model.getAttribute("cartProductTotalPrice");
 
-        if(!errors.isEmpty()) {
+        if (!errors.isEmpty()) {
 
             model.addAttribute("errors", errors);
             model.addAttribute("cartProductTotalPrice", cartProductTotalPrice);
@@ -263,19 +248,39 @@ public class SaleController {
 
             return "finishOrder";
 
-
         }
 
         saleService.saveSale(sale);
 
+        for (Map.Entry<Long, BigDecimal> entry : saleCardDTO.getAmountPaid().entrySet()) {
+            Long key = entry.getKey();
+
+            for (SalesCards saleCard : listSalesCards) {
+                System.out.println(saleCard.getCreditCard().getId());
+
+                if (saleCard.getCreditCard().getId() == key) {
+                    SalesCardsKey salesCardsKey = new SalesCardsKey();
+                    salesCardsKey.setCreditCardId(creditCardService.getCreditCardById(key).getId());
+                    salesCardsKey.setSaleId(sale.getId());
+
+                    saleCard.setId(salesCardsKey);
+                    saleCard.setSale(sale);
+
+                    sale.getCardsUsedInThisSale().add(saleCard);
+
+                }
+
+            }
+
+        }
+
         sale.setStatus(SaleStatusEnum.EM_PROCESSAMENTO);
 
-        sale.setPromotionalCouponApplied(sale.getCart().getPromotionalCoupon());
+        LocalDateTime now = LocalDateTime.now();
+
+        sale.setDateTimeSale(now);
 
         Client client = clientService.getClientById(clientNavigator.getInstance().getClientId());
-
-        sale.setFinalPrice(saleFinalPrice);
-        System.out.println(sale.getFinalPrice());
 
         saleService.saveSale(sale);
 

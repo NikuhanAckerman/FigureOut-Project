@@ -56,7 +56,6 @@ public class AppInitializer implements CommandLineRunner {
     @Autowired
     private SizeRepository sizeRepository;
 
-
     @Override
     public void run(String... args) throws Exception {
         if (genderRepository.count() == 0) {
@@ -260,7 +259,6 @@ public class AppInitializer implements CommandLineRunner {
 
             System.out.println("Tabela de tamanhos de produto populada.");
         }
-
 
     }
 

@@ -136,7 +136,7 @@
 								<a th:href="@{/changePassword/{clientId}(clientId=${client.id})}" type="button" class="btn btn-danger" >Alterar senha</a>
 							</td>
 							<td th:text = "${client.gender.genderType}"></td>
-							<td th:text = "${#temporals.format(client.birthday, 'dd-MM-yyyy')}"></td>
+							<td th:text = "${#temporals.format(client.birthday, 'dd/MM/yyyy')}"></td>
 							<td th:text = "${client.cpf}"></td>
 							<td th:text = "${client.email}"></td>
 							<td>
