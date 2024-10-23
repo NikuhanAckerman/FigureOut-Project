@@ -25,6 +25,7 @@ public class EmailCantBeUsedByMultipleAccountsValidator implements ConstraintVal
 
         if(obj instanceof ClientBasicDataDTO) {
             ClientBasicDataDTO clientBasicDataDTO = (ClientBasicDataDTO) obj;
+
             long id = clientBasicDataDTO.getClientId();
             Client client = clientService.getClientById(id);
             List<Client> allClients = clientService.getAllClients();

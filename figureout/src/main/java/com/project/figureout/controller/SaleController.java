@@ -194,6 +194,9 @@ public class SaleController {
 
         //saleService.saveSale(sale);
 
+
+        // declaring the total amount paid by the credit cards and
+        // errors list
         BigDecimal totalPaidByCards = BigDecimal.valueOf(0);
         List<String> errors = new ArrayList<>();
 
@@ -217,17 +220,18 @@ public class SaleController {
                     sale.getCardsUsedInThisSale().add(saleCard);
 
                     System.out.println("Quantia paga: " + saleCard.getAmountPaid());
+
+                    // incrementing the variable according to each amount paid by the cards
                     totalPaidByCards = totalPaidByCards.add(saleCard.getAmountPaid());
 
                     if(sale.getPromotionalCouponApplied() == null) {
 
+                        // checking if the value paid is bigger than R$10 if, and only if, there is no promotional coupon
                         if(saleCard.getAmountPaid().compareTo(BigDecimal.valueOf(10.00)) < 0) {
                             errors.add("O valor pago pelo cartão " + saleCard.getCreditCard().getCardNumber() + " não pode ser inferior a R$10,00.");
                         }
 
                     }
-
-
 
                 }
 
@@ -235,14 +239,11 @@ public class SaleController {
 
         }
 
-
-
-
         System.out.println("Preço final da venda: " + saleFinalPrice);
         System.out.println("Total pago pelos cartões: " + totalPaidByCards);
 
-        if(totalPaidByCards.compareTo(saleFinalPrice) > 0 || totalPaidByCards.compareTo(saleFinalPrice) < 0) {
-
+        // seeing if the value paid by cards is equal the total sale price
+        if(totalPaidByCards.compareTo(saleFinalPrice) != 0) { // 0 = (values are equal)
             errors.add("O total pago pelos cartões é excedente ou insuficiente para pagar pela compra.");
 
         }

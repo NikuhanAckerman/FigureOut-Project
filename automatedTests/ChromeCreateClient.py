@@ -51,7 +51,7 @@ class ProductFormTest(unittest.TestCase):
         check_checkbox(self, "enabled")
         time.sleep(1)
 
-        select_radio(self, "gender", "1")
+        select_radio(self, "gender-1", "1")
         time.sleep(1)
 
         # Informações de Telefone.
