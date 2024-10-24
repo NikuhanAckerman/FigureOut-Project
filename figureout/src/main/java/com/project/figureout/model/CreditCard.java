@@ -21,7 +21,6 @@ public class CreditCard {
     @Column(name = "cre_preferido", nullable = false)
     private boolean preferential;
 
-
     @Column(name = "cre_apelido", nullable = false)
     private String nickname;
 

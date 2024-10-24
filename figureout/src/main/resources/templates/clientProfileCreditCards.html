@@ -75,6 +75,8 @@
           <p class="card-text" th:text="'Bandeira do cartão:' + ${creditCard.brand.name}"></p>
           <p class="card-text" th:text="'Código de segurança:' + ${creditCard.securityCode}"></p>
 
+          <a class="btn btn-primary" th:href="@{/updateCreditCard/{id}(id=${creditCard.id})}">Atualizar cartão de crédito</a>
+
         </div>
 
       </div>

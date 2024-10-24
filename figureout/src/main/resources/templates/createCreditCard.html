@@ -36,7 +36,7 @@
           <p class="text-danger" th:errors="*{preferential}"></p>
 
           <label><b>Apelido do cartão</b></label>
-          <input type="text" class="form-control"  placeholder="Insira o apelido do cartão de crédito" id="nickname" th:field="*{nickname}">
+          <input type="text" class="form-control" placeholder="Insira o apelido do cartão de crédito" id="nickname" th:field="*{nickname}">
           <p class="text-danger" th:errors="*{nickname}"></p>
 
           <!-- Nome impresso no cartão -->
@@ -70,6 +70,7 @@
               <input type="text" class="form-control" id="securityCode" placeholder="Insira o código de segurança do cartão" th:field="*{securityCode}" required>
               <p class="text-danger" th:errors="*{securityCode}"></p>
             </div>
+
           </div>
         </div>
       </div>

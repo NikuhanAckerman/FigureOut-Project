@@ -119,9 +119,9 @@
 
                   <div class="card">
                     <p th:text="'Nome: ' + ${cartProduct.product.name}"></p>
-                    <p th:text="'Preço unitário: ' + ${cartProduct.priceToPay}"></p>
+                    <p th:text="'Preço unitário: R$' + ${cartProduct.priceToPay}"></p>
                     <p th:text="'Quantidade: ' + ${cartProduct.productQuantity}"></p>
-                    <p th:text="'Preço total: ' + ${cartProduct.productQuantity * cartProduct.priceToPay}"></p>
+                    <p th:text="'Preço total: R$' + ${cartProduct.productQuantity * cartProduct.priceToPay}"></p>
                   </div>
 
                 </div>

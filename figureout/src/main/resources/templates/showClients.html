@@ -284,7 +284,7 @@
 																	<p>País: ${address.country.name}</p>
 																	<p>Observação: ${address.observation}</p>
 
-																	<form action="index/${address.id}/addresses/delete" method="POST" style="display: inline;">
+																	<form action="/deleteAddress/${address.id}" method="POST" style="display: inline;">
 																		<input type="hidden" name="_method" value="DELETE"/>
 																		<button type="submit" class="btn btn-danger btn-delete" id="deleteAddress" onclick="return confirm('Tem certeza?')">Deletar</button>
 																	</form>
@@ -372,6 +372,7 @@
 																		<p style="display: inline;">Preferencial? </p>
 																		<input type="checkbox" id="creditCardPreferredField_${creditCard.id}" data-bs-creditCard-id="${creditCard.id}" disabled style="display: inline;">
 																	</div>
+
 																	<p>Apelido do cartão: ${creditCard.nickname}</p>
 																	<p>Número do cartão: ${creditCard.cardNumber}</p>
 																	<p>Nome impresso no cartão: ${creditCard.printedName}</p>

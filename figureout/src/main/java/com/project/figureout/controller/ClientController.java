@@ -4,6 +4,7 @@ import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.SalesCardsRepository;
 import com.project.figureout.service.*;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -87,7 +88,7 @@ public class ClientController {
         return "redirect:/showAllClients";
     }
 
-    @DeleteMapping("index/{id}/addresses/delete")
+    @DeleteMapping("/deleteAddress/{id}")
     public String deleteClientAddress(@PathVariable long id) {
         addressService.deleteAddress(id);
 
@@ -101,7 +102,6 @@ public class ClientController {
 
         List<State> stateList = stateAndCountryService.getAllStates();
         List<Country> countryList = stateAndCountryService.getAllCountries();
-
 
         addressService.populateAddressDTO(addressDTO, address);
 
@@ -311,7 +311,8 @@ public class ClientController {
     }
 
     @PutMapping("/updateClient/{id}")
-    public String updateClient(@PathVariable long id, @Valid @ModelAttribute ClientBasicDataDTO clientBasicDataDTO, BindingResult result, Model model) {
+    public String updateClient(@PathVariable long id, @Valid @ModelAttribute ClientBasicDataDTO clientBasicDataDTO, BindingResult result, Model model,
+                               HttpServletRequest request) {
 
         Client clientToUpdate = clientService.getClientById(id);
 
@@ -325,7 +326,9 @@ public class ClientController {
 
         clientService.updateClient(clientToUpdate, clientBasicDataDTO);
 
-        return "redirect:/showAllClients";
+        String referer = request.getHeader("Referer");
+
+        return "redirect:" + referer;
 
     }
 

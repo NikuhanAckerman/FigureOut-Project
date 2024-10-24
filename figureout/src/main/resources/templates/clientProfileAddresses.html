@@ -81,6 +81,8 @@
                     <p class="card-text" th:text="'País: ' + ${address.country.name}"></p>
                     <p class="card-text" th:text="'Observação: ' + ${address.observation}"></p>
 
+                    <a class="btn btn-primary" th:href="@{/updateAddress/{id}(id=${address.id})}">Atualizar endereço</a>
+
                 </div>
 
             </div>
