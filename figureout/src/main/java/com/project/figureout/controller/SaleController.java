@@ -330,6 +330,14 @@ public class SaleController {
         return "redirect:/sales/seeSales";
     }
 
+    @GetMapping("/getSaleCartId/{saleId}")
+    @ResponseBody
+    public long getSaleCartId(@PathVariable long saleId, Model model) {
+        Sale sale = saleService.getSaleById(saleId);
+
+        return sale.getCart().getId();
+    }
+
     @GetMapping("/getSaleCartProducts/{saleId}")
     @ResponseBody
     public List<CartsProducts> getSaleCartProducts(@PathVariable long saleId, Model model) {

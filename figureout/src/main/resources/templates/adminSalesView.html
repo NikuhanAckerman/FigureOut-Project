@@ -58,10 +58,10 @@
         <tr th:each="sale : ${sales}">
             <td class="id-venda" th:text="${sale.id}"></td>
             <td th:if="${sale.deliveryAddress != null}" th:text="${sale.deliveryAddress.nickname}"></td>
-            <td th:if="${sale.deliveryAddress == null}">No Address</td>
+            <td th:if="${sale.deliveryAddress == null}">Nenhum endereço</td>
             <td>
-                <button type="button" class="btn btn-secondary" th:data-bs-sale-id = "${sale.id}" data-bs-toggle="modal" data-bs-target="#seeCartModal" >Ver carrinho</button>
-                <p th:text="${sale.cart.id}"></p>
+                <button type="button" class="btn btn-secondary" th:data-bs-sale-id = "${sale.id}" data-bs-toggle="modal" data-bs-target="#seeCartModal">Ver carrinho</button>
+                <div id="elementWithCartId" th:data-bs-cart-id="${sale.cart.id}"></div>
             </td>
             <td>
                 <p class="text-primary" th:text="${sale.status}"></p>
@@ -74,6 +74,7 @@
                                 th:value="${status.name()}" th:text="${status.name()}">
                         </option>
                     </select>
+
                 </form>
             </td>
 
@@ -95,22 +96,23 @@
                     <h1 id="saleId"></h1>
                     <div class="card mt-3">
                         <div class="card-body">
+                            <h2 id="cartId">ID do carrinho:</h2>
                             <h2 id="clientIdId">ID do cliente:</h2>
                             <h2 class="text-primary" id="clientId"></h2>
                             <h2 class="text-success" id="totalPriceId"></h2>
                             <h2 class="text-primary" id="freightId"></h2>
                             <h2 class="text-secondary" id="promotionalCouponNameId"></h2>
                             <h2 class="text-secondary" id="promotionalCouponDiscountId"></h2>
+                            
                             <div id="cartDiv">
 
                             </div>
 
                             <h2 class="card-title">Produtos</h2>
+
                             <div id="productListDiv">
 
                             </div>
-
-
 
                         </div>
                     </div>
@@ -139,6 +141,7 @@
         elementWithId.textContent = elementWithId.textContent + " " + saleId;
 
         const productListDiv = document.getElementById('productListDiv');
+        const cartIdElement = document.getElementById('cartId');
         const clientIdElement = document.getElementById('clientIdId');
         const clientNameElement = document.getElementById('clientId');
         const totalPriceElement = document.getElementById('totalPriceId');
@@ -146,6 +149,23 @@
         const promotionalCouponNameElement = document.getElementById('promotionalCouponNameId');
         const promotionalCouponDiscountElement = document.getElementById('promotionalCouponDiscountId');
         productListDiv.innerHTML = '';
+
+        fetch(`/sales/getSaleCartId/${saleId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erro ao retornar ID do carrinho.");
+                }
+                return response.json();  // Expecting the response to be a long (number)
+            })
+            .then(cartId => {
+                console.log("ID do carrinho:", cartId);  // Log the client ID for inspection
+
+
+                cartIdElement.innerHTML = 'ID do carrinho: ' + cartId;
+            })
+            .catch(error => {
+                console.error(error);
+            });
 
         fetch(`/sales/getSaleClientId/${saleId}`)
             .then(response => {

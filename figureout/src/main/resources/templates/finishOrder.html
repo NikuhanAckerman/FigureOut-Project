@@ -16,9 +16,8 @@
 <div class="container mt-5">
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="/index">Início</a></li>
-      <li class="breadcrumb-item"><a href="/products/shop">Loja</a></li>
-      <li class="breadcrumb-item active"><a href="/sales/makeOrder/{cartId}">Carrinho</a></li>
+      <li class="breadcrumb-item"><a th:href="@{/products/shop}">Loja</a></li>
+      <li class="breadcrumb-item active"><a th:href="@{/sales/makeOrder/{cartId}(cartId = ${saleCart.id})}">Carrinho</a></li>
       <li class="breadcrumb-item active" aria-current="page">Finalizar compra</li>
     </ol>
   </nav>
