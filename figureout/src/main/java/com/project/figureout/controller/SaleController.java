@@ -173,7 +173,8 @@ public class SaleController {
     @PostMapping("/finishOrder/{cartId}")
     public String createSale(@PathVariable long cartId, @ModelAttribute SaleCardDTO saleCardDTO, Model model,
                              @RequestParam("freight") BigDecimal freight,
-                             @RequestParam("saleFinalPrice") BigDecimal saleFinalPrice) {
+                             @RequestParam("saleFinalPrice") BigDecimal saleFinalPrice,
+                             HttpServletRequest request) {
 
         Cart cart = cartService.getCartById(cartId);
 
@@ -247,7 +248,6 @@ public class SaleController {
             model.addAttribute("saleCardDTO", saleCardDTO);
 
             return "finishOrder";
-
         }
 
         saleService.saveSale(sale);
@@ -293,6 +293,7 @@ public class SaleController {
     public String seeSales(Model model) {
 
         model.addAttribute("changeSaleStatusDTO", new ChangeSaleStatusDTO());
+        model.addAttribute("status", SaleStatusEnum.values());
         model.addAttribute("sales", saleService.getAllSales());
 
         return "adminSalesView";

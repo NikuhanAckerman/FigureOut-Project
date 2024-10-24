@@ -24,25 +24,48 @@ public class CpfCantBeUsedByMultipleAccountsValidator implements ConstraintValid
 
         if(obj instanceof ClientBasicDataDTO) {
             ClientBasicDataDTO clientBasicDataDTO = (ClientBasicDataDTO) obj;
+
             long id = clientBasicDataDTO.getClientId();
-            Client client = clientService.getClientById(id);
             List<Client> allClients = clientService.getAllClients();
+            String treatedClientCpf = clientService.treatMaskedCpf(clientBasicDataDTO.getCpf());
 
-            String treatedClientBasicDataDTOCpf = clientService.treatMaskedCpf(clientBasicDataDTO.getCpf());
+            if(id != 0) { // if its update
 
-            for(Client clientObjectInsideList: allClients) {
+                Client client = clientService.getClientById(id);
 
-                String treatedClientCpf = clientService.treatMaskedCpf(clientObjectInsideList.getCpf());
+                for(Client currentClient: allClients) {
 
-                if(treatedClientCpf.equals(treatedClientBasicDataDTOCpf)) {
-                    if(!clientObjectInsideList.equals(client)) {
-                        return false;
+                    String currentClientCpf = clientService.treatMaskedCpf(currentClient.getCpf());
+
+                    if(currentClientCpf.equals(treatedClientCpf)) {
+
+                        if(!currentClient.equals(client)) {
+                            return false;
+                        }
+
                     }
+
                 }
+
+                return true;
+
+            } else {
+
+                for(Client currentClient: allClients) {
+
+                    String currentClientCpf = clientService.treatMaskedCpf(currentClient.getCpf());
+
+                    if(currentClientCpf.equals(treatedClientCpf)) {
+
+                        return false;
+
+                    }
+
+                }
+
 
             }
 
-            return true;
         }
 
         return true;

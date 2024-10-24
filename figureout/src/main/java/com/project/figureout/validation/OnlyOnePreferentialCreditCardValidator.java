@@ -1,7 +1,6 @@
 package com.project.figureout.validation;
 
 import com.project.figureout.dto.CreditCardDTO;
-import com.project.figureout.dto.UpdateCreditCardDTO;
 import com.project.figureout.model.Client;
 import com.project.figureout.model.CreditCard;
 import com.project.figureout.service.ClientService;
@@ -10,9 +9,6 @@ import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 
 @Component
@@ -68,7 +64,7 @@ public class OnlyOnePreferentialCreditCardValidator implements ConstraintValidat
                     return (preferentialCount <= 1);
                 }
 
-                return (preferentialCount < 1);
+                return (preferentialCount < 1); // if its a create
             }
 
             return true;

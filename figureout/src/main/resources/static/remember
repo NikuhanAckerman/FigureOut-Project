@@ -38,7 +38,9 @@ add check to see if the client is in a buying page, and if it is, dont let the c
 // things to add
 -> Button to delete address and creditcard after solving issue
 -> Update and create address and creditcard must be able to returnto the client profile
+-> validate promotional coupon expiry date
 
 // known massive bugs:
 
 //// cant delete credit card and address if it already has been used to make an order and buy something (coupling issue)
+-----> potential solution: use DTOs to visualize data, instead of the objects themselves (that way, can initialize empty or error code messages when the objects are null)

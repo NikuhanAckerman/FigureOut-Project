@@ -2,7 +2,6 @@ package com.project.figureout.service;
 
 import com.project.figureout.dto.CreditCardBrandDTO;
 import com.project.figureout.dto.CreditCardDTO;
-import com.project.figureout.dto.UpdateCreditCardDTO;
 import com.project.figureout.model.Client;
 import com.project.figureout.model.CreditCard;
 import com.project.figureout.model.CreditCardBrand;
