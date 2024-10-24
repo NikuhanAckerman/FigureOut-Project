@@ -77,7 +77,7 @@ public class SaleController {
 
         for(CartsProducts cartsProducts : cartsProductsList) {
             // multiply product price by product quantity
-            cartProductTotalPrices.put(cartsProducts.getProduct().getId(), cartsProducts.getPriceToPay().multiply(BigDecimal.valueOf(cartsProducts.getProductQuantity())));
+            cartProductTotalPrices.put(cartsProducts.getProduct().getId(), cartsProducts.getFinalPrice());
         }
 
         model.addAttribute("saleDTO", new SaleDTO());
@@ -120,7 +120,7 @@ public class SaleController {
 
         for(CartsProducts cartsProducts : cartsProductsList) {
             // multiply product price by product quantity
-            cartProductTotalPrices.put(cartsProducts.getProduct().getId(), cartsProducts.getPriceToPay().multiply(BigDecimal.valueOf(cartsProducts.getProductQuantity())));
+            cartProductTotalPrices.put(cartsProducts.getProduct().getId(), cartsProducts.getFinalPrice());
         }
 
         model.addAttribute("salesCardsList", salesCardsList); // sessionattribute, to keep data for more than 1 request
@@ -392,6 +392,5 @@ public class SaleController {
         }
         return ResponseEntity.ok(coupon); // Otherwise, return the coupon
     }
-
 
 }

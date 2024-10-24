@@ -35,7 +35,10 @@ public class Stock {
     @JoinColumn(name = "est_for_id") // Foreign key for the Supplier
     private Supplier supplier;
 
-    @Column(name = "est_data_entrada")
-    private LocalDate entryDate;
+    @Column(name = "est_data_entrada_inicial")
+    private LocalDate initialEntryDate;
+
+    @Column(name = "est_data_entrada_ultimo_produto")
+    private LocalDate latestEntryDate;
 
 }

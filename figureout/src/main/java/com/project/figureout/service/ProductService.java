@@ -156,7 +156,7 @@ public class ProductService {
         Stock stock = stockRepository.findByProductId(product.getId());
 
         productDTO.getStockDTO().setProductQuantityAvailable(stock.getProductQuantityAvailable());
-        productDTO.getStockDTO().setEntryInStockDate(stock.getEntryDate());
+        productDTO.getStockDTO().setEntryInStockDate(stock.getInitialEntryDate());
         productDTO.setSupplier(stock.getSupplier().getId());
         productDTO.setManufacturer(product.getManufacturer().getId());
         productDTO.setSize(product.getSize().getId());

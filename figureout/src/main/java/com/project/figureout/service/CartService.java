@@ -62,12 +62,13 @@ public class CartService {
         cartProduct.setCart(cart);
         cartProduct.setProduct(product);
         cartProduct.setProductQuantity(changeCartProductQuantityDTO.getQuantity());
-        cartProduct.setPriceToPay(product.getPrice()); // setting a temporary price here so it doesnt come out as 0 when i check for promotional coupon
+        cartProduct.setUnitaryPrice(product.getPrice()); // setting a temporary price here so it doesnt come out as 0 when i check for promotional coupon
 
         if(cart.getPromotionalCoupon() != null) {
             setPromotionalCouponDiscount(cartProduct, cart.getPromotionalCoupon());
         } else {
-            cartProduct.setPriceToPay(product.getPrice());
+            cartProduct.setUnitaryPrice(product.getPrice());
+            cartProduct.setFinalPrice(cartProduct.getUnitaryPrice().multiply(BigDecimal.valueOf(cartProduct.getProductQuantity())));
         }
 
         LocalDateTime now = LocalDateTime.now();
@@ -78,12 +79,18 @@ public class CartService {
         setCartTotal(cart);
     }
 
+    public void changeProductQuantity(CartsProducts cartProduct, ChangeCartProductQuantityDTO changeCartProductQuantityDTO) {
+        cartProduct.setProductQuantity(changeCartProductQuantityDTO.getQuantity());
+        cartProduct.setFinalPrice(cartProduct.getUnitaryPrice().multiply(BigDecimal.valueOf(cartProduct.getProductQuantity())));
+    }
+
     public void setPromotionalCouponDiscount(CartsProducts cartProduct, PromotionalCoupon promotionalCoupon) {
-        BigDecimal cartProductOldPrice = cartProduct.getPriceToPay();
+        BigDecimal cartProductOldPrice = cartProduct.getUnitaryPrice();
 
         BigDecimal newPrice = cartProductOldPrice.subtract(cartProductOldPrice.multiply(promotionalCoupon.getCouponDiscount()));
 
-        cartProduct.setPriceToPay(newPrice);
+        cartProduct.setUnitaryPrice(newPrice);
+        cartProduct.setFinalPrice(newPrice.multiply(BigDecimal.valueOf(cartProduct.getProductQuantity())));
     }
 
     public void applyPromotionalCoupon(Cart cart, PromotionalCoupon promotionalCoupon) {
@@ -95,9 +102,10 @@ public class CartService {
             }
 
             for(CartsProducts cartProduct: cartsProducts) {
-                System.out.println(cartProduct.getPriceToPay());
-                cartProduct.setPriceToPay(cartProduct.getProduct().getPrice());
-                System.out.println(cartProduct.getPriceToPay());
+                System.out.println(cartProduct.getUnitaryPrice());
+                cartProduct.setUnitaryPrice(cartProduct.getProduct().getPrice());
+                cartProduct.setFinalPrice(cartProduct.getProduct().getPrice().multiply(BigDecimal.valueOf(cartProduct.getProductQuantity())));
+                System.out.println(cartProduct.getFinalPrice());
             }
         }
 
@@ -110,7 +118,21 @@ public class CartService {
         setCartTotal(cart);
     }
 
-    public void applyFreight(Cart cart, BigDecimal freight) {
+    public void removePromotionalCoupon(Cart cart) {
+        List<CartsProducts> cartsProducts = cart.getCartProducts();
+
+        if(cart.getPromotionalCoupon() != null) {
+
+            for(CartsProducts cartProduct: cartsProducts) {
+                cartProduct.setUnitaryPrice(cartProduct.getProduct().getPrice());
+                cartProduct.setFinalPrice(cartProduct.getProduct().getPrice().multiply(BigDecimal.valueOf(cartProduct.getProductQuantity())));
+            }
+
+        }
+
+        cart.setPromotionalCoupon(null);
+
+        setCartTotal(cart);
 
     }
 
@@ -123,7 +145,7 @@ public class CartService {
 
         // Loop through each product in the cart and calculate the total price
         for (CartsProducts cartsProduct : cartProducts) {
-            BigDecimal productTotal = cartsProduct.getPriceToPay().multiply(BigDecimal.valueOf(cartsProduct.getProductQuantity()));
+            BigDecimal productTotal = cartsProduct.getFinalPrice();
             System.out.println(productTotal);
             total = total.add(productTotal);
         }

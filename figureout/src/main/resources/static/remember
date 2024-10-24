@@ -20,18 +20,21 @@ add check to see if the client is in a buying page, and if it is, dont let the c
 -> DTO of product not loading image or date // loading date, will have to fix image later
 -> inactivation reason for product creation page doesnt appear by default (make the input checked by default) // fixed
 -> cant use decimals in width, height length in product and productDTO due to float type apparently // fixed
--> 0 default value in product fields
+-> 0 default value in product fields // fixed
 
 // validations to do
 
 -> CurrentPasswordCorrect (the current password passed in the form must be equal the actual current password)
 -> ProductNameCantBeUsedByMultipleProducts (cant have the same name in multiple products)
 
--> CantOrderProductWithNoStock (cant order product with 0 stock)
+-> CantOrderProductWithNoStock (cant order product with 0 or less stock)
 -> CantOrderProductExceedingStock (cant order an amount of product higher than its stock)
 
 -> CantPayLessThanTenReaisWithoutCoupon (each card cant pay less than 10 reais without coupon)
 -> PaymentEqualToPurchaseAmount (the payment of the sale must be equal to the amount required, not more, not less)
+
+// all those done ^
+
 
 // leave the validations for later
 

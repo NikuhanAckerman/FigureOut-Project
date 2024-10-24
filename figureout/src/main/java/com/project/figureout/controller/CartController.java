@@ -159,17 +159,13 @@ public class CartController {
 
             if(cartsProducts.getProduct().getId() == product.getId()) {
 
-                cartsProducts.setProductQuantity(changeCartProductQuantityDTO.getQuantity());
+                cartService.changeProductQuantity(cartsProducts, changeCartProductQuantityDTO);
 
             }
 
         }
 
-
-
         cartService.setCartTotal(cart);
-
-
 
         return "redirect:" + referer;
     }
@@ -192,6 +188,17 @@ public class CartController {
             }
 
         }
+
+        String referer = request.getHeader("Referer");
+
+        return "redirect:" + referer;
+    }
+
+    @DeleteMapping("/removePromotionalCoupon/{cartId}")
+    public String removePromotionalCoupon(@PathVariable long cartId, HttpServletRequest request) {
+        Cart cart = cartService.getCartById(cartId);
+
+        cartService.removePromotionalCoupon(cart);
 
         String referer = request.getHeader("Referer");
 

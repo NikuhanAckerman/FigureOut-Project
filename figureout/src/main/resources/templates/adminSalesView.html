@@ -250,9 +250,9 @@
 
                 cartProducts.forEach(cartProduct => {
                     const product = cartProduct.product;  // Access the Product within CartsProducts
-                    const productTotal = (cartProduct.priceToPay * cartProduct.productQuantity).toFixed(2);
+                    const unitaryPrice = cartProduct.unitaryPrice.toFixed(2);
+                    const productTotal = cartProduct.finalPrice.toFixed(2);
                     const productQuantity = cartProduct.productQuantity;
-                    const priceToPay = cartProduct.priceToPay.toFixed(2);
 
                     const productItem = `
                         <div class="card mt-3">
@@ -261,7 +261,7 @@
 							    <!--<img th:src="@{/products/productPicture/{id}(id=${product.id})}" style="width: 200px;"/> -->
                                 <p><b>${product.name}</b></p>
                                 <p>Quantidade comprada: ${productQuantity}</p>
-                                <p>Preço unitário: R$${priceToPay}</p>
+                                <p>Preço unitário: R$${unitaryPrice}</p>
                                 <p>Preço total: R$${productTotal}</p>
                             </div>
                         </div>

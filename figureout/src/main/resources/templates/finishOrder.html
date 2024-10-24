@@ -51,7 +51,7 @@
 
       <td th:text="${cartProduct.product.name}"></td>
 
-      <td th:text="'R$' + ${cartProduct.priceToPay}"></td>
+      <td th:text="'R$' + ${cartProduct.unitaryPrice}"></td>
 
       <td th:text="${cartProduct.productQuantity}"></td>
 
@@ -74,7 +74,7 @@
     <p><b>Cartões selecionados:</b></p>
 
     <div th:each="saleCard : ${salesCardsList}">
-      <p th:text="'Número do cartão: ' + ${saleCard.creditCard.cardNumber}"><b></b></p>
+      <p th:text="'Apelido do cartão: ' + ${saleCard.creditCard.nickname}"><b></b></p>
 
       <div>
         <input type="number" class="form-control" th:field="*{amountPaid[__${saleCard.creditCard.id}__]}" step="0.01" min="0.01" />

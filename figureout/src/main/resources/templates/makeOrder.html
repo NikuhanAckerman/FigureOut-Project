@@ -30,9 +30,13 @@
                 <input type="text" id="cupom-input" class="form-control" th:field="*{couponName}" placeholder="Digite seu cupom de desconto">
                 <button id="applyCupom" type="submit" class="btn btn-primary mt-2">Aplicar Cupom</button>
             </form>
-
-
+            <form th:action="@{/cart/removePromotionalCoupon/{cartId}(cartId = ${cartId})}" method="POST">
+                <input type="hidden" name="_method" value="DELETE"/>
+                <button id="removeCupom" type="submit" class="btn btn-danger mt-2" onclick="return confirm ('Tem certeza?')">Remover Cupom</button>
+            </form>
         </div>
+
+
 
         <div th:if="${cart.promotionalCoupon} != null">
             <p class="text-primary" th:text="'Cupom promocional aplicado: ' + ${cart.promotionalCoupon.couponName}"></p>
@@ -63,7 +67,7 @@
                 </td>
 
                 <td th:text="${cartProduct.product.name}"></td>
-                <td th:text="'R$' + ${cartProduct.priceToPay}"></td>
+                <td th:text="'R$' + ${cartProduct.unitaryPrice}"></td>
 
                 <td th:text="${cartProduct.productQuantity}"></td>
 
@@ -109,7 +113,7 @@
         <div id="cartao-dropdown-container" class="mb-3">
             <select multiple class="form-control" th:field="*{salesCardsIds}">
                 <option value="" disabled selected>Selecione o(s) cartão(ões)</option>
-                <option th:each="creditCard : ${creditCardClientList}" th:value="${creditCard.id}" th:text="${creditCard.cardNumber}"></option>
+                <option th:each="creditCard : ${creditCardClientList}" th:value="${creditCard.id}" th:text="${creditCard.nickname}"></option>
             </select>
         </div>
 
