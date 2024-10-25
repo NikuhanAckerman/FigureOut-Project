@@ -312,32 +312,7 @@ public class SaleController {
 
     @PutMapping("/seeSales/changeSaleStatus/{saleId}")
     public String changeSaleStatus(@PathVariable long saleId, @ModelAttribute ChangeSaleStatusDTO changeSaleStatusDTO) {
-        Sale sale = saleService.getSaleById(saleId);
-
-        if(sale.getStatus().equals(SaleStatusEnum.EM_PROCESSAMENTO)) {
-
-            if(changeSaleStatusDTO.getStatus().equals(SaleStatusEnum.PAGAMENTO_REALIZADO)) {
-                HashMap<Stock, Integer> cartProductQuantityToDrop = new HashMap<>();
-
-                for(CartsProducts cartProduct : sale.getCart().getCartProducts()) {
-                    Stock stock = stockService.getProductInStockByProductId(cartProduct.getProduct().getId());
-
-                    cartProductQuantityToDrop.put(stock, cartProduct.getProductQuantity());
-
-                    if(cartProduct.getProductQuantity() >= stock.getProductQuantityAvailable()) {
-                        productService.inactivateProduct(stock.getProduct());
-                    }
-                }
-
-                stockService.dropInStockList(cartProductQuantityToDrop);
-
-            }
-
-        }
-
-        sale.setStatus(changeSaleStatusDTO.getStatus());
-
-        saleService.saveSale(sale);
+        saleService.changeSaleStatus(saleService.getSaleById(saleId), changeSaleStatusDTO);
 
         return "redirect:/sales/seeSales";
     }

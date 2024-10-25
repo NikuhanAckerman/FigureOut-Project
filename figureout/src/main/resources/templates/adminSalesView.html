@@ -73,7 +73,7 @@
                 <form th:action="@{/sales/seeSales/changeSaleStatus/{saleId}(saleId=${sale.id})}" method="POST" th:object="${changeSaleStatusDTO}">
                     <input type="hidden" name="_method" value="PUT">
 
-                    <select name="status" class="form-control" th:field="*{status}" onchange="this.form.submit()">
+                    <select name="status" class="form-control" th:field="*{status}" onchange="this.form.submit(); ">
                         <option value="0" selected>Selecione um status</option>
                         <option th:each="status : ${status}"
                                 th:value="${status.name()}" th:text="${status.name()}">
@@ -141,7 +141,7 @@
             <div class="modal-body">
                 <div>
                     <h1 id="exchangeId"></h1>
-                    <div class="card mt-3">
+                    <div class="card mt-3" id="exchangeDiv">
                         <div class="card-body">
                             <h2 id="clientIdIdExchange">ID do cliente:</h2>
                             <h2 class="text-primary" id="statusId"></h2>
@@ -349,6 +349,8 @@
         const button = event.relatedTarget
 
         const saleId = button.getAttribute('data-bs-sale-id');
+        const exchangeDivElement = document.getElementById("exchangeDiv");
+        const exchangeProductListDivElement = document.getElementById("exchangeProductListDiv");
 
         fetch(`/sales/getSaleExchangeList/${saleId}`)
             .then(response => {
@@ -359,7 +361,8 @@
             })
             .then(exchanges => {
                 console.log(exchange);  // Log the JSON response for inspection
-                let productList = '';
+                let exchangeList = '';
+                let returnedProductList = '';
 
                 exchanges.forEach(exchange => {
 
@@ -367,34 +370,38 @@
                         <div class="card mt-3">
 							<div class="card-body">
 							    <h3 class="card-title">ID: ${exchange.id}</h3>
-
                             </div>
                         </div>
                     `;
 
-                    exchange.cartsProducts.forEach(cartProduct => {
+                    exchangeList += exchangeItem;
 
-                        const exchangeItem = `
+                    exchange.returnedProducts.forEach(returnedProduct => {
+
+                        const returnedProductItem = `
                         <div class="card mt-3">
 							<div class="card-body">
-							    <p class="card-title">ID: ${cart.id}</p>
-
+							    <p class="card-title">ID: ${returnedProduct.cartProduct.id}</p>
+                                <p class="card-text">Nome: ${returnedProduct.cartProduct.product.name}</p>
+                                <p class="card-text">Preço unitário: ${returnedProduct.cartProduct.unitaryPrice}</p>
+                                <p class="card-text">Quantidade trocada: ${returnedProduct.quantityReturned}</p>
                             </div>
                         </div>
                         `;
+
+                        returnedProductList += returnedProductItem
 
                     });
 
                 });
 
-
+                exchangeDivElement.insertAdjacentHTML('beforeend', exchangeList);
+                exchangeProductListDivElement.insertAdjacentHTML('beforeend', returnedProductList);
 
             })
             .catch(error => {
                 console.error(error);
             });
-
-
 
     });
 

@@ -1,9 +1,7 @@
 package com.project.figureout.service;
 
-import com.project.figureout.model.Cart;
-import com.project.figureout.model.Client;
-import com.project.figureout.model.Sale;
-import com.project.figureout.model.SalesCards;
+import com.project.figureout.dto.ChangeSaleStatusDTO;
+import com.project.figureout.model.*;
 import com.project.figureout.repository.CartRepository;
 import com.project.figureout.repository.ProductRepository;
 import com.project.figureout.repository.SaleRepository;
@@ -12,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -29,6 +28,12 @@ public class SaleService {
 
     @Autowired
     private SalesCardsRepository salesCardsRepository;
+
+    @Autowired
+    private StockService stockService;
+
+    @Autowired
+    private ProductService productService;
 
     public List<Sale> getAllSales() {
         return saleRepository.findAll();
@@ -68,6 +73,52 @@ public class SaleService {
 
     public void saveSale(Sale sale) {
         saleRepository.save(sale);
+    }
+
+    public void changeSaleStatus(Sale sale, ChangeSaleStatusDTO changeSaleStatusDTO) {
+        SaleStatusEnum saleStatus = sale.getStatus();
+        SaleStatusEnum changeSaleStatusDTOStatus = changeSaleStatusDTO.getStatus();
+        SaleStatusEnum emProcessamento = SaleStatusEnum.EM_PROCESSAMENTO;
+        SaleStatusEnum pagamentoRealizado = SaleStatusEnum.PAGAMENTO_REALIZADO;
+        SaleStatusEnum trocaAutorizada = SaleStatusEnum.TROCA_AUTORIZADA;
+        SaleStatusEnum trocaRecebida = SaleStatusEnum.TROCA_RECEBIDA;
+
+        if(saleStatus.equals(emProcessamento)) {
+
+            if(changeSaleStatusDTOStatus.equals(pagamentoRealizado)) {
+                HashMap<Stock, Integer> cartProductQuantityToDrop = new HashMap<>();
+
+                for(CartsProducts cartProduct : sale.getCart().getCartProducts()) {
+                    Stock stock = stockService.getProductInStockByProductId(cartProduct.getProduct().getId());
+
+                    cartProductQuantityToDrop.put(stock, cartProduct.getProductQuantity());
+
+                    if(cartProduct.getProductQuantity() >= stock.getProductQuantityAvailable()) {
+                        productService.inactivateProduct(stock.getProduct());
+                    }
+                }
+
+                stockService.dropInStockList(cartProductQuantityToDrop);
+
+            }
+
+        }
+
+        if(saleStatus.equals(trocaAutorizada)) {
+
+            if(changeSaleStatusDTOStatus.equals(trocaRecebida)) {
+
+
+
+            }
+
+
+        }
+
+        sale.setStatus(changeSaleStatusDTOStatus);
+
+        saveSale(sale);
+
     }
 
 

@@ -7,7 +7,7 @@ public enum SaleStatusEnum {
     EM_TRANSPORTE,
     ENTREGUE,
     TROCA_SOLICITADA,
-    EM_TROCA,
+    TROCA_AUTORIZADA,
     TROCA_RECEBIDA,
     TROCA_FINALIZADA
 }

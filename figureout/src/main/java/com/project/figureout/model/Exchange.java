@@ -33,6 +33,9 @@ public class Exchange {
     @JoinColumn(name = "tro_trp_id")
     private List<ExchangeProducts> returnedProducts;
 
+    @Column(name = "tro_venda_atual")
+    private boolean isCurrentExchange;
+
     @Column(name = "tro_data_hora_requisicao")
     private LocalDateTime exchangeRequestTime;
 

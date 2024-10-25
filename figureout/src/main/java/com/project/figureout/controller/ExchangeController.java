@@ -12,7 +12,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Controller
@@ -51,37 +53,56 @@ public class ExchangeController {
     public String requestExchangePost(@PathVariable long id, @ModelAttribute ExchangeDTO exchangeDTO, Model model) {
         Sale sale = saleService.getSaleById(id);
         Client client = sale.getCart().getClient();
+        List<Sale> clientSales = saleService.getClientSalesByClientId(client.getId());
         SaleStatusEnum status = sale.getStatus();
         SaleStatusEnum deliveredStatus = SaleStatusEnum.ENTREGUE;
         SaleStatusEnum exchangeEndedStatus = SaleStatusEnum.TROCA_FINALIZADA;
 
-        if(status == deliveredStatus || status == exchangeEndedStatus) {
-            sale.setStatus(SaleStatusEnum.TROCA_SOLICITADA);
-        } else {
-            return "redirect:/clientProfilePurchases/" + client.getId();
+        boolean canRequestExchange = true;
+
+        for(Exchange currentExchange: sale.getExchangeList()) {
+
+            if(currentExchange.isCurrentExchange()) {
+                canRequestExchange = false;
+                break;
+            }
+
         }
 
-        HashMap<Long, Integer> exchangeMap = exchangeDTO.getCartProductQuantity();
+        if(canRequestExchange) {
 
-        Exchange newExchange = new Exchange();
-        newExchange.setSale(sale);
-        exchangeService.saveExchange(newExchange);
+            if(status == deliveredStatus || status == exchangeEndedStatus) {
+                sale.setStatus(SaleStatusEnum.TROCA_SOLICITADA);
+            } else {
+                return "redirect:/clientProfilePurchases/" + client.getId();
+            }
 
-        exchangeMap.forEach((cartProductId, quantity) -> {
-            ExchangeProducts exchangeProduct = new ExchangeProducts();
-            exchangeProduct.setCartProduct(cartsProductsRepository.findById(cartProductId).orElseThrow(() -> new NoSuchElementException("Produto de carrinho não encontrado.")));
-            exchangeProduct.setQuantityReturned(quantity);
-            exchangeProduct.setExchange(newExchange);
+            HashMap<Long, Integer> exchangeMap = exchangeDTO.getCartProductQuantity();
 
-            newExchange.getReturnedProducts().add(exchangeProduct);
-        });
+            Exchange newExchange = new Exchange();
+            newExchange.setSale(sale);
+            exchangeService.saveExchange(newExchange);
 
-        exchangeService.saveExchange(newExchange);
+            exchangeMap.forEach((cartProductId, quantity) -> {
+                ExchangeProducts exchangeProduct = new ExchangeProducts();
+                exchangeProduct.setCartProduct(cartsProductsRepository.findById(cartProductId).orElseThrow(() -> new NoSuchElementException("Produto de carrinho não encontrado.")));
+                exchangeProduct.setQuantityReturned(quantity);
+                exchangeProduct.setExchange(newExchange);
 
-        sale.setStatus(SaleStatusEnum.TROCA_SOLICITADA);
+                newExchange.getReturnedProducts().add(exchangeProduct);
+            });
 
-        sale.getExchangeList().add(newExchange);
-        saleService.saveSale(sale);
+            newExchange.setExchangeRequestTime(LocalDateTime.now());
+            newExchange.setCurrentExchange(true);
+
+            exchangeService.saveExchange(newExchange);
+
+            sale.setStatus(SaleStatusEnum.TROCA_SOLICITADA);
+
+            sale.getExchangeList().add(newExchange);
+            saleService.saveSale(sale);
+
+        }
 
         return "requestExchange";
     }
