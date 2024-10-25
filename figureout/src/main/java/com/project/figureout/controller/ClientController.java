@@ -1,5 +1,6 @@
 package com.project.figureout.controller;
 
+import com.project.figureout.ClientNavigator;
 import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.SalesCardsRepository;
@@ -25,6 +26,9 @@ public class ClientController {
     private ClientService clientService;
 
     @Autowired
+    private LogService logService;
+
+    @Autowired
     private AddressService addressService;
 
     @Autowired
@@ -38,6 +42,8 @@ public class ClientController {
 
     @Autowired
     private SalesCardsRepository salesCardsRepository;
+
+    private ClientNavigator clientNavigator;
 
     @GetMapping("/showAllClients")
     public String showClientsGet(Model model) {
@@ -258,6 +264,10 @@ public class ClientController {
 
         clientService.registerClient(client, clientDTO);
 
+        // log de transação do método.
+        Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
+        logService.logTransaction(String.valueOf(navigator), "insert", client.toString());
+
         return "redirect:/showAllClients";
     }
 
@@ -278,6 +288,11 @@ public class ClientController {
                                  Model model) {
         // Chamar o serviço para mudar a senha.
         clientService.changePassword(clientId, changePasswordDTO);
+
+        // log de transação do método.
+        Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
+        logService.logTransaction(String.valueOf(navigator), "insert", changePasswordDTO.toString());
+
         //boolean success =
         return "redirect:/showAllClients";
 

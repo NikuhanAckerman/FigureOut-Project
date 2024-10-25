@@ -3,6 +3,8 @@ package com.project.figureout.controller;
 import com.project.figureout.ClientNavigator;
 import com.project.figureout.dto.ChangeClientNavigatorDTO;
 import com.project.figureout.model.Client;
+import com.project.figureout.model.Log;
+import com.project.figureout.repository.LogRepository;
 import com.project.figureout.repository.PromotionalCouponRepository;
 import com.project.figureout.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +12,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/")
 public class AdminController {
 
     @Autowired
     ClientService clientService;
+
+    @Autowired
+    private LogService logService;
+
+    @Autowired
+    private LogRepository logRepository;
 
     @Autowired
     AddressService addressService;
@@ -40,6 +50,8 @@ public class AdminController {
         model.addAttribute("changeClientNavigatorDTO", new ChangeClientNavigatorDTO());
 
         model.addAttribute("isClientIdNull", false);
+        List<Log> logs = logRepository.findAll();
+        model.addAttribute("logs", logs);
 
         if(clientNavigator.getInstance().getClientId() == 0) {
             System.out.println("é zero lol");

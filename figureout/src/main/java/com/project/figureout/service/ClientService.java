@@ -48,7 +48,9 @@ public class ClientService {
     }
 
     public void saveClient(Client client) {
+
         clientRepository.save(client);
+
     }
 
     public void registerClient(Client client, ClientDTO clientDTO) {

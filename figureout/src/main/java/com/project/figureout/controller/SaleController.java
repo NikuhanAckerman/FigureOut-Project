@@ -30,6 +30,9 @@ public class SaleController {
     CartService cartService;
 
     @Autowired
+    private LogService logService;
+
+    @Autowired
     ProductService productService;
 
     @Autowired
@@ -132,6 +135,10 @@ public class SaleController {
         redirectAttributes.addFlashAttribute("saleCart", cart);
 
         redirectAttributes.addFlashAttribute("orderTotalPrice", cart.getTotalPrice());
+
+        // log de transação do método.
+        Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
+        logService.logTransaction(String.valueOf(navigator), "insert", cart.toString());
 
         return "redirect:/sales/finishOrder/" + cartId;
     }
@@ -285,6 +292,10 @@ public class SaleController {
         saleService.saveSale(sale);
 
         cartService.changeClientCart(client);
+
+        // log de transação do método.
+        Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
+        logService.logTransaction(String.valueOf(navigator), "insert", sale.toString());
 
         return "redirect:/products/shop";
     }
