@@ -36,8 +36,6 @@
             </form>
         </div>
 
-
-
         <div th:if="${cart.promotionalCoupon} != null">
             <p class="text-primary" th:text="'Cupom promocional aplicado: ' + ${cart.promotionalCoupon.couponName}"></p>
             <p class="text-primary" th:text="'Desconto: ' + ${cart.promotionalCoupon.couponDiscount * 100} + '%'"></p>

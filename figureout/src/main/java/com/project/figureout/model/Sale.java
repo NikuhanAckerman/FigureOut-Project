@@ -47,4 +47,7 @@ public class Sale {
     @Column(name = "ven_data_hora")
     private LocalDateTime dateTimeSale;
 
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL)
+    private List<Exchange> exchangeList = new ArrayList<>();
+
 }

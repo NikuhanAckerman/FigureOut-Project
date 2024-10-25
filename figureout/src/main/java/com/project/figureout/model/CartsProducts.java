@@ -39,6 +39,4 @@ public class CartsProducts {
     @Column(name = "cpr_produto_preco_final")
     private BigDecimal finalPrice;
 
-
-
 }

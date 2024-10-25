@@ -51,6 +51,7 @@
             <th scope="col">ID da Venda</th>
             <th scope="col">Endereço de entrega</th>
             <th scope="col">Carrinho</th>
+            <th scope="col">Trocas</th>
             <th scope="col">Status</th>
         </tr>
         </thead>
@@ -61,8 +62,12 @@
             <td th:if="${sale.deliveryAddress == null}">Nenhum endereço</td>
             <td>
                 <button type="button" class="btn btn-secondary" th:data-bs-sale-id = "${sale.id}" data-bs-toggle="modal" data-bs-target="#seeCartModal">Ver carrinho</button>
-                <div id="elementWithCartId" th:data-bs-cart-id="${sale.cart.id}"></div>
             </td>
+
+            <td>
+                <button type="button" class="btn btn-secondary" th:data-bs-sale-id = "${sale.id}" data-bs-toggle="modal" data-bs-target="#seeExchangesModal">Ver trocas</button>
+            </td>
+
             <td>
                 <p class="text-primary" th:text="${sale.status}"></p>
                 <form th:action="@{/sales/seeSales/changeSaleStatus/{saleId}(saleId=${sale.id})}" method="POST" th:object="${changeSaleStatusDTO}">
@@ -126,9 +131,43 @@
     </div>
 </div>
 
+<div id="seeExchangeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Trocas</h3>
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <h1 id="exchangeId"></h1>
+                    <div class="card mt-3">
+                        <div class="card-body">
+                            <h2 id="clientIdIdExchange">ID do cliente:</h2>
+                            <h2 class="text-primary" id="statusId"></h2>
+
+                            <h2 class="card-title">Produtos</h2>
+
+                            <div id="exchangeProductListDiv">
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 
     const seeCartModal = document.getElementById("seeCartModal");
+    const seeExchangeModal = document.getElementById("seeExchangeModal")
 
     seeCartModal.addEventListener('show.bs.modal', function (event) {
         console.log("mostrou modal de carrinho")
@@ -303,10 +342,61 @@
                     console.error(error);
                 });
 
+    });
+
+    seeExchangeModal.addEventListener('show.bs.modal', function (event) {
+        console.log("mostrou modal de troca")
+        const button = event.relatedTarget
+
+        const saleId = button.getAttribute('data-bs-sale-id');
+
+        fetch(`/sales/getSaleExchangeList/${saleId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erro ao retornar trocas.");
+                }
+                return response.json();  // Use json() to handle the response as JSON
+            })
+            .then(exchanges => {
+                console.log(exchange);  // Log the JSON response for inspection
+                let productList = '';
+
+                exchanges.forEach(exchange => {
+
+                    const exchangeItem = `
+                        <div class="card mt-3">
+							<div class="card-body">
+							    <h3 class="card-title">ID: ${exchange.id}</h3>
+
+                            </div>
+                        </div>
+                    `;
+
+                    exchange.cartsProducts.forEach(cartProduct => {
+
+                        const exchangeItem = `
+                        <div class="card mt-3">
+							<div class="card-body">
+							    <p class="card-title">ID: ${cart.id}</p>
+
+                            </div>
+                        </div>
+                        `;
+
+                    });
+
+                });
 
 
 
-    })
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+
+
+    });
 
 </script>
 

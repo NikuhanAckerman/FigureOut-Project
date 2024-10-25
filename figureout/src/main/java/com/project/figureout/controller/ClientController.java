@@ -381,6 +381,8 @@ public class ClientController {
         model.addAttribute("sales", clientSales);
 
         model.addAttribute("saleStatus", SaleStatusEnum.values());
+        model.addAttribute("entregueStatus", SaleStatusEnum.ENTREGUE);
+        model.addAttribute("trocaFinalizadaStatus", SaleStatusEnum.TROCA_FINALIZADA);
 
         return "clientProfilePurchases";
     }
