@@ -1,12 +1,10 @@
 package com.project.figureout.controller;
 
+import com.project.figureout.ClientNavigator;
 import com.project.figureout.dto.ProductDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.SupplierRepository;
-import com.project.figureout.service.ManufacturerService;
-import com.project.figureout.service.ProductService;
-import com.project.figureout.service.SizeService;
-import com.project.figureout.service.StockService;
+import com.project.figureout.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +21,9 @@ public class StockController {
     private StockService stockService;
 
     @Autowired
+    private LogService logService;
+
+    @Autowired
     private ProductService productService;
 
     @Autowired
@@ -33,6 +34,8 @@ public class StockController {
 
     @Autowired
     private SizeService sizeService;
+
+    private ClientNavigator clientNavigator;
 
     @GetMapping("/stock")
     public String showStockGet(Model model) {
@@ -50,6 +53,8 @@ public class StockController {
         List<Manufacturer> manufacturerList = manufacturerService.getAllManufacturers();
         List<Size> sizeList = sizeService.getAllSizes();
         ProductDTO productDTO = new ProductDTO();
+
+
 
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("pricingGroupList", pricingGroupList);

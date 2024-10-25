@@ -32,6 +32,9 @@ public class ProductController {
     ProductService productService;
 
     @Autowired
+    private LogService logService;
+
+    @Autowired
     ClientService clientService;
 
     @Autowired
@@ -50,6 +53,7 @@ public class ProductController {
     private SizeService sizeService;
 
     private ClientNavigator clientNavigator;
+
 
     @GetMapping("/seeProducts")
     public String showProductsGet(Model model) {
@@ -97,6 +101,10 @@ public class ProductController {
 
         stockService.productInStockDataSetter(stock, product, productDTO);
         stockService.saveProductInStock(stock);
+
+        // log de transação do método.
+        Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
+        logService.logTransaction(String.valueOf(navigator), "insert", product.toString());
 
         return "redirect:/products/seeProducts";
     }

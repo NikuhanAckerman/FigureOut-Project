@@ -5,10 +5,7 @@ import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartsProductsRepository;
 import com.project.figureout.repository.PromotionalCouponRepository;
-import com.project.figureout.service.CartService;
-import com.project.figureout.service.ClientService;
-import com.project.figureout.service.ProductService;
-import com.project.figureout.service.StockService;
+import com.project.figureout.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +23,9 @@ public class CartController {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private LogService logService;
 
     @Autowired
     private ProductService productService;
@@ -108,6 +108,10 @@ public class CartController {
 
         // Get the previous page URL from the Referer header
         String referer = request.getHeader("Referer");
+
+        // log de transação do método.
+        Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
+        logService.logTransaction(String.valueOf(navigator), "insert", product.toString());
 
         // Redirect back to the same page
         return "redirect:" + referer;
