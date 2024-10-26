@@ -20,6 +20,9 @@ public class Exchange {
     @Column(name = "tro_id")
     private long id;
 
+    @Column(name = "tro_codigo_de_troca")
+    private String exchangeCode;
+
     @ManyToOne
     @JoinColumn(name = "tro_cli_id")
     private Client client;
@@ -29,9 +32,12 @@ public class Exchange {
     @JsonIgnore
     private Sale sale;
 
-    @OneToMany(mappedBy = "exchange", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "tro_trp_id")
-    private List<ExchangeProducts> returnedProducts;
+    private List<ExchangeProducts> returnedProducts = new ArrayList<>();
+
+    @Column(name = "tro_quantia_final")
+    private BigDecimal finalAmount;
 
     @Column(name = "tro_venda_atual")
     private boolean isCurrentExchange;
@@ -44,5 +50,12 @@ public class Exchange {
 
     @Column(name = "tro_data_hora_finalizada")
     private LocalDateTime exchangeFinishTime;
+
+    @Column(name = "tro_status")
+    private ExchangeStatusEnum status;
+
+    @OneToOne
+    @JoinColumn(name = "tro_cupom_troca")
+    private ExchangeCoupon coupon;
 
 }

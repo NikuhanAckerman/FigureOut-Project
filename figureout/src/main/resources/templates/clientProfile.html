@@ -48,8 +48,10 @@
     <ul class="list-unstyled">
         <li><a th:href="@{/clientProfileGeneral/{id}(id = ${id})}">Informações gerais</a></li>
         <li><a th:href="@{/clientProfilePurchases/{id}(id = ${id})}">Compras</a></li>
+        <li><a th:href="@{/clientProfileExchanges/{id}(id = ${id})}">Trocas</a></li>
         <li><a th:href="@{/clientProfileAddresses/{id}(id = ${id})}">Endereços</a></li>
         <li><a th:href="@{/clientProfileCreditCards/{id}(id = ${id})}">Cartões</a></li>
+
         <li><a th:href="@{/products/shop}">Loja</a></li>
     </ul>
 </div>
@@ -59,14 +61,14 @@
     <div class="card mb-3">
         <div class="card-body">
             <h5 class="card-title">Básico</h5>
-            <p class="card-text" th:text="'Nome: ' + ${name}">Nome: </p>
-            <p class="card-text" th:text="'Email: ' + ${email}">Email: </p>
-            <p class="card-text" th:text="'Senha: ' + ${password}">Senha: </p>
+            <p class="card-text" th:text="'Nome: ' + ${name}"></p>
+            <p class="card-text" th:text="'Email: ' + ${email}"></p>
+            <p class="card-text" th:text="'Senha: ' + ${password}"></p>
             <a class="btn btn-danger" th:href="@{/changePassword/{id}(id = ${id})}">Mudar senha</a>
-            <p class="card-text" th:text="'Gênero: ' + ${gender.genderType}">Gênero: </p>
-            <p class="card-text" th:text="'CPF: ' + ${cpf}">CPF: </p>
-            <p class="card-text" th:if="${phone.cellphone} == true" th:text="'Tipo de telefone: Celular (' + ${phone.phoneNumber} + ')'">Telefone: </p>
-            <p class="card-text" th:if="${phone.cellphone} == false" th:text="'Tipo de telefone: Residencial (' + ${phone.phoneNumber} + ')'">Telefone: </p>
+            <p class="card-text" th:text="'Gênero: ' + ${gender.genderType}"></p>
+            <p class="card-text" th:text="'CPF: ' + ${cpf}"></p>
+            <p class="card-text" th:if="${phone.cellphone} == true" th:text="'Telefone:' + ${phone.phoneNumber} +  '(Celular)'"></p>
+            <p class="card-text" th:if="${phone.cellphone} == false" th:text="'Telefone: ' + ${phone.phoneNumber} +  ' (Residencial)'"></p>
         </div>
     </div>
 

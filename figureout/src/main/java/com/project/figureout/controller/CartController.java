@@ -110,8 +110,8 @@ public class CartController {
         String referer = request.getHeader("Referer");
 
         // log de transação do método.
-        Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
-        logService.logTransaction(String.valueOf(navigator), "insert", product.toString());
+        //Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
+        //logService.logTransaction(String.valueOf(navigator), "insert", product.toString());
 
         // Redirect back to the same page
         return "redirect:" + referer;

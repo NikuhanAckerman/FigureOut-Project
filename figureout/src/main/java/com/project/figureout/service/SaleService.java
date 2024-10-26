@@ -35,6 +35,9 @@ public class SaleService {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private ExchangeService exchangeService;
+
     public List<Sale> getAllSales() {
         return saleRepository.findAll();
     }
@@ -83,12 +86,14 @@ public class SaleService {
         SaleStatusEnum trocaAutorizada = SaleStatusEnum.TROCA_AUTORIZADA;
         SaleStatusEnum trocaRecebida = SaleStatusEnum.TROCA_RECEBIDA;
 
+        List<CartsProducts> saleCartsProducts = sale.getCart().getCartProducts();
+
         if(saleStatus.equals(emProcessamento)) {
 
             if(changeSaleStatusDTOStatus.equals(pagamentoRealizado)) {
                 HashMap<Stock, Integer> cartProductQuantityToDrop = new HashMap<>();
 
-                for(CartsProducts cartProduct : sale.getCart().getCartProducts()) {
+                for(CartsProducts cartProduct : saleCartsProducts) {
                     Stock stock = stockService.getProductInStockByProductId(cartProduct.getProduct().getId());
 
                     cartProductQuantityToDrop.put(stock, cartProduct.getProductQuantity());
@@ -108,10 +113,41 @@ public class SaleService {
 
             if(changeSaleStatusDTOStatus.equals(trocaRecebida)) {
 
+                Exchange exchangeInProcess = null;
 
+                for(Exchange currentExchange: sale.getExchangeList()) {
+
+                    if(currentExchange.isCurrentExchange()) {
+                        exchangeInProcess = currentExchange;
+                        break;
+                    }
+
+                }
+
+                List<ExchangeProducts> exchangeProducts = exchangeInProcess.getReturnedProducts();
+
+                HashMap<Stock, Integer> cartProductQuantityToAdd = new HashMap<>();
+
+                for(CartsProducts cartProduct : saleCartsProducts) {
+                    Stock stock = stockService.getProductInStockByProductId(cartProduct.getProduct().getId());
+
+                    for(ExchangeProducts currentExchangeProduct : exchangeProducts) {
+
+                        if(currentExchangeProduct.getCartProduct().getId() == cartProduct.getId()) {
+
+                            cartProductQuantityToAdd.put(stock, currentExchangeProduct.getQuantityReturned());
+
+                        }
+
+                    }
+
+                }
+
+                stockService.addInStockList(cartProductQuantityToAdd);
+
+                exchangeService.generateExchangeCoupon(exchangeInProcess);
 
             }
-
 
         }
 

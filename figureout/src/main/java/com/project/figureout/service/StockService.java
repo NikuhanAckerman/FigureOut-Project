@@ -85,5 +85,21 @@ public class StockService {
 
     }
 
+    public void addInStock(Stock stock, int quantity) {
+        stock.setProductQuantityAvailable(stock.getProductQuantityAvailable() + quantity);
+    }
+
+    public void addInStockList(HashMap<Stock, Integer> stockProductsQuantityAdd) {
+
+        for (Map.Entry<Stock, Integer> entry : stockProductsQuantityAdd.entrySet()) {
+            Stock key = entry.getKey();
+            Integer value = entry.getValue();
+
+            addInStock(key, value);
+
+        }
+
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package com.project.figureout.dto;
 
+import com.project.figureout.model.CartsProductsKey;
 import lombok.Getter;
 import lombok.Setter;
 

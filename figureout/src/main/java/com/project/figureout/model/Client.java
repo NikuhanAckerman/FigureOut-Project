@@ -59,7 +59,7 @@ public class Client {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CreditCard> creditCards = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "client", cascade = CascadeType.ALL)
     private List<Cart> cartList = new ArrayList<>();
 
     // Expressão regular para validar a senha

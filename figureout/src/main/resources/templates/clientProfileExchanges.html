@@ -55,14 +55,14 @@
   </ul>
 </div>
 <div class="content">
-  <h1>Compras</h1>
+  <h1>Trocas</h1>
 
-  <div th:if="${sales.isEmpty()}">
-    <p>Você ainda não comprou nada.</p>
-    <a class="btn btn-primary" th:href="@{/products/shop}">Ver loja</a>
+  <div th:if="${exchanges.isEmpty()}">
+    <p>Você ainda não fez nenhuma troca.</p>
+    <a class="btn btn-primary" th:href="@{/clientProfilePurchases/{id}(id = ${id})}">Ver compras</a>
   </div>
 
-  <div th:if="${!sales.isEmpty()}">
+  <div th:if="${!exchanges.isEmpty()}">
 
     <div class="mb-3 d-flex align-items-center">
       <p class="mb-0 me-2">Buscar por data: </p>
@@ -74,76 +74,58 @@
       </svg></a>
     </div>
 
-  <div th:each="sale : ${sales}">
+    <div th:each="exchange : ${exchanges}">
 
-    <div class="purchase-card card mb-3">
-      <div class="card-body">
-        <h5 class="card-title" th:text="'Compra #' + ${sale.saleCode}"></h5>
-        <p class="card-text" th:text="'Data: ' + ${#temporals.format(sale.dateTimeSale, 'dd/MM/yyyy')}"></p>
-        <p class="card-text" th:text="'Valor total: R$ ' + ${sale.finalPrice}"></p>
+      <div class="purchase-card card mb-3">
+        <div class="card-body">
+          <h5 class="card-title" th:text="'Troca #' + ${exchange.exchangeCode}"></h5>
+          <p class="card-text" th:text="'Data: ' + ${#temporals.format(sale.dateTimeSale, 'dd/MM/yyyy')}"></p>
+          <p class="card-text" th:text="'Compra: ' + ${exchange.sale.saleCode}"></p>
+          <p class="card-text" th:text="'Valor total da troca: R$ ' + ${exchange.finalAmount}"></p>
 
-        <span class="badge"
-              th:text="${sale.status.name()}"
-              th:each="status : ${saleStatus}"
-              th:if="${sale.status == status}"
-              th:classappend="${status.name() == 'ENTREGUE' || status.name() ==  'PAGAMENTO_REALIZADO' || status.name() == 'EM_TRANSPORTE' ? 'bg-success' :
-                              status.name() == 'PAGAMENTO_REJEITADO' ? 'bg-danger' : 'bg-secondary'}"
-        >
+          <span class="badge"
+                th:text="${exchange.status.name()}"
+                th:each="status : ${saleStatus}"
+                th:if="${exchange.status == status}"
+                th:classappend="${status.name() == 'TROCA_AUTORIZADA' || status.name() ==  'EM_TROCA' || status.name() == 'TROCA_RECEBIDA' ||
+                 status.name() == 'TROCA_FINALIZADA' ? 'bg-success' :
+                              status.name() == 'TROCA_NAO_AUTORIZADA' ? 'bg-danger' : 'bg-secondary'}"
+          >
         </span>
 
           <div>
             <br>
-            <button class="btn btn-primary" data-bs-toggle="collapse" th:attr="data-bs-target='#saleMoreInfoCollapse_' + ${sale.id}">Mais informações</button>
+            <button class="btn btn-primary" data-bs-toggle="collapse" th:attr="data-bs-target='#exchangeMoreInfoCollapse_' + ${exchange.id}">Mais informações</button>
 
-              <div th:id="'saleMoreInfoCollapse_' + ${sale.id}" class="collapse">
+            <div th:id="'exchangeMoreInfoCollapse_' + ${exchange.id}" class="collapse">
 
-                <p th:text="'Endereço de entrega: ' + ${sale.deliveryAddress.nickname}"></p>
-                <p th:text="'Frete: ' + ${sale.freight*100} + '% do total da compra'"></p>
+              <p>Produtos pedidos no carrinho:</p>
 
-                <p th:text="${sale.promotionalCouponApplied} == null ? 'Nenhum cupom promocional usado.' : 'Cupom promocional usado: ' +
-                ${sale.promotionalCouponApplied.couponName} + ' Desconto: ' +
-                ${sale.promotionalCouponApplied.couponDiscount*100} + '%'"></p>
+              <div th:each="returnedProduct : ${exchange.returnedProducts}">
 
-                <p>Cartões usados na compra: </p>
-
-                <div th:each="saleCard : ${sale.cardsUsedInThisSale}">
-                  <div class="card">
-                    <p th:text="'Apelido do cartão: ' + ${saleCard.creditCard.nickname}"></p>
-                    <p th:text="'Número do cartão: ' + ${saleCard.creditCard.cardNumber}"></p>
-                    <p th:text="'Quantia paga: R$' + ${saleCard.amountPaid}"></p>
-                  </div>
-                </div>
-
-                <p>Produtos pedidos no carrinho:</p>
-
-                <div th:each="cartProduct : ${sale.cart.cartProducts}">
-
-                  <div class="card">
-                    <p th:text="'Nome: ' + ${cartProduct.product.name}"></p>
-                    <p th:text="'Preço unitário: R$' + ${cartProduct.unitaryPrice}"></p>
-                    <p th:text="'Quantidade: ' + ${cartProduct.productQuantity}"></p>
-                    <p th:text="'Preço total: R$' + ${cartProduct.finalPrice}"></p>
-                  </div>
-
+                <div class="card">
+                  <p th:text="'Nome: ' + ${returnedProduct.cartProduct.product.name}"></p>
+                  <p th:text="'Preço unitário: R$' + ${returnedProduct.cartProduct.unitaryPrice}"></p>
+                  <p th:text="'Quantidade trocada: ' + ${returnedProduct.quantityReturned}"></p>
+                  <p th:text="'Quantia trocada em dinheiro: R$' + ${returnedProduct.finalAmount}"></p>
                 </div>
 
               </div>
 
+            </div>
 
-
-         </div>
+          </div>
 
         </div>
 
-      <div th:if="${sale.status == entregueStatus || sale.status == trocaFinalizadaStatus}">
-        <a class="btn btn-primary" th:href="@{/exchange/requestExchange/{id}(id = ${sale.id})}" onclick="confirm('Tem certeza?')">Fazer troca</a>
+      </div>
+
+      <div th:if="${exchange.coupon != null}">
+        <h4>Cupom de troca disponível, use já!</h4>
+        <h5 class="text-primary" th:text="${exchange.coupon}"></h5>
       </div>
 
     </div>
-
-
-
-  </div>
 
   </div>
 

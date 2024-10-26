@@ -23,6 +23,9 @@ public class Sale {
     @Column(name = "ven_preco_final")
     private BigDecimal finalPrice;
 
+    @Column(name = "ven_codigo_de_venda")
+    private String saleCode;
+
     @ManyToOne
     @JoinColumn(name = "ven_car_id")
     private Cart cart;

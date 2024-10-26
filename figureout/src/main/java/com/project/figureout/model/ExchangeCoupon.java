@@ -13,7 +13,11 @@ public class ExchangeCoupon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cdt_id")
     private long id;
+
+    @Column(name = "cdt_codigo")
+    private String exchangeCouponCode;
 
     @ManyToOne
     @JoinColumn(name = "cdt_cli_id")

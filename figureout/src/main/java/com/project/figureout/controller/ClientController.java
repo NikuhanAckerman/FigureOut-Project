@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -265,8 +266,8 @@ public class ClientController {
         clientService.registerClient(client, clientDTO);
 
         // log de transação do método.
-        Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
-        logService.logTransaction(String.valueOf(navigator), "insert", client.toString());
+        //Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
+        //logService.logTransaction(String.valueOf(navigator), "insert", client.toString());
 
         return "redirect:/showAllClients";
     }
@@ -290,8 +291,8 @@ public class ClientController {
         clientService.changePassword(clientId, changePasswordDTO);
 
         // log de transação do método.
-        Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
-        logService.logTransaction(String.valueOf(navigator), "insert", changePasswordDTO.toString());
+        //Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
+        //logService.logTransaction(String.valueOf(navigator), "insert", changePasswordDTO.toString());
 
         //boolean success =
         return "redirect:/showAllClients";
@@ -400,6 +401,30 @@ public class ClientController {
         model.addAttribute("trocaFinalizadaStatus", SaleStatusEnum.TROCA_FINALIZADA);
 
         return "clientProfilePurchases";
+    }
+
+    @GetMapping("/clientProfileExchanges/{id}")
+    public String seeClientProfileExchanges(@PathVariable long id, Model model) {
+        List<Sale> clientSales = saleService.getClientSalesByClientId(id);
+        List<Exchange> clientExchanges = new ArrayList<>();
+
+        for(Sale currentSale : clientSales) {
+
+            clientExchanges.addAll(currentSale.getExchangeList());
+
+        }
+
+        model.addAttribute("id", id);
+        model.addAttribute("exchanges", clientExchanges);
+        model.addAttribute("exchangeStatus", ExchangeStatusEnum.values());
+        model.addAttribute("solicitadaStatus", ExchangeStatusEnum.TROCA_SOLICITADA);
+        model.addAttribute("naoAutorizadaStatus", ExchangeStatusEnum.TROCA_NAO_AUTORIZADA);
+        model.addAttribute("autorizadaStatus", ExchangeStatusEnum.TROCA_AUTORIZADA);
+        model.addAttribute("emTrocaStatus", ExchangeStatusEnum.EM_TROCA);
+        model.addAttribute("recebidaStatus", ExchangeStatusEnum.TROCA_RECEBIDA);
+        model.addAttribute("trocaFinalizadaStatus", SaleStatusEnum.TROCA_FINALIZADA);
+
+        return "clientProfileExchanges";
     }
 
     @GetMapping("/clientProfileAddresses/{id}")

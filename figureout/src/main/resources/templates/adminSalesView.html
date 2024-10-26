@@ -131,7 +131,7 @@
     </div>
 </div>
 
-<div id="seeExchangeModal" class="modal fade">
+<div id="seeExchangesModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -167,7 +167,7 @@
 <script>
 
     const seeCartModal = document.getElementById("seeCartModal");
-    const seeExchangeModal = document.getElementById("seeExchangeModal")
+    const seeExchangesModal = document.getElementById("seeExchangesModal")
 
     seeCartModal.addEventListener('show.bs.modal', function (event) {
         console.log("mostrou modal de carrinho")
@@ -344,7 +344,7 @@
 
     });
 
-    seeExchangeModal.addEventListener('show.bs.modal', function (event) {
+    seeExchangesModal.addEventListener('show.bs.modal', function (event) {
         console.log("mostrou modal de troca")
         const button = event.relatedTarget
 
@@ -360,6 +360,12 @@
                 return response.json();  // Use json() to handle the response as JSON
             })
             .then(exchanges => {
+                if (exchanges.length === 0) {
+                    console.warn("Nenhuma troca encontrada.");
+                    exchangeDivElement.innerHTML = '<h1 class="text-primary">Nenhuma troca disponível.</h1>';
+                    return;  // Stop further execution
+                }
+
                 console.log(exchange);  // Log the JSON response for inspection
                 let exchangeList = '';
                 let returnedProductList = '';

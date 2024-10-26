@@ -9,6 +9,7 @@ import com.project.figureout.repository.SalesCardsRepository;
 import com.project.figureout.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import org.apache.commons.text.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -137,8 +138,8 @@ public class SaleController {
         redirectAttributes.addFlashAttribute("orderTotalPrice", cart.getTotalPrice());
 
         // log de transação do método.
-        Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
-        logService.logTransaction(String.valueOf(navigator), "insert", cart.toString());
+        //Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
+        //logService.logTransaction(String.valueOf(navigator), "insert", cart.toString());
 
         return "redirect:/sales/finishOrder/" + cartId;
     }
@@ -186,6 +187,16 @@ public class SaleController {
         Cart cart = cartService.getCartById(cartId);
 
         Sale sale = new Sale();
+
+        char[][] allowedCharacterRanges = {{'a','z'},{'A','Z'},{'0','9'}};
+
+        RandomStringGenerator generator = new RandomStringGenerator.Builder()
+                .withinRange(allowedCharacterRanges)
+                .build();
+
+        String saleCode = generator.generate(6);
+
+        sale.setSaleCode(saleCode);
 
         sale.setCart(cart);
 
@@ -294,8 +305,8 @@ public class SaleController {
         cartService.changeClientCart(client);
 
         // log de transação do método.
-        Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
-        logService.logTransaction(String.valueOf(navigator), "insert", sale.toString());
+        //Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
+        //logService.logTransaction(String.valueOf(navigator), "insert", sale.toString());
 
         return "redirect:/products/shop";
     }

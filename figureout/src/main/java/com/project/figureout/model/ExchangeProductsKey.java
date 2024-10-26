@@ -17,9 +17,13 @@ public class ExchangeProductsKey implements Serializable {
     @Column(name = "trp_pro_id")
     private long cartProductId;
 
-    public ExchangeProductsKey(long exchangeId, long cartProductId) {
+    @Column(name = "trp_car_id")
+    private long cartId;
+
+    public ExchangeProductsKey(long exchangeId, long cartProductId, long cartId) {
         this.setExchangeId(exchangeId);
         this.setCartProductId(cartProductId);
+        this.setCartId(cartId);
     }
 
     public ExchangeProductsKey() {}

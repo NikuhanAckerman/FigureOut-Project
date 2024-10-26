@@ -103,8 +103,8 @@ public class ProductController {
         stockService.saveProductInStock(stock);
 
         // log de transação do método.
-        Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
-        logService.logTransaction(String.valueOf(navigator), "insert", product.toString());
+        //Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
+        //logService.logTransaction(String.valueOf(navigator), "insert", product.toString());
 
         return "redirect:/products/seeProducts";
     }
