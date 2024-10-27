@@ -1,9 +1,11 @@
 package com.project.figureout.model;
 
+import com.project.figureout.repository.CartsProductsRepository;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 
@@ -14,16 +16,12 @@ public class ExchangeProductsKey implements Serializable {
     @Column(name = "trp_tro_id")
     private long exchangeId;
 
-    @Column(name = "trp_pro_id")
-    private long cartProductId;
+    @Column(name = "trp_crp_id")
+    private CartsProductsKey cartsProductsKey;
 
-    @Column(name = "trp_car_id")
-    private long cartId;
-
-    public ExchangeProductsKey(long exchangeId, long cartProductId, long cartId) {
+    public ExchangeProductsKey(long exchangeId, long productId, long cartId) {
         this.setExchangeId(exchangeId);
-        this.setCartProductId(cartProductId);
-        this.setCartId(cartId);
+        this.setCartsProductsKey(new CartsProductsKey(cartId, productId));
     }
 
     public ExchangeProductsKey() {}

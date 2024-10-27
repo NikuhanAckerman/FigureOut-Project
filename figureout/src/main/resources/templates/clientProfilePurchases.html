@@ -78,15 +78,16 @@
 
     <div class="purchase-card card mb-3">
       <div class="card-body">
-        <h5 class="card-title" th:text="'Compra #' + ${sale.saleCode}"></h5>
-        <p class="card-text" th:text="'Data: ' + ${#temporals.format(sale.dateTimeSale, 'dd/MM/yyyy')}"></p>
+        <h5 class="card-title" th:text="'Compra ' + ${sale.saleCode}"></h5>
+        <p class="card-text" th:text="'Data: ' + ${#temporals.format(sale.dateTimeSale, 'dd/MM/yyyy HH:mm:ss')}"></p>
         <p class="card-text" th:text="'Valor total: R$ ' + ${sale.finalPrice}"></p>
 
         <span class="badge"
               th:text="${sale.status.name()}"
               th:each="status : ${saleStatus}"
               th:if="${sale.status == status}"
-              th:classappend="${status.name() == 'ENTREGUE' || status.name() ==  'PAGAMENTO_REALIZADO' || status.name() == 'EM_TRANSPORTE' ? 'bg-success' :
+              th:classappend="${status.name() == 'ENTREGUE' || status.name() ==  'PAGAMENTO_REALIZADO' ? 'bg-success' :
+                              status.name() == 'EM_TRANSPORTE' ? 'bg-warning' :
                               status.name() == 'PAGAMENTO_REJEITADO' ? 'bg-danger' : 'bg-secondary'}"
         >
         </span>
@@ -140,8 +141,6 @@
       </div>
 
     </div>
-
-
 
   </div>
 

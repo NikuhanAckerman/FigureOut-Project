@@ -10,4 +10,6 @@ public interface CartsProductsRepository extends JpaRepository<CartsProducts, Lo
 
     public CartsProducts getCartsProductsByProductIdAndCart(long productId, Cart cart);
 
+    public CartsProducts getCartsProductsByCart(Cart cart);
+
 }

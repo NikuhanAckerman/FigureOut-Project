@@ -1,5 +1,6 @@
 package com.project.figureout.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.figureout.dto.PromotionalCouponDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -43,6 +44,9 @@ public class Sale {
     @ManyToOne
     @JoinColumn(name = "ven_cupom_promocional_aplicado")
     private PromotionalCoupon promotionalCouponApplied;
+
+    @OneToMany
+    private List<ExchangeCoupon> exchangeCouponsApplied = new ArrayList<>();
 
     @JoinColumn(name = "ven_frete")
     private BigDecimal freight;

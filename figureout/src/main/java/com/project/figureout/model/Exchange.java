@@ -25,6 +25,7 @@ public class Exchange {
 
     @ManyToOne
     @JoinColumn(name = "tro_cli_id")
+    @JsonIgnore
     private Client client;
 
     @ManyToOne

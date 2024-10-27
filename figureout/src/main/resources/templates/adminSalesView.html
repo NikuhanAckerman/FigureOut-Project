@@ -101,8 +101,10 @@
                     <h1 id="saleId"></h1>
                     <div class="card mt-3">
                         <div class="card-body">
+                            <h1 id="saleCode" class="text-danger"></h1>
                             <h2 id="cartId">ID do carrinho:</h2>
                             <h2 id="clientIdId">ID do cliente:</h2>
+                            <h2 id="saleDate" class="text-primary"></h2>
                             <h2 class="text-primary" id="clientId"></h2>
                             <h2 class="text-success" id="totalPriceId"></h2>
                             <h2 class="text-primary" id="freightId"></h2>
@@ -139,21 +141,7 @@
                 <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <div>
-                    <h1 id="exchangeId"></h1>
-                    <div class="card mt-3" id="exchangeDiv">
-                        <div class="card-body">
-                            <h2 id="clientIdIdExchange">ID do cliente:</h2>
-                            <h2 class="text-primary" id="statusId"></h2>
-
-                            <h2 class="card-title">Produtos</h2>
-
-                            <div id="exchangeProductListDiv">
-
-                            </div>
-
-                        </div>
-                    </div>
+                <div id="exchangeDiv">
 
                 </div>
             </div>
@@ -187,6 +175,9 @@
         const freightElement = document.getElementById('freightId');
         const promotionalCouponNameElement = document.getElementById('promotionalCouponNameId');
         const promotionalCouponDiscountElement = document.getElementById('promotionalCouponDiscountId');
+        const saleDateElement = document.getElementById("saleDate");
+        const saleCodeElement = document.getElementById("saleCode");
+
         productListDiv.innerHTML = '';
 
         fetch(`/sales/getSaleCartId/${saleId}`)
@@ -201,6 +192,35 @@
 
 
                 cartIdElement.innerHTML = 'ID do carrinho: ' + cartId;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        fetch(`/sales/getSaleDate/${saleId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erro ao retornar data da venda.");
+                }
+                return response.json();  // Expecting the response to be a long (number)
+            })
+            .then(saleDate => {
+                const data = new Date(saleDate).toLocaleString('pt-BR');
+                saleDateElement.innerHTML = `Data da venda: ${data}`;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+        fetch(`/sales/getSaleCode/${saleId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erro ao retornar código da venda.");
+                }
+                return response.text();  // Expecting the response to be a long (number)
+            })
+            .then(saleCode => {
+                saleCodeElement.innerHTML = 'Código da venda: ' + saleCode;
             })
             .catch(error => {
                 console.error(error);
@@ -350,65 +370,89 @@
 
         const saleId = button.getAttribute('data-bs-sale-id');
         const exchangeDivElement = document.getElementById("exchangeDiv");
-        const exchangeProductListDivElement = document.getElementById("exchangeProductListDiv");
 
         fetch(`/sales/getSaleExchangeList/${saleId}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error("Erro ao retornar trocas.");
                 }
-                return response.json();  // Use json() to handle the response as JSON
+                return response.json();  // Directly parse as JSON
             })
             .then(exchanges => {
                 if (exchanges.length === 0) {
                     console.warn("Nenhuma troca encontrada.");
-                    exchangeDivElement.innerHTML = '<h1 class="text-primary">Nenhuma troca disponível.</h1>';
+                    exchangeDivElement.innerHTML = '<h1 class="text-primary">Nenhuma troca.</h1>';
                     return;  // Stop further execution
                 }
 
-                console.log(exchange);  // Log the JSON response for inspection
+                console.log(exchanges);  // Log the JSON response for inspection
+
                 let exchangeList = '';
-                let returnedProductList = '';
 
                 exchanges.forEach(exchange => {
+                    let exchangeCoupon = ''; // Default as empty
+
+                    // Check if the exchange has a coupon
+                    if (exchange.coupon != null) {
+                        console.log("its not null lol")
+                        console.log(exchange.coupon.amountWorth)
+                        exchangeCoupon = `
+                                <div>
+                                    <h4 class="text-success">Código de cupom da troca: ${exchange.coupon.exchangeCouponCode}</h4>
+                                </div>
+                    `;
+                    }
 
                     const exchangeItem = `
                         <div class="card mt-3">
-							<div class="card-body">
-							    <h3 class="card-title">ID: ${exchange.id}</h3>
-                            </div>
-                        </div>
-                    `;
-
-                    exchangeList += exchangeItem;
-
-                    exchange.returnedProducts.forEach(returnedProduct => {
-
-                        const returnedProductItem = `
-                        <div class="card mt-3">
-							<div class="card-body">
-							    <p class="card-title">ID: ${returnedProduct.cartProduct.id}</p>
-                                <p class="card-text">Nome: ${returnedProduct.cartProduct.product.name}</p>
-                                <p class="card-text">Preço unitário: ${returnedProduct.cartProduct.unitaryPrice}</p>
-                                <p class="card-text">Quantidade trocada: ${returnedProduct.quantityReturned}</p>
+                            <div class="card-body" id="exchangeDiv_${exchange.id}">
+                                <h1 class="card-title text-danger">Código da troca: ${exchange.exchangeCode}</h1>
+                                <h3 class="card-title">ID da troca: ${exchange.id}</h3>
+                                <h4 class="text-primary">Status: ${exchange.status}</h4>
+                                <h4 class="text-danger">Quantia total da troca: R$${exchange.finalAmount}</h4>
+                                <h4 class="text-primary">
+                                    Data de requisição da troca: ${new Date(exchange.exchangeRequestTime).toLocaleString('pt-BR')}
+                                </h4>
+                                ${exchangeCoupon}
+                                <div id="exchangeProductListDiv_${exchange.id}"></div>
                             </div>
                         </div>
                         `;
 
-                        returnedProductList += returnedProductItem
-
-                    });
-
+                    exchangeList += exchangeItem;
                 });
 
-                exchangeDivElement.insertAdjacentHTML('beforeend', exchangeList);
-                exchangeProductListDivElement.insertAdjacentHTML('beforeend', returnedProductList);
+                // Add all exchange cards to the DOM in one go
+                exchangeDivElement.innerHTML = exchangeList;
 
+                // Now, populate the returned products for each exchange
+                exchanges.forEach(exchange => {
+                    let returnedProductList = '';
+
+                    exchange.returnedProducts.forEach(returnedProduct => {
+                        const returnedProductItem = `
+                                    <div class="card mt-3">
+                                        <div class="card-body">
+                                            <p class="card-title">ID do produto: ${returnedProduct.cartProduct.id.productId}</p>
+                                            <p class="card-text">Nome: ${returnedProduct.cartProduct.product.name}</p>
+                                            <p class="card-text">Preço unitário: R$${returnedProduct.cartProduct.unitaryPrice}</p>
+                                            <p class="card-text">Quantidade do produto: ${returnedProduct.quantityReturned}</p>
+                                            <p class="card-text">Quantia total: R$${returnedProduct.finalAmount}</p>
+                                        </div>
+                                    </div>
+                                    `;
+
+                        returnedProductList += returnedProductItem;
+                    });
+
+                    // Insert the returned products into the correct exchange div
+                    const currentExchange = document.getElementById(`exchangeProductListDiv_${exchange.id}`);
+                    currentExchange.insertAdjacentHTML('beforeend', returnedProductList);
+                });
             })
             .catch(error => {
                 console.error(error);
             });
-
     });
 
 </script>

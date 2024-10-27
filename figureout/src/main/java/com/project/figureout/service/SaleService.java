@@ -84,6 +84,7 @@ public class SaleService {
         SaleStatusEnum emProcessamento = SaleStatusEnum.EM_PROCESSAMENTO;
         SaleStatusEnum pagamentoRealizado = SaleStatusEnum.PAGAMENTO_REALIZADO;
         SaleStatusEnum trocaAutorizada = SaleStatusEnum.TROCA_AUTORIZADA;
+        SaleStatusEnum emTroca = SaleStatusEnum.EM_TROCA;
         SaleStatusEnum trocaRecebida = SaleStatusEnum.TROCA_RECEBIDA;
 
         List<CartsProducts> saleCartsProducts = sale.getCart().getCartProducts();
@@ -109,7 +110,26 @@ public class SaleService {
 
         }
 
-        if(saleStatus.equals(trocaAutorizada)) {
+        Exchange exchangeInProcessFirst = null;
+
+        for(Exchange currentExchange: sale.getExchangeList()) {
+
+            if(currentExchange.isCurrentExchange()) {
+                exchangeInProcessFirst = currentExchange;
+                break;
+            }
+
+        }
+
+        for(ExchangeStatusEnum currentEnum: ExchangeStatusEnum.values()) {
+
+            if(changeSaleStatusDTOStatus.name().equals(currentEnum.name())) {
+                exchangeInProcessFirst.setStatus(currentEnum);
+            }
+
+        }
+
+        if(saleStatus.equals(emTroca)) {
 
             if(changeSaleStatusDTOStatus.equals(trocaRecebida)) {
 
@@ -146,6 +166,7 @@ public class SaleService {
                 stockService.addInStockList(cartProductQuantityToAdd);
 
                 exchangeService.generateExchangeCoupon(exchangeInProcess);
+
 
             }
 

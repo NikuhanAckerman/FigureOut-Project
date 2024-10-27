@@ -19,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -194,7 +195,7 @@ public class SaleController {
                 .withinRange(allowedCharacterRanges)
                 .build();
 
-        String saleCode = generator.generate(6);
+        String saleCode = "#" + generator.generate(6);
 
         sale.setSaleCode(saleCode);
 
@@ -342,6 +343,22 @@ public class SaleController {
         Sale sale = saleService.getSaleById(saleId);
 
         return sale.getCart().getId();
+    }
+
+    @GetMapping("/getSaleDate/{saleId}")
+    @ResponseBody
+    public LocalDateTime getSaleDate(@PathVariable long saleId, Model model) {
+        Sale sale = saleService.getSaleById(saleId);
+
+        return sale.getDateTimeSale();
+    }
+
+    @GetMapping("/getSaleCode/{saleId}")
+    @ResponseBody
+    public String getSaleCode(@PathVariable long saleId, Model model) {
+        Sale sale = saleService.getSaleById(saleId);
+
+        return sale.getSaleCode();
     }
 
     @GetMapping("/getSaleCartProducts/{saleId}")

@@ -39,7 +39,7 @@ public class ExchangeService {
                 .withinRange(allowedCharacterRanges)
                 .build();
 
-        String couponCode = generator.generate(10);
+        String couponCode = "#" + generator.generate(10);
 
         /*RandomStringGenerator generator = new RandomStringGenerator.Builder()
                 .withinRange('A', 'Z').build();
@@ -47,7 +47,8 @@ public class ExchangeService {
 
         newExchangeCoupon.setExchangeCouponCode(couponCode);
 
-        newExchangeCoupon.setAmount(exchange.getFinalAmount());
+        newExchangeCoupon.setAmountWorth(exchange.getFinalAmount());
+        newExchangeCoupon.setUsed(false);
 
         exchangeCouponRepository.save(newExchangeCoupon);
 

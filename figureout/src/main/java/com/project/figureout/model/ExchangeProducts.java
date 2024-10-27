@@ -1,5 +1,6 @@
 package com.project.figureout.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,15 +19,11 @@ public class ExchangeProducts {
     @MapsId("exchangeId") // Map the exchange ID part of the composite key
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "trp_tro_id")
+    @JsonIgnore
     private Exchange exchange;
 
-    @MapsId("cartId") // Map the exchange ID part of the composite key
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "trp_car_id")
-    private Cart cart;
-
      //Fix: Use @JoinColumns to map the composite key from CartsProducts
-    @MapsId("cartProductId") // Map the cart-product part of the composite key
+    @MapsId("cartsProductsKey") // Map the cart-product part of the composite key
     @ManyToOne
     @JoinColumns({
             @JoinColumn(name = "trp_cpr_car_id", referencedColumnName = "cpr_car_id"),

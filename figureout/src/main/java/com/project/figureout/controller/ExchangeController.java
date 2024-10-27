@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Controller
@@ -74,6 +76,7 @@ public class ExchangeController {
 
             Exchange newExchange = new Exchange();
             newExchange.setSale(sale);
+            newExchange.setClient(client);
 
             if(status == deliveredStatus || status == exchangeEndedStatus) {
                 sale.setStatus(SaleStatusEnum.TROCA_SOLICITADA);
@@ -90,21 +93,27 @@ public class ExchangeController {
                     .withinRange(allowedCharacterRanges)
                     .build();
 
-            String exchangeCode = generator.generate(6);
+            String exchangeCode = "#" + generator.generate(6);
 
             newExchange.setExchangeCode(exchangeCode);
 
             exchangeService.saveExchange(newExchange);
 
-            exchangeMap.forEach((cartProductId, quantity) -> {// Assuming constructor that takes a Long
+            exchangeMap.forEach((productId, quantity) -> {// Assuming constructor that takes a Long
+                CartsProducts cartProduct = cartsProductsRepository.getCartsProductsByProductIdAndCart(productId, sale.getCart());
+
                 ExchangeProductsKey exchangeProductsKey = new ExchangeProductsKey();
                 exchangeProductsKey.setExchangeId(newExchange.getId());
-                exchangeProductsKey.setCartProductId(cartProductId);
-                exchangeProductsKey.setCartId(sale.getCart().getId());
+
+                CartsProductsKey cartsProductsKey = new CartsProductsKey();
+                cartsProductsKey.setCartId(cartProduct.getId().getCartId());
+                cartsProductsKey.setProductId(cartProduct.getId().getProductId());
+
+                exchangeProductsKey.setCartsProductsKey(cartsProductsKey);
 
                 ExchangeProducts exchangeProduct = new ExchangeProducts();
                 exchangeProduct.setId(exchangeProductsKey);
-                exchangeProduct.setCartProduct(cartsProductsRepository.getCartsProductsByProductIdAndCart(cartProductId, sale.getCart()));
+                exchangeProduct.setCartProduct(cartProduct);
                 exchangeProduct.setQuantityReturned(quantity);
                 exchangeProduct.setFinalAmount(exchangeProduct.getCartProduct().getUnitaryPrice().multiply(BigDecimal.valueOf(exchangeProduct.getQuantityReturned())));
                 exchangeProduct.setExchange(newExchange);
@@ -135,7 +144,7 @@ public class ExchangeController {
 
         }
 
-        return "requestExchange";
+        return "redirect:/clientProfileExchanges/" + client.getId();
     }
 
 

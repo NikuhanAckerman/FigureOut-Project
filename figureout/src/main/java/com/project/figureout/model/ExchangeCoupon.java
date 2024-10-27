@@ -1,5 +1,6 @@
 package com.project.figureout.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,9 +26,18 @@ public class ExchangeCoupon {
 
     @OneToOne
     @JoinColumn(name = "cdt_tro_id")
+    @JsonIgnore
     private Exchange exchange;
 
+    @ManyToOne
+    @JoinColumn(name = "cdt_ven_id")
+    @JsonIgnore
+    private Sale sale;
+
     @Column(name = "cdt_quantia")
-    private BigDecimal amount;
+    private BigDecimal amountWorth;
+
+    @Column(name = "cdt_usado")
+    private boolean used;
 
 }

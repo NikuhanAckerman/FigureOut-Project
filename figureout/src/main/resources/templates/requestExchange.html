@@ -32,6 +32,8 @@
 
   <h3>Venda</h3>
 
+  <h4 class="text-primary">(Caso não queira trocar um dos produtos, digite 0 na quantidade)</h4>
+
   <form th:action="@{/exchange/requestExchange/{id}(id = ${sale.id})}" th:object="${exchangeDTO}" method="POST">
 
     <div th:each="cartProduct : ${sale.cart.cartProducts}">
@@ -45,7 +47,7 @@
 
     </div>
 
-    <button class="btn btn-primary" type="submit">Requisitar troca</button>
+    <button class="btn btn-primary" type="submit" onclick="confirm('Tem certeza?')">Requisitar troca</button>
     <a class="btn btn-danger" id="seeProfile" th:href="@{/clientProfilePurchases/{id}(id = ${clientId})}">Voltar ao perfil</a>
 
   </form>

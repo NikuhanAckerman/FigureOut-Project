@@ -1,5 +1,6 @@
 package com.project.figureout.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -59,6 +60,7 @@ public class Product {
 
     @Lob
     @Column(name = "pro_foto", columnDefinition = "MEDIUMBLOB") // 16mb max size, .JPG/JPEG only
+    @JsonIgnore
     private byte[] picture;
 
     @ManyToOne

@@ -74,18 +74,57 @@
       </svg></a>
     </div>
 
+    <div>
+
+
+    <h4>Cupons de troca</h4>
+    <div th:each="exchange : ${exchanges}">
+
+      <div th:if="${exchange.coupon != null}">
+
+        <div th:if="${exchange.coupon.used} == false">
+
+          <h5 class="text-primary"
+              th:text="'Código: ' + ${exchange.coupon.exchangeCouponCode} + ' Quantia: R$' + ${exchange.coupon.amountWorth} + ' (disponível para uso!)'">
+          </h5>
+
+        </div>
+
+        <div th:if="${exchange.coupon.used} == true">
+          <h5 class="text-danger"
+              th:text="'O cupom ' + ${exchange.coupon.exchangeCouponCode} + 'de quantia: R$' + ${exchange.coupon.amountWorth} + 'já foi usado.'">
+          </h5>
+        </div>
+
+      </div>
+
+    </div>
+
     <div th:each="exchange : ${exchanges}">
 
       <div class="purchase-card card mb-3">
         <div class="card-body">
-          <h5 class="card-title" th:text="'Troca #' + ${exchange.exchangeCode}"></h5>
-          <p class="card-text" th:text="'Data: ' + ${#temporals.format(sale.dateTimeSale, 'dd/MM/yyyy')}"></p>
+          <h5 class="card-title" th:text="'Troca ' + ${exchange.exchangeCode}"></h5>
+
+          <div th:if="${exchange.coupon != null}">
+            <p class="card-text" th:text="'Cupom de troca: ' + ${exchange.coupon.exchangeCouponCode}"></p>
+            <p class="card-text" th:text="'Quantia do cupom: R$' + ${exchange.coupon.amountWorth}"></p>
+            <p class="card-text text-primary" th:if="${exchange.coupon.used == true}" th:text="(este cupom já foi usado.)"></p>
+          </div>
+
+          <p class="card-text" th:text="'Data de requisição: ' + ${#temporals.format(exchange.exchangeRequestTime, 'dd/MM/yyyy HH:mm:ss')}"></p>
+          <div th:if="${exchange.exchangeAcceptedTime != null}">
+            <p class="card-text" th:text="'Data de : ' + ${#temporals.format(exchange.exchangeAcceptedTime, 'dd/MM/yyyy HH:mm:ss')}"></p>
+          </div>
+          <div th:if="${exchange.exchangeFinishTime != null}">
+            <p class="card-text" th:text="'Data de : ' + ${#temporals.format(exchange.exchangeFinishTime, 'dd/MM/yyyy HH:mm:ss')}"></p>
+          </div>
           <p class="card-text" th:text="'Compra: ' + ${exchange.sale.saleCode}"></p>
           <p class="card-text" th:text="'Valor total da troca: R$ ' + ${exchange.finalAmount}"></p>
 
           <span class="badge"
                 th:text="${exchange.status.name()}"
-                th:each="status : ${saleStatus}"
+                th:each="status : ${exchangeStatus}"
                 th:if="${exchange.status == status}"
                 th:classappend="${status.name() == 'TROCA_AUTORIZADA' || status.name() ==  'EM_TROCA' || status.name() == 'TROCA_RECEBIDA' ||
                  status.name() == 'TROCA_FINALIZADA' ? 'bg-success' :
@@ -99,7 +138,7 @@
 
             <div th:id="'exchangeMoreInfoCollapse_' + ${exchange.id}" class="collapse">
 
-              <p>Produtos pedidos no carrinho:</p>
+              <p>Produtos trocados da compra:</p>
 
               <div th:each="returnedProduct : ${exchange.returnedProducts}">
 
@@ -120,12 +159,11 @@
 
       </div>
 
-      <div th:if="${exchange.coupon != null}">
-        <h4>Cupom de troca disponível, use já!</h4>
-        <h5 class="text-primary" th:text="${exchange.coupon}"></h5>
-      </div>
+
 
     </div>
+
+  </div>
 
   </div>
 
