@@ -2,6 +2,7 @@ package com.project.figureout.controller;
 
 import com.project.figureout.ClientNavigator;
 import com.project.figureout.dto.ChangeClientNavigatorDTO;
+import com.project.figureout.dto.SaleDTO;
 import com.project.figureout.model.Client;
 import com.project.figureout.model.Log;
 import com.project.figureout.repository.LogRepository;
@@ -29,6 +30,9 @@ public class AdminController {
 
     @Autowired
     AddressService addressService;
+
+//    @Autowired
+//    SaleService saleService;
 
     @Autowired
     CreditCardService creditCardService;
@@ -72,6 +76,13 @@ public class AdminController {
         System.out.println(clientNavigator.getInstance().getClientId());
 
         return "redirect:/index";
+    }
+
+    @GetMapping("/chart")
+    public String chart(Model model) {
+        //List<SaleDTO> vendas = saleService.getSalesByProductByMonth();
+        //model.addAttribute("vendas", vendas);
+        return "chart"; // nome do template Thymeleaf
     }
 
 }

@@ -1,6 +1,7 @@
 package com.project.figureout.service;
 
 import com.project.figureout.dto.ChangeSaleStatusDTO;
+import com.project.figureout.dto.SaleDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartRepository;
 import com.project.figureout.repository.ProductRepository;
@@ -77,6 +78,10 @@ public class SaleService {
     public void saveSale(Sale sale) {
         saleRepository.save(sale);
     }
+
+//    public List<SaleDTO> getSalesByProductByMonth() {
+//        return saleRepository.findSalesByProductByMonth();
+//    }
 
     public void changeSaleStatus(Sale sale, ChangeSaleStatusDTO changeSaleStatusDTO) {
         SaleStatusEnum saleStatus = sale.getStatus();

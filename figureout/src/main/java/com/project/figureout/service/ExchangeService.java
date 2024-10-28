@@ -24,12 +24,12 @@ public class ExchangeService {
     @Autowired
     private ExchangeCouponRepository exchangeCouponRepository;
 
-    @Autowired
-    private ClientService clientService;
+    //@Autowired
+    //private ClientService clientService;
 
-    private BigDecimal percentileToCreateNewExchangeCoupon = BigDecimal.valueOf(0.20); // if i use an exchange coupon and the
+    private BigDecimal percentileToCreateNewExchangeCoupon = BigDecimal.valueOf(0.20); // if I use an exchange coupon and the
                                                                                       // leftover value is bigger than 100% + (percentile)%
-                                                                                     // then i create a new exchange coupon with the value of
+                                                                                     // then I create a new exchange coupon with the value of
                                                                                     // the leftover.
     public void saveExchange(Exchange exchange) {
         exchangeRepository.save(exchange);
@@ -64,7 +64,7 @@ public class ExchangeService {
 
         exchange.getClient().getExchangeCouponList().add(newExchangeCoupon);
 
-        clientService.saveClient(exchange.getClient());
+//        clientService.saveClient(exchange.getClient());
     }
 
     public void generateExchangeCouponSurpass(Client client, BigDecimal amount) {
@@ -92,7 +92,7 @@ public class ExchangeService {
 
         client.getExchangeCouponList().add(newExchangeCoupon);
 
-        clientService.saveClient(client);
+//        clientService.saveClient(client);
     }
 
 
