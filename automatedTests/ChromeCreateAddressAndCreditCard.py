@@ -92,8 +92,11 @@ class ProductFormTest(unittest.TestCase):
 
         input_string(self, "cardNumber", "1234567891012")
         time.sleep(1)
+
+        input_string(self, "nickname", "Cartao Roxo")
+        time.sleep(1)
         
-        input_string(self, "printedName", "Cartao Roxo")
+        input_string(self, "printedName", "Renan L")
         time.sleep(1)
         
         select_option(self, "brand", "MasterCard")
@@ -114,8 +117,10 @@ class ProductFormTest(unittest.TestCase):
 
         # Preenche os campos do formulário de criar cartão de crédito.
         input_string(self, "cardNumber", "987654321987")
+
+        input_string(self, "nickname", "Cartao Laranja")
         
-        input_string(self, "printedName", "Cartao Laranja")
+        input_string(self, "printedName", "Renan L")
         
         select_option(self, "brand", "Visa")
         
