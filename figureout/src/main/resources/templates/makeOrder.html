@@ -23,11 +23,11 @@
     </nav>
 
         <h1>Carrinho</h1>
-        <p><b>Cupom de desconto:</b></p>
+        <p><b>Cupom promocional:</b></p>
         <div class="mb-3">
             <form th:action="@{/cart/addPromotionalCoupon/{cartId}(cartId = ${cartId})}" th:object="${promotionalCouponDTO}" method="POST">
                 <input type="hidden" name="_method" value="PUT"/>
-                <input type="text" id="cupom-input" class="form-control" th:field="*{couponName}" placeholder="Digite seu cupom de desconto">
+                <input type="text" id="cupom-input" class="form-control" th:field="*{couponName}" placeholder="Digite seu cupom promocional">
                 <button id="applyCupom" type="submit" class="btn btn-primary mt-2">Aplicar Cupom</button>
             </form>
             <form th:action="@{/cart/removePromotionalCoupon/{cartId}(cartId = ${cartId})}" method="POST">
@@ -36,9 +36,37 @@
             </form>
         </div>
 
+        <p><b>Cupons de troca (no máximo 3):</b></p>
+        <div class="mb-3">
+            <form th:action="@{/cart/addExchangeCoupon/{cartId}(cartId = ${cartId})}" th:object="${exchangeCouponIndividualDTO}" method="POST">
+                <input type="hidden" name="_method" value="PUT"/>
+                <input type="text" id="exchangeCouponInput" class="form-control" th:field="*{couponName}" placeholder="Digite seu cupom de troca">
+                <button id="applyExchangeCoupon1" type="submit" class="btn btn-primary mt-2">Aplicar Cupom de Troca</button>
+            </form>
+
+        </div>
+
         <div th:if="${cart.promotionalCoupon} != null">
             <p class="text-primary" th:text="'Cupom promocional aplicado: ' + ${cart.promotionalCoupon.couponName}"></p>
             <p class="text-primary" th:text="'Desconto: ' + ${cart.promotionalCoupon.couponDiscount * 100} + '%'"></p>
+        </div>
+
+        <div th:if="${!cart.exchangeCoupons.isEmpty()}">
+
+            <h3>Cupons de troca aplicados na compra:</h3>
+
+            <div th:each="exchangeCoupon : ${cart.exchangeCoupons}">
+
+                <p class="text-primary" th:text="'Cupom de troca aplicado: ' + ${exchangeCoupon.exchangeCouponCode}"></p>
+                <p class="text-primary" th:text="'Desconto: R$' + ${exchangeCoupon.amountWorth}"></p>
+
+                <form th:action="@{/cart/removeExchangeCoupon/{cartId}/{exchangeCouponId}(cartId = ${cartId}, exchangeCouponId = ${exchangeCoupon.id})}" method="POST">
+                    <input type="hidden" name="_method" value="DELETE"/>
+                    <button id="removeExchangeCoupon1" type="submit" class="btn btn-danger mt-2" onclick="return confirm ('Tem certeza?')">Remover Cupom de Troca</button>
+                </form>
+
+            </div>
+
         </div>
 
         <table class="table table-striped">

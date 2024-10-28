@@ -53,6 +53,7 @@ public class Exchange {
     private LocalDateTime exchangeFinishTime;
 
     @Column(name = "tro_status")
+    @Enumerated(EnumType.ORDINAL)
     private ExchangeStatusEnum status;
 
     @OneToOne

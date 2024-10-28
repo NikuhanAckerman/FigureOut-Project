@@ -1,9 +1,11 @@
 package com.project.figureout.controller;
 
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.project.figureout.ClientNavigator;
 import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartsProductsRepository;
+import com.project.figureout.repository.ExchangeCouponRepository;
 import com.project.figureout.repository.PromotionalCouponRepository;
 import com.project.figureout.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/cart")
@@ -38,6 +41,9 @@ public class CartController {
 
     @Autowired
     private PromotionalCouponRepository promotionalCouponRepository;
+
+    @Autowired
+    private ExchangeCouponRepository exchangeCouponRepository;
 
     private ClientNavigator clientNavigator;
 
@@ -203,6 +209,46 @@ public class CartController {
         Cart cart = cartService.getCartById(cartId);
 
         cartService.removePromotionalCoupon(cart);
+
+        String referer = request.getHeader("Referer");
+
+        return "redirect:" + referer;
+    }
+
+    @PutMapping("/addExchangeCoupon/{cartId}")
+    public String addExchangeCoupon(@PathVariable long cartId, @ModelAttribute ExchangeCouponIndividualDTO exchangeCouponIndividualDTO, HttpServletRequest request) {
+        Cart cart = cartService.getCartById(cartId);
+
+        /* extremely nested code, basically what it does is if the coupon typed is correct,
+         i reset the price of the products back to the original price * quantity,
+         then apply the new coupon's discount
+         (will potentially write it better when i transfer this to CartService and/or SaleService) */
+
+        for(ExchangeCoupon exchangeCoupon: exchangeCouponRepository.findAll()) {
+
+            if(exchangeCouponIndividualDTO.getExchangeCouponCode().equals(exchangeCoupon.getExchangeCouponCode())) {
+
+                if(cart.getClient().getId() == exchangeCoupon.getClient().getId()) { // same client
+
+                    cartService.applyExchangeCoupon(cart, exchangeCoupon);
+
+                }
+
+            }
+
+        }
+
+        String referer = request.getHeader("Referer");
+
+        return "redirect:" + referer;
+    }
+
+    @DeleteMapping("/removeExchangeCoupon/{cartId}/{exchangeCouponId}")
+    public String removeExchangeCoupon(@PathVariable long cartId, @PathVariable long exchangeCouponId, HttpServletRequest request) {
+        Cart cart = cartService.getCartById(cartId);
+        ExchangeCoupon exchangeCoupon = exchangeCouponRepository.findById(exchangeCouponId).orElseThrow(() -> new NoSuchElementException("Cupom de troca não encontrado."));
+
+        cartService.removeExchangeCoupon(cart, exchangeCoupon);
 
         String referer = request.getHeader("Referer");
 

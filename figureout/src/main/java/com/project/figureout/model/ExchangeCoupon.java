@@ -24,11 +24,6 @@ public class ExchangeCoupon {
     @JoinColumn(name = "cdt_cli_id")
     private Client client;
 
-    @OneToOne
-    @JoinColumn(name = "cdt_tro_id")
-    @JsonIgnore
-    private Exchange exchange;
-
     @ManyToOne
     @JoinColumn(name = "cdt_ven_id")
     @JsonIgnore

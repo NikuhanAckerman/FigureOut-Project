@@ -42,6 +42,9 @@ public class Cart {
     @JoinColumn(name = "car_cupom_promocional_usado")
     private PromotionalCoupon promotionalCoupon;
 
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<ExchangeCoupon> exchangeCoupons;
+
     public Cart(LocalDateTime dateOfCreation) {
         this.setDateOfCreation(dateOfCreation);
     }

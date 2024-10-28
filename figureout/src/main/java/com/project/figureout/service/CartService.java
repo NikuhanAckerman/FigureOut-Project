@@ -35,6 +35,9 @@ public class CartService {
     private CartRepository cartRepository;
 
     @Autowired
+    private ExchangeService exchangeService;
+
+    @Autowired
     private CartsProductsRepository cartsProductsRepository;
 
     public Cart getCartById(long id) {
@@ -85,7 +88,7 @@ public class CartService {
     }
 
     public void setPromotionalCouponDiscount(CartsProducts cartProduct, PromotionalCoupon promotionalCoupon) {
-        BigDecimal cartProductOldPrice = cartProduct.getUnitaryPrice();
+        BigDecimal cartProductOldPrice = cartProduct.getProduct().getPrice();
 
         BigDecimal newPrice = cartProductOldPrice.subtract(cartProductOldPrice.multiply(promotionalCoupon.getCouponDiscount()));
 
@@ -134,6 +137,82 @@ public class CartService {
 
         setCartTotal(cart);
 
+    }
+
+    public BigDecimal setExchangeCouponDiscount(CartsProducts cartProduct, ExchangeCoupon exchangeCoupon) {
+        BigDecimal couponAmount = exchangeCoupon.getAmountWorth();
+        BigDecimal cartProductTotal = cartProduct.getFinalPrice();
+
+        return couponAmount.subtract(cartProductTotal);
+    }
+
+    public void applyExchangeCoupon(Cart cart, ExchangeCoupon exchangeCoupon) {
+        List<CartsProducts> cartsProducts = cart.getCartProducts();
+
+        if(cart.getExchangeCoupons().contains(exchangeCoupon)) {
+            return;
+        }
+
+        cart.getExchangeCoupons().add(exchangeCoupon);
+
+        for(CartsProducts cartProduct: cartsProducts) {
+
+            BigDecimal difference = setExchangeCouponDiscount(cartProduct, exchangeCoupon);
+
+            if(difference.compareTo(BigDecimal.valueOf(0)) == 0) {
+
+                cartProduct.setUnitaryPrice(BigDecimal.valueOf(0));
+                cartProduct.setFinalPrice(BigDecimal.valueOf(0));
+
+            } else if(difference.compareTo(BigDecimal.valueOf(0)) == -1) {
+
+                cartProduct.setUnitaryPrice(difference.divide(BigDecimal.valueOf(cartProduct.getProductQuantity())));
+                cartProduct.setFinalPrice(difference);
+
+            } else if(difference.compareTo(BigDecimal.valueOf(0)) == 1) {
+
+                BigDecimal total = cart.getTotalPrice();
+
+                cartProduct.setUnitaryPrice(BigDecimal.valueOf(0));
+                cartProduct.setFinalPrice(BigDecimal.valueOf(0));
+
+                BigDecimal percentile = exchangeService.getPercentileToCreateNewExchangeCoupon();
+                BigDecimal totalPercentile = total.multiply(percentile);
+
+                if(difference.compareTo(totalPercentile) >= 0) {
+                    exchangeService.generateExchangeCouponSurpass(cart.getClient(), difference);
+                }
+
+            }
+
+        }
+
+        setCartTotal(cart);
+    }
+
+    public void removeExchangeCoupon(Cart cart, ExchangeCoupon exchangeCoupon) {
+        List<CartsProducts> cartsProducts = cart.getCartProducts();
+        BigDecimal couponAmount = exchangeCoupon.getAmountWorth();
+        BigDecimal amountLeftover = couponAmount;
+
+        if(cart.getPromotionalCoupon() != null) { // if there is a promotional coupon, reapply it after price reset
+
+            for(CartsProducts cartProduct: cartsProducts) {
+
+                cartProduct.setUnitaryPrice(cartProduct.getProduct().getPrice());
+                cartProduct.setFinalPrice(cartProduct.getProduct().getPrice().multiply(BigDecimal.valueOf(cartProduct.getProductQuantity())));
+
+                amountLeftover = amountLeftover.subtract(cartProduct.getFinalPrice());
+
+            }
+
+            applyPromotionalCoupon(cart, cart.getPromotionalCoupon());
+
+        }
+
+        cart.getExchangeCoupons().remove(exchangeCoupon);
+
+        setCartTotal(cart);
     }
 
     public void setCartTotal(Cart cart) {
