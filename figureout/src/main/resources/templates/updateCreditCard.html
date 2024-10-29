@@ -37,20 +37,27 @@
         </div>
         <div class="card-body">
           <!-- Preferencial? -->
-          <label><b>Preferencial?</b></label>
-          <input class="form-check-input" type="checkbox" id="preferential" th:field="*{preferential}">
-          <p class="text-danger" th:errors="*{preferential}"></p>
-
-          <label><b>Apelido do cartão</b></label>
-          <input type="text" class="form-control"  placeholder="Insira o apelido do cartão de crédito" id="nickname" th:field="*{nickname}">
-          <p class="text-danger" th:errors="*{nickname}"></p>
-
-          <!-- Nome impresso no cartão -->
-          <div class="mt-2">
-            <label><b>Nome impresso no cartão</b></label>
-            <input type="text" class="form-control" id="printedName" placeholder="Insira o nome impresso no cartão" th:field="*{printedName}" required>
-            <p class="text-danger" th:errors="*{printedName}"></p>
+          <div class="col-md-4">
+            <label><b>Preferencial?</b></label>
+            <input class="form-check-input" type="checkbox" id="preferential" th:field="*{preferential}">
+            <p class="text-danger" th:errors="*{preferential}"></p>
           </div>
+
+          <div class="row mt-3">
+            <div class="col-md-6">
+              <label><b>Apelido do cartão</b></label>
+              <input type="text" class="form-control" placeholder="Insira o apelido do cartão de crédito" id="nickname" th:field="*{nickname}">
+              <p class="text-danger" th:errors="*{nickname}"></p>
+            </div>
+
+            <!-- Nome impresso no cartão -->
+            <div class="col-md-6">
+              <label><b>Nome impresso no cartão</b></label>
+              <input type="text" class="form-control" id="printedName" placeholder="Insira o nome impresso no cartão" th:field="*{printedName}" required>
+              <p class="text-danger" th:errors="*{printedName}"></p>
+            </div>
+          </div>
+
 
           <div class="row mt-3">
             <!-- Número do cartão -->
