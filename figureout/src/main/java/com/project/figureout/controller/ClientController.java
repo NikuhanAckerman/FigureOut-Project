@@ -400,6 +400,31 @@ public class ClientController {
         model.addAttribute("entregueStatus", SaleStatusEnum.ENTREGUE);
         model.addAttribute("trocaFinalizadaStatus", SaleStatusEnum.TROCA_FINALIZADA);
 
+        HashMap<CartsProductsKey, ExchangeShowOnPurchasesDTO> productIdExchangeInfo = new HashMap<>();
+
+        for(Sale currentSale: clientSales) {
+
+            for(Exchange currentExchange: currentSale.getExchangeList()) {
+
+                for(ExchangeProducts currentExchangeProduct: currentExchange.getReturnedProducts()) {
+
+                    ExchangeShowOnPurchasesDTO exchangeShowOnPurchasesDTO = new ExchangeShowOnPurchasesDTO();
+
+                    exchangeShowOnPurchasesDTO.setExchangeCode(currentExchange.getExchangeCode());
+                    exchangeShowOnPurchasesDTO.setStatus(currentExchange.getStatus());
+                    exchangeShowOnPurchasesDTO.setCartsProductsKey(currentExchangeProduct.getCartProduct().getId());
+                    exchangeShowOnPurchasesDTO.setQuantityReturned(currentExchangeProduct.getQuantityReturned());
+
+                    productIdExchangeInfo.put(currentExchangeProduct.getCartProduct().getId(), exchangeShowOnPurchasesDTO);
+
+                }
+
+            }
+
+        }
+
+        model.addAttribute("productIdExchangeInfo", productIdExchangeInfo);
+
         return "clientProfilePurchases";
     }
 

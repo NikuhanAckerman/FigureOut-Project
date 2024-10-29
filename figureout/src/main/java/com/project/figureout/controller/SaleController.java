@@ -75,6 +75,7 @@ public class SaleController {
         List<CreditCard> creditCardClientList = client.getCreditCards();
         ChangeCartProductQuantityDTO changeCartProductQuantityDTO = new ChangeCartProductQuantityDTO();
         PromotionalCouponDTO promotionalCouponDTO = new PromotionalCouponDTO();
+        ExchangeCouponIndividualDTO exchangeCouponIndividualDTO = new ExchangeCouponIndividualDTO();
 
         List<CartsProducts> cartsProductsList = cart.getCartProducts();
 
@@ -93,6 +94,7 @@ public class SaleController {
         model.addAttribute("creditCardClientList", creditCardClientList);
         model.addAttribute("changeCartProductQuantityDTO", changeCartProductQuantityDTO);
         model.addAttribute("promotionalCouponDTO", promotionalCouponDTO);
+        model.addAttribute("exchangeCouponIndividualDTO", exchangeCouponIndividualDTO);
         model.addAttribute("orderTotalPrice", cart.getTotalPrice());
 
         return "makeOrder";

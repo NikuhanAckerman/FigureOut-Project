@@ -40,7 +40,7 @@
         <div class="mb-3">
             <form th:action="@{/cart/addExchangeCoupon/{cartId}(cartId = ${cartId})}" th:object="${exchangeCouponIndividualDTO}" method="POST">
                 <input type="hidden" name="_method" value="PUT"/>
-                <input type="text" id="exchangeCouponInput" class="form-control" th:field="*{couponName}" placeholder="Digite seu cupom de troca">
+                <input type="text" id="exchangeCouponInput" class="form-control" th:field="*{exchangeCouponCode}" placeholder="Digite seu cupom de troca">
                 <button id="applyExchangeCoupon1" type="submit" class="btn btn-primary mt-2">Aplicar Cupom de Troca</button>
             </form>
 

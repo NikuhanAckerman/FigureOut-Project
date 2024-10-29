@@ -31,8 +31,8 @@ public class AdminController {
     @Autowired
     AddressService addressService;
 
-//    @Autowired
-//    SaleService saleService;
+    @Autowired
+    SaleService saleService;
 
     @Autowired
     CreditCardService creditCardService;
@@ -81,6 +81,7 @@ public class AdminController {
     @GetMapping("/chart")
     public String chart(Model model) {
         //List<SaleDTO> vendas = saleService.getSalesByProductByMonth();
+
         //model.addAttribute("vendas", vendas);
         return "chart"; // nome do template Thymeleaf
     }
