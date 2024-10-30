@@ -7,6 +7,7 @@ import com.project.figureout.repository.CartRepository;
 import com.project.figureout.repository.ProductRepository;
 import com.project.figureout.repository.SaleRepository;
 import com.project.figureout.repository.SalesCardsRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -83,6 +84,8 @@ public class SaleService {
 //        return saleRepository.findSalesByProductByMonth();
 //    }
 
+
+
     public void changeSaleStatus(Sale sale, ChangeSaleStatusDTO changeSaleStatusDTO) {
         SaleStatusEnum saleStatus = sale.getStatus();
         SaleStatusEnum changeSaleStatusDTOStatus = changeSaleStatusDTO.getStatus();
@@ -91,6 +94,7 @@ public class SaleService {
         SaleStatusEnum trocaAutorizada = SaleStatusEnum.TROCA_AUTORIZADA;
         SaleStatusEnum emTroca = SaleStatusEnum.EM_TROCA;
         SaleStatusEnum trocaRecebida = SaleStatusEnum.TROCA_RECEBIDA;
+        SaleStatusEnum trocaFinalizada = SaleStatusEnum.TROCA_FINALIZADA;
 
         List<CartsProducts> saleCartsProducts = sale.getCart().getCartProducts();
 
@@ -130,6 +134,16 @@ public class SaleService {
 
             if(changeSaleStatusDTOStatus.name().equals(currentEnum.name())) {
                 exchangeInProcessFirst.setStatus(currentEnum);
+            }
+
+        }
+
+        if(changeSaleStatusDTO.getStatus().equals(trocaFinalizada)) {
+
+            if(exchangeInProcessFirst != null) {
+
+                exchangeInProcessFirst.setCurrentExchange(false);
+
             }
 
         }
@@ -176,6 +190,7 @@ public class SaleService {
             }
 
         }
+
 
         sale.setStatus(changeSaleStatusDTOStatus);
 

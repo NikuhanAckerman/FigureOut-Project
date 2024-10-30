@@ -45,7 +45,7 @@ public class Sale {
     @JoinColumn(name = "ven_cupom_promocional_aplicado")
     private PromotionalCoupon promotionalCouponApplied;
 
-    @OneToMany
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ExchangeCoupon> exchangeCouponsApplied = new ArrayList<>();
 
     @JoinColumn(name = "ven_frete")
@@ -54,7 +54,7 @@ public class Sale {
     @Column(name = "ven_data_hora")
     private LocalDateTime dateTimeSale;
 
-    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Exchange> exchangeList = new ArrayList<>();
 
 }

@@ -138,10 +138,6 @@
                                 class="badge bg-warning text-dark"
                                 th:text="'Devolvido: ' + ${exchange.quantityReturned}">
                           </span>
-                          <span
-                                  class="badge bg-warning text-dark"
-                                  th:text="'Quantidade trocável: ' + ${cartProduct.productQuantity - exchange.quantityReturned}">
-                          </span>
                         </div>
 
                       </div>
@@ -174,10 +170,8 @@
                     <h5 th:text="'Status da troca: ' + ${exchange.status} "></h5>
 
                     <p>Produtos devolvidos à loja:</p>
-                    
+
                     <div class="card" th:each="exchangeProduct : ${exchange.returnedProducts}">
-
-
 
                       <p th:text="'Nome: ' + ${exchangeProduct.cartProduct.product.name}"></p>
                       <p th:text="'Preço unitário: R$' + ${exchangeProduct.cartProduct.unitaryPrice}"></p>

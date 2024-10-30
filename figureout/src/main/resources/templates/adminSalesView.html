@@ -371,6 +371,8 @@
         const saleId = button.getAttribute('data-bs-sale-id');
         const exchangeDivElement = document.getElementById("exchangeDiv");
 
+        exchangeDivElement.innerHTML = '';
+
         fetch(`/sales/getSaleExchangeList/${saleId}`)
             .then(response => {
                 if (!response.ok) {
@@ -385,11 +387,10 @@
                     return;  // Stop further execution
                 }
 
-                console.log(exchanges);  // Log the JSON response for inspection
-
-                let exchangeList = '';
+                console.log(exchanges.length);  // Log the JSON response for inspection
 
                 exchanges.forEach(exchange => {
+                    console.log(exchange.exchangeCode);
                     let exchangeCoupon = ''; // Default as empty
 
                     // Check if the exchange has a coupon
@@ -403,31 +404,29 @@
                     `;
                     }
 
+                    let finalAmount = exchange.finalAmount.toFixed(2);
+
                     const exchangeItem = `
                         <div class="card mt-3">
                             <div class="card-body" id="exchangeDiv_${exchange.id}">
                                 <h1 class="card-title text-danger">Código da troca: ${exchange.exchangeCode}</h1>
                                 <h3 class="card-title">ID da troca: ${exchange.id}</h3>
                                 <h4 class="text-primary">Status: ${exchange.status}</h4>
-                                <h4 class="text-danger">Quantia total da troca: R$${exchange.finalAmount}</h4>
+                                <h4 class="text-danger">Quantia total da troca: R$${finalAmount}</h4>
                                 <h4 class="text-primary">
                                     Data de requisição da troca: ${new Date(exchange.exchangeRequestTime).toLocaleString('pt-BR')}
                                 </h4>
                                 ${exchangeCoupon}
-                                <div id="exchangeProductListDiv_${exchange.id}"></div>
+                                <div id="exchangeProductListDiv_${exchange.id}">
+
+                                </div>
                             </div>
                         </div>
                         `;
 
-                    exchangeList += exchangeItem;
-                });
+                    exchangeDivElement.insertAdjacentHTML('beforeend', exchangeItem)
 
-                // Add all exchange cards to the DOM in one go
-                exchangeDivElement.innerHTML = exchangeList;
-
-                // Now, populate the returned products for each exchange
-                exchanges.forEach(exchange => {
-                    let returnedProductList = '';
+                    let currentExchange = document.getElementById(`exchangeProductListDiv_${exchange.id}`);
 
                     exchange.returnedProducts.forEach(returnedProduct => {
                         const returnedProductItem = `
@@ -442,13 +441,11 @@
                                     </div>
                                     `;
 
-                        returnedProductList += returnedProductItem;
+                        currentExchange.insertAdjacentHTML('beforeend', returnedProductItem);
                     });
 
-                    // Insert the returned products into the correct exchange div
-                    const currentExchange = document.getElementById(`exchangeProductListDiv_${exchange.id}`);
-                    currentExchange.insertAdjacentHTML('beforeend', returnedProductList);
                 });
+
             })
             .catch(error => {
                 console.error(error);

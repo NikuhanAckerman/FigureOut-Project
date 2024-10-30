@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -335,6 +336,13 @@ public class SaleController {
     @ResponseBody
     public List<Exchange> getSaleExchangeList(@PathVariable long saleId) {
         Sale sale = saleService.getSaleById(saleId);
+
+        System.out.println("Number of exchanges: " + sale.getExchangeList().size());
+        for (Exchange currentExchange : sale.getExchangeList()) {
+            System.out.println(currentExchange.getExchangeCode());
+        }
+
+
 
         return sale.getExchangeList();
     }
