@@ -400,13 +400,14 @@ public class ClientController {
         model.addAttribute("entregueStatus", SaleStatusEnum.ENTREGUE);
         model.addAttribute("trocaFinalizadaStatus", SaleStatusEnum.TROCA_FINALIZADA);
 
-        HashMap<CartsProductsKey, ExchangeShowOnPurchasesDTO> productIdExchangeInfo = new HashMap<>();
+        HashMap<CartsProductsKey, List<ExchangeShowOnPurchasesDTO>> productIdExchangeInfo = new HashMap<>();
 
         for(Sale currentSale: clientSales) {
 
             for(Exchange currentExchange: currentSale.getExchangeList()) {
 
                 for(ExchangeProducts currentExchangeProduct: currentExchange.getReturnedProducts()) {
+                    System.out.println("ID do carrinho do exchange product: " + currentExchangeProduct.getCartProduct().getId().getCartId());
 
                     ExchangeShowOnPurchasesDTO exchangeShowOnPurchasesDTO = new ExchangeShowOnPurchasesDTO();
 
@@ -415,13 +416,28 @@ public class ClientController {
                     exchangeShowOnPurchasesDTO.setCartsProductsKey(currentExchangeProduct.getCartProduct().getId());
                     exchangeShowOnPurchasesDTO.setQuantityReturned(currentExchangeProduct.getQuantityReturned());
 
-                    productIdExchangeInfo.put(currentExchangeProduct.getCartProduct().getId(), exchangeShowOnPurchasesDTO);
+                    //productIdExchangeInfo.computeIfAbsent(cartId, k -> new ArrayList<>()).add(exchangeShowOnPurchasesDTO);
+                    productIdExchangeInfo.computeIfAbsent(exchangeShowOnPurchasesDTO.getCartsProductsKey(), value -> new ArrayList<>()).add(exchangeShowOnPurchasesDTO);
 
                 }
 
             }
 
         }
+
+        productIdExchangeInfo.forEach((key, values ) -> {
+            for (ExchangeShowOnPurchasesDTO value : values) {
+                System.out.println("");
+                System.out.println("Key (Cart ID): " + key);
+                System.out.println("Product ID: " + value.getCartsProductsKey().getProductId());
+                System.out.println("Cart ID: " + value.getCartsProductsKey().getCartId());
+                System.out.println("Código da troca: " + value.getExchangeCode());
+                System.out.println("Status da troca: " + value.getStatus());
+                System.out.println("Quantidade retornada: " + value.getQuantityReturned());
+                System.out.println("");
+            }
+
+        });
 
         model.addAttribute("productIdExchangeInfo", productIdExchangeInfo);
 

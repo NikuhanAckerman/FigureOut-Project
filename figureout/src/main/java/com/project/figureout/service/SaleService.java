@@ -9,6 +9,7 @@ import com.project.figureout.repository.SaleRepository;
 import com.project.figureout.repository.SalesCardsRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

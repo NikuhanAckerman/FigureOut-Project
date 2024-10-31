@@ -10,6 +10,7 @@ import com.project.figureout.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.apache.commons.text.RandomStringGenerator;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -57,6 +58,9 @@ public class SaleController {
     private StockService stockService;
 
     private ClientNavigator clientNavigator;
+
+    @Autowired
+    ExchangeService exchangeService;
 
     @GetMapping("")
     public String showSalesGet(Model model) {
@@ -321,6 +325,7 @@ public class SaleController {
         model.addAttribute("changeSaleStatusDTO", new ChangeSaleStatusDTO());
         model.addAttribute("status", SaleStatusEnum.values());
         model.addAttribute("sales", saleService.getAllSales());
+        model.addAttribute("exchanges", exchangeService.getAllExchanges());
 
         return "adminSalesView";
     }
@@ -337,14 +342,15 @@ public class SaleController {
     public List<Exchange> getSaleExchangeList(@PathVariable long saleId) {
         Sale sale = saleService.getSaleById(saleId);
 
-        System.out.println("Number of exchanges: " + sale.getExchangeList().size());
-        for (Exchange currentExchange : sale.getExchangeList()) {
-            System.out.println(currentExchange.getExchangeCode());
-        }
-
-
-
         return sale.getExchangeList();
+    }
+
+    @GetMapping("/getSpecificExchange/{exchangeId}")
+    @ResponseBody
+    public Exchange getSpecificExchange(@PathVariable long exchangeId) {
+        Exchange exchange = exchangeService.getExchangeById(exchangeId);
+
+        return exchange;
     }
 
     @GetMapping("/getSaleCartId/{saleId}")

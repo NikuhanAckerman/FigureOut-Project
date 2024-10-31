@@ -23,7 +23,7 @@
 <nav class="navbar navbar-custom fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a id="upper-navbar-text" class="navbar-brand">VENDAS</a>
+            <a id="upper-navbar-text" class="navbar-brand">VENDAS E TROCAS</a>
         </div>
 
         <ul class="navbar-nav">
@@ -49,7 +49,8 @@
         <thead class="table-dark">
         <tr>
             <th scope="col">ID da Venda</th>
-            <th scope="col">Endereço de entrega</th>
+            <th scope="col">Código da Venda</th>
+            <th scope="col">Cliente</th>
             <th scope="col">Carrinho</th>
             <th scope="col">Trocas</th>
             <th scope="col">Status</th>
@@ -58,8 +59,8 @@
         <tbody>
         <tr th:each="sale : ${sales}">
             <td class="id-venda" th:text="${sale.id}"></td>
-            <td th:if="${sale.deliveryAddress != null}" th:text="${sale.deliveryAddress.nickname}"></td>
-            <td th:if="${sale.deliveryAddress == null}">Nenhum endereço</td>
+            <td th:text="${sale.saleCode}"></td>
+            <td th:text="'ID: ' + ${sale.cart.client.id} + ' Nome: ' + ${sale.cart.client.name}"></td>
             <td>
                 <button type="button" class="btn btn-secondary" th:data-bs-sale-id = "${sale.id}" data-bs-toggle="modal" data-bs-target="#seeCartModal">Ver carrinho</button>
             </td>
@@ -87,6 +88,39 @@
 
         </tbody>
     </table>
+
+    <h1 class="mb-4">Visualização de Trocas</h1>
+
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">ID da Troca</th>
+            <th scope="col">Código da Troca</th>
+            <th scope="col">Cliente</th>
+            <th scope="col">Detalhes da Troca</th>
+            <th scope="col">Detalhes da Venda</th>
+            <th scope="col">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="exchange : ${exchanges}">
+            <td class="id-exchange" th:text="${exchange.id}"></td>
+            <td th:text="${exchange.exchangeCode}"></td>
+            <td th:text="'ID: ' + ${exchange.client.id} + ' Nome: ' + ${exchange.client.name}"></td>
+            <td>
+                <button type="button" class="btn btn-secondary" th:data-bs-exchange-id = "${exchange.id}" data-bs-toggle="modal" data-bs-target="#seeSpecificExchangeModal">Ver detalhes</button>
+            </td>
+            <td>
+                <button type="button" class="btn btn-secondary" th:data-bs-sale-id = "${exchange.sale.id}" data-bs-toggle="modal" data-bs-target="#seeCartModal">Ver venda</button>
+            </td>
+
+            <td class="text-primary" th:text="${exchange.status}"></td>
+
+        </tr>
+
+        </tbody>
+    </table>
+
 </div>
 
 <div id="seeCartModal" class="modal fade">
@@ -152,10 +186,30 @@
     </div>
 </div>
 
+<div id="seeSpecificExchangeModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Troca</h3>
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="specificExchangeDiv">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 
     const seeCartModal = document.getElementById("seeCartModal");
     const seeExchangesModal = document.getElementById("seeExchangesModal")
+    const seeSpecificExchangeModal = document.getElementById("seeSpecificExchangeModal")
 
     seeCartModal.addEventListener('show.bs.modal', function (event) {
         console.log("mostrou modal de carrinho")
@@ -364,12 +418,14 @@
 
     });
 
+    const exchangeDivElement = document.getElementById("exchangeDiv");
+
     seeExchangesModal.addEventListener('show.bs.modal', function (event) {
         console.log("mostrou modal de troca")
+
         const button = event.relatedTarget
 
         const saleId = button.getAttribute('data-bs-sale-id');
-        const exchangeDivElement = document.getElementById("exchangeDiv");
 
         exchangeDivElement.innerHTML = '';
 
@@ -381,6 +437,8 @@
                 return response.json();  // Directly parse as JSON
             })
             .then(exchanges => {
+                console.log('Raw exchange data:', exchanges); // Check how many exchanges arrive
+
                 if (exchanges.length === 0) {
                     console.warn("Nenhuma troca encontrada.");
                     exchangeDivElement.innerHTML = '<h1 class="text-primary">Nenhuma troca.</h1>';
@@ -429,14 +487,17 @@
                     let currentExchange = document.getElementById(`exchangeProductListDiv_${exchange.id}`);
 
                     exchange.returnedProducts.forEach(returnedProduct => {
+                        let unitaryPrice = returnedProduct.cartProduct.unitaryPrice.toFixed(2);
+                        let totalAmount = returnedProduct.finalAmount.toFixed(2);
+
                         const returnedProductItem = `
                                     <div class="card mt-3">
                                         <div class="card-body">
                                             <p class="card-title">ID do produto: ${returnedProduct.cartProduct.id.productId}</p>
                                             <p class="card-text">Nome: ${returnedProduct.cartProduct.product.name}</p>
-                                            <p class="card-text">Preço unitário: R$${returnedProduct.cartProduct.unitaryPrice}</p>
+                                            <p class="card-text">Preço unitário: R$${unitaryPrice}</p>
                                             <p class="card-text">Quantidade do produto: ${returnedProduct.quantityReturned}</p>
-                                            <p class="card-text">Quantia total: R$${returnedProduct.finalAmount}</p>
+                                            <p class="card-text">Quantia total: R$${totalAmount}</p>
                                         </div>
                                     </div>
                                     `;
@@ -450,6 +511,92 @@
             .catch(error => {
                 console.error(error);
             });
+
+    });
+
+    const specificExchangeDivElement = document.getElementById("specificExchangeDiv");
+
+    seeSpecificExchangeModal.addEventListener('show.bs.modal', function(event) {
+        console.log("mostrou modal de troca específica")
+
+        const button = event.relatedTarget
+
+        const exchangeId = button.getAttribute('data-bs-exchange-id');
+
+        specificExchangeDivElement.innerHTML = '';
+
+        fetch(`/sales/getSpecificExchange/${exchangeId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erro ao retornar troca.");
+                }
+                return response.json();  // Directly parse as JSON
+            })
+            .then(exchange => {
+                console.log('Raw exchange data:', exchange); // Check how many exchanges arrive
+
+                console.log(exchange.exchangeCode);
+                let exchangeCoupon = ''; // Default as empty
+
+                // Check if the exchange has a coupon
+                if (exchange.coupon != null) {
+                    console.log("its not null lol")
+                    console.log(exchange.coupon.amountWorth)
+                    exchangeCoupon = `
+                         <div>
+                            <h4 class="text-success">Código de cupom da troca: ${exchange.coupon.exchangeCouponCode}</h4>
+                         </div>
+                    `;
+                }
+
+                let finalAmount = exchange.finalAmount.toFixed(2);
+
+                const exchangeItem = `
+                   <div class="card mt-3">
+                       <div class="card-body" id="exchangeDiv_${exchange.id}">
+                           <h1 class="card-title text-danger">Código da troca: ${exchange.exchangeCode}</h1>
+                           <h3 class="card-title">ID da troca: ${exchange.id}</h3>
+                           <h4 class="text-primary">Status: ${exchange.status}</h4>
+                           <h4 class="text-danger">Quantia total da troca: R$${finalAmount}</h4>
+                           <h4 class="text-primary">
+                              Data de requisição da troca: ${new Date(exchange.exchangeRequestTime).toLocaleString('pt-BR')}
+                           </h4>
+                           ${exchangeCoupon}
+                           <div id="specificExchangeProductListDiv_${exchange.id}">
+
+                           </div>
+                       </div>
+                   </div>
+                   `;
+
+                specificExchangeDivElement.insertAdjacentHTML('beforeend', exchangeItem)
+
+                const specificExchangeProductListDivElement = document.getElementById(`specificExchangeProductListDiv_${exchange.id}`);
+
+                exchange.returnedProducts.forEach(returnedProduct => {
+                    let unitaryPrice = returnedProduct.cartProduct.unitaryPrice.toFixed(2);
+                    let totalAmount = returnedProduct.finalAmount.toFixed(2);
+
+                    const returnedProductItem = `
+                                    <div class="card mt-3">
+                                        <div class="card-body">
+                                            <p class="card-title">ID do produto: ${returnedProduct.cartProduct.id.productId}</p>
+                                            <p class="card-text">Nome: ${returnedProduct.cartProduct.product.name}</p>
+                                            <p class="card-text">Preço unitário: R$${unitaryPrice}</p>
+                                            <p class="card-text">Quantidade do produto: ${returnedProduct.quantityReturned}</p>
+                                            <p class="card-text">Quantia total: R$${totalAmount}</p>
+                                        </div>
+                                    </div>
+                      `;
+
+                    specificExchangeProductListDivElement.insertAdjacentHTML('beforeend', returnedProductItem);
+                });
+
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
     });
 
 </script>

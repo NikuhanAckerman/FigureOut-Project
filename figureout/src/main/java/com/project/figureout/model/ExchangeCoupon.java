@@ -22,6 +22,7 @@ public class ExchangeCoupon {
 
     @ManyToOne
     @JoinColumn(name = "cdt_cli_id")
+    @JsonIgnore
     private Client client;
 
     @ManyToOne

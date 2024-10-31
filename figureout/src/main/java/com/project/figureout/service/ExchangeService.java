@@ -28,8 +28,17 @@ public class ExchangeService {
                                                                                       // leftover value is bigger than 100% + (percentile)%
                                                                                      // then I create a new exchange coupon with the value of
                                                                                     // the leftover.
+
     public void saveExchange(Exchange exchange) {
         exchangeRepository.save(exchange);
+    }
+
+    public List<Exchange> getAllExchanges() {
+        return exchangeRepository.findAll();
+    }
+
+    public Exchange getExchangeById(long id) {
+        return exchangeRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Troca não encontrada por ID."));
     }
 
     public void generateExchangeCoupon(Exchange exchange) {
