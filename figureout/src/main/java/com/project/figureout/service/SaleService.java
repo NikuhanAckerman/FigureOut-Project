@@ -12,10 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 public class SaleService {
@@ -197,6 +196,22 @@ public class SaleService {
 
         saveSale(sale);
 
+    }
+
+    // Método para achar os produtos com base na data.
+    public Map<LocalDate, BigDecimal> getSalesData(LocalDate startDate, LocalDate endDate) {
+        List<Sale> sales = saleRepository.findByDateTimeSaleBetween(startDate.atStartOfDay(), endDate.atTime(23, 59, 59));
+
+        Map<LocalDate, BigDecimal> salesData = new HashMap<>();
+
+        for (Sale sale : sales) {
+            LocalDate date = sale.getDateTimeSale().toLocalDate();
+            BigDecimal totalSale = salesData.getOrDefault(date, BigDecimal.ZERO).add(sale.getFinalPrice());
+
+            salesData.put(date, totalSale);
+        }
+
+        return salesData;
     }
 
 

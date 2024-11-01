@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import org.apache.commons.text.RandomStringGenerator;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,6 +59,9 @@ public class SaleController {
     private StockService stockService;
 
     private ClientNavigator clientNavigator;
+
+    @Autowired
+    private SaleRepository saleRepository;
 
     @Autowired
     ExchangeService exchangeService;
@@ -429,6 +433,24 @@ public class SaleController {
             return ResponseEntity.ok().body(Collections.emptyMap()); // Return an empty map if the coupon is null
         }
         return ResponseEntity.ok(coupon); // Otherwise, return the coupon
+    }
+
+    // Gráfico de vendas.
+//    @GetMapping
+//    public String showSalesChart(Model model) {
+//        // Adiciona um atributo vazio ao modelo, se necessário
+//        model.addAttribute("salesData", new HashMap<>());
+//        return "chart"; // O nome do template Thymeleaf
+//    }
+
+    // Gráfico de vendas
+    @GetMapping("/chart")
+    public String getSalesReport(Model model,
+                                 @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                 @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        Map<LocalDate, BigDecimal> salesData = saleService.getSalesData(startDate, endDate);
+        model.addAttribute("salesData", salesData);
+        return "chart";
     }
 
 }
