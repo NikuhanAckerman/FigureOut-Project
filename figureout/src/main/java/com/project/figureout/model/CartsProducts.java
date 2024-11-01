@@ -39,4 +39,7 @@ public class CartsProducts {
     @Column(name = "cpr_produto_preco_final")
     private BigDecimal finalPrice;
 
+    @Column(name = "cpr_quantidade_trocavel")
+    private int exchangeableQuantity;
+
 }

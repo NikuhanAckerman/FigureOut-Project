@@ -139,14 +139,16 @@
                     <p th:text="'Preço total: R$' + ${cartProduct.finalPrice}"></p>
 
                     <div class="d-flex flex-column align-items-start">
-                      <div th:if="${!productIdExchangeInfo[cartProduct.id].isEmpty()}">
+                      <div th:if="${productIdExchangeInfo[cartProduct.id] != null and !productIdExchangeInfo[cartProduct.id].isEmpty()}">
                         <p class="text-primary">Este produto está sendo trocado ou foi trocado:</p>
 
                         <div th:each="exchangeCartProduct : ${productIdExchangeInfo[cartProduct.id]}">
                           <span class="badge bg-warning text-dark" th:text="'Código da troca: ' + ${exchangeCartProduct.exchangeCode}"></span>
                           <span class="badge bg-warning text-dark" th:text="' Status da troca: ' + ${exchangeCartProduct.status}"></span>
                           <span class="badge bg-warning text-dark" th:text="'Devolvido: ' + ${exchangeCartProduct.quantityReturned}"></span>
+                          <span class="badge bg-info text-dark" th:text="'Quantidade ainda devolvível do produto: ' + ${cartProduct.exchangeableQuantity}"></span>
                         </div>
+
                       </div>
 
 

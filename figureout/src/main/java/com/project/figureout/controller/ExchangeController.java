@@ -102,6 +102,8 @@ public class ExchangeController {
             exchangeMap.forEach((productId, quantity) -> {// Assuming constructor that takes a Long
                 CartsProducts cartProduct = cartsProductsRepository.getCartsProductsByProductIdAndCart(productId, sale.getCart());
 
+                cartProduct.setExchangeableQuantity(cartProduct.getExchangeableQuantity() - quantity);
+
                 ExchangeProductsKey exchangeProductsKey = new ExchangeProductsKey();
                 exchangeProductsKey.setExchangeId(newExchange.getId());
 

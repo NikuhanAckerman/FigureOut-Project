@@ -415,8 +415,7 @@ public class ClientController {
                     exchangeShowOnPurchasesDTO.setStatus(currentExchange.getStatus());
                     exchangeShowOnPurchasesDTO.setCartsProductsKey(currentExchangeProduct.getCartProduct().getId());
                     exchangeShowOnPurchasesDTO.setQuantityReturned(currentExchangeProduct.getQuantityReturned());
-
-                    //productIdExchangeInfo.computeIfAbsent(cartId, k -> new ArrayList<>()).add(exchangeShowOnPurchasesDTO);
+                    ;
                     productIdExchangeInfo.computeIfAbsent(exchangeShowOnPurchasesDTO.getCartsProductsKey(), value -> new ArrayList<>()).add(exchangeShowOnPurchasesDTO);
 
                 }

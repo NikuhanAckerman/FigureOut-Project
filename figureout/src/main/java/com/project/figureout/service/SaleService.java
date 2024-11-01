@@ -12,9 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Service;
 
+<<<<<<< HEAD
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
+=======
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.NoSuchElementException;
+>>>>>>> c318bbb2147f5314b5aad1437ceac5ef8ca3ea04
 
 @Service
 public class SaleService {
@@ -130,10 +138,21 @@ public class SaleService {
 
         }
 
+        LocalDateTime now = LocalDateTime.now();
+
         for(ExchangeStatusEnum currentEnum: ExchangeStatusEnum.values()) {
 
             if(changeSaleStatusDTOStatus.name().equals(currentEnum.name())) {
                 exchangeInProcessFirst.setStatus(currentEnum);
+
+                if(currentEnum.equals(trocaAutorizada)) {
+                    exchangeInProcessFirst.setExchangeAcceptedTime(now);
+                }
+
+                if(currentEnum.equals(trocaFinalizada)) {
+                    exchangeInProcessFirst.setExchangeFinishTime(now);
+                }
+
             }
 
         }
@@ -190,7 +209,6 @@ public class SaleService {
             }
 
         }
-
 
         sale.setStatus(changeSaleStatusDTOStatus);
 

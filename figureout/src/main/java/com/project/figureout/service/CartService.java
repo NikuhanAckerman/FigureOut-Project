@@ -66,6 +66,7 @@ public class CartService {
         cartProduct.setProduct(product);
         cartProduct.setProductQuantity(changeCartProductQuantityDTO.getQuantity());
         cartProduct.setUnitaryPrice(product.getPrice()); // setting a temporary price here so it doesnt come out as 0 when i check for promotional coupon
+        cartProduct.setExchangeableQuantity(changeCartProductQuantityDTO.getQuantity());
 
         if(cart.getPromotionalCoupon() != null) {
             setPromotionalCouponDiscount(cartProduct, cart.getPromotionalCoupon());
@@ -84,6 +85,7 @@ public class CartService {
 
     public void changeProductQuantity(CartsProducts cartProduct, ChangeCartProductQuantityDTO changeCartProductQuantityDTO) {
         cartProduct.setProductQuantity(changeCartProductQuantityDTO.getQuantity());
+        cartProduct.setExchangeableQuantity(changeCartProductQuantityDTO.getQuantity());
         cartProduct.setFinalPrice(cartProduct.getUnitaryPrice().multiply(BigDecimal.valueOf(cartProduct.getProductQuantity())));
     }
 
@@ -139,13 +141,6 @@ public class CartService {
 
     }
 
-    public BigDecimal setExchangeCouponDiscount(CartsProducts cartProduct, ExchangeCoupon exchangeCoupon) {
-        BigDecimal couponAmount = exchangeCoupon.getAmountWorth();
-        BigDecimal cartProductTotal = cartProduct.getFinalPrice();
-
-        return couponAmount.subtract(cartProductTotal);
-    }
-
     public void applyExchangeCoupon(Cart cart, ExchangeCoupon exchangeCoupon) {
         List<CartsProducts> cartsProducts = cart.getCartProducts();
 
@@ -155,34 +150,53 @@ public class CartService {
 
         cart.getExchangeCoupons().add(exchangeCoupon);
 
+        BigDecimal difference;
+        difference = exchangeCoupon.getAmountWorth();
+
         for(CartsProducts cartProduct: cartsProducts) {
 
-            BigDecimal difference = setExchangeCouponDiscount(cartProduct, exchangeCoupon);
+            BigDecimal cartProductTotal = cartProduct.getFinalPrice();
+            System.out.println("CartProduct total price: " + cartProductTotal);
+            System.out.println("Difference currently: " + difference);
+            difference = difference.subtract(cartProductTotal);
+            System.out.println("Difference after subtraction currently: " + difference);
+        }
 
-            if(difference.compareTo(BigDecimal.valueOf(0)) == 0) {
+        System.out.println("Valor de sobra do cupom de troca " + exchangeCoupon.getExchangeCouponCode() + " : " + difference);
 
+        if(difference.compareTo(BigDecimal.valueOf(0)) == 0) {
+            System.out.println("Difference is equal to 0");
+
+            for(CartsProducts cartProduct: cartsProducts) {
                 cartProduct.setUnitaryPrice(BigDecimal.valueOf(0));
                 cartProduct.setFinalPrice(BigDecimal.valueOf(0));
+            }
 
-            } else if(difference.compareTo(BigDecimal.valueOf(0)) == -1) {
+        } else if(difference.compareTo(BigDecimal.valueOf(0)) == -1) {
+            System.out.println("Difference is lesser than 0");
 
+            difference = difference.abs();
+
+            for(CartsProducts cartProduct: cartsProducts.reversed()) {
                 cartProduct.setUnitaryPrice(difference.divide(BigDecimal.valueOf(cartProduct.getProductQuantity())));
-                cartProduct.setFinalPrice(difference);
+                cartProduct.setFinalPrice(cartProduct.getFinalPrice().subtract(difference));
+            }
 
-            } else if(difference.compareTo(BigDecimal.valueOf(0)) == 1) {
+        } else if(difference.compareTo(BigDecimal.valueOf(0)) == 1) {
+            System.out.println("Difference is bigger than 0");
 
-                BigDecimal total = cart.getTotalPrice();
+            BigDecimal total = cart.getTotalPrice();
 
+            for(CartsProducts cartProduct: cartsProducts) {
                 cartProduct.setUnitaryPrice(BigDecimal.valueOf(0));
                 cartProduct.setFinalPrice(BigDecimal.valueOf(0));
+            }
 
-                BigDecimal percentile = exchangeService.getPercentileToCreateNewExchangeCoupon();
-                BigDecimal totalPercentile = total.multiply(percentile);
+            BigDecimal percentile = exchangeService.getPercentileToCreateNewExchangeCoupon();
+            BigDecimal totalPercentile = total.multiply(percentile);
 
-                if(difference.compareTo(totalPercentile) >= 0) {
-                    exchangeService.generateExchangeCouponSurpass(cart.getClient(), difference);
-                }
-
+            if(difference.compareTo(totalPercentile) >= 0) {
+                exchangeService.generateExchangeCouponSurpass(cart.getClient(), difference);
             }
 
         }
@@ -195,19 +209,29 @@ public class CartService {
         BigDecimal couponAmount = exchangeCoupon.getAmountWorth();
         BigDecimal amountLeftover = couponAmount;
 
-        if(cart.getPromotionalCoupon() != null) { // if there is a promotional coupon, reapply it after price reset
+        for(CartsProducts cartProduct: cartsProducts.reversed()) {
 
-            for(CartsProducts cartProduct: cartsProducts) {
+            BigDecimal finalAmountNeeded = cartProduct.getProduct().getPrice().multiply(BigDecimal.valueOf(cartProduct.getProductQuantity()));
 
-                cartProduct.setUnitaryPrice(cartProduct.getProduct().getPrice());
+            amountLeftover = amountLeftover.subtract(finalAmountNeeded);
+
+            if(amountLeftover.compareTo(BigDecimal.valueOf(0)) == -1) {
+
+                cartProduct.setFinalPrice(amountLeftover);
+                cartProduct.setUnitaryPrice(amountLeftover.divide(BigDecimal.valueOf(cartProduct.getProductQuantity())));
+
+            } else if (amountLeftover.compareTo(BigDecimal.valueOf(0)) >= 0) {
+
                 cartProduct.setFinalPrice(cartProduct.getProduct().getPrice().multiply(BigDecimal.valueOf(cartProduct.getProductQuantity())));
-
-                amountLeftover = amountLeftover.subtract(cartProduct.getFinalPrice());
+                cartProduct.setUnitaryPrice(cartProduct.getProduct().getPrice());
 
             }
 
-            applyPromotionalCoupon(cart, cart.getPromotionalCoupon());
+            amountLeftover = amountLeftover.subtract(cartProduct.getFinalPrice());
+        }
 
+        if(cart.getPromotionalCoupon() != null) {
+            applyPromotionalCoupon(cart, cart.getPromotionalCoupon());
         }
 
         cart.getExchangeCoupons().remove(exchangeCoupon);
@@ -278,7 +302,7 @@ public class CartService {
                 }
 
                 LocalDateTime now = LocalDateTime.now();
-                LocalDateTime expirationTime = currentCart.getDateOfCreation().plusMinutes(1);
+                LocalDateTime expirationTime = currentCart.getDateOfCreation().plusMinutes(20);
 
                 if (now.isAfter(expirationTime)) {
                     System.out.println("Cart expired");
@@ -290,7 +314,7 @@ public class CartService {
 
     }
 
-    private static final int qntMinutesExpire = 20;  // Set to 20 minutes
+    private static final int qntMinutesExpire = 1;  // Set to 20 minutes
     private static final long qntMinutesExpireInMs = qntMinutesExpire * 60 * 1000; // Convert to milliseconds
 
     @Scheduled(fixedRate = qntMinutesExpireInMs)  // Run every minute (60000 ms)
