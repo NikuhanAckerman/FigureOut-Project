@@ -156,14 +156,18 @@ public class CartService {
         for(CartsProducts cartProduct: cartsProducts) {
 
             BigDecimal cartProductTotal = cartProduct.getFinalPrice();
-            System.out.println("CartProduct total price: " + cartProductTotal);
-            System.out.println("Difference currently: " + difference);
+
             difference = difference.subtract(cartProductTotal);
-            System.out.println("Difference after subtraction currently: " + difference);
+
+            //System.out.println("CartProduct total price: " + cartProductTotal);
+            //System.out.println("Difference currently: " + difference);
+            //System.out.println("Difference after subtraction currently: " + difference);
+
         }
 
         System.out.println("Valor de sobra do cupom de troca " + exchangeCoupon.getExchangeCouponCode() + " : " + difference);
 
+        /*
         if(difference.compareTo(BigDecimal.valueOf(0)) == 0) {
             System.out.println("Difference is equal to 0");
 
@@ -199,7 +203,7 @@ public class CartService {
                 exchangeService.generateExchangeCouponSurpass(cart.getClient(), difference);
             }
 
-        }
+        }*/
 
         setCartTotal(cart);
     }

@@ -8,21 +8,19 @@ import com.project.figureout.repository.ProductRepository;
 import com.project.figureout.repository.SaleRepository;
 import com.project.figureout.repository.SalesCardsRepository;
 import jakarta.transaction.Transactional;
+import org.hibernate.loader.LoaderLogging;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Service;
 
-<<<<<<< HEAD
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
-=======
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
->>>>>>> c318bbb2147f5314b5aad1437ceac5ef8ca3ea04
 
 @Service
 public class SaleService {
@@ -54,6 +52,24 @@ public class SaleService {
 
     public Sale getSaleById(long id) {
         return saleRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Venda não encontrada com base no ID."));
+    }
+
+    public List<Sale> getSalesInsideDateRange(LocalDateTime startDate, LocalDateTime endDate) {
+        List<Sale> allSales = getAllSales();
+        List<Sale> salesInsideDesiredRange = new ArrayList<>();
+
+        for(Sale currentSale : allSales) {
+            LocalDateTime currentSaleDateTime = currentSale.getDateTimeSale();
+
+            if(currentSaleDateTime.isAfter(startDate) && currentSaleDateTime.isBefore(endDate)) {
+
+                salesInsideDesiredRange.add(currentSale);
+
+            }
+
+        }
+
+        return salesInsideDesiredRange;
     }
 
     public List<Sale> getClientSalesByClientId(long id) {
@@ -216,7 +232,7 @@ public class SaleService {
 
     }
 
-    // Método para achar os produtos com base na data.
+    /* Método para achar os produtos com base na data.
     public Map<LocalDate, BigDecimal> getSalesData(LocalDate startDate, LocalDate endDate) {
         List<Sale> sales = saleRepository.findByDateTimeSaleBetween(startDate.atStartOfDay(), endDate.atTime(23, 59, 59));
 
@@ -230,7 +246,7 @@ public class SaleService {
         }
 
         return salesData;
-    }
+    }*/
 
 
 }
