@@ -24,31 +24,40 @@
 
         <h1>Carrinho</h1>
         <p><b>Cupom promocional:</b></p>
-        <div class="mb-3">
-            <form th:action="@{/cart/addPromotionalCoupon/{cartId}(cartId = ${cartId})}" th:object="${promotionalCouponDTO}" method="POST">
-                <input type="hidden" name="_method" value="PUT"/>
-                <input type="text" id="cupom-input" class="form-control" th:field="*{couponName}" placeholder="Digite seu cupom promocional">
-                <button id="applyCupom" type="submit" class="btn btn-primary mt-2">Aplicar Cupom</button>
-            </form>
-            <form th:action="@{/cart/removePromotionalCoupon/{cartId}(cartId = ${cartId})}" method="POST">
-                <input type="hidden" name="_method" value="DELETE"/>
-                <button id="removeCupom" type="submit" class="btn btn-danger mt-2" onclick="return confirm ('Tem certeza?')">Remover Cupom</button>
-            </form>
-        </div>
-
-        <p><b>Cupons de troca (no máximo 3):</b></p>
-        <div class="mb-3">
-            <form th:action="@{/cart/addExchangeCoupon/{cartId}(cartId = ${cartId})}" th:object="${exchangeCouponIndividualDTO}" method="POST">
-                <input type="hidden" name="_method" value="PUT"/>
-                <input type="text" id="exchangeCouponInput" class="form-control" th:field="*{exchangeCouponCode}" placeholder="Digite seu cupom de troca">
-                <button id="applyExchangeCoupon1" type="submit" class="btn btn-primary mt-2">Aplicar Cupom de Troca</button>
-            </form>
-
+        <div class="row">
+            <div class="col-5">
+                <form th:action="@{/cart/addPromotionalCoupon/{cartId}(cartId = ${cartId})}" th:object="${promotionalCouponDTO}" method="POST" class="d-flex">
+                    <input type="hidden" name="_method" value="PUT"/>
+                    <input type="text" id="cupom-input" class="form-control me-2" th:field="*{couponName}" placeholder="Digite seu cupom promocional">
+                    <div class="col-md-5">
+                        <button id="applyCupom" type="submit" class="btn btn-primary flex-shrink-0">Aplicar</button>
+                    </div>
+                </form>
+            </div>
+            <div>
+                <form th:action="@{/cart/removePromotionalCoupon/{cartId}(cartId = ${cartId})}" method="POST" class="d-inline">
+                    <input type="hidden" name="_method" value="DELETE"/>
+                    <button id="removeCupom" type="submit" class="btn btn-danger flex-shrink-0" onclick="return confirm('Tem certeza?')">Remover</button>
+                </form>
+            </div>
         </div>
 
         <div th:if="${cart.promotionalCoupon} != null">
             <p class="text-primary" th:text="'Cupom promocional aplicado: ' + ${cart.promotionalCoupon.couponName}"></p>
             <p class="text-primary" th:text="'Desconto: ' + ${cart.promotionalCoupon.couponDiscount * 100} + '%'"></p>
+        </div>
+
+        <p><b>Cupons de troca (no máximo 3):</b></p>
+        <div class="row">
+            <div class="col-5">
+                <form th:action="@{/cart/addExchangeCoupon/{cartId}(cartId = ${cartId})}" th:object="${exchangeCouponIndividualDTO}" method="POST" class="d-flex">
+                    <input type="hidden" name="_method" value="PUT"/>
+                    <input type="text" id="exchangeCouponInput" class="form-control me-2" th:field="*{exchangeCouponCode}" placeholder="Digite seu cupom de troca">
+                    <div class="col-md-5">
+                        <button id="applyExchangeCoupon1" type="submit" class="btn btn-primary flex-shrink-0">Aplicar</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <div th:if="${!cart.exchangeCoupons.isEmpty()}">
@@ -131,7 +140,11 @@
 
         <input type="hidden" th:value="${cart.id}" th:field="*{saleCartId}">
 
-        <h3 th:text="'Preço Total: R$' + ${orderTotalPrice}"></h3>
+        <!--<h3 id="totalPrice" th:text="'Preço Total: R$' + ${orderTotalPrice}"></h3>-->
+        <h3>
+            <span>Preço Total: R$</span>
+            <span id="totalPrice" th:text="${orderTotalPrice}"></span>
+        </h3>
 
         <!-- Seção de Cartões de Crédito -->
 

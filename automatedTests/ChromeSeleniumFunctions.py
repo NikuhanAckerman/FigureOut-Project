@@ -181,7 +181,17 @@ def create_product(self, name, description, height, width, length, weight, purch
     click_button(self, "createButton")
 
 # Cria produtos de forma automatizada.
-#def create_sale():
+def buy_product(product_name, quantity):
+    click_button(self, "seeShop")
+
+    # Adicionando o produto "Paimon" no carrinho.
+    select_product(self, product_name)
+
+    input_string(self, "quantity", quantity)
+    
+    click_button(self, "addToCart")
+
+    click_button(self, "backToShop")
 
 
 #if __name__ == "__main__":

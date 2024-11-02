@@ -4,6 +4,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 import time
+import random
 from ChromeSeleniumFunctions import *
 
 class ProductFormTest(unittest.TestCase):
@@ -29,38 +30,35 @@ class ProductFormTest(unittest.TestCase):
         select_product(self, produto): Seleciona um produto da loja pelo nome dele.
         send_image(self, id, pasta, arquivo): Envia uma imagem.
         '''
-        # Informações gerais.
+        
+        # Selecionando um cliente para navegar a loja.
         select_option_by_value(self, "clientNavigate", "1")
         time.sleep(2)
-        
-        click_button(self, "seeShop")
-        time.sleep(1)
 
-        # Adicionando o produto "Paimon" no carrinho.
-        select_product(self, "Paimon")
-        time.sleep(2)
+        # CONJUNTO DE PRODUTOS (por nome)
+        products = {"Hu Tao", "Paimon", "Asuka", "Hatsune Miku", "Mari (Omori)"}
 
-        input_string(self, "quantity", "1")
-        time.sleep(1)
-        
-        click_button(self, "addToCart")
-        time.sleep(2)
+        # Number of iterations (up to the number of unique products)
+        iteration = min(1, len(products))  # Adjust this as needed
 
-        click_button(self, "backToShop")
-        time.sleep(2)
+        # Keep track of already chosen products
+        chosen_products = set()
 
-        # Adicionando o produto "Hu Tao" no carrinho.
-        select_product(self, "Hu Tao")
-        time.sleep(2)
+        for i in range(iteration):
+            # Select a random product that hasn't been chosen yet
+            remaining_products = list(products - chosen_products)  # Get products that haven't been chosen
+            if not remaining_products:  # Break if there are no remaining products
+                print("No more unique products to choose from.")
+                break
+                
+            product_name = random.choice(remaining_products)
+            quantity = random.randint(1, 10)
 
-        input_string(self, "quantity", "1")
-        time.sleep(1)
-        
-        click_button(self, "addToCart")
-        time.sleep(2)
-
-        click_button(self, "backToShop")
-        time.sleep(2)
+            # Função modular para comprar um produto aleatório em uma quantia aleatória.
+            buy_product(product_name, quantity)
+            
+            # Add the chosen product to the set of chosen products
+            chosen_products.add(product_name)
 
         # Entrando no offcanvas do carrinho.
         click_button(self, "cart")
@@ -69,18 +67,9 @@ class ProductFormTest(unittest.TestCase):
         click_button(self, "proceedToCheckout")
         time.sleep(2)
 
-        # Página de carrinho.
-        # Aplicando cupom promocional.
-        input_string(self, "cupom-input", "FIGUREOUT10")
-        time.sleep(1)
-
-        click_button(self, "applyCupom")
-        time.sleep(1)
-
+        # PÁGINA DE CARRINHO
         # Selecionando cartões de crédito e endereço.
         select_option_by_value(self, "salesCardsIds", "1")
-        time.sleep(1)
-        select_option_by_value(self, "salesCardsIds", "2")
         time.sleep(1)
 
         select_option(self, "address-dropdown", "Minha casa")
