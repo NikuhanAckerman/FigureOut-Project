@@ -1,5 +1,6 @@
 import os
 import unittest
+import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -181,9 +182,9 @@ def create_product(self, name, description, height, width, length, weight, purch
     click_button(self, "createButton")
 
 # Cria produtos de forma automatizada.
-def buy_product(product_name, quantity):
-    click_button(self, "seeShop")
-
+def buy_product(self, product_name, quantity):
+    
+    time.sleep(2)
     # Adicionando o produto "Paimon" no carrinho.
     select_product(self, product_name)
 
@@ -192,6 +193,7 @@ def buy_product(product_name, quantity):
     click_button(self, "addToCart")
 
     click_button(self, "backToShop")
+    time.sleep(1)
 
 
 #if __name__ == "__main__":

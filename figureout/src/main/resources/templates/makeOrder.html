@@ -140,7 +140,6 @@
 
         <input type="hidden" th:value="${cart.id}" th:field="*{saleCartId}">
 
-        <!--<h3 id="totalPrice" th:text="'Preço Total: R$' + ${orderTotalPrice}"></h3>-->
         <h3>
             <span>Preço Total: R$</span>
             <span id="totalPrice" th:text="${orderTotalPrice}"></span>

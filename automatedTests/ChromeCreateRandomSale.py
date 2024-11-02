@@ -33,59 +33,59 @@ class ProductFormTest(unittest.TestCase):
         
         # Selecionando um cliente para navegar a loja.
         select_option_by_value(self, "clientNavigate", "1")
-        time.sleep(2)
+        
+        # Clica no botão "Ver Loja".
+        click_button(self, "seeShop")
 
         # CONJUNTO DE PRODUTOS (por nome)
-        products = {"Hu Tao", "Paimon", "Asuka", "Hatsune Miku", "Mari (Omori)"}
+        products = {"Hu Tao", "Paimon", "Asuka"}
 
-        # Number of iterations (up to the number of unique products)
-        iteration = min(1, len(products))  # Adjust this as needed
+        # Cria uma cópia do conjunto de produtos pra ser usado no loop.
+        remaining_products = set(products)
 
-        # Keep track of already chosen products
-        chosen_products = set()
+        # Número aleatório de iterações (Entre 1 e a quantidade de produtos no conjunto).
+        iteration = random.randint(1, len(products))
+        print("Produtos a serem comprados: " + str(iteration))
 
         for i in range(iteration):
-            # Select a random product that hasn't been chosen yet
-            remaining_products = list(products - chosen_products)  # Get products that haven't been chosen
-            if not remaining_products:  # Break if there are no remaining products
-                print("No more unique products to choose from.")
-                break
-                
-            product_name = random.choice(remaining_products)
-            quantity = random.randint(1, 10)
-
-            # Função modular para comprar um produto aleatório em uma quantia aleatória.
-            buy_product(product_name, quantity)
+            print(remaining_products)
+            if not remaining_products:  # Checa os produtos restantes.
+                print("Não há mais produtos únicos para escolher.")
+                break #Sai do loop se não tiver mais produtos pra escolher (experimental).
             
-            # Add the chosen product to the set of chosen products
-            chosen_products.add(product_name)
+            product_name = random.choice(list(remaining_products))  # Seleciona um produto aleatório.
+            quantity = random.randint(1, 10)  # Determina uma quantidade de produtos aleatória.
+            print("Quantidade: " + str(quantity))
+            # Função para comprar um produto.
+            print(product_name)
+            print(quantity)
+            buy_product(self, product_name, quantity)
+
+            # Remove o produto escolhido no conjunto cópia.
+            remaining_products.remove(product_name)
 
         # Entrando no offcanvas do carrinho.
         click_button(self, "cart")
-        time.sleep(2)
 
         click_button(self, "proceedToCheckout")
-        time.sleep(2)
 
         # PÁGINA DE CARRINHO
         # Selecionando cartões de crédito e endereço.
+
+        ### PAREI AQUI ###
         select_option_by_value(self, "salesCardsIds", "1")
-        time.sleep(1)
 
         select_option(self, "address-dropdown", "Minha casa")
-        time.sleep(1)
 
         click_button(self, "btn-finalizar")
-        time.sleep(1)
 
-        # Página de finalizar compra.
-        input_string(self, "amountPaid1", "200")
-        time.sleep(1)
-        input_string(self, "amountPaid2", "109.78")
-        time.sleep(1)
+        # PÁGINA DE FINALIZAR COMPRA
+        #atribuindo o preço total da compra com frete para a variável "final_price".
+        final_price = self.driver.find_element(By.ID, "saleFinalPrice").text
+        
+        input_string(self, "amountPaid1", final_price)
 
         click_button(self, "btn-finalizar")
-        time.sleep(1)
 
     def tearDown(self):
         # Fecha o browser
