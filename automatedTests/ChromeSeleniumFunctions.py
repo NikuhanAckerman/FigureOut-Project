@@ -142,5 +142,47 @@ def create_address(self, delivery, charging, nickname, typeOfResidence, addressi
     
     click_button(self, "createButton")
 
+# Cria produtos de forma automatizada.
+def create_product(self, name, description, height, width, length, weight, purchaseAmount, category, pricingGroup, price, quantityAvailable, entryDate, supplier, manufacturer, size, fileInput):
+    click_button(self, "createProduct")
+        
+    input_string(self, "name", name)
+
+    input_string(self, "description", description)
+    
+    input_string(self, "height", height)
+    
+    input_string(self, "width", width)
+    
+    input_string(self, "length", length)
+    
+    input_string(self, "weight", weight)
+    
+    input_string(self, "purchaseAmount", purchaseAmount)
+    
+    select_option(self, "categorySelect", category)
+    
+    select_option(self, "pricingGroupSelect", pricingGroup)
+
+    input_string(self, "price", price)
+
+    input_string(self, "productQuantityAvailable", quantityAvailable)
+
+    input_string(self, "entryInStockDate", entryDate)
+    
+    select_option(self, "supplier", supplier)
+    
+    select_option(self, "manufacturer", manufacturer)
+    
+    select_option(self, "size", size)
+
+    send_image(self, "fileInput", "Images", fileInput)
+    
+    click_button(self, "createButton")
+
+# Cria produtos de forma automatizada.
+#def create_sale():
+
+
 #if __name__ == "__main__":
 #   unittest.main()

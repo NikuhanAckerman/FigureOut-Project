@@ -4,6 +4,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 import time
+import csv
 from ChromeSeleniumFunctions import *
 
 class ProductFormTest(unittest.TestCase):
@@ -15,10 +16,10 @@ class ProductFormTest(unittest.TestCase):
 
         # Iniciliza o WebDriver
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
-        self.driver.get("http://localhost:8080/products/createProduct")
+        self.driver.get("http://localhost:8080/products/seeProducts")
 
     def test_fill_product_form(self):
-
+        '''
         # -- FUNÇÕES CRIADAS PARA TESTES --
         # click_button(self, id): Clica em botão da página.
         # input_string(self, id, valor): Insere texto.
@@ -26,79 +27,19 @@ class ProductFormTest(unittest.TestCase):
         # check_checkbox(self, id): Checha checkbox.
         # select_option(self, id, valor): Seleciona opção de um menu dropdown.
         # send_image(self, id, pasta, arquivo): Envia uma imagem.
-        
-        # Criação do produto "Hu tao".
-        input_string(self, "name", "Hu Tao")
+        # create_product(self, nome, descrição, altura, largura, comprimento, peso
+                        preçoDeCompra, categoria, grupoDePrecificação, preço, QuantidadeDisponível
+                        dataDeEntrada, fornecedor, fabricante, tamanho, foto)
+        '''
+        #create_product(self, "Hu Tao", "Action figure colecionável da personagem Hu Tao de Genshin Impact.", "10.5", "7.5", "5.6", "31.5", "195.56", "Figura de ação", "Ferro (5.00%)", "210.89", "15", "06-10-2023", "Fornecedor A", "Bandai", "1/8", "hutao.jpg")
+        #create_product(self, "Paimon", "Action Figure da personagem principal de Genshin Impact Paimon.", "8.5", "5.5", "5.0", "22.0", "110.16", "Figura de ação", "Ferro (5.00%)", "129.90", "25", "06-10-2023", "Fornecedor A", "Bandai", "1/8", "paimon.jpg")
 
-        input_string(self, "description", "Action figure colecionável da personagem Hu Tao de Genshin Impact.")
-        
-        input_string(self, "height", "10.5")
-        
-        input_string(self, "width", "7.5")
-        
-        input_string(self, "length", "5.6")
-        
-        input_string(self, "weight", "31.5")
-        
-        input_string(self, "purchaseAmount", "195.56")
-        
-        select_option(self, "categorySelect", "Figura de ação")
-        
-        select_option(self, "pricingGroupSelect", "Ferro (5.00%)")
+        with open('products.csv', mode='r', encoding='utf-8') as csvfile:
+            reader = csv.DictReader(csvfile)
 
-        input_string(self, "price", "210.89")
-
-        input_string(self, "productQuantityAvailable", "15")
-
-        input_string(self, "entryInStockDate", "06-10-2023")
+            for row in reader:
+                create_product(self, row['Nome'], row['Descricao'], row['Altura'], row['Largura'], row['Comprimento'], row['Peso'], row['PrecoDeCompra'], row['Categoria'], row['GrupoDePrecificacao'], row['Preco'], row['QuantidadeDisponivel'], row['DataDeEntrada'], row['Fornecedor'], row['Fabricante'], row['Tamanho'], row['Foto'])
         
-        select_option(self, "supplier", "Fornecedor A")
-        
-        select_option(self, "manufacturer", "Bandai")
-        
-        select_option(self, "size", "1/8")
-
-        send_image(self, "fileInput", "Images", "hutao.jpg")
-        
-        click_button(self, "createButton")
-
-        # Criação do produto "Paimon"
-        click_button(self, "createProduct")
-        
-        input_string(self, "name", "Paimon")
-
-        input_string(self, "description", "Action Figure da personagem principal de Genshin Impact Paimon.")
-        
-        input_string(self, "height", "8.5")
-        
-        input_string(self, "width", "5.5")
-        
-        input_string(self, "length", "5.0")
-        
-        input_string(self, "weight", "22.0")
-        
-        input_string(self, "purchaseAmount", "110.16")
-        
-        select_option(self, "categorySelect", "Figura de ação")
-        
-        select_option(self, "pricingGroupSelect", "Ferro (5.00%)")
-
-        input_string(self, "price", "129.90")
-
-        input_string(self, "productQuantityAvailable", "25")
-
-        input_string(self, "entryInStockDate", "06-10-2023")
-        
-        select_option(self, "supplier", "Fornecedor A")
-        
-        select_option(self, "manufacturer", "Bandai")
-        
-        select_option(self, "size", "1/8")
-
-        send_image(self, "fileInput", "Images", "paimon.jpg")
-        
-        click_button(self, "createButton")
-
         # Espera alguns segundos para antes de fechar o browser.
         time.sleep(10)
 
