@@ -21,19 +21,11 @@ class ProductFormTest(unittest.TestCase):
     def test_fill_product_form(self):
         '''
         # -- FUNÇÕES CRIADAS PARA TESTES --
-        # click_button(self, id): Clica em botão da página.
-        # input_string(self, id, valor): Insere texto.
-        # select_radio(self, id, valor): Seleciona botão de rádio.
-        # check_checkbox(self, id): Checha checkbox.
-        # select_option(self, id, valor): Seleciona opção de um menu dropdown.
-        # send_image(self, id, pasta, arquivo): Envia uma imagem.
         # create_product(self, nome, descrição, altura, largura, comprimento, peso
                         preçoDeCompra, categoria, grupoDePrecificação, preço, QuantidadeDisponível
                         dataDeEntrada, fornecedor, fabricante, tamanho, foto)
         '''
-        #create_product(self, "Hu Tao", "Action figure colecionável da personagem Hu Tao de Genshin Impact.", "10.5", "7.5", "5.6", "31.5", "195.56", "Figura de ação", "Ferro (5.00%)", "210.89", "15", "06-10-2023", "Fornecedor A", "Bandai", "1/8", "hutao.jpg")
-        #create_product(self, "Paimon", "Action Figure da personagem principal de Genshin Impact Paimon.", "8.5", "5.5", "5.0", "22.0", "110.16", "Figura de ação", "Ferro (5.00%)", "129.90", "25", "06-10-2023", "Fornecedor A", "Bandai", "1/8", "paimon.jpg")
-
+        
         with open('products.csv', mode='r', encoding='utf-8') as csvfile:
             reader = csv.DictReader(csvfile)
 
