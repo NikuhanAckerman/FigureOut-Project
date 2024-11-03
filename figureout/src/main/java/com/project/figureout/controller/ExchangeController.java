@@ -4,10 +4,9 @@ import com.project.figureout.dto.ExchangeDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartsProductsRepository;
 import com.project.figureout.repository.ExchangeProductsRepository;
-import com.project.figureout.service.CartService;
-import com.project.figureout.service.ClientService;
-import com.project.figureout.service.ExchangeService;
-import com.project.figureout.service.SaleService;
+import com.project.figureout.repository.ProductRepository;
+import com.project.figureout.service.*;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.text.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,7 +38,12 @@ public class ExchangeController {
 
     @Autowired
     ExchangeService exchangeService;
+
+    @Autowired
     private ExchangeProductsRepository exchangeProducts;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @GetMapping("/requestExchange/{id}")
     public String requestExchangeGet(@PathVariable long id, Model model) {
@@ -54,12 +58,15 @@ public class ExchangeController {
     }
 
     @PostMapping("/requestExchange/{id}")
-    public String requestExchangePost(@PathVariable long id, @ModelAttribute ExchangeDTO exchangeDTO, Model model) {
+    public String requestExchangePost(@PathVariable long id, @ModelAttribute ExchangeDTO exchangeDTO, Model model,
+                                      HttpServletRequest request) {
         Sale sale = saleService.getSaleById(id);
         Client client = sale.getCart().getClient();
         SaleStatusEnum status = sale.getStatus();
         SaleStatusEnum deliveredStatus = SaleStatusEnum.ENTREGUE;
         SaleStatusEnum exchangeEndedStatus = SaleStatusEnum.TROCA_FINALIZADA;
+
+        List<String> errors = new ArrayList<>();
 
         boolean canRequestExchange = true;
 
@@ -73,6 +80,17 @@ public class ExchangeController {
         }
 
         if(canRequestExchange) {
+
+            exchangeDTO.getCartProductQuantity().forEach((key, value) -> {
+                CartsProducts cartsProducts = cartsProductsRepository.findById(key).orElseThrow(() -> new NoSuchElementException("Cart Product não encontrado com base no ID."));
+                String name = cartsProducts.getProduct().getName();
+                if(value < 0) {
+                    errors.add("Não se pode trocar menos que 0 de '" + name + "'.");
+                }
+                if(value > cartsProducts.getExchangeableQuantity()) {
+                    errors.add("Não é possível trocar essa quantidade do produto '" + name + "' pois a quantidade disponível para troca é menor do que a digitada.");
+                }
+            });
 
             Exchange newExchange = new Exchange();
             newExchange.setSale(sale);
@@ -144,6 +162,14 @@ public class ExchangeController {
 
             saleService.saveSale(sale);
 
+        }
+
+        String referer = request.getHeader("Referer");
+
+        if(!errors.isEmpty()) {
+            model.addAttribute("errorsExchangeRequest", errors);
+
+            return "redirect:/" + referer;
         }
 
         return "redirect:/clientProfileExchanges/" + client.getId();

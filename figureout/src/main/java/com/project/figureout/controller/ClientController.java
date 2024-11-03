@@ -463,6 +463,7 @@ public class ClientController {
         model.addAttribute("emTrocaStatus", ExchangeStatusEnum.EM_TROCA);
         model.addAttribute("recebidaStatus", ExchangeStatusEnum.TROCA_RECEBIDA);
         model.addAttribute("trocaFinalizadaStatus", SaleStatusEnum.TROCA_FINALIZADA);
+        model.addAttribute("client", clientService.getClientById(id));
 
         return "clientProfileExchanges";
     }

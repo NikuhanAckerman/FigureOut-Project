@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -81,7 +82,7 @@ public class CartController {
         }
 
         if(quantityOrdered <= 0) {
-            errors.add("Não se pode pedir uma quantidade de 0.");
+            errors.add("Não se pode pedir 0 ou menos produtos.");
         }
 
         boolean isAlreadyInCart = false;
@@ -140,7 +141,7 @@ public class CartController {
     @PutMapping("/changeProductQuantity/{productId}/{cartId}")
     public String changeProductQuantity(@PathVariable Long productId, @PathVariable Long cartId,
                                         @ModelAttribute ChangeCartProductQuantityDTO changeCartProductQuantityDTO, HttpServletRequest request,
-                                        Model model) {
+                                        Model model, RedirectAttributes redirectAttributes) {
 
         Product product = productService.getProductById(productId);
         Cart cart = cartService.getCartById(cartId);
@@ -152,16 +153,15 @@ public class CartController {
         List<String> errors = new ArrayList<>();
 
         if(quantityOrdered > availableQuantity) {
-            errors.add("Quantidade indisponível em estoque.");
+            errors.add("Quantidade indisponível em estoque do produto " + product.getName() + ".");
         }
 
-        if(quantityOrdered == 0) {
-            errors.add("Não se pode pedir uma quantidade de 0.");
+        if(quantityOrdered <= 0) {
+            errors.add("Não se pode pedir 0 ou menos produtos.");
         }
 
-        if(!errors.isEmpty()) {
-            model.addAttribute("errors", errors);
-
+        if (!errors.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorsProductChangeQuantity", errors);
             return "redirect:" + referer;
         }
 
@@ -216,29 +216,63 @@ public class CartController {
     }
 
     @PutMapping("/addExchangeCoupon/{cartId}")
-    public String addExchangeCoupon(@PathVariable long cartId, @ModelAttribute ExchangeCouponIndividualDTO exchangeCouponIndividualDTO, HttpServletRequest request) {
+    public String addExchangeCoupon(@PathVariable long cartId, @ModelAttribute ExchangeCouponIndividualDTO exchangeCouponIndividualDTO,
+                                    HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
         Cart cart = cartService.getCartById(cartId);
 
-        /* extremely nested code, basically what it does is if the coupon typed is correct,
-         i reset the price of the products back to the original price * quantity,
-         then apply the new coupon's discount
-         (will potentially write it better when i transfer this to CartService and/or SaleService) */
+        List<String> errors = new ArrayList<>();
+        String referer = request.getHeader("Referer");
+
+        long exchangeCouponId = 0;
 
         for(ExchangeCoupon exchangeCoupon: exchangeCouponRepository.findAll()) {
 
             if(exchangeCouponIndividualDTO.getExchangeCouponCode().equals(exchangeCoupon.getExchangeCouponCode())) {
 
-                if(cart.getClient().getId() == exchangeCoupon.getClient().getId()) { // same client
-
-                    cartService.applyExchangeCoupon(cart, exchangeCoupon);
-
-                }
+                exchangeCouponId = exchangeCoupon.getId();
 
             }
 
         }
 
-        String referer = request.getHeader("Referer");
+        if(exchangeCouponId != 0) {
+            ExchangeCoupon exchangeCoupon = exchangeCouponRepository.findById(exchangeCouponId).orElseThrow(() -> new NoSuchElementException("Cupom de troca não encontrado por ID."));
+
+            if(cart.getClient().getId() == exchangeCoupon.getClient().getId()) { // same client
+
+                if(exchangeCoupon.isUsed()) {
+
+                    errors.add("Este cupom de troca já foi utilizado.");
+
+                } else {
+
+                    if(cartService.isExchangeCouponSurpassingCartTotalTooMuch(cart, exchangeCoupon).compareTo(BigDecimal.valueOf(0)) == 0) {
+
+                        errors.add("Este cupom não pode ser aplicado, pois ultrapassa o preço da compra excessivamente.");
+
+                    } else {
+
+                        cartService.applyExchangeCoupon(cart, exchangeCoupon);
+
+                    }
+
+                }
+
+            } else {
+
+                errors.add("Você não pode adicionar um cupom de troca não proveniente de sua conta.");
+
+            }
+
+        } else {
+            System.out.println("o cupom nao existe lol");
+            errors.add("Este cupom de troca não existe.");
+        }
+
+        if(!errors.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorsExchangeCoupon", errors);
+            return "redirect:" + referer;
+        }
 
         return "redirect:" + referer;
     }

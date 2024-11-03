@@ -141,104 +141,45 @@ public class CartService {
 
     }
 
-    public void applyExchangeCoupon(Cart cart, ExchangeCoupon exchangeCoupon) {
-        List<CartsProducts> cartsProducts = cart.getCartProducts();
+    public BigDecimal isExchangeCouponSurpassingCartTotalTooMuch(Cart cart, ExchangeCoupon exchangeCoupon) {
 
+        BigDecimal percentile = BigDecimal.valueOf(0.20);
+        BigDecimal couponAmount = exchangeCoupon.getAmountWorth();
+        BigDecimal cartTotal = cart.getTotalPrice();
+        BigDecimal cartTotalPercentile = cartTotal.multiply(percentile);
+
+        // 200 > 100
+        if(couponAmount.compareTo(cartTotal) > 0) { // if the amount is bigger than the current total price in the cart
+            // 100 - 200 = -100
+            BigDecimal subtractedValue = cartTotal.subtract(couponAmount).abs(); // now we have the subtracted value
+            // 100
+            // 100 > 20?
+            if(subtractedValue.compareTo(cartTotalPercentile) >= 0) { // if that value is bigger/equal to the percentile, then we cant let the coupon be applied
+                // true, so return and dont even apply the coupon
+                return BigDecimal.valueOf(0);
+            } else {
+                return subtractedValue;
+            }
+
+        }
+
+        return BigDecimal.valueOf(-1);
+    }
+
+    public void applyExchangeCoupon(Cart cart, ExchangeCoupon exchangeCoupon) {
         if(cart.getExchangeCoupons().contains(exchangeCoupon)) {
             return;
         }
 
         cart.getExchangeCoupons().add(exchangeCoupon);
-
-        BigDecimal difference;
-        difference = exchangeCoupon.getAmountWorth();
-
-        for(CartsProducts cartProduct: cartsProducts) {
-
-            BigDecimal cartProductTotal = cartProduct.getFinalPrice();
-
-            difference = difference.subtract(cartProductTotal);
-
-            //System.out.println("CartProduct total price: " + cartProductTotal);
-            //System.out.println("Difference currently: " + difference);
-            //System.out.println("Difference after subtraction currently: " + difference);
-
-        }
-
-        System.out.println("Valor de sobra do cupom de troca " + exchangeCoupon.getExchangeCouponCode() + " : " + difference);
-
-        /*
-        if(difference.compareTo(BigDecimal.valueOf(0)) == 0) {
-            System.out.println("Difference is equal to 0");
-
-            for(CartsProducts cartProduct: cartsProducts) {
-                cartProduct.setUnitaryPrice(BigDecimal.valueOf(0));
-                cartProduct.setFinalPrice(BigDecimal.valueOf(0));
-            }
-
-        } else if(difference.compareTo(BigDecimal.valueOf(0)) == -1) {
-            System.out.println("Difference is lesser than 0");
-
-            difference = difference.abs();
-
-            for(CartsProducts cartProduct: cartsProducts.reversed()) {
-                cartProduct.setUnitaryPrice(difference.divide(BigDecimal.valueOf(cartProduct.getProductQuantity())));
-                cartProduct.setFinalPrice(cartProduct.getFinalPrice().subtract(difference));
-            }
-
-        } else if(difference.compareTo(BigDecimal.valueOf(0)) == 1) {
-            System.out.println("Difference is bigger than 0");
-
-            BigDecimal total = cart.getTotalPrice();
-
-            for(CartsProducts cartProduct: cartsProducts) {
-                cartProduct.setUnitaryPrice(BigDecimal.valueOf(0));
-                cartProduct.setFinalPrice(BigDecimal.valueOf(0));
-            }
-
-            BigDecimal percentile = exchangeService.getPercentileToCreateNewExchangeCoupon();
-            BigDecimal totalPercentile = total.multiply(percentile);
-
-            if(difference.compareTo(totalPercentile) >= 0) {
-                exchangeService.generateExchangeCouponSurpass(cart.getClient(), difference);
-            }
-
-        }*/
+        saveCart(cart);
 
         setCartTotal(cart);
     }
 
     public void removeExchangeCoupon(Cart cart, ExchangeCoupon exchangeCoupon) {
-        List<CartsProducts> cartsProducts = cart.getCartProducts();
-        BigDecimal couponAmount = exchangeCoupon.getAmountWorth();
-        BigDecimal amountLeftover = couponAmount;
-
-        for(CartsProducts cartProduct: cartsProducts.reversed()) {
-
-            BigDecimal finalAmountNeeded = cartProduct.getProduct().getPrice().multiply(BigDecimal.valueOf(cartProduct.getProductQuantity()));
-
-            amountLeftover = amountLeftover.subtract(finalAmountNeeded);
-
-            if(amountLeftover.compareTo(BigDecimal.valueOf(0)) == -1) {
-
-                cartProduct.setFinalPrice(amountLeftover);
-                cartProduct.setUnitaryPrice(amountLeftover.divide(BigDecimal.valueOf(cartProduct.getProductQuantity())));
-
-            } else if (amountLeftover.compareTo(BigDecimal.valueOf(0)) >= 0) {
-
-                cartProduct.setFinalPrice(cartProduct.getProduct().getPrice().multiply(BigDecimal.valueOf(cartProduct.getProductQuantity())));
-                cartProduct.setUnitaryPrice(cartProduct.getProduct().getPrice());
-
-            }
-
-            amountLeftover = amountLeftover.subtract(cartProduct.getFinalPrice());
-        }
-
-        if(cart.getPromotionalCoupon() != null) {
-            applyPromotionalCoupon(cart, cart.getPromotionalCoupon());
-        }
-
         cart.getExchangeCoupons().remove(exchangeCoupon);
+        saveCart(cart);
 
         setCartTotal(cart);
     }
@@ -247,20 +188,36 @@ public class CartService {
         BigDecimal total = new BigDecimal(0);
         System.out.println("calling setCartTotal");
 
-        // Get the list of products in the cart
+        // get the list of products in the cart
         List<CartsProducts> cartProducts = cart.getCartProducts();
 
-        // Loop through each product in the cart and calculate the total price
+        // loop through each product in the cart and calculate the total price
         for (CartsProducts cartsProduct : cartProducts) {
             BigDecimal productTotal = cartsProduct.getFinalPrice();
             System.out.println(productTotal);
             total = total.add(productTotal);
         }
 
-        // Set the total price in the cart
+        List<ExchangeCoupon> cartExchangeCoupons = cart.getExchangeCoupons();
+
+        if(!cartExchangeCoupons.isEmpty()) {
+
+            for(ExchangeCoupon exchangeCoupon : cartExchangeCoupons) {
+
+                total = total.subtract(exchangeCoupon.getAmountWorth());
+
+            }
+
+        }
+
+        // set the total price in the cart
+        if(total.compareTo(BigDecimal.valueOf(0)) < 0) {
+            total = BigDecimal.valueOf(0);
+        }
+
         cart.setTotalPrice(total);
 
-        // Save the cart with the updated total
+        // save the cart with the updated total
         saveCart(cart);
     }
 

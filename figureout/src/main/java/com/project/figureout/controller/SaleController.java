@@ -242,11 +242,12 @@ public class SaleController {
             }
         }
 
-        if (sale.getPromotionalCouponApplied() == null) {
+
+        if (sale.getPromotionalCouponApplied() == null && sale.getExchangeCouponsApplied().isEmpty()) {
 
             for (SalesCards saleCard : listSalesCards) {
 
-                // checking if the value paid is bigger than R$10 if, and only if, there is no promotional coupon
+                // checking if the value paid is bigger than R$10 if, and only if, there is no promotional coupon or exchangeCoupon
                 if (saleCard.getAmountPaid().compareTo(BigDecimal.valueOf(10.00)) < 0) {
                     errors.add("O valor pago pelo cartão " + saleCard.getCreditCard().getCardNumber() + " não pode ser inferior a R$10,00.");
                 }
@@ -302,6 +303,12 @@ public class SaleController {
 
             }
 
+        }
+
+        for(ExchangeCoupon exchangeCoupon: sale.getExchangeCouponsApplied()) {
+            if(cartService.isExchangeCouponSurpassingCartTotalTooMuch(cart, exchangeCoupon).compareTo(BigDecimal.valueOf(0)) > 0) {
+                exchangeService.generateExchangeCouponSurpass(cart.getClient(), cartService.isExchangeCouponSurpassingCartTotalTooMuch(cart, exchangeCoupon));
+            }
         }
 
         sale.setStatus(SaleStatusEnum.EM_PROCESSAMENTO);

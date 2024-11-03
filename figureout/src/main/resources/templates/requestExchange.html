@@ -34,13 +34,22 @@
 
   <h4 class="text-primary">(Caso não queira trocar um dos produtos, digite 0 na quantidade)</h4>
 
+  <div th:if="${errorsExchangeRequest} != null">
+    <div th:if="${!errorsExchangeRequest.isEmpty()}">
+      <div th:each="err : ${errorsExchangeRequest}">
+        <p class="text-danger" th:text="${err}"></p>
+      </div>
+    </div>
+  </div>
+
   <form th:action="@{/exchange/requestExchange/{id}(id = ${sale.id})}" th:object="${exchangeDTO}" method="POST">
 
     <div th:each="cartProduct : ${sale.cart.cartProducts}">
 
       <p th:text="'Nome: ' + ${cartProduct.product.name}"></p>
       <p th:text="'Preço unitário: R$' + ${cartProduct.unitaryPrice}"></p>
-      <p th:text="'Quantidade: ' + ${cartProduct.productQuantity}"></p>
+      <p th:text="'Quantidade comprada: ' + ${cartProduct.productQuantity}"></p>
+      <p th:text="'Quantidade trocável: ' + ${cartProduct.exchangeableQuantity}"></p>
       <p th:text="'Preço total: R$' + ${cartProduct.finalPrice}"></p>
 
       <input class="form-control" placeholder="Insira a quantidade para trocar" type="number" id="exchangeInput" step="1" th:field="*{cartProductQuantity[__${cartProduct.id.productId}__]}" required>

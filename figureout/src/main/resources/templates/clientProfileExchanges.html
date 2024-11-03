@@ -78,25 +78,27 @@
 
 
     <h4>Cupons de troca</h4>
-    <div th:each="exchange : ${exchanges}">
+    <div th:each="exchangeCoupon : ${client.exchangeCouponList}">
 
-      <div th:if="${exchange.coupon != null}">
-
-        <div th:if="${exchange.coupon.used} == false">
+        <div th:if="${exchangeCoupon.used} == false">
 
           <h5 class="text-primary"
-              th:text="'Código: ' + ${exchange.coupon.exchangeCouponCode} + ' Quantia: R$' + ${exchange.coupon.amountWorth} + ' (disponível para uso!)'">
+              th:text="'Código: ' + ${exchangeCoupon.exchangeCouponCode} + ' Quantia: R$' + ${exchangeCoupon.amountWorth} + ' (disponível para uso!)'">
           </h5>
 
         </div>
 
-        <div th:if="${exchange.coupon.used} == true">
+        <div th:if="${exchangeCoupon.used} == true">
+
           <h5 class="text-danger"
-              th:text="'O cupom ' + ${exchange.coupon.exchangeCouponCode} + 'de quantia: R$' + ${exchange.coupon.amountWorth} + 'já foi usado.'">
+              th:text="'O cupom ' + ${exchangeCoupon.exchangeCouponCode} + 'de quantia: R$' + ${exchangeCoupon.amountWorth} + 'já foi usado.'">
           </h5>
+
         </div>
 
       </div>
+
+      <div></div>
 
     </div>
 

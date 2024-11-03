@@ -78,6 +78,22 @@
 
         </div>
 
+        <div th:if="${errorsExchangeCoupon} != null">
+            <div th:if="${!errorsExchangeCoupon.isEmpty()}">
+                <div th:each="err : ${errorsExchangeCoupon}">
+                    <p class="text-danger" th:text="${err}"></p>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${errorsProductChangeQuantity} != null">
+            <div th:if="${!errorsProductChangeQuantity.isEmpty()}">
+                <div th:each="err : ${errorsProductChangeQuantity}">
+                    <p class="text-danger" th:text="${err}"></p>
+                </div>
+            </div>
+        </div>
+
         <table class="table table-striped">
             <thead>
             <tr>
@@ -88,7 +104,6 @@
                 <th scope="col">Total</th>
                 <th scope="col">Mudar quantidade</th>
                 <th scope="col">Tirar do carrinho</th>
-                <!-- <th scope="col">Ação</th> -->
             </tr>
             </thead>
 
@@ -114,14 +129,9 @@
 
                         <input type="number" class="form-control quantidade" value="1" min="1" th:field="*{quantity}">
 
-                        <div th:if="${errors} != null">
-                            <div th:each="err : ${errors}">
-                                <p class="text-danger" th:text="${err}"></p>
-                            </div>
-                        </div>
-
                         <button type="submit" class="btn btn-danger" onclick="return confirm ('Tem certeza?')">Mudar quantidade</button>
                     </form>
+
                 </td>
 
                 <td>
@@ -144,6 +154,15 @@
             <span>Preço Total: R$</span>
             <span id="totalPrice" th:text="${orderTotalPrice}"></span>
         </h3>
+
+        <div th:if="${!cart.exchangeCoupons.isEmpty()}">
+            <div th:each="exchangeCoupon : ${cart.exchangeCoupons}">
+
+                <h5 class="text-primary" th:text="'(Foi debitado do valor total R$' + ${exchangeCoupon.amountWorth} +
+                ' do cupom de troca ' + ${exchangeCoupon.exchangeCouponCode} + ')'"></h5>
+
+            </div>
+        </div>
 
         <!-- Seção de Cartões de Crédito -->
 
