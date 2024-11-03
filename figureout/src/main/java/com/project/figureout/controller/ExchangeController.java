@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -59,7 +60,7 @@ public class ExchangeController {
 
     @PostMapping("/requestExchange/{id}")
     public String requestExchangePost(@PathVariable long id, @ModelAttribute ExchangeDTO exchangeDTO, Model model,
-                                      HttpServletRequest request) {
+                                      HttpServletRequest request, RedirectAttributes redirectAttributes) {
         Sale sale = saleService.getSaleById(id);
         Client client = sale.getCart().getClient();
         SaleStatusEnum status = sale.getStatus();
@@ -82,15 +83,25 @@ public class ExchangeController {
         if(canRequestExchange) {
 
             exchangeDTO.getCartProductQuantity().forEach((key, value) -> {
-                CartsProducts cartsProducts = cartsProductsRepository.findById(key).orElseThrow(() -> new NoSuchElementException("Cart Product não encontrado com base no ID."));
-                String name = cartsProducts.getProduct().getName();
+                CartsProducts cartProduct = cartsProductsRepository.getCartsProductsByProductIdAndCart(key, sale.getCart());
+                String name = cartProduct.getProduct().getName();
                 if(value < 0) {
                     errors.add("Não se pode trocar menos que 0 de '" + name + "'.");
                 }
-                if(value > cartsProducts.getExchangeableQuantity()) {
+                if(value > cartProduct.getExchangeableQuantity()) {
                     errors.add("Não é possível trocar essa quantidade do produto '" + name + "' pois a quantidade disponível para troca é menor do que a digitada.");
                 }
             });
+
+            if(!errors.isEmpty()) {
+                String referer = request.getHeader("Referer");
+
+                if(!errors.isEmpty()) {
+                    redirectAttributes.addFlashAttribute("errorsExchangeRequest", errors);
+
+                    return "redirect:" + referer;
+                }
+            }
 
             Exchange newExchange = new Exchange();
             newExchange.setSale(sale);
@@ -164,13 +175,6 @@ public class ExchangeController {
 
         }
 
-        String referer = request.getHeader("Referer");
-
-        if(!errors.isEmpty()) {
-            model.addAttribute("errorsExchangeRequest", errors);
-
-            return "redirect:/" + referer;
-        }
 
         return "redirect:/clientProfileExchanges/" + client.getId();
     }
