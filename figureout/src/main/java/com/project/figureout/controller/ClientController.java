@@ -268,9 +268,7 @@ public class ClientController {
 
         clientService.registerClient(client, clientDTO);
 
-        HashMap<Long, List<Sale>> clientAndSales = new HashMap<>();
-        clientAndSales.put(client.getId(), new ArrayList<>());
-        clientService.recalculateClientRanking(clientAndSales);
+        clientService.recalculateClientRanking();
 
         // log de transação do método.
         //Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());

@@ -333,9 +333,7 @@ public class SaleController {
         notificationDTO.setDescription("Sua compra de R$" + sale.getFinalPrice() + "foi realizada com sucesso.");
         notificationService.createNotification(client, notificationDTO);
 
-        HashMap<Long, List<Sale>> clientAndSales = new HashMap<>();
-        clientAndSales.computeIfAbsent(client.getId(), value -> new ArrayList<>()).add(sale);
-        clientService.recalculateClientRanking(clientAndSales);
+        clientService.recalculateClientRanking();
 
         // log de transação do método.
         //Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());

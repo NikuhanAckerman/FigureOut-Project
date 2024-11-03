@@ -3,15 +3,10 @@ package com.project.figureout.service;
 import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,7 +26,9 @@ public class ClientService {
     private CartService cartService;
 
     @Autowired
-    private SaleService saleService; // maybe circular dependency
+    private SaleService saleService;
+
+    private HashMap<Long, BigDecimal> clientAndSaleTotals = new HashMap<>();
 
     // Client Methods
 
@@ -39,10 +36,33 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
+    private void populateClientsAndSalesMap() {
+        List<Client> allClients = getAllClients();
+
+        if(!clientAndSaleTotals.isEmpty()) {
+            clientAndSaleTotals.clear();
+        }
+
+        for(Client currentClient : allClients) {
+
+            List<Sale> clientSaleList = new ArrayList<>();
+            clientSaleList.addAll(saleService.getClientSalesByClientId(currentClient.getId()));
+
+            BigDecimal salesTotals = BigDecimal.valueOf(0.00);
+
+            for(Sale currentSale: clientSaleList) {
+                salesTotals = salesTotals.add(currentSale.getFinalPrice());
+            }
+
+            clientAndSaleTotals.put(currentClient.getId(), salesTotals);
+
+        }
+
+    }
+
     public Client getClientById(long id) {
         return clientRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Cliente não encontrado com base no ID."));
     }
-
 
     public void deleteClientById(long id) {
         clientRepository.deleteById(id); // add exception throwing to this later, apparently this doesnt throw EmptyResultDataAccessException anymore
@@ -193,7 +213,56 @@ public class ClientService {
         return clients.isEmpty() ? new ArrayList<>() : clients; // Retornar uma lista vazia se nenhum filtro bater
     }
 
-    public void recalculateClientRanking(HashMap<Long, List<Sale>> clientsAndSales) {
+    public void recalculateClientRanking() {
+
+        populateClientsAndSalesMap();
+
+        List<Map.Entry<Long, BigDecimal>> sortedClientsBySales = clientAndSaleTotals.entrySet()
+                .stream()
+                .sorted(Map.Entry.<Long, BigDecimal>comparingByValue().reversed()) // Sort by value, descending
+                .toList();
+
+        System.out.println("HashMap of total sale values ordered by ranking:");
+
+        int rank = 1;
+        for (Map.Entry<Long, BigDecimal> entry : sortedClientsBySales) {
+            Long clientId = entry.getKey();
+            BigDecimal totalSales = entry.getValue();
+
+            Client client = getClientById(clientId);
+            client.setRanking(rank);
+            saveClient(client);
+
+            System.out.println("Rank " + rank + ": Client " + getClientById(clientId).getName() +
+                    " - Total Sales: $" + totalSales);
+            rank++;
+        }
+
+
+
+        /*List<BigDecimal> totalSaleValues = new ArrayList<>(clientAndSaleTotals.values());
+        Collections.sort(totalSaleValues);
+        totalSaleValues = totalSaleValues.reversed();
+
+        System.out.println("HashMap de valores totais da venda:");
+
+        clientAndSaleTotals.forEach((key, value) -> {
+            System.out.println("Cliente: " + getClientById(key).getName());
+            System.out.println("Valor total gasto em vendas: R$" + value);
+        });
+
+        System.out.println("Lista com valores ordenados:");
+
+        int i = 1;
+
+        for(BigDecimal currentValue : totalSaleValues) {
+            System.out.println("Valor: R$" + currentValue + " Ranking: " + i);
+            i += 1;
+        }*/
+
+
+
+        /*
         System.out.println("CALLING RECALCULATE CLIENT RANKING");
 
         HashMap<Long, BigDecimal> clientTotalAmountSales = new HashMap<>();
@@ -245,7 +314,7 @@ public class ClientService {
             i += 1;
             System.out.println("");
         }
-
+        */
     }
 
 }

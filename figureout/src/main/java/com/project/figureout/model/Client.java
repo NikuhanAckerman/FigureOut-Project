@@ -66,7 +66,7 @@ public class Client {
     private List<ExchangeCoupon> exchangeCouponList = new ArrayList<>();
 
     @Column(name = "cli_ranking")
-    private int ranking = 1;
+    private Integer ranking = 1;
 
     // Expressão regular para validar a senha
     // (Incluir no mínimo 8 caracteres, letra mínuscula, maiúscula e caractere especial).
