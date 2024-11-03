@@ -184,16 +184,15 @@ def create_product(self, name, description, height, width, length, weight, purch
 # Cria produtos de forma automatizada.
 def buy_product(self, product_name, quantity):
     
-    time.sleep(2)
-    # Adicionando o produto "Paimon" no carrinho.
+    # Scrollando a página pra ficar mais fácil do Selenium achar os produtos.
+    self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")  # Scroll to bottom
+    # Adicionando o produto no carrinho.
     select_product(self, product_name)
-
     input_string(self, "quantity", quantity)
     
     click_button(self, "addToCart")
 
     click_button(self, "backToShop")
-    time.sleep(1)
 
 
 #if __name__ == "__main__":

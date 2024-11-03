@@ -38,31 +38,26 @@ class ProductFormTest(unittest.TestCase):
         click_button(self, "seeShop")
 
         # CONJUNTO DE PRODUTOS (por nome)
-        products = {"Hu Tao", "Paimon", "Asuka"}
+        products = {"Hu Tao", "Paimon", "Asuka", "Hatsune Miku", "Mari (Omori)"}
 
         # Cria uma cópia do conjunto de produtos pra ser usado no loop.
         remaining_products = set(products)
 
         # Número aleatório de iterações (Entre 1 e a quantidade de produtos no conjunto).
         iteration = random.randint(1, len(products))
-        print("Produtos a serem comprados: " + str(iteration))
+        print("PRODUTOS A SEREM COMPRADOS: " + str(iteration))
 
         for i in range(iteration):
-            print(remaining_products)
-            if not remaining_products:  # Checa os produtos restantes.
-                print("Não há mais produtos únicos para escolher.")
-                break #Sai do loop se não tiver mais produtos pra escolher (experimental).
-            
             product_name = random.choice(list(remaining_products))  # Seleciona um produto aleatório.
             quantity = random.randint(1, 10)  # Determina uma quantidade de produtos aleatória.
-            print("Quantidade: " + str(quantity))
+            
             # Função para comprar um produto.
-            print(product_name)
-            print(quantity)
+            print("Produto: " + str(product_name) + " x " + str(quantity))
             buy_product(self, product_name, quantity)
 
             # Remove o produto escolhido no conjunto cópia.
             remaining_products.remove(product_name)
+            print("Produtos restantes: " + str(remaining_products))
 
         # Entrando no offcanvas do carrinho.
         click_button(self, "cart")
@@ -72,7 +67,6 @@ class ProductFormTest(unittest.TestCase):
         # PÁGINA DE CARRINHO
         # Selecionando cartões de crédito e endereço.
 
-        ### PAREI AQUI ###
         select_option_by_value(self, "salesCardsIds", "1")
 
         select_option(self, "address-dropdown", "Minha casa")
