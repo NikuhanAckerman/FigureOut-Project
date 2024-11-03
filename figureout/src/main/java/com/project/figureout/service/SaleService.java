@@ -1,6 +1,7 @@
 package com.project.figureout.service;
 
 import com.project.figureout.dto.ChangeSaleStatusDTO;
+import com.project.figureout.dto.NotificationDTO;
 import com.project.figureout.dto.SaleDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartRepository;
@@ -45,6 +46,9 @@ public class SaleService {
 
     @Autowired
     private ExchangeService exchangeService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     public List<Sale> getAllSales() {
         return saleRepository.findAll();
@@ -169,6 +173,12 @@ public class SaleService {
                     exchangeInProcessFirst.setExchangeFinishTime(now);
                 }
 
+                NotificationDTO notificationDTO = new NotificationDTO();
+                notificationDTO.setCategory(NotificationCategoryEnum.TROCA);
+                notificationDTO.setTitle("O status da troca de código '" + exchangeInProcessFirst.getExchangeCode() + "' foi alterado.");
+                notificationDTO.setDescription("O status desta troca foi alterado de " + exchangeInProcessFirst.getStatus().name() + " para " + changeSaleStatusDTO.getStatus().name() + ".");
+                notificationService.createNotification(sale.getCart().getClient(), notificationDTO);
+
             }
 
         }
@@ -225,6 +235,13 @@ public class SaleService {
             }
 
         }
+
+        // creating notification
+        NotificationDTO notificationDTO = new NotificationDTO();
+        notificationDTO.setCategory(NotificationCategoryEnum.VENDA);
+        notificationDTO.setTitle("O status da venda de código '" + sale.getSaleCode() + "' foi alterado.");
+        notificationDTO.setDescription("O status desta venda foi alterado de " + sale.getStatus().name() + " para " + changeSaleStatusDTO.getStatus().name() + ".");
+        notificationService.createNotification(sale.getCart().getClient(), notificationDTO);
 
         sale.setStatus(changeSaleStatusDTOStatus);
 

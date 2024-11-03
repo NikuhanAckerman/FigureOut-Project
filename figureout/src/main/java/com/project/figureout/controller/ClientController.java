@@ -44,6 +44,9 @@ public class ClientController {
     @Autowired
     private SalesCardsRepository salesCardsRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
     private ClientNavigator clientNavigator;
 
     @GetMapping("/showAllClients")
@@ -387,6 +390,24 @@ public class ClientController {
         model.addAttribute("phone", client.getPhone());
 
         return "clientProfile";
+    }
+
+    @GetMapping("/clientProfileNotifications/{id}")
+    public String seeClientProfileNotifications(@PathVariable long id, Model model) {
+        Client client = clientService.getClientById(id);
+        List<Notification> clientNotifications = notificationService.getClientNotifications(client.getId());
+
+        model.addAttribute("notifications", clientNotifications);
+
+        return "clientProfileNotifications";
+    }
+
+    @DeleteMapping("/clientRemoveNotification/{id}")
+    public String clientRemoveNotification(@PathVariable long id, Model model) {
+        Client client = notificationService.getClientByNotification(notificationService.getNotificationById(id));
+        notificationService.deleteNotificationById(id);
+
+        return "redirect:/clientProfileNotifications/" + client.getId();
     }
 
     @GetMapping("/clientProfilePurchases/{id}")

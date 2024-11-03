@@ -66,6 +66,9 @@ public class SaleController {
     @Autowired
     ExchangeService exchangeService;
 
+    @Autowired
+    NotificationService notificationService;
+
     @GetMapping("")
     public String showSalesGet(Model model) {
 
@@ -322,6 +325,14 @@ public class SaleController {
         saleService.saveSale(sale);
 
         cartService.changeClientCart(client);
+
+        // creating notification
+        NotificationDTO notificationDTO = new NotificationDTO();
+        notificationDTO.setCategory(NotificationCategoryEnum.VENDA);
+        notificationDTO.setTitle("Compra realizada!");
+        notificationDTO.setDescription("Sua compra de R$" + sale.getFinalPrice() + "foi realizada com sucesso.");
+
+        notificationService.createNotification(client, notificationDTO);
 
         // log de transação do método.
         //Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());

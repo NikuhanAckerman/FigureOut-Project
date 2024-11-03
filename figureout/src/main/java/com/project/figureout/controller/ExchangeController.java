@@ -1,6 +1,7 @@
 package com.project.figureout.controller;
 
 import com.project.figureout.dto.ExchangeDTO;
+import com.project.figureout.dto.NotificationDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartsProductsRepository;
 import com.project.figureout.repository.ExchangeProductsRepository;
@@ -45,6 +46,9 @@ public class ExchangeController {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping("/requestExchange/{id}")
     public String requestExchangeGet(@PathVariable long id, Model model) {
@@ -173,8 +177,13 @@ public class ExchangeController {
 
             saleService.saveSale(sale);
 
-        }
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setCategory(NotificationCategoryEnum.TROCA);
+            notificationDTO.setTitle("Uma troca foi requisitada!");
+            notificationDTO.setDescription("Uma troca de código '" + newExchange.getExchangeCode() + "' foi requisitada.");
+            notificationService.createNotification(sale.getCart().getClient(), notificationDTO);
 
+        }
 
         return "redirect:/clientProfileExchanges/" + client.getId();
     }
