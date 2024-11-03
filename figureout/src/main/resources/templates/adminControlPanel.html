@@ -98,7 +98,11 @@
                 <div class="card-body">
                     <h5 class="card-title">Estatística</h5>
                     <p class="card-text">Visualizar gráficos e estatísticas do sistema.</p>
-                    <a th:href="@{/statistics}" class="btn btn-primary">Acessar</a>
+                    <div class="d-flex gap-2"> <!-- 'gap-2' cria um espaçamento entre os botões -->
+                        <a th:href="@{/chart}" class="btn btn-primary">Gráfico</a>
+                        <a th:href="@{/statistics/clientRanking/}" class="btn btn-primary">Ranking</a>
+                    </div>
+
                 </div>
             </div>
         </div>
