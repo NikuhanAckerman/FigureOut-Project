@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +29,9 @@ public class ClientService {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private SaleService saleService; // maybe circular dependency
 
     // Client Methods
 
@@ -120,6 +120,8 @@ public class ClientService {
 
         client.setGender(gender);
         client.setPhone(phone);
+
+        client.setRanking(0);
     }
 
     public List<Gender> getAllGenders() {
@@ -191,6 +193,59 @@ public class ClientService {
         return clients.isEmpty() ? new ArrayList<>() : clients; // Retornar uma lista vazia se nenhum filtro bater
     }
 
+    public void recalculateClientRanking(HashMap<Long, List<Sale>> clientsAndSales) {
+        System.out.println("CALLING RECALCULATE CLIENT RANKING");
 
+        HashMap<Long, BigDecimal> clientTotalAmountSales = new HashMap<>();
+        List<BigDecimal> totalSales = new ArrayList<>();
+        LinkedHashMap<Long, BigDecimal> sortedSales = new LinkedHashMap<>();
+
+        long idPreviousClient = 0;
+
+        for (Map.Entry<Long, List<Sale>> entry : clientsAndSales.entrySet()) {
+            long currentClientId = entry.getKey();
+            List<Sale> listOfSales = entry.getValue();
+
+            BigDecimal totalAmountInTheListOfSales = BigDecimal.valueOf(0.00);
+            idPreviousClient = currentClientId;
+
+            for (Sale currentSale : listOfSales) {
+                totalAmountInTheListOfSales = totalAmountInTheListOfSales.add(currentSale.getFinalPrice());
+                clientTotalAmountSales.put(currentClientId, totalAmountInTheListOfSales);
+                totalSales.add(totalAmountInTheListOfSales);
+            }
+        }
+
+        totalSales.sort(new Comparator<BigDecimal>() {
+            public int compare(BigDecimal bd1, BigDecimal bd2) {
+                return bd1.compareTo(bd2);
+            }
+        });
+
+        for (BigDecimal bd : totalSales) {
+            for (Map.Entry<Long, BigDecimal> entry : clientTotalAmountSales.entrySet()) {
+                if (entry.getValue().equals(bd)) {
+                    sortedSales.put(entry.getKey(), bd);
+                }
+            }
+        }
+
+        int i = 1;
+
+        for (Map.Entry<Long, BigDecimal> entry : sortedSales.entrySet()) {
+            long currentClientId = entry.getKey();
+            BigDecimal totalInSales = entry.getValue();
+            System.out.println("");
+            System.out.println("Cliente: " + getClientById(currentClientId).getName());
+            System.out.println("Quantidade total gasta com compras: R$" + totalInSales);
+            Client client = getClientById(currentClientId);
+            client.setRanking(i);
+            System.out.println("Ranking do cliente: " + i);
+            saveClient(client);
+            i += 1;
+            System.out.println("");
+        }
+
+    }
 
 }

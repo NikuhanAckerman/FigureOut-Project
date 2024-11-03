@@ -112,8 +112,6 @@ public class SaleService {
 //        return saleRepository.findSalesByProductByMonth();
 //    }
 
-
-
     public void changeSaleStatus(Sale sale, ChangeSaleStatusDTO changeSaleStatusDTO) {
         SaleStatusEnum saleStatus = sale.getStatus();
         SaleStatusEnum changeSaleStatusDTOStatus = changeSaleStatusDTO.getStatus();
@@ -248,6 +246,8 @@ public class SaleService {
         saveSale(sale);
 
     }
+
+
 
     /* Método para achar os produtos com base na data.
     public Map<LocalDate, BigDecimal> getSalesData(LocalDate startDate, LocalDate endDate) {

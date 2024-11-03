@@ -5,6 +5,7 @@ import com.project.figureout.dto.ChangeClientNavigatorDTO;
 import com.project.figureout.dto.SaleDTO;
 import com.project.figureout.model.Client;
 import com.project.figureout.model.Log;
+import com.project.figureout.model.Sale;
 import com.project.figureout.repository.LogRepository;
 import com.project.figureout.repository.PromotionalCouponRepository;
 import com.project.figureout.service.*;
@@ -13,6 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -78,6 +82,20 @@ public class AdminController {
         return "redirect:/index";
     }
 
+    @GetMapping("/statistics")
+    public String getStatistics() {
+        return "statistics";
+    }
+
+    @GetMapping("/statistics/clientRanking/")
+    public String getClientRanking(Model model) {
+        HashMap<Long, BigDecimal> orderedClientsByRanking = new HashMap<>();
+
+        model.addAttribute("orderedClientsByRanking", orderedClientsByRanking);
+
+        return "clientRanking";
+    }
+
     @GetMapping("/chart")
     public String chart(Model model) {
         //List<SaleDTO> vendas = saleService.getSalesByProductByMonth();
@@ -85,5 +103,7 @@ public class AdminController {
         //model.addAttribute("vendas", vendas);
         return "chart"; // nome do template Thymeleaf
     }
+
+
 
 }
