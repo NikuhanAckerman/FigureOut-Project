@@ -1,5 +1,8 @@
 package com.project.figureout.controller;
 
+import com.googlecode.wickedcharts.highcharts.options.*;
+import com.googlecode.wickedcharts.highcharts.options.series.SimpleSeries;
+import com.googlecode.wickedcharts.wicket15.highcharts.Chart;
 import com.project.figureout.ClientNavigator;
 import com.project.figureout.dto.ChangeClientNavigatorDTO;
 import com.project.figureout.dto.SaleDTO;
@@ -98,9 +101,8 @@ public class AdminController {
 
     @GetMapping("/chart")
     public String chart(Model model) {
-        //List<SaleDTO> vendas = saleService.getSalesByProductByMonth();
+        
 
-        //model.addAttribute("vendas", vendas);
         return "chart"; // nome do template Thymeleaf
     }
 
