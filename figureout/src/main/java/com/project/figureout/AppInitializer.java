@@ -260,6 +260,8 @@ public class AppInitializer implements CommandLineRunner {
             System.out.println("Tabela de tamanhos de produto populada.");
         }
 
+        System.out.println("A aplicação foi inicializada com sucesso!");
+
     }
 
 }
