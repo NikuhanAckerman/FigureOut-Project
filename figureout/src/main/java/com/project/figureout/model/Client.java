@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,6 +68,9 @@ public class Client {
 
     @Column(name = "cli_ranking")
     private Integer ranking = 1;
+
+    @Column(name = "cli_total_gasto_vendas")
+    private BigDecimal totalAmountSpent = BigDecimal.valueOf(0.00);
 
     // Expressão regular para validar a senha
     // (Incluir no mínimo 8 caracteres, letra mínuscula, maiúscula e caractere especial).

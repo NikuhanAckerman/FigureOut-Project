@@ -15,9 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/")
@@ -89,9 +87,11 @@ public class AdminController {
 
     @GetMapping("/statistics/clientRanking/")
     public String getClientRanking(Model model) {
-        HashMap<Long, BigDecimal> orderedClientsByRanking = new HashMap<>();
+        List<Client> allClients = clientService.getAllClients();
 
-        model.addAttribute("orderedClientsByRanking", orderedClientsByRanking);
+        allClients.sort(Comparator.comparingInt(Client::getRanking));
+
+        model.addAttribute("clients", allClients);
 
         return "clientRanking";
     }

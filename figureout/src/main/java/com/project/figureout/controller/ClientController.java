@@ -356,6 +356,7 @@ public class ClientController {
     @DeleteMapping("/deleteClient/{id}")
     public String deleteClient(@PathVariable long id) {
         clientService.deleteClientById(id);
+        clientService.recalculateClientRanking();
 
         return "redirect:/showAllClients";
     }

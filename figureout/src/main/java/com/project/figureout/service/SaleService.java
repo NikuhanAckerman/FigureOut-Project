@@ -58,8 +58,6 @@ public class SaleService {
         return saleRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Venda não encontrada com base no ID."));
     }
 
-
-
     public List<Sale> getSalesInsideDateRange(LocalDateTime startDate, LocalDateTime endDate) {
         List<Sale> allSales = getAllSales();
         List<Sale> salesInsideDesiredRange = new ArrayList<>();

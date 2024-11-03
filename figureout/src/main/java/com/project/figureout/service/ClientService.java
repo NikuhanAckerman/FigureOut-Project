@@ -222,8 +222,6 @@ public class ClientService {
                 .sorted(Map.Entry.<Long, BigDecimal>comparingByValue().reversed()) // Sort by value, descending
                 .toList();
 
-        System.out.println("HashMap of total sale values ordered by ranking:");
-
         int rank = 1;
         for (Map.Entry<Long, BigDecimal> entry : sortedClientsBySales) {
             Long clientId = entry.getKey();
@@ -231,90 +229,13 @@ public class ClientService {
 
             Client client = getClientById(clientId);
             client.setRanking(rank);
+            client.setTotalAmountSpent(totalSales);
             saveClient(client);
 
-            System.out.println("Rank " + rank + ": Client " + getClientById(clientId).getName() +
-                    " - Total Sales: $" + totalSales);
+            System.out.println("Rank " + rank + ": Client " + getClientById(clientId).getName() + " - Total Sales: $" + totalSales);
             rank++;
         }
 
-
-
-        /*List<BigDecimal> totalSaleValues = new ArrayList<>(clientAndSaleTotals.values());
-        Collections.sort(totalSaleValues);
-        totalSaleValues = totalSaleValues.reversed();
-
-        System.out.println("HashMap de valores totais da venda:");
-
-        clientAndSaleTotals.forEach((key, value) -> {
-            System.out.println("Cliente: " + getClientById(key).getName());
-            System.out.println("Valor total gasto em vendas: R$" + value);
-        });
-
-        System.out.println("Lista com valores ordenados:");
-
-        int i = 1;
-
-        for(BigDecimal currentValue : totalSaleValues) {
-            System.out.println("Valor: R$" + currentValue + " Ranking: " + i);
-            i += 1;
-        }*/
-
-
-
-        /*
-        System.out.println("CALLING RECALCULATE CLIENT RANKING");
-
-        HashMap<Long, BigDecimal> clientTotalAmountSales = new HashMap<>();
-        List<BigDecimal> totalSales = new ArrayList<>();
-        LinkedHashMap<Long, BigDecimal> sortedSales = new LinkedHashMap<>();
-
-        long idPreviousClient = 0;
-
-        for (Map.Entry<Long, List<Sale>> entry : clientsAndSales.entrySet()) {
-            long currentClientId = entry.getKey();
-            List<Sale> listOfSales = entry.getValue();
-
-            BigDecimal totalAmountInTheListOfSales = BigDecimal.valueOf(0.00);
-            idPreviousClient = currentClientId;
-
-            for (Sale currentSale : listOfSales) {
-                totalAmountInTheListOfSales = totalAmountInTheListOfSales.add(currentSale.getFinalPrice());
-                clientTotalAmountSales.put(currentClientId, totalAmountInTheListOfSales);
-                totalSales.add(totalAmountInTheListOfSales);
-            }
-        }
-
-        totalSales.sort(new Comparator<BigDecimal>() {
-            public int compare(BigDecimal bd1, BigDecimal bd2) {
-                return bd1.compareTo(bd2);
-            }
-        });
-
-        for (BigDecimal bd : totalSales) {
-            for (Map.Entry<Long, BigDecimal> entry : clientTotalAmountSales.entrySet()) {
-                if (entry.getValue().equals(bd)) {
-                    sortedSales.put(entry.getKey(), bd);
-                }
-            }
-        }
-
-        int i = 1;
-
-        for (Map.Entry<Long, BigDecimal> entry : sortedSales.entrySet()) {
-            long currentClientId = entry.getKey();
-            BigDecimal totalInSales = entry.getValue();
-            System.out.println("");
-            System.out.println("Cliente: " + getClientById(currentClientId).getName());
-            System.out.println("Quantidade total gasta com compras: R$" + totalInSales);
-            Client client = getClientById(currentClientId);
-            client.setRanking(i);
-            System.out.println("Ranking do cliente: " + i);
-            saveClient(client);
-            i += 1;
-            System.out.println("");
-        }
-        */
     }
 
 }
