@@ -43,8 +43,21 @@
   </style>
 </head>
 <body>
+<nav class="navbar navbar-custom fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a id="upper-navbar-text" class="navbar-brand">Meu Perfil</a>
+    </div>
+
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="btn navbar-top-button" href="/products/shop">Loja</a>
+      </li>
+    </ul>
+
+  </div>
+</nav>
 <div class="sidebar">
-  <h4>Meu Perfil</h4>
   <ul class="list-unstyled">
     <li><a th:href="@{/clientProfileGeneral/{id}(id = ${id})}">Informações gerais</a></li>
     <li><a th:href="@{/clientProfileNotifications/{id}(id = ${id})}">Notificações</a></li>
@@ -56,7 +69,6 @@
   </ul>
 </div>
 <div class="content">
-  <h1>Compras</h1>
 
   <div th:if="${sales.isEmpty()}">
     <p>Você ainda não comprou nada.</p>
@@ -66,22 +78,23 @@
   <div th:if="${!sales.isEmpty()}">
 
     <div class="mb-3 d-flex align-items-center">
-      <p class="mb-0 me-2">Buscar por data: </p>
-      <div class="col-md-3">
+      <p class="mb-0 me-2">Buscar por data:</p>
+      <div class="input-group" style="width: 200px;"> <!-- Ajuste aqui -->
         <input type="date" class="form-control" id="filterDate">
+        <a href="#" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+          <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
+        </svg></a>
       </div>
-      <a href="#" class="btn btn-primary"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
-      </svg></a>
     </div>
 
-  <div th:each="sale : ${sales}">
+
+    <div th:each="sale : ${sales}">
 
     <div class="purchase-card card mb-3">
+      <div class="card-header">
+        <h3 class="card-title" th:text="'Compra ' + ${sale.saleCode}"></h3>
+      </div>
       <div class="card-body">
-        <h5 class="card-title" th:text="'Compra ' + ${sale.saleCode}"></h5>
-        <p class="card-text" th:text="'Data: ' + ${#temporals.format(sale.dateTimeSale, 'dd/MM/yyyy HH:mm:ss')}"></p>
-        <p class="card-text" th:text="'Valor total: R$ ' + ${sale.finalPrice}"></p>
 
         <span class="badge"
               th:text="${sale.status.name()}"
@@ -89,55 +102,81 @@
               th:if="${sale.status == status}"
               th:classappend="${status.name() == 'ENTREGUE' || status.name() ==  'PAGAMENTO_REALIZADO' ? 'bg-success' :
                               status.name() == 'EM_TRANSPORTE' ? 'bg-warning' :
-                              status.name() == 'PAGAMENTO_REJEITADO' ? 'bg-danger' : 'bg-secondary'}"
-        >
+                              status.name() == 'PAGAMENTO_REJEITADO' ? 'bg-danger' : 'bg-secondary'}">
         </span>
 
+        <p class="card-text">
+          <strong>Data e horário: </strong><span th:text="${#temporals.format(sale.dateTimeSale, 'dd/MM/yyyy - HH:mm:ss')}"></span>
+        </p>
+        <p class="card-text">
+          <strong>Valor total: </strong>R$<span th:text="${sale.finalPrice}"></span>
+        </p>
+
+
+
           <div>
-            <br>
-            <button class="btn btn-primary" data-bs-toggle="collapse" th:attr="data-bs-target='#saleMoreInfoCollapse_' + ${sale.id}">Mais informações</button>
+            <button class="btn btn-primary mb-2" data-bs-toggle="collapse" th:attr="data-bs-target='#saleMoreInfoCollapse_' + ${sale.id}">Mais informações</button>
 
-              <div th:id="'saleMoreInfoCollapse_' + ${sale.id}" class="collapse">
 
-                <p th:text="'Endereço de entrega: ' + ${sale.deliveryAddress.nickname}"></p>
-                <p th:text="'Frete: ' + ${sale.freight*100} + '% do total da compra'"></p>
 
-                <p th:text="${sale.promotionalCouponApplied} == null ? 'Nenhum cupom promocional usado.' : 'Cupom promocional usado: ' +
+
+            <div th:id="'saleMoreInfoCollapse_' + ${sale.id}" class="collapse">
+
+                <p class="card-text">
+                  <strong>Endereço de entrega: </strong><span th:text="${sale.deliveryAddress.nickname}"></span>
+                </p>
+              <p class="card-text">
+                <strong>Frete: </strong><span th:text="${sale.freight*100} + '% do total da compra'"></span>
+              </p>
+
+                <p th:text="${sale.promotionalCouponApplied} == null ? 'Nenhum cupom promocional foi usado nesta compra.' : 'Cupom promocional usado na compra: ' +
                 ${sale.promotionalCouponApplied.couponName} + ' Desconto: ' +
                 ${sale.promotionalCouponApplied.couponDiscount*100} + '%'"></p>
 
-                <p>Cartões usados na compra: </p>
+              <h5><strong>Cartão(ões) usado(s) na compra: </strong></h5>
 
                 <div th:each="saleCard : ${sale.cardsUsedInThisSale}">
-                  <div class="card">
-                    <p th:text="'Apelido do cartão: ' + ${saleCard.creditCard.nickname}"></p>
-                    <p th:text="'Número do cartão: ' + ${saleCard.creditCard.cardNumber}"></p>
-                    <p th:text="'Quantia paga: R$' + ${saleCard.amountPaid}"></p>
+                  <div class="card mb-3">
+                    <div class="card-header">
+                      <h5 class="card-title" th:text="${saleCard.creditCard.nickname}"></h5>
+                    </div>
+                    <div class="card-body">
+                      <p class="card-text">
+                        Número do cartão: <span th:text="${saleCard.creditCard.cardNumber}"></span>
+                      </p>
+                      <p class="card-text">
+                        <strong>Quantia paga:</strong> R$<span th:text="${saleCard.amountPaid}"></span>
+                      </p>
+                    </div>
                   </div>
                 </div>
 
-                <p>Produtos pedidos no carrinho:</p>
+                <h5><strong>Produto(s) comprado(s):</strong></h5>
 
                 <div th:each="cartProduct : ${sale.cart.cartProducts}">
 
-                  <div class="card p-3 mb-2">
+                  <div class="card mb-3">
 
-                      <!-- Product Name with Exchange Status Badge -->
-
-                    <div>
-                      <p th:text="'Nome: ' + ${cartProduct.product.name}" class="mb-0"></p>
+                    <div class="card-header">
+                      <h5 class="card-title" th:text="${cartProduct.product.name}"></h5>
                     </div>
-
-                      <!-- Unit Price -->
-                    <p th:text="'Preço unitário: R$' + ${cartProduct.unitaryPrice}"></p>
-
-                      <!-- Product Quantity with Returned Quantity Badge -->
-                    <div class="d-flex justify-content-between align-items-center">
-                      <p th:text="'Quantidade: ' + ${cartProduct.productQuantity}" class="mb-0"></p>
-                    </div>
-
+                    <div class="card-body">
+                        <!-- Unit Price -->
+                      <p class="card-text">
+                        Preço unitário: R$<span th:text="${cartProduct.unitaryPrice}"></span>
+                      </p>
+                        <!-- Product Quantity with Returned Quantity Badge -->
+                      <p class="card-text">
+                        Quantidade: <span th:text="${cartProduct.productQuantity}"></span>
+                      </p>
                       <!-- Final Price -->
-                    <p th:text="'Preço total: R$' + ${cartProduct.finalPrice}"></p>
+                      <p class="card-text">
+                        <strong>Preço total:</strong> R$<span th:text="${cartProduct.finalPrice}"></span>
+                      </p>
+
+                    </div>
+
+
 
                     <div class="d-flex flex-column align-items-start">
                       <div th:if="${productIdExchangeInfo[cartProduct.id] != null and !productIdExchangeInfo[cartProduct.id].isEmpty()}">
@@ -158,7 +197,13 @@
 
                   </div>
 
+
+
                 </div>
+
+              <div th:if="${sale.status == entregueStatus || sale.status == trocaFinalizadaStatus}">
+                <a class="btn btn-warning" th:href="@{/exchange/requestExchange/{id}(id = ${sale.id})}" onclick="return confirm('Tem certeza?')">Fazer troca</a>
+              </div>
 
                 <div th:if="${!sale.exchangeList.isEmpty()}">
 
@@ -191,9 +236,7 @@
 
         </div>
 
-      <div th:if="${sale.status == entregueStatus || sale.status == trocaFinalizadaStatus}">
-        <a class="btn btn-primary" th:href="@{/exchange/requestExchange/{id}(id = ${sale.id})}" onclick="return confirm('Tem certeza?')">Fazer troca</a>
-      </div>
+
 
     </div>
 
