@@ -70,10 +70,6 @@
   </ul>
 </div>
 <div class="content">
-  <h1>Notificações</h1>
-
-  <div class="card mb-3">
-    <div class="card-body">
 
       <div th:if="${notifications.isEmpty()}">
         <h4>Nenhuma notificação.</h4>
@@ -84,14 +80,22 @@
         <div th:each="notification : ${notifications}">
 
           <div class="card mt-3">
-            <p th:text="${notification.category.name()}"></p>
-            <p th:text="${#temporals.format(notification.notificationDateTime, 'dd/MM/yyyy HH:mm:ss')}"></p>
-            <p th:text="${notification.title}"></p>
-            <p th:text="${notification.description}"></p>
-            <form th:action="@{/clientRemoveNotification/{id}(id = ${notification.id})}" method="POST">
-              <input type="hidden" name="_method" value="DELETE">
-              <button class="submit bi bi-x"></button>
-            </form>
+            <div class="card-header d-flex align-items-center">
+              <form th:action="@{/clientRemoveNotification/{id}(id = ${notification.id})}" method="POST" class="me-2 d-flex align-items-center">
+                <input type="hidden" name="_method" value="DELETE">
+                <button class="submit btn-close" aria-label="Close"></button>
+              </form>
+              <h3 class="card-title mb-0" th:text="${notification.category.name()}"></h3>
+            </div>
+
+
+          <div class="card-body">
+            <p class="card-text">
+              <strong><span th:text="${#temporals.format(notification.notificationDateTime, 'dd/MM/yyyy - HH:mm:ss')}"></span></strong>
+            </p>
+              <p th:text="${notification.title}"></p>
+              <p th:text="${notification.description}"></p>
+            </div>
 
           </div>
 
@@ -99,8 +103,6 @@
 
       </div>
 
-    </div>
-  </div>
 
 </div>
 
