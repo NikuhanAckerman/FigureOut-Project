@@ -72,14 +72,4 @@ public class Client {
     @Column(name = "cli_total_gasto_vendas")
     private BigDecimal totalAmountSpent = BigDecimal.valueOf(0.00);
 
-    // Expressão regular para validar a senha
-    // (Incluir no mínimo 8 caracteres, letra mínuscula, maiúscula e caractere especial).
-    //private static final String PASSWORD_PATTERN = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$";
-
-    //public boolean isValidPassword(String password) {
-    //    if (password == null) {
-    //        return false;
-    //    }
-    //    return password.matches(PASSWORD_PATTERN);
-    //}
 }

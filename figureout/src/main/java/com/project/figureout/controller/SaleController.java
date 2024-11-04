@@ -454,35 +454,5 @@ public class SaleController {
         return ResponseEntity.ok(coupon); // Otherwise, return the coupon
     }
 
-    // Gráfico de vendas.
-//    @GetMapping
-//    public String showSalesChart(Model model) {
-//        // Adiciona um atributo vazio ao modelo, se necessário
-//        model.addAttribute("salesData", new HashMap<>());
-//        return "chart"; // O nome do template Thymeleaf
-//    }
-
-    // Gráfico de vendas
-    @GetMapping("/chart")
-    public String getSalesReport(Model model) {
-
-        //model.addAttribute("salesData", salesData);
-
-        return "chart";
-    }
-
-    @GetMapping("/chart/saleData")
-    @ResponseBody
-    public HashMap<LocalDateTime, BigDecimal> getSaleData(@RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime startDate,
-                                                          @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime endDate) {
-        List<Sale> salesInsideRange = saleService.getSalesInsideDateRange(startDate, endDate);
-        HashMap<LocalDateTime, BigDecimal> salesData = new HashMap<>();
-
-        for(Sale currentSale: salesInsideRange) {
-            salesData.put(currentSale.getDateTimeSale(), currentSale.getFinalPrice());
-        }
-
-        return salesData;
-    }
 
 }

@@ -1,11 +1,10 @@
 package com.project.figureout.controller;
 
-import com.googlecode.wickedcharts.highcharts.options.*;
-import com.googlecode.wickedcharts.highcharts.options.series.SimpleSeries;
-import com.googlecode.wickedcharts.wicket15.highcharts.Chart;
 import com.project.figureout.ClientNavigator;
 import com.project.figureout.dto.ChangeClientNavigatorDTO;
+import com.project.figureout.dto.ProductInChartDTO;
 import com.project.figureout.dto.SaleDTO;
+import com.project.figureout.model.CartsProducts;
 import com.project.figureout.model.Client;
 import com.project.figureout.model.Log;
 import com.project.figureout.model.Sale;
@@ -13,11 +12,13 @@ import com.project.figureout.repository.LogRepository;
 import com.project.figureout.repository.PromotionalCouponRepository;
 import com.project.figureout.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller
@@ -99,9 +100,46 @@ public class AdminController {
         return "clientRanking";
     }
 
+    @GetMapping("/chart/changeDateInterval")
+    public HashMap<LocalDateTime, BigDecimal> changeDateInterval(Model model) {
+
+    }
+
+
     @GetMapping("/chart")
-    public String chart(Model model) {
-        
+    public String chart(Model model, @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime startDate,
+                        @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime endDate) {
+        List<Sale> salesInsideRange = saleService.getSalesInsideDateRange(startDate, endDate);
+        List<ProductInChartDTO> productInChartDTOList = new ArrayList<>();
+
+        for(Sale currentSale: salesInsideRange) {
+
+            for(CartsProducts cartProduct: currentSale.getCart().getCartProducts()) {
+
+                if(productInChartDTOList.stream().anyMatch(productInChartDTO -> productInChartDTO.equals(cartProduct.getProduct().getId()))) {
+
+                    
+
+
+
+
+
+
+                } else {
+                    ProductInChartDTO productInChartDTO = new ProductInChartDTO();
+                    productInChartDTO.setProductId(cartProduct.getProduct().getId());
+                    productInChartDTO.setName(cartProduct.getProduct().getName());
+                    productInChartDTO.setValuePurchased(cartProduct.getFinalPrice());
+                }
+
+
+
+
+
+            }
+
+        }
+
 
         return "chart"; // nome do template Thymeleaf
     }
