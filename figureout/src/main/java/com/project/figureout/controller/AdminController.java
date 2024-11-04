@@ -100,10 +100,10 @@ public class AdminController {
         return "clientRanking";
     }
 
-    @GetMapping("/chart/changeDateInterval")
-    public HashMap<LocalDateTime, BigDecimal> changeDateInterval(Model model) {
-
-    }
+//    @GetMapping("/chart/changeDateInterval")
+//    public HashMap<LocalDateTime, BigDecimal> changeDateInterval(Model model) {
+//    // Comentei pois dá erro de compilação por não ter um return.
+//    }
 
 
     @GetMapping("/chart")

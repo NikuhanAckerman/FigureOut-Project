@@ -47,7 +47,7 @@
       <h5 class="mt-3" th:text=" 'Disponível em estoque: ' + ${stock.productQuantityAvailable}"></h5>
 
       <form th:action="@{/cart/addProductToCart/{productId}/{cartId}(productId=${product.id}, cartId=${cart.id})}" method="POST" th:object="${changeCartProductQuantityDTO}">
-        <input type="number" class="form-control" step="1" min="1" th:field="*{quantity}" required>
+        <input type="number" class="form-control w-25" step="1" min="1" th:field="*{quantity}" required><br>
 
         <button class="btn btn-primary btn-lg" id="addToCart" type="submit">
           Adicionar ao Carrinho

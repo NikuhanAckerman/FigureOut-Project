@@ -27,26 +27,30 @@
   </div>
 </nav>
 
-  <div style="max-width: 1200px; margin: 0 auto">
-    <table class="table table-striped table-hover mt-5">
-      <thead class="table-dark">
-      <tr>
-        <th>ID</th>
-        <th>Ranking</th>
-        <th>Nome completo</th>
-        <th>Total gasto em compras</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr th:each="client : ${clients}">
-        <td th:text = "${client.id}"></td>
-        <td th:text = "${client.ranking}"></td>
-        <td th:text = "${client.name}"></td>
-        <td th:text = "'R$' + ${client.totalAmountSpent}"></td>
-      </tr>
-      </tbody>
-    </table>
-  </div>
+<div style="max-width: 1200px; margin: 0 auto">
+  <table class="table table-striped table-hover mt-5">
+    <thead class="table-dark">
+    <tr>
+      <th>ID</th>
+      <th>Ranking</th>
+      <th>Nome completo</th>
+      <th>Total gasto em compras</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="client, iterStat : ${clients}">
+      <td th:text="${client.id}"></td>
+      <td th:text="${client.ranking}"></td>
+      <td>
+        <span th:text="${client.name}"></span>
+        <span th:if="${iterStat.index == 0}">🥇</span>
+        <span th:if="${iterStat.index == 1}">🥈</span>
+        <span th:if="${iterStat.index == 2}">🥉</span>
+      </td>
+      <td th:text="'R$' + ${client.totalAmountSpent}"></td>
+    </tr>
+    </tbody>
+  </table>
 </div>
 
 <footer id="footer">
