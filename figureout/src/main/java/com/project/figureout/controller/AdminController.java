@@ -4,10 +4,7 @@ import com.project.figureout.ClientNavigator;
 import com.project.figureout.dto.ChangeClientNavigatorDTO;
 import com.project.figureout.dto.ProductInChartDTO;
 import com.project.figureout.dto.SaleDTO;
-import com.project.figureout.model.CartsProducts;
-import com.project.figureout.model.Client;
-import com.project.figureout.model.Log;
-import com.project.figureout.model.Sale;
+import com.project.figureout.model.*;
 import com.project.figureout.repository.LogRepository;
 import com.project.figureout.repository.PromotionalCouponRepository;
 import com.project.figureout.service.*;
@@ -100,46 +97,61 @@ public class AdminController {
         return "clientRanking";
     }
 
-//    @GetMapping("/chart/changeDateInterval")
-//    public HashMap<LocalDateTime, BigDecimal> changeDateInterval(Model model) {
-//    // Comentei pois dá erro de compilação por não ter um return.
-//    }
-
 
     @GetMapping("/chart")
-    public String chart(Model model, @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime startDate,
-                        @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime endDate) {
+    public String chart(@RequestParam(defaultValue = "2024-01-01T00:00:00") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+                        @RequestParam(defaultValue = "2024-12-31T00:00:00") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,
+                        Model model) {
         List<Sale> salesInsideRange = saleService.getSalesInsideDateRange(startDate, endDate);
         List<ProductInChartDTO> productInChartDTOList = new ArrayList<>();
 
-        for(Sale currentSale: salesInsideRange) {
+        System.out.println("Start Date: " + startDate);
+        System.out.println("End Date: " + endDate);
 
-            for(CartsProducts cartProduct: currentSale.getCart().getCartProducts()) {
+        for(Sale sale: salesInsideRange) {
 
-                if(productInChartDTOList.stream().anyMatch(productInChartDTO -> productInChartDTO.equals(cartProduct.getProduct().getId()))) {
+            System.out.println("");
+            System.out.println("Venda");
+            System.out.println("Código da venda: " + sale.getSaleCode());
+            System.out.println("Valor final da venda: R$" + sale.getFinalPrice());
+            System.out.println("Produtos:");
 
-                    
+            for (CartsProducts cartProduct: sale.getCart().getCartProducts()) {
+                long productId = cartProduct.getProduct().getId();
+                BigDecimal productPrice = cartProduct.getFinalPrice();
+                int productQuantity = cartProduct.getProductQuantity();
 
+                ProductInChartDTO productInChartDTO = new ProductInChartDTO();
+                productInChartDTO.setId(productId);
+                productInChartDTO.setName(cartProduct.getProduct().getName());
+                productInChartDTO.setValuePurchased(cartProduct.getFinalPrice());
+                productInChartDTO.setVolumePurchased(cartProduct.getProductQuantity());
+                productInChartDTO.setDatePurchased(sale.getDateTimeSale());
+                productInChartDTOList.add(productInChartDTO);
 
-
-
-
-
-                } else {
-                    ProductInChartDTO productInChartDTO = new ProductInChartDTO();
-                    productInChartDTO.setProductId(cartProduct.getProduct().getId());
-                    productInChartDTO.setName(cartProduct.getProduct().getName());
-                    productInChartDTO.setValuePurchased(cartProduct.getFinalPrice());
-                }
-
-
-
-
+                System.out.println("");
+                System.out.println("    Nome: " + productInChartDTO.getName());
+                System.out.println("    Valor de compra: R$" + productInChartDTO.getValuePurchased());
+                System.out.println("    Volume de compra:" + productInChartDTO.getVolumePurchased());
+                System.out.println("    Data específica da venda " + productInChartDTO.getDatePurchased());
 
             }
 
+            System.out.println("");
+
         }
 
+        System.out.println("Elementos da lista de productInChartDTO:");
+
+        for(ProductInChartDTO productInChartDTO: productInChartDTOList) {
+            System.out.println("");
+            System.out.println("Nome: " + productInChartDTO.getName());
+            System.out.println("Valor de compra: R$" + productInChartDTO.getValuePurchased());
+            System.out.println("Volume de compra:" + productInChartDTO.getVolumePurchased());
+            System.out.println("Data de venda: " + productInChartDTO.getDatePurchased());
+        }
+
+        model.addAttribute("productInChartDTOList", productInChartDTOList);
 
         return "chart"; // nome do template Thymeleaf
     }
