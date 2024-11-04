@@ -43,8 +43,21 @@
     </style>
 </head>
 <body>
+<nav class="navbar navbar-custom fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a id="upper-navbar-text" class="navbar-brand">Meu Perfil</a>
+        </div>
+
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="btn navbar-top-button" href="/products/shop">Loja</a>
+            </li>
+        </ul>
+
+    </div>
+</nav>
 <div class="sidebar">
-    <h4>Meu Perfil</h4>
     <ul class="list-unstyled">
         <li><a th:href="@{/clientProfileGeneral/{id}(id = ${id})}">Informações gerais</a></li>
         <li><a th:href="@{/clientProfileNotifications/{id}(id = ${id})}">Notificações</a></li>
@@ -57,23 +70,62 @@
     </ul>
 </div>
 <div class="content">
-    <h1>Informações gerais</h1>
 
     <div class="card mb-3">
+        <div class="card-header">
+            <h3>Informações Gerais</h3>
+        </div>
         <div class="card-body">
-            <h5 class="card-title">Básico</h5>
-            <p class="card-text" th:text="'Nome: ' + ${name}"></p>
-            <p class="card-text" th:text="'Email: ' + ${email}"></p>
-            <p class="card-text" th:text="'Senha: ' + ${password}"></p>
-            <a class="btn btn-danger" th:href="@{/changePassword/{id}(id = ${id})}">Mudar senha</a>
-            <p class="card-text" th:text="'Gênero: ' + ${gender.genderType}"></p>
-            <p class="card-text" th:text="'CPF: ' + ${cpf}"></p>
-            <p class="card-text" th:if="${phone.cellphone} == true" th:text="'Telefone:' + ${phone.phoneNumber} +  '(Celular)'"></p>
-            <p class="card-text" th:if="${phone.cellphone} == false" th:text="'Telefone: ' + ${phone.phoneNumber} +  ' (Residencial)'"></p>
+            <p class="card-text">
+                <strong>Nome: </strong><span th:text="${name}"></span>
+            </p>
+            <p class="card-text">
+                <strong>Email: </strong><span th:text="${email}"></span>
+            </p>
+            <p class="card-text mb-1">
+                <strong>Senha: </strong>
+                <span id="password" th:text="${password}" style="display: none;"></span>
+                <span id="maskedPassword">***************</span>
+                <button type="button" id="togglePassword" class="btn btn-primary" aria-label="Mostrar ou esconder senha" onclick="togglePassword()">
+                    Mostrar
+                </button>
+                <a class="btn btn-danger mb-1" th:href="@{/changePassword/{id}(id = ${id})}">Trocar senha</a>
+            </p>
+
+            <p class="card-text">
+                <strong>Gênero: </strong><span th:text="${gender.genderType}"></span>
+            </p>
+            <p class="card-text">
+                <strong>CPF: </strong><span th:text="${cpf}"></span>
+            </p>
+            <p class="card-text">
+                <strong>Telefone: </strong>
+                <span th:if="${phone.cellphone} == true" th:text="${phone.ddd} + ' ' + ${phone.phoneNumber}"></span>
+                <span th:if="${phone.cellphone} == false" th:text="${phone.ddd} + ' ' + ${phone.phoneNumber}"></span>
+                <!--<strong>Telefone: </strong><span th:if="${phone.cellphone} == false" th:text="${phone.ddd} + ' ' + ${phone.phoneNumber}"></span>-->
+            </p>
         </div>
     </div>
 
 </div>
+
+<script>
+    function togglePassword() {
+        var passwordField = document.getElementById("password");
+        var maskedPasswordField = document.getElementById("maskedPassword");
+        var toggleButton = document.getElementById("togglePassword");
+
+        if (passwordField.style.display === "none") {
+            passwordField.style.display = "inline";
+            maskedPasswordField.style.display = "none";
+            toggleButton.textContent = "Esconder";
+        } else {
+            passwordField.style.display = "none";
+            maskedPasswordField.style.display = "inline";
+            toggleButton.textContent = "Mostrar";
+        }
+    }
+</script>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
