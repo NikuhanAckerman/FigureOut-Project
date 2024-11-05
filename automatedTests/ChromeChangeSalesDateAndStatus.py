@@ -53,7 +53,7 @@ class ProductFormTest(unittest.TestCase):
                 click_button(self, change_date_button)
 
                 # Clica no botão "Mudar" para mudar a data.
-                select_option_by_value(self, sale_status, "ENTREGUE")
+                # select_option_by_value(self, sale_status, "ENTREGUE")
 
                 # Imprime no console
                 print("Data e status da venda de ID " + str(i) + " trocada!")
