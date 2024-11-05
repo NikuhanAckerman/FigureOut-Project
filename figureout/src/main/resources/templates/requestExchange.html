@@ -30,36 +30,57 @@
 
 <div class="container mt-5">
 
-  <h3>Venda</h3>
+  <div class="card mb-3">
+    <div class="card-header">
+      <h3 class="card-title">Venda</h3>
+    </div>
+    <div class="card-body">
+      <p><b>(Caso não queira trocar um dos produtos, digite 0 na quantidade)</b></p>
 
-  <h4 class="text-primary">(Caso não queira trocar um dos produtos, digite 0 na quantidade)</h4>
-
-  <div th:if="${errorsExchangeRequest} != null">
-    <div th:if="${!errorsExchangeRequest.isEmpty()}">
-      <div th:each="err : ${errorsExchangeRequest}">
-        <p class="text-danger" th:text="${err}"></p>
+      <div th:if="${errorsExchangeRequest} != null">
+        <div th:if="${!errorsExchangeRequest.isEmpty()}">
+          <div th:each="err : ${errorsExchangeRequest}">
+            <p class="text-danger" th:text="${err}"></p>
+          </div>
+        </div>
       </div>
+
+      <form th:action="@{/exchange/requestExchange/{id}(id = ${sale.id})}" th:object="${exchangeDTO}" method="POST">
+
+        <div th:each="cartProduct : ${sale.cart.cartProducts}">
+          <div class="card mb-3">
+            <div class="card-header">
+              <h5 class="card-title" th:text="${cartProduct.product.name}"></h5>
+            </div>
+            <div class="card-body">
+
+              <p class="card-text">
+                Preço unitário: R$<span th:text="${cartProduct.unitaryPrice}"></span>
+              </p>
+              <p class="card-text">
+                Quantidade comprada: <span th:text="${cartProduct.productQuantity}"></span>
+              </p>
+              <p class="card-text">
+                Quantidade trocável: <span th:text="${cartProduct.exchangeableQuantity}"></span>
+              </p>
+              <p class="card-text">
+                <strong>Preço total:</strong> R$<span th:text="${cartProduct.finalPrice}"></span>
+              </p>
+
+              <input class="form-control w-25" placeholder="Insira a quantidade para trocar" type="number" id="exchangeInput" step="1" th:field="*{cartProductQuantity[__${cartProduct.id.productId}__]}" required>
+              <br>
+              <button class="btn btn-primary" type="submit" onclick="confirm('Tem certeza?')">Requisitar troca</button>
+
+            </div>
+
+          </div>
+        </div>
+
+        <a class="btn btn-danger" id="seeProfile" th:href="@{/clientProfilePurchases/{id}(id = ${clientId})}">Voltar ao perfil</a>
+
+      </form>
     </div>
   </div>
-
-  <form th:action="@{/exchange/requestExchange/{id}(id = ${sale.id})}" th:object="${exchangeDTO}" method="POST">
-
-    <div th:each="cartProduct : ${sale.cart.cartProducts}">
-
-      <p th:text="'Nome: ' + ${cartProduct.product.name}"></p>
-      <p th:text="'Preço unitário: R$' + ${cartProduct.unitaryPrice}"></p>
-      <p th:text="'Quantidade comprada: ' + ${cartProduct.productQuantity}"></p>
-      <p th:text="'Quantidade trocável: ' + ${cartProduct.exchangeableQuantity}"></p>
-      <p th:text="'Preço total: R$' + ${cartProduct.finalPrice}"></p>
-
-      <input class="form-control" placeholder="Insira a quantidade para trocar" type="number" id="exchangeInput" step="1" th:field="*{cartProductQuantity[__${cartProduct.id.productId}__]}" required>
-
-    </div>
-
-    <button class="btn btn-primary" type="submit" onclick="confirm('Tem certeza?')">Requisitar troca</button>
-    <a class="btn btn-danger" id="seeProfile" th:href="@{/clientProfilePurchases/{id}(id = ${clientId})}">Voltar ao perfil</a>
-
-  </form>
 
 </div>
 
