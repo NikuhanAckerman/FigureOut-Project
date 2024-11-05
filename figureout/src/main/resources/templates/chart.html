@@ -90,7 +90,8 @@
                     // Initialize product entry for that date if it doesn't exist
                     dataMap[dateKey][product.name] = {
                         totalValue: 0,
-                        totalVolume: 0
+                        totalVolume: 0,
+                        datePurchased: product.datePurchased // Store the purchase date
                     };
                 }
 
@@ -106,14 +107,16 @@
                 productNames.forEach(function(productName) {
                     if (dataMap[date][productName]) {
                         var productData = dataMap[date][productName];
+
                         row.push(productData.totalValue); // Add accumulated value
                         row.push(`
-                        <div style="padding: 5px;">
-                            <strong>Nome:</strong> ${productName}<br/>
-                            <strong>Valor vendido:</strong> R$${productData.totalValue.toFixed(2)}<br/>
-                            <strong>Quantidade vendida:</strong> ${productData.totalVolume}<br/>
-                        </div>
-                    `); // Add tooltip with accumulated details
+                    <div style="padding: 5px;">
+                        <strong>Nome:</strong> ${productName}<br/>
+                        <strong>Valor vendido:</strong> R$${productData.totalValue.toFixed(2)}<br/>
+                        <strong>Quantidade vendida:</strong> ${productData.totalVolume}<br/>
+                        <strong>Data:</strong> ${new Date(productData.datePurchased).toLocaleDateString()}<br/>
+                    </div>
+                `); // Add tooltip with accumulated details
                     } else {
                         row.push(null); // No data for this product on this date
                         row.push(''); // Empty tooltip

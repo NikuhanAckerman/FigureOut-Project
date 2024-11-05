@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -108,6 +109,10 @@ public class AdminController {
         System.out.println("Start Date: " + startDate);
         System.out.println("End Date: " + endDate);
 
+        // fake sales
+        LocalDateTime dayStart = startDate;
+        LocalDateTime dayEnd = endDate;
+
         for(Sale sale: salesInsideRange) {
 
             System.out.println("");
@@ -117,13 +122,28 @@ public class AdminController {
             System.out.println("Produtos:");
 
             for (CartsProducts cartProduct: sale.getCart().getCartProducts()) {
-                long productId = cartProduct.getProduct().getId();
+                String productName = cartProduct.getProduct().getName();
                 BigDecimal productPrice = cartProduct.getFinalPrice();
                 int productQuantity = cartProduct.getProductQuantity();
 
+                if(!productInChartDTOList.stream().anyMatch(dto -> dto.getName().equals(productName))) {
+                    System.out.println("the product hasnt been set yet! add the fakers!");
+
+                    for(LocalDateTime currentDate = dayStart; currentDate.isBefore(dayEnd); currentDate = currentDate.plusDays(1)) {
+
+                        ProductInChartDTO productInChartDTOFake = new ProductInChartDTO();
+                        productInChartDTOFake.setName(productName);
+                        productInChartDTOFake.setValuePurchased(BigDecimal.valueOf(0));
+                        productInChartDTOFake.setVolumePurchased(0);
+                        productInChartDTOFake.setDatePurchased(currentDate);
+                        productInChartDTOList.add(productInChartDTOFake);
+
+                    }
+
+                }
+
                 ProductInChartDTO productInChartDTO = new ProductInChartDTO();
-                productInChartDTO.setId(productId);
-                productInChartDTO.setName(cartProduct.getProduct().getName());
+                productInChartDTO.setName(productName);
                 productInChartDTO.setValuePurchased(cartProduct.getFinalPrice());
                 productInChartDTO.setVolumePurchased(cartProduct.getProductQuantity());
                 productInChartDTO.setDatePurchased(sale.getDateTimeSale());
@@ -149,6 +169,7 @@ public class AdminController {
             System.out.println("Valor de compra: R$" + productInChartDTO.getValuePurchased());
             System.out.println("Volume de compra:" + productInChartDTO.getVolumePurchased());
             System.out.println("Data de venda: " + productInChartDTO.getDatePurchased());
+
         }
 
         model.addAttribute("productInChartDTOList", productInChartDTOList);
