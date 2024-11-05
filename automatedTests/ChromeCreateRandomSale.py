@@ -30,56 +30,66 @@ class ProductFormTest(unittest.TestCase):
         select_product(self, produto): Seleciona um produto da loja pelo nome dele.
         send_image(self, id, pasta, arquivo): Envia uma imagem.
         '''
-        
-        # Selecionando um cliente para navegar a loja.
-        select_option_by_value(self, "clientNavigate", "1")
-        
-        # Clica no botão "Ver Loja".
-        click_button(self, "seeShop")
 
-        # CONJUNTO DE PRODUTOS (por nome)
-        products = {"Hu Tao", "Paimon", "Asuka", "Hatsune Miku", "Mari (Omori)"}
-
-        # Cria uma cópia do conjunto de produtos pra ser usado no loop.
-        remaining_products = set(products)
-
-        # Número aleatório de iterações (Entre 1 e a quantidade de produtos no conjunto).
-        iteration = random.randint(1, len(products))
-        print("PRODUTOS A SEREM COMPRADOS: " + str(iteration))
-
-        for i in range(iteration):
-            product_name = random.choice(list(remaining_products))  # Seleciona um produto aleatório.
-            quantity = random.randint(1, 10)  # Determina uma quantidade de produtos aleatória.
+        ## Define quantas compras aleatórias serão feitas. 
+        for i in range(40):
+            print()
+            print("======== ITERAÇÃO " + str(i + 1) + " ========")
+            # Selecionando um cliente aleatório com ID entre 0 a 10.
+            random_client = str(random.randint(1, 10))
+            print("ID do cliente: " + random_client)
+            # Selecionando um cliente aleatório para navegar a loja.
+            select_option_by_value(self, "clientNavigate", random_client)
             
-            # Função para comprar um produto.
-            print("Produto: " + str(product_name) + " x " + str(quantity))
-            buy_product(self, product_name, quantity)
+            # Clica no botão "Ver Loja".
+            click_button(self, "seeShop")
 
-            # Remove o produto escolhido no conjunto cópia.
-            remaining_products.remove(product_name)
-            print("Produtos restantes: " + str(remaining_products))
+            # CONJUNTO DE PRODUTOS (por nome)
+            products = {"Hu Tao", "Paimon", "Asuka", "Hatsune Miku", "Mari (Omori)"}
 
-        # Entrando no offcanvas do carrinho.
-        click_button(self, "cart")
+            # Cria uma cópia do conjunto de produtos pra ser usado no loop.
+            remaining_products = set(products)
 
-        click_button(self, "proceedToCheckout")
+            # Número aleatório de iterações (Entre 1 e a quantidade de produtos no conjunto).
+            iteration = random.randint(1, len(products))
+            print("PRODUTOS A SEREM COMPRADOS: " + str(iteration))
 
-        # PÁGINA DE CARRINHO
-        # Selecionando cartões de crédito e endereço.
+            for i in range(iteration):
+                product_name = random.choice(list(remaining_products))  # Seleciona um produto aleatório.
+                quantity = random.randint(1, 10)  # Determina uma quantidade de produtos aleatória.
+                
+                # Função para comprar um produto.
+                print("Produto: " + str(product_name) + " x " + str(quantity))
+                buy_product(self, product_name, quantity)
 
-        select_option_by_value(self, "salesCardsIds", "1")
+                # Remove o produto escolhido no conjunto cópia.
+                remaining_products.remove(product_name)
+                print("Produtos restantes: " + str(remaining_products))
 
-        select_option(self, "address-dropdown", "Minha casa")
+            # Entrando no offcanvas do carrinho.
+            click_button(self, "cart")
 
-        click_button(self, "btn-finalizar")
+            click_button(self, "proceedToCheckout")
 
-        # PÁGINA DE FINALIZAR COMPRA
-        #atribuindo o preço total da compra com frete para a variável "final_price".
-        final_price = self.driver.find_element(By.ID, "saleFinalPrice").text
-        
-        input_string(self, "amountPaid1", final_price)
+            # PÁGINA DE CARRINHO
+            # Selecionando cartões de crédito e endereço.
 
-        click_button(self, "btn-finalizar")
+            select_option_by_value(self, "salesCardsIds", str(random_client))
+
+            select_option_by_value(self, "address-dropdown", str(random_client))
+
+            click_button(self, "btn-finalizar")
+
+            # PÁGINA DE FINALIZAR COMPRA
+            #atribuindo o preço total da compra com frete para a variável "final_price".
+            final_price = self.driver.find_element(By.ID, "saleFinalPrice").text
+            amount_paid = "amountPaid" + str(random_client)
+            
+            input_string(self, amount_paid, final_price)
+
+            click_button(self, "btn-finalizar")
+
+            click_button(self, "controlPanel")
 
     def tearDown(self):
         # Fecha o browser
