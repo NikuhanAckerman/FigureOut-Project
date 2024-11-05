@@ -346,6 +346,7 @@ public class SaleController {
     public String seeSales(Model model) {
 
         model.addAttribute("changeSaleStatusDTO", new ChangeSaleStatusDTO());
+        model.addAttribute("changeSaleDateTimeDTO", new ChangeSaleDateTimeDTO());
         model.addAttribute("status", SaleStatusEnum.values());
         model.addAttribute("sales", saleService.getAllSales());
         model.addAttribute("exchanges", exchangeService.getAllExchanges());
@@ -453,6 +454,18 @@ public class SaleController {
         }
         return ResponseEntity.ok(coupon); // Otherwise, return the coupon
     }
+
+    @PutMapping("/seeSales/changeSaleDateTime/{saleId}")
+    public String changeSaleDateTime(@PathVariable long saleId, @ModelAttribute ChangeSaleDateTimeDTO changeSaleDateTimeDTO) {
+        Sale sale = saleService.getSaleById(saleId);
+
+        sale.setDateTimeSale(changeSaleDateTimeDTO.getNewDateTime());
+        
+        saleService.saveSale(sale);
+
+        return "redirect:/sales/seeSales";
+    }
+
 
 
 }

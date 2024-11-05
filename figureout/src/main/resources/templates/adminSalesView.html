@@ -50,6 +50,7 @@
         <tr>
             <th scope="col">ID da Venda</th>
             <th scope="col">Código da Venda</th>
+            <th scope="col">Mudar data-hora da venda</th>
             <th scope="col">Cliente</th>
             <th scope="col">Carrinho</th>
             <th scope="col">Trocas</th>
@@ -60,6 +61,15 @@
         <tr th:each="sale : ${sales}">
             <td class="id-venda" th:text="${sale.id}"></td>
             <td th:text="${sale.saleCode}"></td>
+            <td>
+                <form th:action="@{/sales/seeSales/changeSaleDateTime/{saleId}(saleId=${sale.id})}" th:object="${changeSaleDateTimeDTO}" method="POST">
+                    <input type="hidden" name="_method" value="PUT">
+                    <label><b>Escolha uma nova data-hora</b></label>
+                    <input class="form-group" type="datetime-local" th:field="*{newDateTime}" required>
+                    <button class="btn btn-danger" type="submit">Mudar</button>
+                </form>
+
+            </td>
             <td th:text="'ID: ' + ${sale.cart.client.id} + ' Nome: ' + ${sale.cart.client.name}"></td>
             <td>
                 <button type="button" class="btn btn-secondary" th:data-bs-sale-id = "${sale.id}" data-bs-toggle="modal" data-bs-target="#seeCartModal">Ver carrinho</button>
