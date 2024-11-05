@@ -215,7 +215,7 @@
                     </div>
                     <div class="card-body">
                       <p class="card-text">
-                        <strong>tatus da troca:</strong><span th:text="${exchange.status}"></span>
+                        <strong>Status da troca: </strong><span th:text="${exchange.status}"></span>
                       </p>
 
                       <p><strong>Produtos devolvidos à loja:</strong></p>
@@ -229,7 +229,7 @@
                             Preço unitário: R$<span th:text="${exchangeProduct.cartProduct.unitaryPrice}"></span>
                           </p>
                           <p class="card-text">
-                            Quantidade retornada: R$<span th:text="${exchangeProduct.quantityReturned}"></span>
+                            Quantidade retornada: <span th:text="${exchangeProduct.quantityReturned}"></span>
                           </p>
                           <p class="card-text">
                             <strong>Preço total:</strong> R$<span th:text="${exchangeProduct.finalAmount}"></span>
