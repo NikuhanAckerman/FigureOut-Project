@@ -69,14 +69,14 @@ public class SaleController {
     @Autowired
     NotificationService notificationService;
 
-    @GetMapping("")
+    /*@GetMapping("")
     public String showSalesGet(Model model) {
 
         List<Sale> sales =  saleService.getAllSales();
         model.addAttribute("sales", sales);
 
         return "adminSalesView";
-    }
+    }*/
 
     @GetMapping("/makeOrder/{cartId}")
     public String makeOrderGet(@PathVariable long cartId, Model model) {
@@ -460,7 +460,7 @@ public class SaleController {
         Sale sale = saleService.getSaleById(saleId);
 
         sale.setDateTimeSale(changeSaleDateTimeDTO.getNewDateTime());
-        
+
         saleService.saveSale(sale);
 
         return "redirect:/sales/seeSales";
