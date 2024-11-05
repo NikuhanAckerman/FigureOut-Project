@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 @Getter @Setter
 public class ProductInChartDTO {
 
-    private long id;
-
     private String name;
 
     private BigDecimal valuePurchased;
