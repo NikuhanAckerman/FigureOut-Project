@@ -57,41 +57,41 @@
         function drawChart() {
             var data = new google.visualization.DataTable();
 
-            // Define the columns of the DataTable
+            // define the columns of the DataTable
             data.addColumn('string', 'Data da compra'); // X-axis (date)
 
             var products = /*[[${productInChartDTOList}]]*/ [];
             var productNames = [];
 
-            // Create a unique list of product names for column headers
+            // create a unique list of product names for column headers
             products.forEach(function(product) {
                 if (!productNames.includes(product.name)) {
                     productNames.push(product.name);
                 }
             });
 
-            // Add columns for each product
+            // add columns for each product
             productNames.forEach(function(productName) {
                 data.addColumn('number', productName); // Column for product values
                 data.addColumn({type: 'string', role: 'tooltip', p: { html: true }}); // Tooltip column for each product
             });
 
-            // Create a map to store cumulative sales data by date and product
+            // create a map to store cumulative sales data by date and product
             var dataMap = {};
 
             products.forEach(function(product) {
                 var dateKey = new Date(product.datePurchased).toLocaleDateString();
 
                 if (!dataMap[dateKey]) {
-                    dataMap[dateKey] = {}; // Initialize date entry if it doesn't exist
+                    dataMap[dateKey] = {}; // initialize date entry if it doesn't exist
                 }
 
                 if (!dataMap[dateKey][product.name]) {
-                    // Initialize product entry for that date if it doesn't exist
+                    // initialize product entry for that date if it doesn't exist
                     dataMap[dateKey][product.name] = {
                         totalValue: 0,
                         totalVolume: 0,
-                        datePurchased: product.datePurchased // Store the purchase date
+                        datePurchased: product.datePurchased // store the purchase date
                     };
                 }
 
@@ -100,9 +100,9 @@
                 dataMap[dateKey][product.name].totalVolume += parseFloat(product.volumePurchased);
             });
 
-            // Convert the accumulated data into rows for the DataTable
+            // convert the accumulated data into rows for the DataTable
             for (var date in dataMap) {
-                var row = [date]; // Start each row with the date
+                var row = [date]; // start each row with the date
 
                 productNames.forEach(function(productName) {
                     if (dataMap[date][productName]) {
@@ -116,14 +116,14 @@
                         <strong>Quantidade vendida:</strong> ${productData.totalVolume}<br/>
                         <strong>Data:</strong> ${new Date(productData.datePurchased).toLocaleDateString()}<br/>
                     </div>
-                `); // Add tooltip with accumulated details
+                `); // add tooltip with accumulated details
                     } else {
-                        row.push(null); // No data for this product on this date
-                        row.push(''); // Empty tooltip
+                        row.push(null); // no data for this product on this date
+                        row.push(''); // empty tooltip
                     }
                 });
 
-                data.addRow(row); // Add the row to the DataTable
+                data.addRow(row); // add the row to the DataTable
             }
 
             // Chart options
@@ -136,7 +136,7 @@
                 vAxis: {
                     title: 'Valor'
                 },
-                tooltip: { isHtml: true } // Enable HTML tooltips
+                tooltip: { isHtml: true } // enable HTML tooltips
             };
 
             var chart = new google.visualization.LineChart(document.getElementById('curve_line'));
