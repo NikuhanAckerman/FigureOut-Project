@@ -40,6 +40,9 @@
       margin-left: 270px;
       padding: 20px;
     }
+    .custom-footer {
+        height: 40px;
+    }
   </style>
 </head>
 <body>
@@ -119,24 +122,43 @@
     <div th:each="exchange : ${exchanges}">
 
       <div class="purchase-card card mb-3">
+        <div class="card-header">
+          <h3 class="card-title" th:text="'Troca ' + ${exchange.exchangeCode}"></h3>
+        </div>
         <div class="card-body">
-          <h5 class="card-title" th:text="'Troca ' + ${exchange.exchangeCode}"></h5>
 
           <div th:if="${exchange.coupon != null}">
             <p class="card-text" th:text="'Cupom de troca: ' + ${exchange.coupon.exchangeCouponCode}"></p>
             <p class="card-text" th:text="'Quantia do cupom: R$' + ${exchange.coupon.amountWorth}"></p>
             <p class="card-text text-primary" th:if="${exchange.coupon.used == true}" th:text="(este cupom já foi usado.)"></p>
           </div>
+          <!--
+          <p class="card-text">
+            <strong>Data e horário: </strong><span th:text="${#temporals.format(sale.dateTimeSale, 'dd/MM/yyyy - HH:mm:ss')}"></span>
+          </p>
+          -->
+          <p class="card-text">
+            <strong>Data de requisição: </strong><span th:text="${#temporals.format(exchange.exchangeRequestTime, 'dd/MM/yyyy' + ' - ' + 'HH:mm:ss')}"></span>
+          </p>
 
-          <p class="card-text" th:text="'Data de requisição: ' + ${#temporals.format(exchange.exchangeRequestTime, 'dd/MM/yyyy HH:mm:ss')}"></p>
+
           <div th:if="${exchange.exchangeAcceptedTime != null}">
-            <p class="card-text" th:text="'Data de : ' + ${#temporals.format(exchange.exchangeAcceptedTime, 'dd/MM/yyyy HH:mm:ss')}"></p>
+            <p class="card-text">
+              <strong>Data de: </strong><span th:text="'Data de : ' + ${#temporals.format(exchange.exchangeAcceptedTime, 'dd/MM/yyyy' + ' - ' + 'HH:mm:ss')}"</span>
+            </p>
           </div>
           <div th:if="${exchange.exchangeFinishTime != null}">
-            <p class="card-text" th:text="'Data de : ' + ${#temporals.format(exchange.exchangeFinishTime, 'dd/MM/yyyy HH:mm:ss')}"></p>
+            <p class="card-text">
+              <strong>Data de: </strong><span th:text="${#temporals.format(exchange.exchangeFinishTime, 'dd/MM/yyyy' + ' - ' + 'HH:mm:ss')}"</span>
+            </p>
           </div>
-          <p class="card-text" th:text="'Compra: ' + ${exchange.sale.saleCode}"></p>
-          <p class="card-text" th:text="'Valor total da troca: R$ ' + ${exchange.finalAmount}"></p>
+
+          <p class="card-text">
+            <strong>Compra: </strong><span th:text="${exchange.sale.saleCode}"></span>
+          </p>
+          <p class="card-text">
+            <strong>Valor total da troca: </strong>R$<span th:text="${exchange.finalAmount}"></span>
+          </p>
 
           <span class="badge"
                 th:text="${exchange.status.name()}"
@@ -154,18 +176,29 @@
 
             <div th:id="'exchangeMoreInfoCollapse_' + ${exchange.id}" class="collapse">
 
-              <p>Produtos trocados da compra:</p>
+              <h5><strong>Produtos trocados da compra:</strong></h5>
 
               <div th:each="returnedProduct : ${exchange.returnedProducts}">
 
-                <div class="card">
-                  <p th:text="'Nome: ' + ${returnedProduct.cartProduct.product.name}"></p>
-                  <p th:text="'Preço unitário: R$' + ${returnedProduct.cartProduct.unitaryPrice}"></p>
-                  <p th:text="'Quantidade trocada: ' + ${returnedProduct.quantityReturned}"></p>
-                  <p th:text="'Quantia trocada em dinheiro: R$' + ${returnedProduct.finalAmount}"></p>
+                <div class="card mb-3">
+                  <div class="card-header">
+                    <h3 class="card-title" th:text="${returnedProduct.cartProduct.product.name}"></h3>
+                  </div>
+                  <div class="card-body">
+                    <p class="card-text">
+                      Preço unitário: R$<span th:text="${returnedProduct.cartProduct.unitaryPrice}"></span>
+                    </p>
+                    <p class="card-text">
+                      Quantidade trocada: <span th:text="${returnedProduct.quantityReturned}"></span>
+                    </p>
+                    <p class="card-text">
+                      <strong>Quantia trocada em dinheiro: </strong>R$<span th:text="${returnedProduct.finalAmount}"></span>
+                    </p>
+                  </div>
+                  <div class="card-footer text-muted custom-footer">
+                    <p th:text="'Quantidade ainda devolvível do produto: ' + ${returnedProduct.cartProduct.exchangeableQuantity}"></p>
+                  </div>
                 </div>
-
-                <p th:text="'Quantidade ainda devolvível do produto: ' + ${returnedProduct.cartProduct.exchangeableQuantity}"></p>
 
               </div>
 

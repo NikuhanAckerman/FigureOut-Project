@@ -65,8 +65,8 @@
                 <form th:action="@{/sales/seeSales/changeSaleDateTime/{saleId}(saleId=${sale.id})}" th:object="${changeSaleDateTimeDTO}" method="POST">
                     <input type="hidden" name="_method" value="PUT">
                     <label><b>Escolha uma nova data-hora</b></label>
-                    <input class="form-group" type="datetime-local" th:field="*{newDateTime}" required>
-                    <button class="btn btn-danger" type="submit">Mudar</button>
+                    <input th:id="inputDate + ${sale.id}" class="form-group" type="datetime" th:field="*{newDateTime}" required>
+                    <button th:id="changeDate + ${sale.id}" class="btn btn-danger" type="submit">Mudar</button>
                 </form>
 
             </td>
@@ -84,7 +84,7 @@
                 <form th:action="@{/sales/seeSales/changeSaleStatus/{saleId}(saleId=${sale.id})}" method="POST" th:object="${changeSaleStatusDTO}">
                     <input type="hidden" name="_method" value="PUT">
 
-                    <select name="status" class="form-control" th:field="*{status}" onchange="this.form.submit(); ">
+                    <select th:id="saleStatus + ${sale.id}" name="status" class="form-control" th:field="*{status}" onchange="this.form.submit(); ">
                         <option value="0" selected>Selecione um status</option>
                         <option th:each="status : ${status}"
                                 th:value="${status.name()}" th:text="${status.name()}">
