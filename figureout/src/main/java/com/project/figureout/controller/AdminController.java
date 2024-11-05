@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Controller
@@ -106,20 +107,11 @@ public class AdminController {
         List<Sale> salesInsideRange = saleService.getSalesInsideDateRange(startDate, endDate);
         List<ProductInChartDTO> productInChartDTOList = new ArrayList<>();
 
-        System.out.println("Start Date: " + startDate);
-        System.out.println("End Date: " + endDate);
-
-        // fake sales
-        LocalDateTime dayStart = startDate;
-        LocalDateTime dayEnd = endDate;
+        long amountOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+        ChronoUnit groupingLogic = amountOfDaysBetween <= 30 ? ChronoUnit.DAYS :
+                amountOfDaysBetween <= 365 ? ChronoUnit.MONTHS : ChronoUnit.YEARS;
 
         for(Sale sale: salesInsideRange) {
-
-            System.out.println("");
-            System.out.println("Venda");
-            System.out.println("Código da venda: " + sale.getSaleCode());
-            System.out.println("Valor final da venda: R$" + sale.getFinalPrice());
-            System.out.println("Produtos:");
 
             for (CartsProducts cartProduct: sale.getCart().getCartProducts()) {
                 String productName = cartProduct.getProduct().getName();
@@ -129,7 +121,8 @@ public class AdminController {
                 if(!productInChartDTOList.stream().anyMatch(dto -> dto.getName().equals(productName))) {
                     System.out.println("the product hasnt been set yet! add the fakers!");
 
-                    for(LocalDateTime currentDate = dayStart; currentDate.isBefore(dayEnd); currentDate = currentDate.plusDays(1)) {
+                    // time to set the fake sales
+                    for(LocalDateTime currentDate = startDate; currentDate.isBefore(endDate); currentDate = currentDate.plusDays(1)) {
 
                         ProductInChartDTO productInChartDTOFake = new ProductInChartDTO();
                         productInChartDTOFake.setName(productName);
@@ -149,26 +142,7 @@ public class AdminController {
                 productInChartDTO.setDatePurchased(sale.getDateTimeSale());
                 productInChartDTOList.add(productInChartDTO);
 
-                System.out.println("");
-                System.out.println("    Nome: " + productInChartDTO.getName());
-                System.out.println("    Valor de compra: R$" + productInChartDTO.getValuePurchased());
-                System.out.println("    Volume de compra:" + productInChartDTO.getVolumePurchased());
-                System.out.println("    Data específica da venda " + productInChartDTO.getDatePurchased());
-
             }
-
-            System.out.println("");
-
-        }
-
-        System.out.println("Elementos da lista de productInChartDTO:");
-
-        for(ProductInChartDTO productInChartDTO: productInChartDTOList) {
-            System.out.println("");
-            System.out.println("Nome: " + productInChartDTO.getName());
-            System.out.println("Valor de compra: R$" + productInChartDTO.getValuePurchased());
-            System.out.println("Volume de compra:" + productInChartDTO.getVolumePurchased());
-            System.out.println("Data de venda: " + productInChartDTO.getDatePurchased());
 
         }
 
