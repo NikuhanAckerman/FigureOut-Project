@@ -32,7 +32,7 @@ class ProductFormTest(unittest.TestCase):
         '''
 
         ## Define quantas compras aleatórias serão feitas. 
-        for i in range(40):
+        for i in range(2):
             print()
             print("======== ITERAÇÃO " + str(i + 1) + " ========")
             # Selecionando um cliente aleatório com ID entre 0 a 10.

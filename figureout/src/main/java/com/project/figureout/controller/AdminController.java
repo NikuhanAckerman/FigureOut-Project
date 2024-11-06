@@ -121,7 +121,7 @@ public class AdminController {
                 if(!productInChartDTOList.stream().anyMatch(dto -> dto.getName().equals(productName))) {
                     System.out.println("the product hasnt been set yet! add the fakers!");
 
-                    // time to set the fake sales
+                    // Configura as vendas "falsas".
                     for(LocalDateTime currentDate = startDate; currentDate.isBefore(endDate); currentDate = currentDate.plusDays(1)) {
 
                         ProductInChartDTO productInChartDTOFake = new ProductInChartDTO();
@@ -148,7 +148,7 @@ public class AdminController {
 
         model.addAttribute("productInChartDTOList", productInChartDTOList);
 
-        return "chart"; // nome do template Thymeleaf
+        return "chart";
     }
 
 

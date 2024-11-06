@@ -68,11 +68,8 @@ public class SaleService {
             if(currentSaleDateTime.isAfter(startDate) && currentSaleDateTime.isBefore(endDate)) {
 
                 salesInsideDesiredRange.add(currentSale);
-
             }
-
         }
-
         return salesInsideDesiredRange;
     }
 

@@ -57,12 +57,11 @@ public class ProductController {
 
     @GetMapping("/seeProducts")
     public String showProductsGet(Model model) {
-        List<Product> products =  productService.getAllProducts();
+        List<Product> products = productService.getAllProducts();
         model.addAttribute("products", products);
-
-
         return "adminSeeProducts";
     }
+
 
     @GetMapping("/seeSales")
     public String showSalesGet(Model model) {
