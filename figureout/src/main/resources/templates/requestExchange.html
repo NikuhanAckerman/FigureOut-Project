@@ -69,13 +69,14 @@
 
               <input class="form-control w-25" placeholder="Insira a quantidade para trocar" type="number" id="exchangeInput" step="1" th:field="*{cartProductQuantity[__${cartProduct.id.productId}__]}" required>
               <br>
-              <button class="btn btn-primary" type="submit" onclick="confirm('Tem certeza?')">Requisitar troca</button>
+
 
             </div>
 
           </div>
         </div>
 
+        <button class="btn btn-primary" type="submit" onclick="confirm('Tem certeza?')">Requisitar troca</button>
         <a class="btn btn-danger" id="seeProfile" th:href="@{/clientProfilePurchases/{id}(id = ${clientId})}">Voltar ao perfil</a>
 
       </form>

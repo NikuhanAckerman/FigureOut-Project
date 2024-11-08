@@ -368,6 +368,8 @@ public class SaleController {
         notificationDTO.setDescription("Sua compra de R$" + sale.getFinalPrice() + " foi realizada com sucesso.");
         notificationService.createNotification(client, notificationDTO);
 
+
+
         // Recalcula o ranking do cliente após a compra
         clientService.recalculateClientRanking();
 
