@@ -75,6 +75,7 @@ public class CartController {
         int quantityOrdered = changeCartProductQuantityDTO.getQuantity();
         int availableQuantity = stockService.getProductInStockByProductId(productId).getProductQuantityAvailable();
 
+        String referer = request.getHeader("Referer");
         List<String> errors = new ArrayList<>();
 
         if(quantityOrdered > availableQuantity) {
@@ -114,7 +115,7 @@ public class CartController {
         cartService.addProductToCart(cart, product, changeCartProductQuantityDTO);
 
         // Get the previous page URL from the Referer header
-        String referer = request.getHeader("Referer");
+
 
         // log de transação do método.
         //Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());

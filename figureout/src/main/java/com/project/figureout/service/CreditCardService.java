@@ -10,8 +10,11 @@ import com.project.figureout.repository.CreditCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Random;
 
 @Service
 public class CreditCardService {
@@ -33,10 +36,18 @@ public class CreditCardService {
         return clientService.getClientById(id).getCreditCards();
     }
 
+    public void saveCreditCard(CreditCard creditCard) {
+        creditCardRepository.save(creditCard);
+    }
+
     public void addCreditCardToClient(Client client, CreditCard creditCard) {
         client.getCreditCards().add(creditCard);
         creditCard.setClient(client);
 
+        BigDecimal creditCardBalance = randomizeCreditCardBalance();
+        System.out.println(creditCardBalance);
+
+        creditCard.setBalance(creditCardBalance);
         creditCardRepository.save(creditCard);
     }
 
@@ -69,6 +80,8 @@ public class CreditCardService {
 
         insertDataIntoCreditCard(creditCard, creditCardDTO);
 
+
+
         addCreditCardToClient(client, creditCard);
     }
 
@@ -96,5 +109,23 @@ public class CreditCardService {
         creditCardDTO.setSecurityCode(creditCard.getSecurityCode());
 
     }
+
+    public BigDecimal randomizeCreditCardBalance() {
+
+        BigDecimal maxCreditCardBalance = BigDecimal.valueOf(20000);
+        BigDecimal minCreditCardBalance = BigDecimal.valueOf(1000);
+
+        Random random = new Random();
+        double randomDouble = random.nextDouble();
+
+        BigDecimal range = maxCreditCardBalance.subtract(minCreditCardBalance);
+        BigDecimal randomValueInRange = minCreditCardBalance.add(range.multiply(BigDecimal.valueOf(randomDouble)));
+
+        BigDecimal randomizedBalance = randomValueInRange.setScale(2, RoundingMode.HALF_UP);
+
+        return randomizedBalance;
+
+    }
+
 
 }

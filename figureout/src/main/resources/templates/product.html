@@ -21,7 +21,7 @@
     <ul class="navbar-nav ml-auto">
 
       <li class="nav-item">
-        <a class="nav-link" th:href="@{/index}">Início</a>
+        <a class="nav-link" th:href="@{/index}">Administrador</a>
       </li>
 
       <li class="nav-item">
@@ -29,7 +29,7 @@
       </li>
 
       <div th:replace="Fragments/cartOffcanvasFragment :: cartButtonFragment"></div>
-      <div th:replace="Fragments/clientProfileFragment :: clientProfileButtonFragment(${clientId})"></div>
+      <div th:replace="Fragments/clientProfileFragment :: clientProfileButtonFragment(${clientId}, ${notificationQuantity})"></div>
 
     </ul>
   </div>

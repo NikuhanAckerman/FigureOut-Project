@@ -51,7 +51,6 @@ public class ClientController {
 
     @GetMapping("/showAllClients")
     public String showClientsGet(Model model) {
-
         List<Client> clients = clientService.getAllClients();
         model.addAttribute("clients", clients);
 
@@ -384,6 +383,8 @@ public class ClientController {
     public String seeClientProfile(@PathVariable long id, Model model) {
         Client client = clientService.getClientById(id);
 
+        int notificationQuantity = notificationService.getClientNotifications(client.getId()).size();
+
         model.addAttribute("id", id);
         model.addAttribute("name", client.getName());
         model.addAttribute("email", client.getEmail());
@@ -391,6 +392,7 @@ public class ClientController {
         model.addAttribute("gender", client.getGender());
         model.addAttribute("cpf", client.getCpf());
         model.addAttribute("phone", client.getPhone());
+        model.addAttribute("notificationQuantity", notificationQuantity);
 
         return "clientProfile";
     }
@@ -399,8 +401,10 @@ public class ClientController {
     public String seeClientProfileNotifications(@PathVariable long id, Model model) {
         Client client = clientService.getClientById(id);
         List<Notification> clientNotifications = notificationService.getClientNotifications(client.getId());
+        int notificationQuantity = notificationService.getClientNotifications(client.getId()).size();
 
         model.addAttribute("notifications", clientNotifications);
+        model.addAttribute("notificationQuantity", notificationQuantity);
 
         return "clientProfileNotifications";
     }
@@ -416,9 +420,11 @@ public class ClientController {
     @GetMapping("/clientProfilePurchases/{id}")
     public String seeClientProfilePurchases(@PathVariable long id, Model model) {
         List<Sale> clientSales = saleService.getClientSalesByClientId(id);
+        int notificationQuantity = notificationService.getClientNotifications(id).size();
 
         model.addAttribute("id", id);
         model.addAttribute("sales", clientSales);
+        model.addAttribute("notificationQuantity", notificationQuantity);
 
         model.addAttribute("saleStatus", SaleStatusEnum.values());
         model.addAttribute("entregueStatus", SaleStatusEnum.ENTREGUE);
@@ -471,6 +477,8 @@ public class ClientController {
     public String seeClientProfileExchanges(@PathVariable long id, Model model) {
         List<Sale> clientSales = saleService.getClientSalesByClientId(id);
         List<Exchange> clientExchanges = new ArrayList<>();
+        int notificationQuantity = notificationService.getClientNotifications(id).size();
+        model.addAttribute("notificationQuantity", notificationQuantity);
 
         for(Sale currentSale : clientSales) {
 
@@ -495,6 +503,9 @@ public class ClientController {
     @GetMapping("/clientProfileAddresses/{id}")
     public String seeClientProfileAddresses(@PathVariable long id, Model model) {
         List<Address> clientAddresses = clientService.getClientAddresses(id);
+        int notificationQuantity = notificationService.getClientNotifications(id).size();
+        model.addAttribute("notificationQuantity", notificationQuantity);
+
 
         model.addAttribute("id", id);
         model.addAttribute("addresses", clientAddresses);
@@ -506,12 +517,37 @@ public class ClientController {
     @GetMapping("/clientProfileCreditCards/{id}")
     public String seeClientProfileCreditCards(@PathVariable long id, Model model) {
         List<CreditCard> clientCreditCards = clientService.getClientCreditCards(id);
+        int notificationQuantity = notificationService.getClientNotifications(id).size();
+        model.addAttribute("notificationQuantity", notificationQuantity);
+
 
         model.addAttribute("id", id);
         model.addAttribute("creditCards", clientCreditCards);
 
         return "clientProfileCreditCards";
 
+    }
+
+    @GetMapping("/creditCardUpdateBalance/{creditCardId}")
+    public String updateCreditCardBalanceGet(@PathVariable long creditCardId, Model model) {
+        CreditCard creditCard = creditCardService.getCreditCardById(creditCardId);
+        ChangeCreditCardBalanceDTO changeCreditCardBalanceDTO = new ChangeCreditCardBalanceDTO();
+        changeCreditCardBalanceDTO.setBalance(creditCard.getBalance());
+
+        model.addAttribute("creditCard", creditCard);
+        model.addAttribute("changeCreditCardBalanceDTO", changeCreditCardBalanceDTO);
+
+        return "changeCreditCardBalance";
+    }
+
+    @PutMapping("/creditCardUpdateBalance/{creditCardId}")
+    public String updateCreditCardBalance(@PathVariable long creditCardId, @ModelAttribute ChangeCreditCardBalanceDTO changeCreditCardBalanceDTO) {
+        CreditCard creditCard = creditCardService.getCreditCardById(creditCardId);
+
+        creditCard.setBalance(changeCreditCardBalanceDTO.getBalance());
+        creditCardService.saveCreditCard(creditCard);
+
+        return "redirect:/showAllClients";
     }
 
 

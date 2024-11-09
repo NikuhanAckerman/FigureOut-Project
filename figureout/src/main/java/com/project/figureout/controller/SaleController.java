@@ -271,6 +271,13 @@ public class SaleController {
                     // Atualiza o valor pago por esse cartão
                     saleCard.setAmountPaid(value);
 
+                    CreditCard specificCreditCard = saleCard.getCreditCard();
+                    BigDecimal creditCardBalance = specificCreditCard.getBalance();
+
+                    if(creditCardBalance.compareTo(saleCard.getAmountPaid()) < 0) {
+                        errors.add("O valor pago pelo cartão " + specificCreditCard.getNickname() + " é insuficiente para pagar pela compra.");
+                    }
+
                     // Acumula o total pago pelos cartões
                     totalPaidByCards = totalPaidByCards.add(saleCard.getAmountPaid());
                 }
@@ -368,10 +375,28 @@ public class SaleController {
         notificationDTO.setDescription("Sua compra de R$" + sale.getFinalPrice() + " foi realizada com sucesso.");
         notificationService.createNotification(client, notificationDTO);
 
+        HashMap<Stock, Integer> cartProductQuantityToRemove = new HashMap<>();
 
+        for(CartsProducts currentCartProduct: sale.getCart().getCartProducts()) {
+            Stock stock = stockService.getProductInStockByProductId(currentCartProduct.getProduct().getId());
+            cartProductQuantityToRemove.put(stock, currentCartProduct.getProductQuantity());
+
+            if(currentCartProduct.getProductQuantity() >= stock.getProductQuantityAvailable()) {
+                productService.inactivateProduct(stock.getProduct());
+            }
+        }
+
+        stockService.dropInStockList(cartProductQuantityToRemove);
 
         // Recalcula o ranking do cliente após a compra
         clientService.recalculateClientRanking();
+
+        for (SalesCards saleCard : listSalesCards) {
+            CreditCard creditCard = saleCard.getCreditCard();
+
+            creditCard.setBalance(creditCard.getBalance().subtract(saleCard.getAmountPaid()));
+            creditCardService.saveCreditCard(creditCard);
+        }
 
         // Redireciona o usuário para a página de compras após concluir o pedido
         return "redirect:/products/shop";

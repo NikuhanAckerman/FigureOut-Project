@@ -226,7 +226,7 @@
 			</div>
 		</div>
 
-		<script>
+		<script type="text/javascript" th:inline="javascript">
 
 			const seeAddressModal = document.getElementById("seeAddressModal");
 			const createAddress = document.getElementById("createAddress");
@@ -350,7 +350,9 @@
 				const creditCardList = document.getElementById("creditCardList");
 				creditCardList.innerHTML = '';
 
-				fetch(`index/${clientId}/creditCards`)
+				var changeCreditCardBalanceDTO = /*[[${changeCreditCardBalanceDTO}]]*/
+
+						fetch(`index/${clientId}/creditCards`)
 						.then(response => {
 							if(!response.ok) {
 								throw new Error("Erro ao retornar cartões de crédito.");
@@ -360,6 +362,7 @@
 
 						.then(creditCards => {
 							creditCards.forEach(creditCard => {
+								let balance = creditCard.balance.toFixed(2);
 								const creditCardItem = `
 														<div class="card mt-3">
 															<div class="card-body">
@@ -378,6 +381,8 @@
 																	<p>Nome impresso no cartão: ${creditCard.printedName}</p>
 																	<p>Bandeira do cartão: ${creditCard.brand.name}</p>
 																	<p>Código de segurança: ${creditCard.securityCode}</p>
+																	<p>Saldo: R$${balance}</p>
+																	<a class="btn btn-success updateBalanceCreditCardButton" data-bs-creditCard-id="${creditCard.id}"  id="updateBalanceCreditCard" href="#">Mudar saldo</a>
 
 																	<form action="index/${creditCard.id}/creditCards/delete" method="POST" style="display: inline;">
 																		<input type="hidden" name="_method" value="DELETE"/>
@@ -404,6 +409,16 @@
 								console.log(creditCardIdToGo);
 
 								button.setAttribute('href', `updateCreditCard/${creditCardIdToGo}`)
+							});
+
+							let updateBalanceCreditCardButtonList = document.querySelectorAll(".updateBalanceCreditCardButton");
+
+							updateBalanceCreditCardButtonList.forEach(button => {
+
+								creditCardIdToGo = button.getAttribute("data-bs-creditCard-id");
+								console.log(creditCardIdToGo);
+
+								button.setAttribute('href', `/creditCardUpdateBalance/${creditCardIdToGo}`)
 							});
 
 						});

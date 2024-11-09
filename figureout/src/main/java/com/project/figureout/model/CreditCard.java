@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
@@ -41,5 +42,8 @@ public class CreditCard {
     @JoinColumn(name = "cre_cli_id")
     @JsonIgnore // prevenir loop infinito
     private Client client;
+
+    @Column(name = "cre_saldo")
+    private BigDecimal balance;
 
 }

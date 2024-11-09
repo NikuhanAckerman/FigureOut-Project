@@ -52,6 +52,9 @@ public class ProductController {
     @Autowired
     private SizeService sizeService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     private ClientNavigator clientNavigator;
 
 
@@ -133,9 +136,12 @@ public class ProductController {
     public String showShop(Model model) {
         List<Product> products =  productService.getAllProducts();
         Client client = clientService.getClientById(clientNavigator.getInstance().getClientId());
+        int notificationQuantity = notificationService.getClientNotifications(client.getId()).size();
+
         model.addAttribute("products", products);
         model.addAttribute("cart", client.getCartList().getLast()); // always get the last card added to the client's cart list
         model.addAttribute("clientId", clientNavigator.getInstance().getClientId());
+        model.addAttribute("notificationQuantity", notificationQuantity);
         return "shop";
     }
 
@@ -145,7 +151,9 @@ public class ProductController {
         Stock stock = stockService.getProductInStockByProductId(id);
         List<Category> productCategoryList = product.getCategories();
         Client client = clientService.getClientById(clientNavigator.getInstance().getClientId());
+        int notificationQuantity = notificationService.getClientNotifications(client.getId()).size();
         model.addAttribute("clientId", client.getId());
+        model.addAttribute("notificationQuantity", notificationQuantity);
         model.addAttribute("stock", stock);
         model.addAttribute("changeCartProductQuantityDTO", new ChangeCartProductQuantityDTO());
         model.addAttribute("product", product);

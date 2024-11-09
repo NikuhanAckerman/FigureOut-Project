@@ -125,6 +125,7 @@ public class SaleService {
         if(saleStatus.equals(emProcessamento)) {
 
             if(changeSaleStatusDTOStatus.equals(pagamentoRealizado)) {
+                /*
                 HashMap<Stock, Integer> cartProductQuantityToDrop = new HashMap<>();
 
                 for(CartsProducts cartProduct : saleCartsProducts) {
@@ -138,7 +139,7 @@ public class SaleService {
                 }
 
                 stockService.dropInStockList(cartProductQuantityToDrop);
-
+                */
             }
 
         }
