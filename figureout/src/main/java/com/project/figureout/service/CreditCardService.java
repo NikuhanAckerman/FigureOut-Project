@@ -113,7 +113,7 @@ public class CreditCardService {
     public BigDecimal randomizeCreditCardBalance() {
 
         BigDecimal maxCreditCardBalance = BigDecimal.valueOf(20000);
-        BigDecimal minCreditCardBalance = BigDecimal.valueOf(1000);
+        BigDecimal minCreditCardBalance = BigDecimal.valueOf(6000);
 
         Random random = new Random();
         double randomDouble = random.nextDouble();

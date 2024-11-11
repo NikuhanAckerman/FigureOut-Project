@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -27,6 +28,9 @@ public class ClientService {
 
     @Autowired
     private SaleService saleService;
+
+    @Autowired
+    private LogService logService;
 
     private HashMap<Long, BigDecimal> clientAndSaleTotals = new HashMap<>();
 
@@ -70,6 +74,8 @@ public class ClientService {
 
     public void saveClient(Client client) {
 
+
+
         clientRepository.save(client);
 
     }
@@ -79,6 +85,16 @@ public class ClientService {
         clientBasicDataSetter(client, clientDTO.getClientBasicDataDTO());
 
         saveClient(client);
+
+        LogDTO logDTO = new LogDTO();
+        logDTO.setTimestamp(LocalDateTime.now());
+        logDTO.setUser("Administrador");
+        logDTO.setAction("INSERT");
+        logDTO.setTable("Clientes");
+        logDTO.setColumn("(todas as colunas)");
+        logDTO.setData("(dados do cliente)");
+        logDTO.setOldData("(nada)");
+        logService.logTransaction(logDTO);
 
         cartService.changeClientCart(client);
 
