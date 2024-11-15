@@ -32,9 +32,6 @@ public class ProductController {
     ProductService productService;
 
     @Autowired
-    private LogService logService;
-
-    @Autowired
     ClientService clientService;
 
     @Autowired

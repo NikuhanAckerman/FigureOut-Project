@@ -29,9 +29,6 @@ public class ClientService {
     @Autowired
     private SaleService saleService;
 
-    @Autowired
-    private LogService logService;
-
     private HashMap<Long, BigDecimal> clientAndSaleTotals = new HashMap<>();
 
     // Client Methods
@@ -85,17 +82,6 @@ public class ClientService {
         clientBasicDataSetter(client, clientDTO.getClientBasicDataDTO());
 
         saveClient(client);
-
-        LogDTO logDTO = new LogDTO();
-        logDTO.setTimestamp(LocalDateTime.now());
-        logDTO.setUser("Administrador");
-        logDTO.setAction("INSERT");
-        logDTO.setTable("Clientes");
-        logDTO.setColumn("(todas as colunas)");
-        logDTO.setData("(dados do cliente)");
-        logDTO.setOldData("(nada)");
-        logService.logTransaction(logDTO);
-
         cartService.changeClientCart(client);
 
         AddressDTO clientDTOAddress = clientDTO.getAddressDTO();

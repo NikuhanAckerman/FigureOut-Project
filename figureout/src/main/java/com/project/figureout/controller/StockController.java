@@ -21,9 +21,6 @@ public class StockController {
     private StockService stockService;
 
     @Autowired
-    private LogService logService;
-
-    @Autowired
     private ProductService productService;
 
     @Autowired

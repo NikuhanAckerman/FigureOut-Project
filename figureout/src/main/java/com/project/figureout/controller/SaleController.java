@@ -35,9 +35,6 @@ public class SaleController {
     CartService cartService;
 
     @Autowired
-    private LogService logService;
-
-    @Autowired
     ProductService productService;
 
     @Autowired

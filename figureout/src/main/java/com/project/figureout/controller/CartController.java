@@ -29,9 +29,6 @@ public class CartController {
     private CartService cartService;
 
     @Autowired
-    private LogService logService;
-
-    @Autowired
     private ProductService productService;
 
     @Autowired

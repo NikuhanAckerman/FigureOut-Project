@@ -71,6 +71,7 @@ public class ProductService {
         product.setActive(productDTO.isActive());
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
+        product.setAiDescription(productDTO.getAiDescription());
         product.setHeight(productDTO.getHeight());
         product.setWidth(productDTO.getWidth());
         product.setWeight(productDTO.getWeight());

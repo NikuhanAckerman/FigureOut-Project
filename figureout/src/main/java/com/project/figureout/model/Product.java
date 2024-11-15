@@ -28,6 +28,9 @@ public class Product {
     @Column(name = "pro_descricao")
     private String description;
 
+    @Column(name = "pro_ia_descricao")
+    private String aiDescription;
+
     @Column(name = "pro_altura")
     private Float height;
 

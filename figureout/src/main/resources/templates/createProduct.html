@@ -47,6 +47,9 @@
                     <label><b>Descrição</b></label>
                     <textarea class="form-control" id="description" placeholder="Insira uma descrição para o produto (opcional)" rows="2" th:field="*{description}"></textarea>
 
+                    <label><b>Descrição para chatbot</b></label>
+                    <textarea class="form-control" id="aiDescription" placeholder="Insira uma descrição para o produto para o chatbot interpretar" rows="3" th:field="*{aiDescription}" required></textarea>
+
                     <!-- Dimensões do produto -->
                     <div class="row">
                         <div class="col-md-3">

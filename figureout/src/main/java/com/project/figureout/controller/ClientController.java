@@ -28,9 +28,6 @@ public class ClientController {
     private ClientService clientService;
 
     @Autowired
-    private LogService logService;
-
-    @Autowired
     private AddressService addressService;
 
     @Autowired
