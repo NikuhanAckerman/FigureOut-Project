@@ -30,7 +30,7 @@ class ProductFormTest(unittest.TestCase):
             reader = csv.DictReader(csvfile)
 
             for row in reader:
-                create_product(self, row['Nome'], row['Descricao'], row['Altura'], row['Largura'], row['Comprimento'], row['Peso'], row['PrecoDeCompra'], row['Categoria'], row['GrupoDePrecificacao'], row['Preco'], row['QuantidadeDisponivel'], row['DataDeEntrada'], row['Fornecedor'], row['Fabricante'], row['Tamanho'], row['Foto'])
+                create_product(self, row['Nome'], row['Descricao'], row['IA'], row['Altura'], row['Largura'], row['Comprimento'], row['Peso'], row['PrecoDeCompra'], row['Categoria'], row['GrupoDePrecificacao'], row['Preco'], row['QuantidadeDisponivel'], row['DataDeEntrada'], row['Fornecedor'], row['Fabricante'], row['Tamanho'], row['Foto'])
         
         # Espera alguns segundos para antes de fechar o browser.
         time.sleep(10)

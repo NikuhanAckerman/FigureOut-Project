@@ -28,7 +28,7 @@ public class Product {
     @Column(name = "pro_descricao")
     private String description;
 
-    @Column(name = "pro_ia_descricao")
+    @Column(name = "pro_ia_descricao", columnDefinition = "LONGTEXT")
     private String aiDescription;
 
     @Column(name = "pro_altura")

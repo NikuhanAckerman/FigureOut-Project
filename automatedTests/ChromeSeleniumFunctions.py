@@ -144,12 +144,14 @@ def create_address(self, delivery, charging, nickname, typeOfResidence, addressi
     click_button(self, "createButton")
 
 # Cria produtos de forma automatizada.
-def create_product(self, name, description, height, width, length, weight, purchaseAmount, category, pricingGroup, price, quantityAvailable, entryDate, supplier, manufacturer, size, fileInput):
+def create_product(self, name, description, ai, height, width, length, weight, purchaseAmount, category, pricingGroup, price, quantityAvailable, entryDate, supplier, manufacturer, size, fileInput):
     click_button(self, "createProduct")
         
     input_string(self, "name", name)
 
     input_string(self, "description", description)
+
+    input_string(self, "aiDescription", ai)
     
     input_string(self, "height", height)
     
