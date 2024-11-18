@@ -30,8 +30,6 @@ public class ProductDTO {
 
     private String description;
 
-    private String aiDescription;
-
     @NotNull(message = "O campo de altura do produto não pode ser nulo.")
     @Positive(message = "A altura do produto deve ser maior que zero.")
     private Float height;
