@@ -71,7 +71,6 @@ public class ProductService {
         product.setActive(productDTO.isActive());
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
-        product.setAiDescription(productDTO.getAiDescription());
         product.setHeight(productDTO.getHeight());
         product.setWidth(productDTO.getWidth());
         product.setWeight(productDTO.getWeight());
@@ -138,7 +137,6 @@ public class ProductService {
         productDTO.setActive(product.isActive());
         productDTO.setName(product.getName());
         productDTO.setDescription(product.getDescription());
-        productDTO.setAiDescription(product.getAiDescription());
         productDTO.setHeight(product.getHeight());
         productDTO.setWidth(product.getWidth());
         productDTO.setWeight(product.getWeight());
