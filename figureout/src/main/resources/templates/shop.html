@@ -52,10 +52,17 @@
       </div>
       <div class="modal-body">
         <div class="input-group">
-          <input class="form-control" placeholder="Digite sua pergunta aqui">
-          <button class=" input-group-text btn btn-primary" type="button"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
+          <input class="form-control" placeholder="Digite sua pergunta aqui" name="prompt" id="promptInput">
+          <button class="input-group-text btn btn-primary" type="button" id="sendButton" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send" viewBox="0 0 16 16">
             <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
           </svg></button>
+
+
+        </div>
+
+
+        <div id="chatResponse">
+
         </div>
 
       </div>
@@ -184,6 +191,38 @@
               priceLabel.textContent = "Até R$ " + value; // Atualiza para "Até R$ X"
           }
       }
+  });
+</script>
+
+<script>
+  document.getElementById("sendButton").addEventListener("click", function() {
+    const promptInput = document.getElementById("promptInput").value;
+    const chatResponseDiv = document.getElementById("chatResponse");
+
+    chatResponseDiv.innerHTML = ``;
+
+    // check if input is not empty
+    if (promptInput.trim() === "") {
+      alert("Por favor, digite uma pergunta.");
+      return;
+    }
+
+    // create an AJAX request
+    fetch('/chat?prompt=' + encodeURIComponent(promptInput), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+            .then(response => response.text()) // assuming response is plain text, change as needed
+            .then(data => {
+              // display the response
+              chatResponseDiv.innerHTML = `<p class="text-primary mt-3">${data}</p>`;
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              chatResponseDiv.innerHTML = `<p class="text-danger mt-3">Erro ao obter resposta.</p>`;
+            });
   });
 </script>
 
