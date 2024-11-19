@@ -188,10 +188,13 @@ public class ProductController {
     @PutMapping("/updateProduct/{id}")
     public String updateProductPut(@PathVariable Long id, @ModelAttribute ProductDTO productDTO, Model model) {
         Product product = productService.getProductById(id);
-        Stock stock = stockService.getProductInStockByProductId(id);
 
         productService.updateProduct(product, productDTO);
-        stockService.saveProductInStock(stock);
+
+        Stock stock = product.getStocks().getLast();
+        System.out.println(stock.getProductQuantityAvailable());
+        stockService.changeStock(stock, product, productDTO);
+        System.out.println(stock.getProductQuantityAvailable());
 
         return "redirect:/products/seeProducts";
     }

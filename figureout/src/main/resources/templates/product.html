@@ -146,22 +146,19 @@
 
     chatResponseDiv.innerHTML = ``;
 
-    // check if input is not empty
     if (promptInput.trim() === "") {
       alert("Por favor, digite uma pergunta.");
       return;
     }
 
-    // create an AJAX request
     fetch('/chat?prompt=' + encodeURIComponent(promptInput), {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       }
     })
-            .then(response => response.text()) // assuming response is plain text, change as needed
+            .then(response => response.text())
             .then(data => {
-              // display the response
               chatResponseDiv.innerHTML = `<p class="mt-3">${data}</p>`;
             })
             .catch(error => {
@@ -170,7 +167,6 @@
             });
   });
 </script>
-
 
 <div th:replace="Fragments/cartOffcanvasFragment :: cartOffcanvasFragment(${cart})"></div>
 

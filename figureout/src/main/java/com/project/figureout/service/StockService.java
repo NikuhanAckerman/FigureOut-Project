@@ -66,6 +66,11 @@ public class StockService {
 
     }
 
+    public void changeStock(Stock stock, Product product, ProductDTO productDTO) {
+        stock.setProductQuantityAvailable(productDTO.getStockDTO().getProductQuantityAvailable());
+        saveProductInStock(stock);
+    }
+
     public void dropInStock(Stock stock, int quantity) {
 
         stock.setProductQuantityAvailable(stock.getProductQuantityAvailable() - quantity);
