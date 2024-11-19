@@ -47,6 +47,9 @@ def select_product(self, product):
     # Passa pelos card-bodies até achar o produto específico.
     for card_body in card_bodies:
         card_title = card_body.find_element(By.CLASS_NAME, 'card-title')
+        if 'Preço' in card_title.text:  # Pula se for um card indesejado.
+                continue
+        
         if card_title.text == product_to_select:
             # Localiza o botão no mesmo card-body
             button = card_body.find_element(By.ID, 'seeProduct')

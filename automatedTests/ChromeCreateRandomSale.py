@@ -31,7 +31,7 @@ class ProductFormTest(unittest.TestCase):
         send_image(self, id, pasta, arquivo): Envia uma imagem.
         '''
 
-        ## Define quantas compras aleatórias serão feitas. 
+        ## Define quantas compras aleatórias serão feitas.
         for i in range(2):
             print()
             print("======== ITERAÇÃO " + str(i + 1) + " ========")
@@ -59,6 +59,7 @@ class ProductFormTest(unittest.TestCase):
                 quantity = random.randint(1, 10)  # Determina uma quantidade de produtos aleatória.
                 
                 # Função para comprar um produto.
+                time.sleep(5)
                 print("Produto: " + str(product_name) + " x " + str(quantity))
                 buy_product(self, product_name, quantity)
 

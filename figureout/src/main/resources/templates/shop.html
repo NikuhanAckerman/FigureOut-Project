@@ -31,7 +31,7 @@
       <ul class="navbar-nav ml-auto">
 
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/index}">Administrador</a>
+          <a id="controlPanel" class="nav-link" th:href="@{/index}">Administrador</a>
         </li>
 
         <li class="nav-item">
@@ -62,7 +62,7 @@
           <div class="card-body">
             <form id="filterForm">
 
-              <h5>Preço</h5>
+              <h5 class="card-title">Preço</h5>
               <input type="range" class="form-range" id="priceRange" min="50" max="5000" step="50" value="50">
               <label for="priceRange" class="form-label" style="display:inline;">
                 <span id="priceLabel">Qualquer preço</span>
@@ -130,11 +130,6 @@
 
 
       <div class="col-md-9 my-4">
-        <div class="card mb-3">
-
-
-
-          <div class="card-body">
 
               <div class="input-group">
                 <input type="text" class="form-control" placeholder="Buscar um produto..." aria-label="Buscar">
@@ -159,8 +154,7 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
+
       </div>
 
     </div>
