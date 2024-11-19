@@ -23,6 +23,8 @@ public class ChatGptService {
 
         String requestBody = "{ \"model\": \"gpt-3.5-turbo\", \"messages\": [{\"role\": \"user\", \"content\": \"" + prompt + "\"}]}";
 
+        System.out.println(prompt);
+
         HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
