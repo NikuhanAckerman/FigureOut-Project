@@ -80,7 +80,7 @@ class ProductFormTest(unittest.TestCase):
         # Selecionando cartões de crédito e endereço.
         select_option_by_value(self, "salesCardsIds", "1")
         time.sleep(1)
-        select_option_by_value(self, "salesCardsIds", "2")
+        select_option_by_value(self, "salesCardsIds", "11")
         time.sleep(1)
 
         select_option(self, "address-dropdown", "Minha casa")
@@ -90,13 +90,13 @@ class ProductFormTest(unittest.TestCase):
         time.sleep(1)
 
         # Página de finalizar compra.
-        input_string(self, "amountPaid1", "200")
+        input_string(self, "amountPaid1", "300")
         time.sleep(1)
-        input_string(self, "amountPaid2", "109.78")
+        input_string(self, "amountPaid11", "12.84")
         time.sleep(1)
 
         click_button(self, "btn-finalizar")
-        time.sleep(1)
+        time.sleep(5)
 
     def tearDown(self):
         # Fecha o browser

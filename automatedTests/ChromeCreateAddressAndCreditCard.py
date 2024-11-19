@@ -79,7 +79,7 @@ class ProductFormTest(unittest.TestCase):
 
         ## CRIAÇÃO DE CARTÃO DE CRÉDITO
         # Clica no botão de "Ver cartões"
-        click_button(self, "seeCreditCards")
+        click_button(self, "seeCreditCards-1")
         time.sleep(1)
         
         # Clica no botão "Adicionar cartão"
