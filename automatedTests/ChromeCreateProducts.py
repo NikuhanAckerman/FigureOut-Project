@@ -18,7 +18,7 @@ class ProductFormTest(unittest.TestCase):
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         self.driver.get("http://localhost:8080/products/seeProducts")
 
-    def test_fill_product_form(self):
+    def test_create_products(self):
         '''
         # -- FUNÇÕES CRIADAS PARA TESTES --
         # create_product(self, nome, descrição, altura, largura, comprimento, peso

@@ -18,7 +18,7 @@ class ProductFormTest(unittest.TestCase):
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         self.driver.get("http://localhost:8080/showAllClients")
 
-    def test_fill_credit_cards_form(self):
+    def test_create_10_credit_cards(self):
 
         # -- FUNÇÕES CRIADAS PARA TESTES --
         # click_button(self, id): Clica em botão da página.
