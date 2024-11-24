@@ -186,7 +186,8 @@ public class ClientService {
 
     // Método para filtrar os atributos do cliente.
     public List<Client> filterClients(String name, String email, String password,
-                                      String cpf, LocalDate birthday, String phone, Long id) {
+                                      String cpf, LocalDate birthday, String phone,
+                                      String active, String gender, Long id) {
         List<Client> clients = getAllClients();
 
         if (id != null && id > 0) {
@@ -222,6 +223,21 @@ public class ClientService {
         if (phone != null && !phone.isEmpty()) {
             clients = clients.stream()
                     .filter(client -> client.getPhone().getPhoneNumber().contains(phone)) // Filtro de número de telefone
+                    .collect(Collectors.toList());
+        }
+        if (active != null) {
+            boolean isActive = Boolean.parseBoolean(active); // Converte "true"/"false" para boolean
+            clients = clients.stream()
+                    .filter(client -> client.isEnabled() == isActive) // Supondo que `isActive()` retorna um boolean
+                    .collect(Collectors.toList());
+        }
+        if (gender != null && !gender.isEmpty()) {
+            clients = clients.stream()
+                    .filter(client -> {
+                        String genderType = client.getGender() != null ? client.getGender().getGenderType() : null;
+                        //System.out.println("GenderType: " + genderType);
+                        return genderType != null && genderType.equalsIgnoreCase(gender);
+                    })
                     .collect(Collectors.toList());
         }
 

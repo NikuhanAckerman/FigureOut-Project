@@ -368,9 +368,11 @@ public class ClientController {
                              @RequestParam(required = false) String cpf,
                              @RequestParam(required = false) LocalDate birthday,
                              @RequestParam(required = false) String phone,
+                             @RequestParam(required = false) String active,
+                             @RequestParam(required = false) String gender,
                              @RequestParam(required = false) Long id,
                              Model model) {
-        List<Client> clients = clientService.filterClients(name, email, password, cpf, birthday, phone, id);
+        List<Client> clients = clientService.filterClients(name, email, password, cpf, birthday, phone, active, gender, id);
         model.addAttribute("clients", clients);
         model.addAttribute("filterName", name);
         model.addAttribute("filterEmail", email);
@@ -378,6 +380,8 @@ public class ClientController {
         model.addAttribute("filterCpf", cpf);
         model.addAttribute("filterBirthday", birthday);
         model.addAttribute("filterPhone", phone);
+        model.addAttribute("filterActive", active);
+        model.addAttribute("filterGender", gender);
         model.addAttribute("filterId", id);
         return "showClients";
     }

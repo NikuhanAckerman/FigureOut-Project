@@ -62,21 +62,24 @@
 							<input type="text" name="password" id="filterPassword" class="form-control" th:value="${filterPassword}" placeholder="Filtrar por Senha">
 						</div>
 
-						<div class="mb-3 d-flex align-items-center">
-							<p class="mb-0 me-2">Filtrar por gênero:</p>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="filterMale" value="male">
-								<label class="form-check-label" for="filterMale">M</label>
+							<div class="mb-3 d-flex align-items-center">
+								<p class="mb-0 me-2">Filtrar por Gênero:</p>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="radio" name="gender" id="filterMale" value="Masculino"
+										   th:checked="${filterGender == 'Masculino'}">
+									<label class="form-check-label" for="filterMale">M</label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="radio" name="gender" id="filterFemale" value="Feminino"
+										   th:checked="${filterGender == 'Feminino'}">
+									<label class="form-check-label" for="filterFemale">F</label>
+								</div>
+								<div class="form-check form-check-inline">
+									<input class="form-check-input" type="radio" name="gender" id="filterOther" value="Outro"
+										   th:checked="${filterGender == 'Outro'}">
+									<label class="form-check-label" for="filterOther">?</label>
+								</div>
 							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="filterFemale" value="female">
-								<label class="form-check-label" for="filterFemale">F</label>
-							</div>
-							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="filterOther" value="other">
-								<label class="form-check-label" for="filterOther">?</label>
-							</div>
-						</div>
 
 						<div class="mb-3 d-flex align-items-center">
 							<p class="mb-0 me-2">Filtrar por Nascimento:</p>
@@ -91,11 +94,13 @@
 						<div class="mb-3 d-flex align-items-center">
 							<p class="mb-0 me-2">Filtrar por Ativo:</p>
 							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="filterActive" value="active">
+								<input class="form-check-input" type="radio" name="active" id="filterActive" value="true"
+									   th:checked="${filterActive == 'true'}">
 								<label class="form-check-label" for="filterActive">Ativo</label>
 							</div>
 							<div class="form-check form-check-inline">
-								<input class="form-check-input" type="radio" name="inlineRadioOptions" id="filterUnactive" value="unactive">
+								<input class="form-check-input" type="radio" name="active" id="filterUnactive" value="false"
+									   th:checked="${filterActive == 'false'}">
 								<label class="form-check-label" for="filterUnactive">Não ativo</label>
 							</div>
 						</div>
