@@ -268,10 +268,6 @@ public class ClientController {
 
         clientService.recalculateClientRanking();
 
-        // log de transação do método.
-        //Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
-        //logService.logTransaction(String.valueOf(navigator), "insert", client.toString());
-
         return "redirect:/showAllClients";
     }
 
@@ -293,22 +289,7 @@ public class ClientController {
         // Chamar o serviço para mudar a senha.
         clientService.changePassword(clientId, changePasswordDTO);
 
-        // log de transação do método.
-        //Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
-        //logService.logTransaction(String.valueOf(navigator), "insert", changePasswordDTO.toString());
-
-        //boolean success =
         return "redirect:/showAllClients";
-
-        /*if (!success) {
-            model.addAttribute("error", "Password change failed. Please check your inputs.");
-            return "changePassword"; // Mostrar o formulário de novo com um erro
-        }*/
-
-        /*model.addAttribute("message", "Password changed successfully!");
-        return "/changePassword/" + clientId; // Redirecionar para uma página de sucesso.
-
-         */
     }
 
     @GetMapping("/updateClient/{id}")
@@ -317,6 +298,9 @@ public class ClientController {
         Client client = clientService.getClientById(id);
 
         ClientBasicDataDTO clientBasicDataDTO = new ClientBasicDataDTO();
+        System.out.println(id);
+        clientBasicDataDTO.setClientId(id);
+        System.out.println(clientBasicDataDTO.getClientId());
 
         clientService.populateClientBasicDataDTO(clientBasicDataDTO, client);
 
@@ -330,8 +314,7 @@ public class ClientController {
     }
 
     @PutMapping("/updateClient/{id}")
-    public String updateClient(@PathVariable long id, @Valid @ModelAttribute ClientBasicDataDTO clientBasicDataDTO, BindingResult result, Model model,
-                               HttpServletRequest request) {
+    public String updateClient(@PathVariable long id, @Valid @ModelAttribute ClientBasicDataDTO clientBasicDataDTO, BindingResult result, Model model) {
 
         Client clientToUpdate = clientService.getClientById(id);
 
@@ -345,9 +328,8 @@ public class ClientController {
 
         clientService.updateClient(clientToUpdate, clientBasicDataDTO);
 
-        String referer = request.getHeader("Referer");
 
-        return "redirect:" + referer;
+        return "redirect:/showAllClients";
 
     }
 

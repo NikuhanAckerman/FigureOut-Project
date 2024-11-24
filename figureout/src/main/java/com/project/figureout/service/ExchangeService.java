@@ -25,7 +25,7 @@ public class ExchangeService {
     private ExchangeCouponRepository exchangeCouponRepository;
 
     private BigDecimal percentileToCreateNewExchangeCoupon = BigDecimal.valueOf(0.20); // if I use an exchange coupon and the
-                                                                                      // leftover value is bigger than 100% + (percentile)%
+                                                                                      // leftover value is bigger than 100% + (percentile*100)%
                                                                                      // then I create a new exchange coupon with the value of
                                                                                     // the leftover.
 

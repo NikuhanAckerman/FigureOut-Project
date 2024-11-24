@@ -2,8 +2,8 @@ package com.project.figureout.dto;
 
 import com.project.figureout.model.Gender;
 import com.project.figureout.model.Phone;
-//import com.project.figureout.validation.CpfCantBeUsedByMultipleAccounts;
-//import com.project.figureout.validation.EmailCantBeUsedByMultipleAccounts;
+import com.project.figureout.validation.CpfCantBeUsedByMultipleAccounts;
+import com.project.figureout.validation.EmailCantBeUsedByMultipleAccounts;
 import com.project.figureout.validation.PasswordsMatch;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -13,12 +13,13 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
-@Getter @Setter
+
 @PasswordsMatch
-//@EmailCantBeUsedByMultipleAccounts
-//@CpfCantBeUsedByMultipleAccounts
+@EmailCantBeUsedByMultipleAccounts
+@CpfCantBeUsedByMultipleAccounts
+@Getter @Setter
 public class ClientBasicDataDTO {
-    @NotNull
+
     private long clientId;
 
     @NotBlank(message = "O nome não pode estar vazio.")
@@ -27,13 +28,11 @@ public class ClientBasicDataDTO {
 
     @NotBlank(message = "O e-mail não pode estar vazio.")
     @Email(message = "Este e-mail não é válido.")
-    //@EmailCantBeUsedByMultipleAccounts solve issue with update first
     private String email;
 
     @NotBlank(message = "O CPF não pode estar vazio.")
     @Size(max = 14)
     @Pattern(message = "O formato é inválido. O CPF deve estar no formato: '123.456.789-00'.", regexp = "\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}")
-    //@CpfCantBeUsedByMultipleAccounts solve issue with update first
     private String cpf;
 
     @NotBlank(message = "A senha não pode estar vazia.")

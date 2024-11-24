@@ -20,7 +20,9 @@
 		<div class="container mt-5">
 			<form  th:action="@{/updateClient/{id}(id=${clientId})}" th:object="${clientBasicDataDTO}" method="POST">
 				<input type="hidden" name="_method" value="PUT"/>
+
 				<div class="form-group">
+					<input type="hidden" th:field="*{clientId}"/>
 
 					<div class="card">
 						<div class="card-header">

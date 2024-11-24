@@ -30,6 +30,8 @@ public class OnlyOnePreferentialCreditCardValidator implements ConstraintValidat
             if(creditCardDTO.isPreferential()) {
                 long clientId = creditCardDTO.getClientId();
                 long creditCardId = creditCardDTO.getCreditCardId();
+                System.out.println(clientId);
+                System.out.println(creditCardId);
 
                 Client client = clientService.getClientById(clientId);
 
