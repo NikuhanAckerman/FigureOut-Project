@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -365,14 +366,18 @@ public class ClientController {
                              @RequestParam(required = false) String email,
                              @RequestParam(required = false) String password,
                              @RequestParam(required = false) String cpf,
+                             @RequestParam(required = false) LocalDate birthday,
+                             @RequestParam(required = false) String phone,
                              @RequestParam(required = false) Long id,
                              Model model) {
-        List<Client> clients = clientService.filterClients(name, email, password, cpf, id);
+        List<Client> clients = clientService.filterClients(name, email, password, cpf, birthday, phone, id);
         model.addAttribute("clients", clients);
         model.addAttribute("filterName", name);
         model.addAttribute("filterEmail", email);
         model.addAttribute("filterPassword", password);
         model.addAttribute("filterCpf", cpf);
+        model.addAttribute("filterBirthday", birthday);
+        model.addAttribute("filterPhone", phone);
         model.addAttribute("filterId", id);
         return "showClients";
     }

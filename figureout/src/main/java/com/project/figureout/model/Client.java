@@ -1,7 +1,7 @@
 package com.project.figureout.model;
 
-import com.project.figureout.validation.CpfCantBeUsedByMultipleAccounts;
-import com.project.figureout.validation.EmailCantBeUsedByMultipleAccounts;
+//import com.project.figureout.validation.CpfCantBeUsedByMultipleAccounts;
+//import com.project.figureout.validation.EmailCantBeUsedByMultipleAccounts;
 import com.project.figureout.validation.OnlyOnePreferentialCreditCard;
 import jakarta.persistence.*;
 import lombok.Getter;

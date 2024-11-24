@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -184,7 +185,8 @@ public class ClientService {
 
 
     // Método para filtrar os atributos do cliente.
-    public List<Client> filterClients(String name, String email, String password, String cpf, Long id) {
+    public List<Client> filterClients(String name, String email, String password,
+                                      String cpf, LocalDate birthday, String phone, Long id) {
         List<Client> clients = getAllClients();
 
         if (id != null && id > 0) {
@@ -212,6 +214,18 @@ public class ClientService {
                     .filter(client -> client.getCpf().toLowerCase().contains(cpf.toLowerCase()))
                     .collect(Collectors.toList());
         }
+        if (birthday != null) {
+            clients = clients.stream()
+                    .filter(client -> client.getBirthday().equals(birthday))
+                    .collect(Collectors.toList());
+        }
+        if (phone != null && !phone.isEmpty()) {
+            clients = clients.stream()
+                    .filter(client -> client.getPhone().getPhoneNumber().contains(phone)) // Filtro de número de telefone
+                    .collect(Collectors.toList());
+        }
+
+
         return clients.isEmpty() ? new ArrayList<>() : clients; // Retornar uma lista vazia se nenhum filtro bater
     }
 

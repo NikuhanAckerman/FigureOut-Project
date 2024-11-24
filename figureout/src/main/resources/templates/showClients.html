@@ -53,6 +53,12 @@
 							<input type="text" name="name" id="filterName" class="form-control" th:value="${filterName}" placeholder="Filtrar por Nome Completo">
 						</div>
 						<div class="mb-3">
+							<input type="text" name="cpf" id="filterCpf" class="form-control" th:value="${filterCpf}" placeholder="Filtrar por CPF">
+						</div>
+						<div class="mb-3">
+							<input type="text" name="email" id="filterEmail" class="form-control" th:value="${filterEmail}" placeholder="Filtrar por Email">
+						</div>
+						<div class="mb-3">
 							<input type="text" name="password" id="filterPassword" class="form-control" th:value="${filterPassword}" placeholder="Filtrar por Senha">
 						</div>
 
@@ -75,18 +81,12 @@
 						<div class="mb-3 d-flex align-items-center">
 							<p class="mb-0 me-2">Filtrar por Nascimento:</p>
 							<div class="col-md-5">
-								<input type="date" class="form-control" id="filterBirthday">
+								<input type="date" class="form-control" name="birthday" th:value="${filterBirthday}" id="filterBirthday">
 							</div>
 						</div>
 
 						<div class="mb-3">
-							<input type="text" name="cpf" id="filterCpf" class="form-control" th:value="${filterCpf}" placeholder="Filtrar por CPF">
-						</div>
-						<div class="mb-3">
-							<input type="text" name="email" id="filterEmail" class="form-control" th:value="${filterEmail}" placeholder="Filtrar por Email">
-						</div>
-						<div class="mb-3">
-							<input type="text" class="form-control" id="filterPhone" placeholder="Filtrar por Telefone">
+							<input type="text" class="form-control" name="phone" th:value="${filterPhone}" id="filterPhone" placeholder="Filtrar por Telefone">
 						</div>
 						<div class="mb-3 d-flex align-items-center">
 							<p class="mb-0 me-2">Filtrar por Ativo:</p>
@@ -146,7 +146,8 @@
 								<button type="button" class="btn btn-secondary" th:id="'seeCreditCards-' + ${client.id}" th:data-bs-client-id = "${client.id}" data-bs-toggle="modal" data-bs-target="#seeCreditCardModal" >Ver cartões</button>
 							</td>
 
-							<td th:text = "${client.phone.phoneNumber}"></td>
+							<td th:text ="${'(' + client.phone.ddd + ') ' + client.phone.phoneNumber}"></td>
+
 							<td>
 								<input type="checkbox" th:checked="${client.enabled}" disabled>
 							</td>
