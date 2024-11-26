@@ -1,3 +1,8 @@
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.getcwd()))
+
 import unittest
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager

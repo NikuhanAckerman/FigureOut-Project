@@ -1,3 +1,8 @@
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.getcwd()))
+
 import unittest
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
@@ -96,7 +101,7 @@ class ProductFormTest(unittest.TestCase):
         time.sleep(1)
 
         click_button(self, "btn-finalizar")
-        time.sleep(5)
+        time.sleep(4)
 
     def tearDown(self):
         # Fecha o browser

@@ -1,3 +1,8 @@
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.getcwd()))
+
 import unittest
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
@@ -29,7 +34,7 @@ class ProductFormTest(unittest.TestCase):
         
         ## CRIAÇÃO DE ENDEREÇO
         # Clica no botão de "Ver endereços"
-        click_button(self, "seeAddresses")
+        click_button(self, "seeAddresses-1")
         time.sleep(1)
         
         # Clica no botão "Adicionar endereço"
@@ -76,60 +81,8 @@ class ProductFormTest(unittest.TestCase):
         click_button(self, "createButton")
         time.sleep(1)
         
-
-        ## CRIAÇÃO DE CARTÃO DE CRÉDITO
-        # Clica no botão de "Ver cartões"
-        click_button(self, "seeCreditCards-1")
-        time.sleep(1)
-        
-        # Clica no botão "Adicionar cartão"
-        click_button(self, "addCreditCardButton")
-        time.sleep(1)
-
-        # Preenche os campos do formulário de criar cartão de crédito.
-        check_checkbox(self, "preferential")
-        time.sleep(1)
-
-        input_string(self, "cardNumber", "1234567891012")
-        time.sleep(1)
-
-        input_string(self, "nickname", "Cartao Roxo")
-        time.sleep(1)
-        
-        input_string(self, "printedName", "Renan L")
-        time.sleep(1)
-        
-        select_option(self, "brand", "MasterCard")
-        time.sleep(1)
-        
-        input_string(self, "securityCode", "123")
-        time.sleep(1)
-
-        click_button(self, "createButton")
-        time.sleep(1)
-
-        ## CRIAÇÃO DE CARTÃO DE CRÉDITO 2 (rápido)
-        # Clica no botão de "Ver cartões"
-        click_button(self, "seeCreditCards")
-        
-        # Clica no botão "Adicionar cartão"
-        click_button(self, "addCreditCardButton")
-
-        # Preenche os campos do formulário de criar cartão de crédito.
-        input_string(self, "cardNumber", "987654321987")
-
-        input_string(self, "nickname", "Cartao Laranja")
-        
-        input_string(self, "printedName", "Renan L")
-        
-        select_option(self, "brand", "Visa")
-        
-        input_string(self, "securityCode", "456")
-
-        click_button(self, "createButton")
-        
         # Espera alguns segundos para o resultado.
-        time.sleep(10)
+        time.sleep(4)
 
     def tearDown(self):
         # Fecha o browser

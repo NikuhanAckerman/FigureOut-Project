@@ -1,3 +1,8 @@
+import sys
+import os
+
+sys.path.insert(0, os.path.dirname(os.getcwd()))
+
 import unittest
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
@@ -108,7 +113,7 @@ class ProductFormTest(unittest.TestCase):
         time.sleep(1)
 
         # Espera alguns segundos para antes de fechar o browser.
-        time.sleep(10)
+        time.sleep(4)
 
     def tearDown(self):
         # Fecha o browser

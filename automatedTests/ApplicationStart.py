@@ -1,4 +1,5 @@
 import subprocess
+import os
 
 # Função para rodar um script Python
 def run_script(script_name):
@@ -12,12 +13,11 @@ def run_script(script_name):
 
 # Lista dos scripts a serem executados
 scripts = [
-    "ChromeCreateTonsOfClients.py",
-    "ChromeCreate10CreditCards.py",
-    "ChromeCreateProducts.py"
+    os.path.join('Starters', 'ChromeCreateTonsOfClients.py'),
+    os.path.join('Starters', 'ChromeCreate10CreditCards.py'),
+    os.path.join('Starters', 'ChromeCreateProducts.py')
 ]
 
 # Executa os scripts na ordem
 for script in scripts:
     run_script(script)
-
