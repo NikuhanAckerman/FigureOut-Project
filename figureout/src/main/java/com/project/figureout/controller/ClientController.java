@@ -418,6 +418,7 @@ public class ClientController {
         model.addAttribute("saleStatus", SaleStatusEnum.values());
         model.addAttribute("entregueStatus", SaleStatusEnum.ENTREGUE);
         model.addAttribute("trocaFinalizadaStatus", SaleStatusEnum.TROCA_FINALIZADA);
+        model.addAttribute("trocaNaoAutorizadaStatus", SaleStatusEnum.TROCA_NAO_AUTORIZADA);
 
         HashMap<CartsProductsKey, List<ExchangeShowOnPurchasesDTO>> productIdExchangeInfo = new HashMap<>();
 

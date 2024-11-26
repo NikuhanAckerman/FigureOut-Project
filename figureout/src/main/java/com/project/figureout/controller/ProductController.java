@@ -52,6 +52,9 @@ public class ProductController {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private ChatGptService chatGptService;
+
     private ClientNavigator clientNavigator;
 
 
@@ -91,7 +94,7 @@ public class ProductController {
     }
 
     @PostMapping("/createProduct")
-    public String createProduct(@ModelAttribute ProductDTO productDTO, Model model) {
+    public String createProduct(@ModelAttribute ProductDTO productDTO, Model model) throws IOException {
         Product product = new Product();
         Stock stock = new Stock();
 
@@ -100,6 +103,8 @@ public class ProductController {
 
         stockService.productInStockDataSetter(stock, product, productDTO);
         stockService.saveProductInStock(stock);
+
+        //chatGptService.addProduct(product);
 
         // log de transação do método.
         //Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
@@ -123,8 +128,10 @@ public class ProductController {
     }
 
     @DeleteMapping("/deleteProduct/{id}")
-    public String deleteProduct(@PathVariable Long id) {
+    public String deleteProduct(@PathVariable Long id) throws IOException {
         productService.deleteProductById(id);
+
+        //chatGptService.deleteProduct(id);
 
         return "redirect:/products/seeProducts";
     }
@@ -186,7 +193,7 @@ public class ProductController {
     }
 
     @PutMapping("/updateProduct/{id}")
-    public String updateProductPut(@PathVariable Long id, @ModelAttribute ProductDTO productDTO, Model model) {
+    public String updateProductPut(@PathVariable Long id, @ModelAttribute ProductDTO productDTO, Model model) throws IOException {
         Product product = productService.getProductById(id);
 
         productService.updateProduct(product, productDTO);
@@ -195,6 +202,8 @@ public class ProductController {
         System.out.println(stock.getProductQuantityAvailable());
         stockService.changeStock(stock, product, productDTO);
         System.out.println(stock.getProductQuantityAvailable());
+
+        //chatGptService.updateProduct(product.getId(), product);
 
         return "redirect:/products/seeProducts";
     }

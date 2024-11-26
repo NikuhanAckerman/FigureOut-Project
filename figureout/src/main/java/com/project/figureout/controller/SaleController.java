@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -65,6 +66,9 @@ public class SaleController {
 
     @Autowired
     NotificationService notificationService;
+
+    @Autowired
+    ChatGptService chatGptService;
 
     /*@GetMapping("")
     public String showSalesGet(Model model) {
@@ -211,7 +215,7 @@ public class SaleController {
     public String createSale(@PathVariable long cartId, @ModelAttribute SaleCardDTO saleCardDTO, Model model,
                              @RequestParam("freight") BigDecimal freight,
                              @RequestParam("saleFinalPrice") BigDecimal saleFinalPrice,
-                             HttpServletRequest request) {
+                             HttpServletRequest request) throws IOException {
 
         // Obtém o carrinho de compras (Cart) com base no ID fornecido na URL
         Cart cart = cartService.getCartById(cartId);
@@ -272,7 +276,7 @@ public class SaleController {
                     BigDecimal creditCardBalance = specificCreditCard.getBalance();
 
                     if(creditCardBalance.compareTo(saleCard.getAmountPaid()) < 0) {
-                        errors.add("O valor pago pelo cartão " + specificCreditCard.getNickname() + " é insuficiente para pagar pela compra.");
+                        errors.add("O cartão " + specificCreditCard.getNickname() + " não tem saldo suficiente para pagar pela compra.");
                     }
 
                     // Acumula o total pago pelos cartões
@@ -392,8 +396,20 @@ public class SaleController {
             CreditCard creditCard = saleCard.getCreditCard();
 
             creditCard.setBalance(creditCard.getBalance().subtract(saleCard.getAmountPaid()));
+
             creditCardService.saveCreditCard(creditCard);
+
+
         }
+
+        ChangeSaleStatusDTO changeSaleStatusDTO = new ChangeSaleStatusDTO();
+        changeSaleStatusDTO.setStatus(SaleStatusEnum.PAGAMENTO_REALIZADO);
+        saleService.changeSaleStatus(sale, changeSaleStatusDTO);
+
+        //for(CartsProducts currentSaleProduct: cart.getCartProducts()) {
+        //    Product saleProduct = currentSaleProduct.getProduct();
+        //    chatGptService.updateProduct(saleProduct.getId(), saleProduct);
+        //}
 
         // Redireciona o usuário para a página de compras após concluir o pedido
         return "redirect:/products/shop";
@@ -425,7 +441,7 @@ public class SaleController {
 
     // Define o método para lidar com requisições PUT no caminho "/seeSales/changeSaleStatus/{saleId}"
     @PutMapping("/seeSales/changeSaleStatus/{saleId}")
-    public String changeSaleStatus(@PathVariable long saleId, @ModelAttribute ChangeSaleStatusDTO changeSaleStatusDTO) {
+    public String changeSaleStatus(@PathVariable long saleId, @ModelAttribute ChangeSaleStatusDTO changeSaleStatusDTO) throws IOException {
         // Chama o serviço saleService para alterar o status da venda, passando a venda encontrada pelo ID e os dados do DTO
         saleService.changeSaleStatus(saleService.getSaleById(saleId), changeSaleStatusDTO);
 

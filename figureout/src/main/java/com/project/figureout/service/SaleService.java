@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
@@ -49,6 +50,9 @@ public class SaleService {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private ChatGptService chatGptService;
 
     public List<Sale> getAllSales() {
         return saleRepository.findAll();
@@ -109,7 +113,7 @@ public class SaleService {
 //        return saleRepository.findSalesByProductByMonth();
 //    }
 
-    public void changeSaleStatus(Sale sale, ChangeSaleStatusDTO changeSaleStatusDTO) {
+    public void changeSaleStatus(Sale sale, ChangeSaleStatusDTO changeSaleStatusDTO) throws IOException {
         SaleStatusEnum saleStatus = sale.getStatus();
         SaleStatusEnum changeSaleStatusDTOStatus = changeSaleStatusDTO.getStatus();
         SaleStatusEnum emProcessamento = SaleStatusEnum.EM_PROCESSAMENTO;
@@ -121,28 +125,6 @@ public class SaleService {
         SaleStatusEnum trocaFinalizada = SaleStatusEnum.TROCA_FINALIZADA;
 
         List<CartsProducts> saleCartsProducts = sale.getCart().getCartProducts();
-
-        if(saleStatus.equals(emProcessamento)) {
-
-            if(changeSaleStatusDTOStatus.equals(pagamentoRealizado)) {
-                /*
-                HashMap<Stock, Integer> cartProductQuantityToDrop = new HashMap<>();
-
-                for(CartsProducts cartProduct : saleCartsProducts) {
-                    Stock stock = stockService.getProductInStockByProductId(cartProduct.getProduct().getId());
-
-                    cartProductQuantityToDrop.put(stock, cartProduct.getProductQuantity());
-
-                    if(cartProduct.getProductQuantity() >= stock.getProductQuantityAvailable()) {
-                        productService.inactivateProduct(stock.getProduct());
-                    }
-                }
-
-                stockService.dropInStockList(cartProductQuantityToDrop);
-                */
-            }
-
-        }
 
         Exchange exchangeInProcessFirst = null;
 
@@ -180,7 +162,24 @@ public class SaleService {
 
         }
 
-        if(changeSaleStatusDTO.getStatus().equals(trocaFinalizada) || changeSaleStatusDTO.getStatus().equals(trocaNaoAutorizada)) {
+        if(changeSaleStatusDTOStatus.equals(trocaFinalizada) || changeSaleStatusDTOStatus.equals(trocaNaoAutorizada)) {
+
+            if(changeSaleStatusDTOStatus.equals(trocaNaoAutorizada)) {
+
+                if(exchangeInProcessFirst != null) {
+
+                    for(ExchangeProducts currentProduct: exchangeInProcessFirst.getReturnedProducts()) {
+
+                        currentProduct.setFinalAmount(BigDecimal.valueOf(0.00));
+                        currentProduct.setQuantityReturned(0);
+
+                    }
+
+                    exchangeInProcessFirst.setCurrentExchange(false);
+
+                }
+
+            }
 
             if(exchangeInProcessFirst != null) {
 
@@ -229,6 +228,11 @@ public class SaleService {
 
                 exchangeService.generateExchangeCoupon(exchangeInProcess);
 
+                /*for(CartsProducts currentSaleProduct: sale.getCart().getCartProducts()) {
+                    Product saleProduct = currentSaleProduct.getProduct();
+                    chatGptService.updateProduct(saleProduct.getId(), saleProduct);
+                }*/
+
 
             }
 
@@ -246,24 +250,6 @@ public class SaleService {
         saveSale(sale);
 
     }
-
-
-
-    /* Método para achar os produtos com base na data.
-    public Map<LocalDate, BigDecimal> getSalesData(LocalDate startDate, LocalDate endDate) {
-        List<Sale> sales = saleRepository.findByDateTimeSaleBetween(startDate.atStartOfDay(), endDate.atTime(23, 59, 59));
-
-        Map<LocalDate, BigDecimal> salesData = new HashMap<>();
-
-        for (Sale sale : sales) {
-            LocalDate date = sale.getDateTimeSale().toLocalDate();
-            BigDecimal totalSale = salesData.getOrDefault(date, BigDecimal.ZERO).add(sale.getFinalPrice());
-
-            salesData.put(date, totalSale);
-        }
-
-        return salesData;
-    }*/
 
 
 }

@@ -70,6 +70,7 @@ public class ExchangeController {
         SaleStatusEnum status = sale.getStatus();
         SaleStatusEnum deliveredStatus = SaleStatusEnum.ENTREGUE;
         SaleStatusEnum exchangeEndedStatus = SaleStatusEnum.TROCA_FINALIZADA;
+        SaleStatusEnum exchangeNotAuthorizedStatus = SaleStatusEnum.TROCA_NAO_AUTORIZADA;
 
         List<String> errors = new ArrayList<>();
 
@@ -111,7 +112,7 @@ public class ExchangeController {
             newExchange.setSale(sale);
             newExchange.setClient(client);
 
-            if(status == deliveredStatus || status == exchangeEndedStatus) {
+            if(status == deliveredStatus || status == exchangeEndedStatus || status == exchangeNotAuthorizedStatus) {
                 sale.setStatus(SaleStatusEnum.TROCA_SOLICITADA);
                 newExchange.setStatus(ExchangeStatusEnum.TROCA_SOLICITADA);
             } else {

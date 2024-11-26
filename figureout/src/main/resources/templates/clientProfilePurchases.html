@@ -178,11 +178,12 @@
                         <div th:if="${productIdExchangeInfo[cartProduct.id] != null and !productIdExchangeInfo[cartProduct.id].isEmpty()}">
                           <p class="text-primary">Este produto está sendo trocado ou foi trocado:</p>
 
+                          <span class="badge bg-info text-dark mb-2" th:text="'Quantidade ainda devolvível do produto: ' + ${cartProduct.exchangeableQuantity}"></span>
+
                           <div th:each="exchangeCartProduct : ${productIdExchangeInfo[cartProduct.id]}">
                             <span class="badge bg-warning text-dark" th:text="'Código da troca: ' + ${exchangeCartProduct.exchangeCode}"></span>
                             <span class="badge bg-warning text-dark" th:text="' Status da troca: ' + ${exchangeCartProduct.status}"></span>
                             <span class="badge bg-warning text-dark" th:text="'Devolvido: ' + ${exchangeCartProduct.quantityReturned}"></span>
-                            <span class="badge bg-info text-dark" th:text="'Quantidade ainda devolvível do produto: ' + ${cartProduct.exchangeableQuantity}"></span>
                           </div>
                         </div>
                       </div>
@@ -199,14 +200,13 @@
 
                 </div>
 
-              <div th:if="${sale.status == entregueStatus || sale.status == trocaFinalizadaStatus}">
-                <a class="btn btn-warning" th:href="@{/exchange/requestExchange/{id}(id = ${sale.id})}" onclick="return confirm('Tem certeza?')">Fazer troca</a>
+              <div th:if="${sale.status == entregueStatus || sale.status == trocaFinalizadaStatus || sale.status == trocaNaoAutorizadaStatus}">
+                <a class="mb-3 btn btn-warning" th:href="@{/exchange/requestExchange/{id}(id = ${sale.id})}" onclick="return confirm('Tem certeza?')"><b>Fazer troca</b></a>
               </div>
 
                 <div th:if="${!sale.exchangeList.isEmpty()}">
 
                   <h5><strong>Trocas envolvendo a compra</strong></h5>
-
 
                   <div class="card mb-3" th:each="exchange : ${sale.exchangeList}">
 

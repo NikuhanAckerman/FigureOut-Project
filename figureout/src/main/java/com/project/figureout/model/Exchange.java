@@ -33,7 +33,7 @@ public class Exchange {
     @JsonIgnore
     private Sale sale;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "tro_trp_id")
     private List<ExchangeProducts> returnedProducts = new ArrayList<>();
 
