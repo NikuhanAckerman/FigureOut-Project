@@ -113,7 +113,7 @@ class ProductFormTest(unittest.TestCase):
         time.sleep(1)
 
         # Espera alguns segundos para antes de fechar o browser.
-        time.sleep(4)
+        time.sleep(3)
 
     def tearDown(self):
         # Fecha o browser
