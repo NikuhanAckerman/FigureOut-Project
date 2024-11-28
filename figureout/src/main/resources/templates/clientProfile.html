@@ -89,7 +89,7 @@
                 <button type="button" id="togglePassword" class="btn btn-primary" aria-label="Mostrar ou esconder senha" onclick="togglePassword()">
                     Mostrar
                 </button>
-                <a class="btn btn-danger mb-1" th:href="@{/changePassword/{id}(id = ${id})}">Trocar senha</a>
+                <a class="btn btn-danger mb-1" id="changePassword" th:href="@{/changePassword/{id}(id = ${id})}">Trocar senha</a>
             </p>
 
             <p class="card-text">
