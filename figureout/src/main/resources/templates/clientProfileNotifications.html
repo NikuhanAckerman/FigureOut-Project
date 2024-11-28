@@ -82,7 +82,7 @@
             <div class="card-header d-flex align-items-center">
               <form th:action="@{/clientRemoveNotification/{id}(id = ${notification.id})}" method="POST" class="me-2 d-flex align-items-center">
                 <input type="hidden" name="_method" value="DELETE">
-                <button class="submit btn-close" aria-label="Close"></button>
+                <button th:id="'close-' + ${notification.id}" class="submit btn-close" aria-label="Close"></button>
               </form>
               <h3 class="card-title mb-0" th:text="${notification.category.name()}"></h3>
             </div>

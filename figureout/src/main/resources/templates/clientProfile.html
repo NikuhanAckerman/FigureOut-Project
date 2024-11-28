@@ -59,12 +59,12 @@
 </nav>
 <div class="sidebar">
     <ul class="list-unstyled">
-        <li><a th:href="@{/clientProfileGeneral/{id}(id = ${id})}">Informações gerais</a></li>
-        <li><a th:href="@{/clientProfileNotifications/{id}(id = ${id})}" th:text="'Notificações (' + ${notificationQuantity > 9 ? '9+' : notificationQuantity} + ')'"></a></li>
-        <li><a th:href="@{/clientProfilePurchases/{id}(id = ${id})}">Compras</a></li>
-        <li><a th:href="@{/clientProfileExchanges/{id}(id = ${id})}">Trocas</a></li>
-        <li><a th:href="@{/clientProfileAddresses/{id}(id = ${id})}">Endereços</a></li>
-        <li><a th:href="@{/clientProfileCreditCards/{id}(id = ${id})}">Cartões</a></li>
+        <li><a id="generalInfo" th:href="@{/clientProfileGeneral/{id}(id = ${id})}">Informações gerais</a></li>
+        <li><a id="notifications" th:href="@{/clientProfileNotifications/{id}(id = ${id})}" th:text="'Notificações (' + ${notificationQuantity > 9 ? '9+' : notificationQuantity} + ')'"></a></li>
+        <li><a id="purchases" th:href="@{/clientProfilePurchases/{id}(id = ${id})}">Compras</a></li>
+        <li><a id="exchanges" th:href="@{/clientProfileExchanges/{id}(id = ${id})}">Trocas</a></li>
+        <li><a id="addresses" th:href="@{/clientProfileAddresses/{id}(id = ${id})}">Endereços</a></li>
+        <li><a id="creditCards" th:href="@{/clientProfileCreditCards/{id}(id = ${id})}">Cartões</a></li>
 
         <li><a th:href="@{/products/shop}">Loja</a></li>
     </ul>
