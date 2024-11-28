@@ -45,7 +45,7 @@ class ProductFormTest(unittest.TestCase):
         click_button(self, "filterClients")
 
         # Espera alguns segundos para antes de fechar o browser.
-        time.sleep(3)
+        time.sleep(4)
 
     def tearDown(self):
         # Fecha o browser

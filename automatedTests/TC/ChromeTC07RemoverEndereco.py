@@ -32,9 +32,17 @@ class ProductFormTest(unittest.TestCase):
         # select_option(self, id, valor): Seleciona opção de um menu dropdown.
         # send_image(self, id, pasta, arquivo): Envia uma imagem.
         
-        # Informações gerais.
-        click_button(self, "deleteClient-11")
+        # Clica no botão de "Ver endereços".
+        click_button(self, "seeAddresses-1")
         time.sleep(1)
+        
+        # Clica no botão de colapsar.
+        click_button(self, "addressCollapse-12")
+        time.sleep(1)
+
+        # Clica no botão de "Deletar".
+        click_button(self, "deleteAddress-12")
+        time.sleep(2)
 
         # Confirma no alerta "Tem certeza?"
         accept_confirm_box(self)

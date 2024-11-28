@@ -77,6 +77,31 @@ class ProductFormTest(unittest.TestCase):
                 # Imprime no console
                 print("Cartão de crédito do cliente de ID " + str(i) + " criado!")
 
+        # CRIAÇÃO DO CARTÃO DE CRÉDITO PARA O CLIENTE DE ID=1 PARA FUNCIONAR TESTE DE COMPRA.
+        # Clica no botão de "Ver cartões"
+        click_button(self, "seeCreditCards-1")
+        
+        # Clica no botão "Adicionar cartão"
+        click_button(self, "addCreditCardButton")
+
+        # Preenche o número do cartão
+        input_string(self, "cardNumber", "5169343132105354")
+
+        # Preenche o apelido
+        input_string(self, "nickname", "Itaú")
+
+        # Preenche o nome impresso
+        input_string(self, "printedName", "Otavio M")
+
+        # Seleciona a bandeira do cartão
+        select_option(self, "brand", "MasterCard")
+
+        # Preenche o CVV
+        input_string(self, "securityCode", "682")
+
+        # Clica no botão "Criar"
+        click_button(self, "createButton")
+
     def tearDown(self):
         # Fecha o browser
         self.driver.quit()

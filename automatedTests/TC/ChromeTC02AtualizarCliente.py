@@ -52,7 +52,7 @@ class ProductFormTest(unittest.TestCase):
         time.sleep(1)
 
         blank_field(self, "birthday")
-        input_string(self, "birthday", "21-03-2004")
+        input_string(self, "birthday", "18-03-2004")
         time.sleep(1)
 
         blank_field(self, "cpf")

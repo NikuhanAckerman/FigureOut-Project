@@ -13,12 +13,12 @@ from ChromeSeleniumFunctions import *
 
 class ProductFormTest(unittest.TestCase):
     def setUp(self):
-        # Configura as opções do Chrome.
+        # Configura as opções do Chrome
         chrome_options = Options()
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
 
-        # Iniciliza o WebDriver.
+        # Iniciliza o WebDriver
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         self.driver.get("http://localhost:8080/showAllClients")
 
@@ -32,15 +32,24 @@ class ProductFormTest(unittest.TestCase):
         # select_option(self, id, valor): Seleciona opção de um menu dropdown.
         # send_image(self, id, pasta, arquivo): Envia uma imagem.
         
-        # Informações gerais.
-        click_button(self, "deleteClient-11")
+        ## ATUALIZAÇÃO DE ENDEREÇO
+        # Clica no botão de "Ver endereços".
+        click_button(self, "seeCreditCards-1")
+        time.sleep(1)
+        
+        # Clica no botão de colapsar.
+        click_button(self, "creditCardCollapse-12")
         time.sleep(1)
 
+        # Clica no botão de "Deletar".
+        click_button(self, "deleteCreditCard-12")
+        time.sleep(1)
+        
         # Confirma no alerta "Tem certeza?"
         accept_confirm_box(self)
-
-        # Espera alguns segundos para antes de fechar o browser.
-        time.sleep(5)
+        
+        # Espera alguns segundos para o resultado.
+        time.sleep(4)
 
     def tearDown(self):
         # Fecha o browser
