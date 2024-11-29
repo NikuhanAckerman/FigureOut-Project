@@ -26,6 +26,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/sales")
@@ -385,6 +386,15 @@ public class SaleController {
             if(currentCartProduct.getProductQuantity() >= stock.getProductQuantityAvailable()) {
                 productService.inactivateProduct(stock.getProduct());
             }
+
+            if(currentCartProduct.getProductQuantity() > stock.getProductQuantityAvailable()) {
+                errors.add("O produto " + currentCartProduct.getProduct().getName() + " só tem " + stock.getProductQuantityAvailable() + " unidades disponíveis para compra.");
+            }
+
+            if(!currentCartProduct.getProduct().isActive()) {
+                errors.add("O produto " + currentCartProduct.getProduct().getName() + " está atualmente inativo para compras.");
+            }
+
         }
 
         stockService.dropInStockList(cartProductQuantityToRemove);

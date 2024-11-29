@@ -20,7 +20,7 @@ public class Stock {
     @Column(name = "est_id")
     private long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "est_pro_id")
     @JsonIgnore
     private Product product;
@@ -31,14 +31,21 @@ public class Stock {
     @Column(name = "est_valor_custo")
     private BigDecimal productPurchaseAmount;
 
-    @ManyToOne
-    @JoinColumn(name = "est_for_id") // Foreign key for the Supplier
-    private Supplier supplier;
+    @ManyToMany
+    @JoinTable(
+            name = "EstoqueFornecedores",
+            joinColumns = @JoinColumn(name = "est_id"),
+            inverseJoinColumns = @JoinColumn(name = "for_id")
+    )
+    private List<Supplier> supplier;
 
-    @Column(name = "est_data_entrada_inicial")
-    private LocalDate initialEntryDate;
+    @Column(name = "est_datahora_entrada_inicial")
+    private LocalDateTime initialEntryDate;
 
-    @Column(name = "est_data_entrada_ultimo_produto")
-    private LocalDate latestEntryDate;
+    @Column(name = "est_datahora_entrada_ultimo_produto")
+    private LocalDateTime latestEntryDate;
+
+    @Column(name = "est_datahora_saida_ultimo_produto")
+    private LocalDateTime latestDropDate;
 
 }

@@ -183,7 +183,10 @@
                           <div th:each="exchangeCartProduct : ${productIdExchangeInfo[cartProduct.id]}">
                             <span class="badge bg-warning text-dark" th:text="'Código da troca: ' + ${exchangeCartProduct.exchangeCode}"></span>
                             <span class="badge bg-warning text-dark" th:text="' Status da troca: ' + ${exchangeCartProduct.status}"></span>
-                            <span class="badge bg-warning text-dark" th:text="'Devolvido: ' + ${exchangeCartProduct.quantityReturned}"></span>
+                            <span class="badge bg-warning text-dark" th:text="${exchangeCartProduct.status.name()} == 'TROCA_RECEBIDA' or ${exchangeCartProduct.status.name()} == 'TROCA_FINALIZADA'?
+                            'Devolvido: ' + ${exchangeCartProduct.quantityReturned} :
+                            'Devolvendo: ' + ${exchangeCartProduct.quantityReturned}"
+                            ></span>
                           </div>
                         </div>
                       </div>

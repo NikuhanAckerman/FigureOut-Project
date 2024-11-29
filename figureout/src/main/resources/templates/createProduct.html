@@ -26,6 +26,9 @@
                 <div class="card-header">
                     <h3>Informações Gerais</h3>
                 </div>
+
+                <p class="text-danger" th:errors="*"></p>
+
                 <div class="card-body">
                     <!-- Ativo checkbox -->
                     <div>
@@ -35,8 +38,8 @@
 
                     <!-- Razão para inativação -->
                     <div id="inactiveProductReason" style="display:none;">
-                        <label for="reasonForInactivation"><b>Razão para inativação?</b></label>
-                        <input type="text" class="form-control" th:field="*{reasonForInactivation}" id="reasonForInactivation">
+                        <label for="reasonForInactivationOrActivation"><b>Razão para inativação/ativação?</b></label>
+                        <input type="text" class="form-control" th:field="*{reasonForInactivationOrActivation}" id="reasonForInactivationOrActivation">
                     </div>
 
                     <!-- Nome do produto -->
@@ -46,7 +49,6 @@
                     <!-- Descrição do produto -->
                     <label><b>Descrição</b></label>
                     <textarea class="form-control" id="description" placeholder="Insira uma descrição para o produto (opcional)" rows="2" th:field="*{description}"></textarea>
-
 
                     <!-- Dimensões do produto -->
                     <div class="row">
@@ -69,6 +71,7 @@
                             <label><b>Peso (g)</b></label>
                             <input type="number" class="form-control" id="weight" step="0.01" min="0" placeholder="0,0" th:field="*{weight}" required>
                         </div>
+
                     </div>
 
                     <!-- Categorias do produto -->
@@ -93,6 +96,7 @@
                                     <option selected value="0">Selecione um grupo de precificação</option>
                                     <option th:each="pricingGroup : ${pricingGroupList}" th:value="${pricingGroup.id}" th:text="${pricingGroup.name} + ' (' + ${pricingGroup.percentage * 100} + '%)'"></option>
                                 </select>
+
                             </div>
                         </div>
 
@@ -112,7 +116,7 @@
 
                         <div class="col-12 col-md-6">
                             <label><b>Data de entrada em estoque</b></label>
-                            <input type="date" class="form-control" id="entryInStockDate" placeholder="Insira a data de entrada do produto no estoque" th:field="*{stockDTO.entryInStockDate}" required>
+                            <input type="datetime-local" class="form-control" id="entryInStockDate" placeholder="Insira a data de entrada do produto no estoque" th:field="*{stockDTO.entryInStockDate}" required>
                         </div>
                     </div>
 
@@ -121,7 +125,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label><b>Fornecedor</b></label>
-                                <select class="form-control" id="supplier" th:field="*{supplier}">
+                                <select multiple class="form-control" id="supplier" th:field="*{stockDTO.supplier}">
                                     <option selected value="0">Selecione um fornecedor</option>
                                     <option th:each="supplier : ${supplierList}" th:value="${supplier.id}" th:text="${supplier.name}"></option>
                                 </select>
@@ -170,11 +174,14 @@
 </footer>
 
 <script>
+    let valueCheckbox = document.getElementById('activeCheckbox').checked;
+    console.log(valueCheckbox)
+
     document.getElementById('activeCheckbox').addEventListener('change', function() {
         var inputContainer = document.getElementById('inactiveProductReason');
 
-        // Show the input field if checkbox is unchecked (meaning inactive)
-        if (!this.checked) {
+
+        if (this.checked !== valueCheckbox) {
             inputContainer.style.display = 'block';
         } else {
             inputContainer.style.display = 'none';

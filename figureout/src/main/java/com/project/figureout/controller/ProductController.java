@@ -11,11 +11,13 @@ import jakarta.persistence.Column;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -94,12 +96,31 @@ public class ProductController {
     }
 
     @PostMapping("/createProduct")
-    public String createProduct(@ModelAttribute ProductDTO productDTO, Model model) throws IOException {
+    public String createProduct(@Valid @ModelAttribute ProductDTO productDTO, BindingResult result, Model model) throws IOException {
+
+        if(result.hasErrors()) {
+            List<Category> categoryList = productService.getAllCategories();
+            List<PricingGroup> pricingGroupList = productService.getAllPricingGroups();
+            List<Supplier> supplierList = supplierRepository.findAll();
+            List<Manufacturer> manufacturerList = manufacturerService.getAllManufacturers();
+            List<Size> sizeList = sizeService.getAllSizes();
+
+            model.addAttribute("categoryList", categoryList);
+            model.addAttribute("pricingGroupList", pricingGroupList);
+            model.addAttribute("supplierList", supplierList);
+            model.addAttribute("manufacturerList", manufacturerList);
+            model.addAttribute("sizeList", sizeList);
+
+            return "createProduct";
+        }
+
         Product product = new Product();
         Stock stock = new Stock();
 
         productService.productDataSetter(product, productDTO);
         System.out.println(product.getName());
+
+        productDTO.getStockDTO().setLatestEntryDate(productDTO.getStockDTO().getEntryInStockDate());
 
         stockService.productInStockDataSetter(stock, product, productDTO);
         stockService.saveProductInStock(stock);
@@ -138,7 +159,7 @@ public class ProductController {
 
     @GetMapping("/shop")
     public String showShop(Model model) {
-        List<Product> products =  productService.getAllProducts();
+        List<Product> products =  productService.getAllActiveProducts();
         Client client = clientService.getClientById(clientNavigator.getInstance().getClientId());
         int notificationQuantity = notificationService.getClientNotifications(client.getId()).size();
 
@@ -153,7 +174,6 @@ public class ProductController {
     public String showSpecificProduct(@PathVariable Long id, Model model) {
         Product product = productService.getProductById(id);
         Stock stock = stockService.getProductInStockByProductId(id);
-        List<Category> productCategoryList = product.getCategories();
         Client client = clientService.getClientById(clientNavigator.getInstance().getClientId());
         int notificationQuantity = notificationService.getClientNotifications(client.getId()).size();
         model.addAttribute("clientId", client.getId());
@@ -172,6 +192,7 @@ public class ProductController {
         List<Supplier> supplierList = supplierRepository.findAll();
 
         ProductDTO productDTO = new ProductDTO();
+        productDTO.setProductId(product.getId());
         productDTO.setStockDTO(new StockDTO());
 
         productService.populateProductDTO(productDTO, product);
@@ -193,15 +214,27 @@ public class ProductController {
     }
 
     @PutMapping("/updateProduct/{id}")
-    public String updateProductPut(@PathVariable Long id, @ModelAttribute ProductDTO productDTO, Model model) throws IOException {
+    public String updateProductPut(@PathVariable Long id, @Valid @ModelAttribute ProductDTO productDTO, BindingResult result, Model model) throws IOException {
+        if(result.hasErrors()) {
+            List<Supplier> supplierList = supplierRepository.findAll();
+            List<Category> categoryList = productService.getAllCategories();
+            List<PricingGroup> pricingGroupList = productService.getAllPricingGroups();
+            List<Manufacturer> manufacturerList = manufacturerService.getAllManufacturers();
+            List<Size> sizeList = sizeService.getAllSizes();
+
+            model.addAttribute("productId", id);
+            model.addAttribute("categoryList", categoryList);
+            model.addAttribute("pricingGroupList", pricingGroupList);
+            model.addAttribute("supplierList", supplierList);
+            model.addAttribute("manufacturerList", manufacturerList);
+            model.addAttribute("sizeList", sizeList);
+
+            return "updateProduct";
+        }
+
         Product product = productService.getProductById(id);
 
         productService.updateProduct(product, productDTO);
-
-        Stock stock = product.getStocks().getLast();
-        System.out.println(stock.getProductQuantityAvailable());
-        stockService.changeStock(stock, product, productDTO);
-        System.out.println(stock.getProductQuantityAvailable());
 
         //chatGptService.updateProduct(product.getId(), product);
 
@@ -218,6 +251,12 @@ public class ProductController {
     @ResponseBody
     public Product getProductGeneralInfo(@PathVariable Long id) {
         return productService.getProductById(id);
+    }
+
+    @GetMapping("/getProductActivationInfo/{id}")
+    @ResponseBody
+    public List<ProductsActivation> getProductActivationInfo(@PathVariable Long id) {
+        return productService.getProductById(id).getProductActivations();
     }
 
     // Filtro de produtos no CRUD de produtos

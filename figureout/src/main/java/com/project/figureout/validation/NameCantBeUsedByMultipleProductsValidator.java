@@ -27,6 +27,20 @@ public class NameCantBeUsedByMultipleProductsValidator implements ConstraintVali
 
             List<Product> productList = productService.getAllProducts();
 
+            if(productDTO.getProductId() != 0) { // if its an update
+                Product product = productService.getProductById(productDTO.getProductId());
+
+                for(Product currentProduct : productList) {
+
+                    if(productDTO.getName().equals(currentProduct.getName()) && !currentProduct.equals(product)) {
+                        return false;
+                    }
+
+                }
+
+                return true;
+            }
+
             for(Product currentProduct : productList) {
 
                 if(productDTO.getName().equals(currentProduct.getName())) {
@@ -34,7 +48,6 @@ public class NameCantBeUsedByMultipleProductsValidator implements ConstraintVali
                 }
 
             }
-
 
             return true;
         }

@@ -31,19 +31,28 @@ public class ProductService {
     private StockRepository stockRepository;
 
     @Autowired
-    private InactiveProductsRepository inactiveProductsRepository;
-
-    @Autowired
-    private ActiveProductsRepository activeProductsRepository;
-
-    @Autowired
     private ManufacturerRepository manufacturerRepository;
 
     @Autowired
     private SizeRepository sizeRepository;
 
+    @Autowired
+    private ProductsActivationRepository productsActivationRepository;
+
     public List<Product> getAllProducts() {
         return productRepository.findAll();
+    }
+
+    public List<Product> getAllActiveProducts() {
+        List<Product> allProducts = getAllProducts();
+        List<Product> activeProducts = new ArrayList<>();
+
+        for(Product product : allProducts) {
+            if(product.isActive()) {
+                activeProducts.add(product);
+            }
+        }
+        return activeProducts;
     }
 
     public Product getProductById(long id) {
@@ -68,7 +77,6 @@ public class ProductService {
 
     public void productDataSetter(Product product, ProductDTO productDTO) {
         System.out.println("calling product data setter");
-        product.setActive(productDTO.isActive());
         product.setName(productDTO.getName());
         product.setDescription(productDTO.getDescription());
         product.setHeight(productDTO.getHeight());
@@ -92,21 +100,24 @@ public class ProductService {
 
         saveProduct(product);
 
-        if(!product.isActive()) {
-            InactiveProducts inactiveProduct = new InactiveProducts();
-            inactiveProduct.setProduct(product);
-            inactiveProduct.setDateTimeInactivation(now);
-            inactiveProduct.setReasonForInactivation(productDTO.getReasonForInactivation());
+        if(product.isActive() != productDTO.isActive()) {
 
-            inactiveProductsRepository.save(inactiveProduct);
-        } else {
-            ActiveProducts activeProduct = new ActiveProducts();
-            activeProduct.setProduct(product);
-            activeProduct.setDateTimeActivation(now);
-            activeProduct.setReasonForActivation("Produto ativado quando registrado ao sistema.");
+            ProductsActivation productsActivation = new ProductsActivation();
+            productsActivation.setActive(productDTO.isActive());
+            productsActivation.setReason(productDTO.getReasonForInactivationOrActivation());
+            productsActivation.setDateTime(now);
+            productsActivation.setProduct(product);
+            productsActivation.setCategory(ProductActivationEnum.OUTRA_RAZAO);
+            productsActivationRepository.save(productsActivation);
 
-            activeProductsRepository.save(activeProduct);
+            product.getProductActivations().add(productsActivation);
+
+            productRepository.save(product);
+
         }
+
+        product.setActive(productDTO.isActive());
+        saveProduct(product);
 
         product.setManufacturer(manufacturerRepository.findById(productDTO.getManufacturer()).orElseThrow(() -> new NoSuchElementException("Fabricante não encontrada.")));
         product.setSize(sizeRepository.findById(productDTO.getSize()).orElseThrow(() -> new NoSuchElementException("Tamanho de produto não encontrado.")));
@@ -144,20 +155,22 @@ public class ProductService {
         productDTO.setPurchaseAmount(product.getPurchaseAmount());
 
         List<Long> productCategoryIdList = product.getCategories().stream()
-                .map(Category::getId)  // Map each Category to its id
-                .collect(Collectors.toList());  // Collect the IDs into a list
+                .map(Category::getId)
+                .collect(Collectors.toList());
 
         productDTO.setCategoriesIds(productCategoryIdList);
         productDTO.setPricingGroup(product.getPricingGroup().getId());
         productDTO.setPrice(product.getPrice());
+        //productDTO.getStockDTO().setEntryInStockDate(product.getStock().getInitialEntryDate());
 
         //byte[] productImage = product.getPicture();
 
-        Stock stock = stockRepository.findByProductId(product.getId());
+        //Stock stock = stockRepository.findAllByProductId(product.getId()).getLast();
 
-        productDTO.getStockDTO().setProductQuantityAvailable(stock.getProductQuantityAvailable());
-        productDTO.getStockDTO().setEntryInStockDate(stock.getInitialEntryDate());
-        productDTO.setSupplier(stock.getSupplier().getId());
+        //productDTO.getStockDTO().setProductQuantityAvailable(stock.getProductQuantityAvailable());
+        //productDTO.getStockDTO().setEntryInStockDate(stock.getInitialEntryDate());
+        //productDTO.getStockDTO().setLatestEntryDate(stock.getLatestEntryDate());
+        //productDTO.setSupplier(stock.getSupplier().getId());
         productDTO.setManufacturer(product.getManufacturer().getId());
         productDTO.setSize(product.getSize().getId());
 

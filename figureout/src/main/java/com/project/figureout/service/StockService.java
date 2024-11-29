@@ -9,10 +9,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class StockService {
@@ -26,26 +24,53 @@ public class StockService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private StockHistoryRepository stockHistoryRepository;
+
+    @Autowired
+    private ProductsActivationRepository productsActivationRepository;
+
+    public Stock getStockById(long id) {
+        return stockRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Estoque não encontrado com base no ID."));
+    }
+
     public List<Stock> getAllProductsInStock() {
         return stockRepository.findAll();
     }
 
-    public Stock getProductInStockById(long id) {
-        return stockRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Produto não encontrado no estoque com base no ID."));
-    }
-
     public Stock getProductInStockByProductId(long id) {
-        return stockRepository.findByProductId(id);
-    }
-
-    public void deleteProductInStockById(long id) {
-        stockRepository.deleteById(id); // add exception throwing to this later, apparently this doesnt throw EmptyResultDataAccessException anymore
+        return stockRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Produto não encontrado em estoque."));
     }
 
     public void dropStockAmountByProductId(long id, int amount) {
-        Stock stock = getProductInStockById(id);
+        Stock stock = getProductInStockByProductId(id);
 
         stock.setProductQuantityAvailable(stock.getProductQuantityAvailable() - amount);
+    }
+
+    public List<Supplier> getAllSuppliers() {
+        return supplierRepository.findAll();
+    }
+
+    public List<Supplier> getSupplierByListOfIds(List<Long> idList) {
+        return supplierRepository.findAllById(idList);
+    }
+
+    public List<StockHistory> getStockHistoryByStockId(long id) {
+        Stock stock = getStockById(id);
+
+        List<StockHistory> stockHistoryList = new ArrayList<>();
+
+        for(StockHistory stockHistory: stockHistoryRepository.findAll()) {
+
+            if(stockHistory.getStock().getId() == id) {
+                stockHistoryList.add(stockHistory);
+            }
+
+        }
+
+        return stockHistoryList;
+
     }
 
     public void saveProductInStock(Stock stock) {
@@ -54,27 +79,52 @@ public class StockService {
 
     public void productInStockDataSetter(Stock stock, Product product, ProductDTO productDTO) {
 
-        stock.setSupplier(supplierRepository.findById(productDTO.getSupplier()).orElseThrow(() -> new NoSuchElementException("Fornecedor não encontrado.")));
+        stock.setSupplier(getSupplierByListOfIds(productDTO.getStockDTO().getSupplier()));
         stock.setProductQuantityAvailable(productDTO.getStockDTO().getProductQuantityAvailable());
         stock.setProductPurchaseAmount(product.getPurchaseAmount());
 
         stock.setInitialEntryDate(productDTO.getStockDTO().getEntryInStockDate());
+        stock.setLatestEntryDate(productDTO.getStockDTO().getLatestEntryDate());
 
         stock.setProduct(product);
 
-        product.getStocks().add(stock);
-
-    }
-
-    public void changeStock(Stock stock, Product product, ProductDTO productDTO) {
-        stock.setProductQuantityAvailable(productDTO.getStockDTO().getProductQuantityAvailable());
-        saveProductInStock(stock);
     }
 
     public void dropInStock(Stock stock, int quantity) {
 
+        StockHistory stockHistory = new StockHistory();
+        stockHistory.setDateChangeOfStockQuantity(LocalDateTime.now());
+        stockHistory.setSupplier(getSupplierByListOfIds(stock.getSupplier().stream().map(Supplier::getId).collect(Collectors.toList())));
+        stockHistory.setProductQuantityAvailablePreviously(stock.getProductQuantityAvailable());
+        stockHistory.setStock(stock);
+
         stock.setProductQuantityAvailable(stock.getProductQuantityAvailable() - quantity);
+        stock.setLatestDropDate(LocalDateTime.now());
+
+        stockHistory.setProductQuantityAvailable(stock.getProductQuantityAvailable());
+        stockHistoryRepository.save(stockHistory);
+
         saveProductInStock(stock);
+
+        if(stock.getProductQuantityAvailable() <= 0) {
+            Product product = stock.getProduct();
+
+            if(product.isActive()) {
+                ProductsActivation productsActivation = new ProductsActivation();
+                productsActivation.setActive(false);
+                productsActivation.setReason("Produto inativado por estar fora de estoque.");
+                productsActivation.setDateTime(LocalDateTime.now());
+                productsActivation.setProduct(product);
+                productsActivation.setCategory(ProductActivationEnum.FORA_DE_MERCADO);
+                productsActivationRepository.save(productsActivation);
+
+                product.getProductActivations().add(productsActivation);
+                product.setActive(productsActivation.isActive());
+
+                productRepository.save(product);
+            }
+
+        }
 
     }
 
@@ -91,7 +141,20 @@ public class StockService {
     }
 
     public void addInStock(Stock stock, int quantity) {
+
+        StockHistory stockHistory = new StockHistory();
+        stockHistory.setDateChangeOfStockQuantity(LocalDateTime.now());
+        stockHistory.setSupplier(getSupplierByListOfIds(stock.getSupplier().stream().map(Supplier::getId).collect(Collectors.toList())));
+        stockHistory.setStock(stock);
+        stockHistory.setProductQuantityAvailablePreviously(stock.getProductQuantityAvailable());
+
         stock.setProductQuantityAvailable(stock.getProductQuantityAvailable() + quantity);
+        stock.setLatestEntryDate(LocalDateTime.now());
+
+        stockHistory.setProductQuantityAvailable(stock.getProductQuantityAvailable());
+        stockHistoryRepository.save(stockHistory);
+
+        saveProductInStock(stock);
     }
 
     public void addInStockList(HashMap<Stock, Integer> stockProductsQuantityAdd) {

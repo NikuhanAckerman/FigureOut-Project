@@ -51,6 +51,9 @@ public class Product {
     )
     private List<Category> categories;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<ProductsActivation> productActivations = new ArrayList<>();
+
     @ManyToOne
     @JoinColumn(name = "pro_gdp_id")
     private PricingGroup pricingGroup;
@@ -71,13 +74,7 @@ public class Product {
     @JoinColumn(name = "pro_tam_id")
     private Size size;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Stock> stocks = new ArrayList<>();
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ActiveProducts> activeProducts = new ArrayList<>();
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<InactiveProducts> inactiveProducts = new ArrayList<>();
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Stock stock;
 
 }

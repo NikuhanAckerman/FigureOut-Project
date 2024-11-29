@@ -3,6 +3,8 @@ package com.project.figureout.dto;
 import com.project.figureout.model.Category;
 import com.project.figureout.model.Manufacturer;
 import com.project.figureout.model.PricingGroup;
+import com.project.figureout.validation.NameCantBeUsedByMultipleProducts;
+import com.project.figureout.validation.ProductPriceMustBeHigherThanPurchaseAmount;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -17,13 +19,16 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Getter @Setter
+@NameCantBeUsedByMultipleProducts
+@ProductPriceMustBeHigherThanPurchaseAmount
 public class ProductDTO {
+
+    private long productId;
 
     @NotNull
     private boolean active = true;
 
-    @NotBlank(message = "A razão para inativação do produto não pode estar em branco.")
-    private String reasonForInactivation;
+    private String reasonForInactivationOrActivation;
 
     @NotBlank(message = "O nome do produto não pode estar em branco.")
     private String name;
