@@ -13,9 +13,9 @@ def run_script(script_name):
 
 # Lista dos scripts a serem executados
 scripts = [
-    os.path.join('Starters', 'ChromeCreateTonsOfClients.py'),
-    os.path.join('Starters', 'ChromeCreate10CreditCards.py'),
-    os.path.join('Starters', 'ChromeCreateProducts.py')
+    'ChromeCreateTonsOfClients.py',
+    'ChromeCreate10CreditCards.py',
+    'ChromeCreateProducts.py'
 ]
 
 # Executa os scripts na ordem

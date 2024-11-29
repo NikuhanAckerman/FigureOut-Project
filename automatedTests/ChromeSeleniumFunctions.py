@@ -7,6 +7,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import Select
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support.ui import WebDriverWait
 
 # Função para a seleção de botão de rádio pelo ID.
 def select_radio(self, radio_id, value):
@@ -19,9 +20,20 @@ def click_button(self, element_id):
     element = self.driver.find_element(By.ID, element_id)
     self.driver.execute_script("arguments[0].click();", element)
 
+# Clica em "OK" de uma caixa de confirmação.
+def accept_confirm_box(self):
+    wait = WebDriverWait(self.driver, timeout=2)
+    alert = wait.until(lambda d : d.switch_to.alert)
+    text = alert.text
+    alert.accept()
+
 # Envia uma string em uma caixa de texto.
 def input_string(self, element_id, value):
     self.driver.find_element(By.ID, element_id).send_keys(value)
+
+# Função para apagar uma string de um campo.
+def blank_field(self, element_id):
+    self.driver.find_element(By.ID, element_id).clear()
     
 # Checa uma checkbox (com javascript) e verifica se já está selecionada.
 def check_checkbox(self, element_id):

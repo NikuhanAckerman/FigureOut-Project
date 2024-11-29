@@ -47,7 +47,7 @@
                 <label><b>Data de expiração do cupom</b></label>
                 <input type="date" class="form-control" id="expirationDate" placeholder="Insira a data de expiração do cupom" th:field="*{couponExpirationDate}" required>
 
-                <button class="btn btn-primary" type="submit" onclick="confirm('Tem certeza?')">Criar cupom promocional</button>
+                <button class="btn btn-primary" id="createCoupon" type="submit">Criar cupom promocional</button>
                 <a class="btn btn-danger" id="seeProfile" th:href="@{/coupons/}">Voltar à página de cupons</a>
 
             </form>

@@ -25,7 +25,7 @@
         <input type="hidden" name="_method" value="PUT"/>
         <label><b>Novo saldo</b></label>
         <input type="number" class="form-control" id="balance" step="0.01" min="0" placeholder="R$0,00" th:field="*{balance}" required>
-        <button type="submit" class="btn btn-success " id="updateBalanceCreditCard" onclick="return confirm('Tem certeza?')">Atualizar</button>
+        <button type="submit" class="btn btn-success " id="updateBalanceCreditCard">Atualizar</button>
         <a class="btn btn-danger add-delete-button" th:href="@{/showAllClients}">Voltar</a>
     </form>
 </div>

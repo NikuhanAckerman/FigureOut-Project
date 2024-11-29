@@ -36,7 +36,7 @@
 
     <h1 class="mb-4">Cupons Promocionais</h1>
 
-    <a class="btn btn-primary mb-3" th:href="@{/coupons/createPromotionalCoupon/}">Adicionar cupom promocional</a>
+    <a class="btn btn-primary" id="addCoupon" th:href="@{/coupons/createPromotionalCoupon/}">Adicionar cupom promocional</a>
 
     <table class="table table-striped table-hover">
         <thead class="table-dark">
@@ -55,8 +55,8 @@
                 <form th:action="@{/coupons/changePromotionalCouponCode/{promotionalCouponId}(promotionalCouponId = ${promotionalCoupon.id})}" th:object="${changePromotionalCouponCodeDTO}" method="POST">
                     <input type="hidden" name="_method" value="PUT">
                     <label><b>Alterar código do cupom</b></label>
-                    <input th:id="inputPromotionalCode + ${promotionalCoupon.id}" class="form-group" type="text" th:field="*{couponCode}" required>
-                    <button th:id="changePromotionalCode + ${promotionalCoupon.id}" class="btn btn-danger" type="submit">Mudar</button>
+                    <input th:id="inputPromotionalCode- + ${promotionalCoupon.id}" class="form-group" type="text" th:field="*{couponCode}" required>
+                    <button th:id="changePromotionalCode- + ${promotionalCoupon.id}" class="btn btn-danger" type="submit">Mudar</button>
                 </form>
             </td>
             <td>
@@ -64,8 +64,8 @@
                 <form th:action="@{/coupons/changePromotionalCouponDiscount/{promotionalCouponId}(promotionalCouponId = ${promotionalCoupon.id})}" th:object="${changePromotionalCouponDiscountDTO}" method="POST">
                     <input type="hidden" name="_method" value="PUT">
                     <label><b>Alterar desconto (digite um valor de 1 a 100)</b></label>
-                    <input th:id="inputPromotionalDiscount + ${promotionalCoupon.id}" class="form-group" type="number" step="0.01" min="1" th:field="*{discount}" required>
-                    <button th:id="changePromotionalDiscount + ${promotionalCoupon.id}" class="btn btn-danger" type="submit">Mudar</button>
+                    <input th:id="inputPromotionalDiscount- + ${promotionalCoupon.id}" class="form-group" type="number" step="0.01" min="1" th:field="*{discount}" required>
+                    <button th:id="changePromotionalDiscount- + ${promotionalCoupon.id}" class="btn btn-danger" type="submit">Mudar</button>
                 </form>
             </td>
             <td>
@@ -73,8 +73,8 @@
                 <form th:action="@{/coupons/changePromotionalCouponExpirationDate/{promotionalCouponId}(promotionalCouponId = ${promotionalCoupon.id})}" th:object="${changePromotionalCouponExpirationDateDTO}" method="POST">
                     <input type="hidden" name="_method" value="PUT">
                     <label><b>Alterar data de validade</b></label>
-                    <input th:id="inputPromotionalDate + ${promotionalCoupon.id}" class="form-group" type="date" th:field="*{expirationDate}" required>
-                    <button th:id="changePromotionalDate + ${promotionalCoupon.id}" class="btn btn-danger" type="submit">Mudar</button>
+                    <input th:id="inputPromotionalDate- + ${promotionalCoupon.id}" class="form-group" type="date" th:field="*{expirationDate}" required>
+                    <button th:id="changePromotionalDate- + ${promotionalCoupon.id}" class="btn btn-danger" type="submit">Mudar</button>
                 </form>
             </td>
         </tr>

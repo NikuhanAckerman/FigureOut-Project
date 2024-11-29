@@ -32,7 +32,7 @@
 
 			<!--BOTÃO DE FILTRAR -->
 
-			<a class="btn btn-outline-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+			<a class="btn btn-outline-primary" id="filterButton" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
 				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
 					<path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
 				</svg> Filtrar</a>
@@ -104,7 +104,7 @@
 								<label class="form-check-label" for="filterUnactive">Não ativo</label>
 							</div>
 						</div>
-							<button type="submit" class="btn btn-primary">Filtrar</button>
+							<button type="submit" id="filterClients" class="btn btn-primary">Filtrar</button>
 						</form>
 					</div>
 				</div>
@@ -145,7 +145,7 @@
 							<td th:text = "${client.cpf}"></td>
 							<td th:text = "${client.email}"></td>
 							<td>
-								<button type="button" class="btn btn-secondary" id="seeAddresses" th:data-bs-client-id = "${client.id}" data-bs-toggle="modal" data-bs-target="#seeAddressModal" >Ver endereços</button>
+								<button type="button" class="btn btn-secondary" th:id="'seeAddresses-' + ${client.id}" th:data-bs-client-id = "${client.id}" data-bs-toggle="modal" data-bs-target="#seeAddressModal" >Ver endereços</button>
 							</td>
 							<td>
 								<button type="button" class="btn btn-secondary" th:id="'seeCreditCards-' + ${client.id}" th:data-bs-client-id = "${client.id}" data-bs-toggle="modal" data-bs-target="#seeCreditCardModal" >Ver cartões</button>
@@ -158,13 +158,13 @@
 							</td>
 
 							<td>
-								<a class="btn btn-primary" th:href="@{/updateClient/{id}(id=${client.id})}">Atualizar</a>
+								<a class="btn btn-primary" th:id="'updateClient-' + ${client.id}" th:href="@{/updateClient/{id}(id=${client.id})}">Atualizar</a>
 							</td>
 
 							<td>
 								<form th:action="@{/deleteClient/{id}(id=${client.id})}" method="POST">
 									<input type="hidden" name="_method" value="DELETE"/>
-									<button type="submit" class="btn btn-danger btn-delete" onclick="return confirm('Tem certeza?')">Deletar</button>
+									<button type="submit" th:id="'deleteClient-' + ${client.id}" class="btn btn-danger btn-delete" onclick="return confirm('Tem certeza?')">Deletar</button>
 								</form>
 							</td>
 
@@ -273,7 +273,7 @@
 																<h3 class="card-title">ID: ${address.id}</h3>
 																<h4>${address.nickname}</h4
 																<button class="btn collapseAddress" data-bs-toggle="collapse"   data-bs-target="#addressInfo_${address.id}">
-																<button class="btn collapseAddress" data-bs-toggle="collapse" id="addressCollapse" data-bs-target="#addressInfo_${address.id}">
+																<button class="btn collapseAddress" data-bs-toggle="collapse" id="addressCollapse-${address.id}" data-bs-target="#addressInfo_${address.id}">
 																	<i class="bi bi-chevron-down"></i>
 																</button>
 																<div id="addressInfo_${address.id}" class="collapse">
@@ -292,10 +292,10 @@
 
 																	<form action="/deleteAddress/${address.id}" method="POST" style="display: inline;">
 																		<input type="hidden" name="_method" value="DELETE"/>
-																		<button type="submit" class="btn btn-danger btn-delete" id="deleteAddress" onclick="return confirm('Tem certeza?')">Deletar</button>
+																		<button type="submit" class="btn btn-danger btn-delete" id="deleteAddress-${address.id}" onclick="return confirm('Tem certeza?')">Deletar</button>
 																	</form>
 
-																	<a class="btn btn-primary updateAddressButton" id="updateAddress" data-bs-address-id="${address.id}" href="#">Atualizar</a>
+																	<a class="btn btn-primary updateAddressButton" id="updateAddress-${address.id}" data-bs-address-id="${address.id}" href="#">Atualizar</a>
 
 																</div>
 															</div>
@@ -373,7 +373,7 @@
 														<div class="card mt-3">
 															<div class="card-body">
 																<h3 class="card-title">ID: ${creditCard.id}</h3>
-																<button class="btn" data-bs-toggle="collapse" id="creditCardCollapse" data-bs-target="#creditCardInfo_${creditCard.id}">
+																<button class="btn" data-bs-toggle="collapse" id="creditCardCollapse-${creditCard.id}" data-bs-target="#creditCardInfo_${creditCard.id}">
 																	<i class="bi bi-chevron-down"></i>
 																</button>
 																<div id="creditCardInfo_${creditCard.id}" class="collapse">
@@ -388,14 +388,14 @@
 																	<p>Bandeira do cartão: ${creditCard.brand.name}</p>
 																	<p>Código de segurança: ${creditCard.securityCode}</p>
 																	<p>Saldo: R$${balance}</p>
-																	<a class="btn btn-success updateBalanceCreditCardButton" data-bs-creditCard-id="${creditCard.id}" id="updateBalanceCreditCard" href="#">Mudar saldo</a>
+																	<a class="btn btn-success updateBalanceCreditCardButton" data-bs-creditCard-id="${creditCard.id}" id="updateBalanceCreditCard-${creditCard.id}" href="#">Mudar saldo</a>
 
 																	<form action="index/${creditCard.id}/creditCards/delete" method="POST" style="display: inline;">
 																		<input type="hidden" name="_method" value="DELETE"/>
-																		<button type="submit" class="btn btn-danger btn-delete" id="deleteCreditCard" onclick="return confirm('Tem certeza?')">Deletar</button>
+																		<button type="submit" class="btn btn-danger btn-delete" id="deleteCreditCard-${creditCard.id}" onclick="return confirm('Tem certeza?')">Deletar</button>
 																	</form>
 
-																	<a class="btn btn-primary updateCreditCardButton" id="updateCreditCard" data-bs-creditCard-id="${creditCard.id}" href="#">Atualizar</a>
+																	<a class="btn btn-primary updateCreditCardButton" id="updateCreditCard-${creditCard.id}" data-bs-creditCard-id="${creditCard.id}" href="#">Atualizar</a>
 
 																</div>
 															</div>

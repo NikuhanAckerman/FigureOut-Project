@@ -235,7 +235,8 @@ public class AppInitializer implements CommandLineRunner {
                     new Manufacturer("Medicom"),
                     new Manufacturer("TakaraTomy"),
                     new Manufacturer("Kaiyodo"),
-                    new Manufacturer("Good Smile")
+                    new Manufacturer("Good Smile"),
+                    new Manufacturer("Nintendo")
             );
 
             manufacturerRepository.saveAll(manufacturerList);
