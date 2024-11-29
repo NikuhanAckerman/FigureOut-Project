@@ -25,14 +25,14 @@ TC16 - (Aplicar filtro de produtos)
 GRUPO: CUPOM PROMOCIONAL
 TC17 - Cadastrar Cupom promocional
 TC18 - Atualizar Cupom promocional
-TC19 - Remover Cupom promocional
+TC19 - (Remover Cupom promocional)
 
 GRUPO: TRANSAÇÕES
 TC20 - Comprar Produtos
 TC21 - Aprovar Compra
 TC22 - (Aplicar filtro na loja)
 TC23 - Trocar Produtos comprados
-TC24 - Aprovar Troca
+TC24 - (Aprovar Troca)
 
 GRUPO: PERFIL DE CLIENTE
 TC25 - Mostrar Senha em perfil de cliente
