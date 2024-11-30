@@ -39,7 +39,8 @@ public class ClientService {
     }
 
     public List<Sale> getClientSales(long clientId) {
-        return clientRepository.getSalesByClientId(clientId);
+        //return clientRepository.getSalesByClientId(clientId);
+        return null;
     }
 
     private void populateClientsAndSalesMap() {
