@@ -40,12 +40,12 @@ public class Stock {
     private List<Supplier> supplier;
 
     @Column(name = "est_datahora_entrada_inicial")
-    private LocalDateTime initialEntryDate;
+    private LocalDate initialEntryDate;
 
     @Column(name = "est_datahora_entrada_ultimo_produto")
-    private LocalDateTime latestEntryDate;
+    private LocalDate latestEntryDate;
 
     @Column(name = "est_datahora_saida_ultimo_produto")
-    private LocalDateTime latestDropDate;
+    private LocalDate latestDropDate;
 
 }

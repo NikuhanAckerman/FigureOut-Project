@@ -59,23 +59,23 @@ class ProductFormTest(unittest.TestCase):
         select_option(self, "categorySelect", "Amiibo")
         time.sleep(1)
         
-        #select_option(self, "pricingGroupSelect", "Bronze (10.00%)")
-        #time.sleep(1)
+        select_option(self, "pricingGroupSelect", "Bronze (10.00%)")
+        time.sleep(1)
 
         blank_field(self, "price")
         input_string(self, "price", "285.60")
         time.sleep(1)
 
-        blank_field(self, "productQuantityAvailable")
-        input_string(self, "productQuantityAvailable", "26")
-        time.sleep(1)
+        #blank_field(self, "productQuantityAvailable")
+        #input_string(self, "productQuantityAvailable", "26")
+        #time.sleep(1)
 
-        blank_field(self, "entryInStockDate")
-        input_string(self, "entryInStockDate", "07-10-2023")
-        time.sleep(1)
+        #blank_field(self, "entryInStockDate")
+        ##input_string(self, "entryInStockDate", "07-10-2023")
+        #time.sleep(1)
         
-        select_option(self, "supplier", "Fornecedor A")
-        time.sleep(1)
+        #select_option(self, "supplier", "Fornecedor A")
+        #time.sleep(1)
         
         select_option(self, "manufacturer", "Nintendo")
         time.sleep(1)

@@ -32,10 +32,10 @@ public class StockDTO {
 
     @PastOrPresent(message = "A data de entrada deve estar no passado ou no presente.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime entryInStockDate;
+    private LocalDate entryInStockDate;
 
     @PastOrPresent(message = "A data de entrada deve estar no passado ou no presente.")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime latestEntryDate;
+    private LocalDate latestEntryDate;
 
 }

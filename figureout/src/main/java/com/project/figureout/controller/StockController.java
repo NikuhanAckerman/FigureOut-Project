@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -154,14 +155,14 @@ public class StockController {
 
     @GetMapping("/getStockDateOfLastEntry/{stockId}")
     @ResponseBody
-    public LocalDateTime getStockDateOfLastEntry(@PathVariable long stockId) {
+    public LocalDate getStockDateOfLastEntry(@PathVariable long stockId) {
         Stock stock = stockService.getProductInStockByProductId(stockId);
         return stock.getLatestEntryDate();
     }
 
     @GetMapping("/getStockDateOfLastDrop/{stockId}")
     @ResponseBody
-    public LocalDateTime getStockDateOfLastDrop(@PathVariable long stockId) {
+    public LocalDate getStockDateOfLastDrop(@PathVariable long stockId) {
         Stock stock = stockService.getProductInStockByProductId(stockId);
         return stock.getLatestDropDate();
     }

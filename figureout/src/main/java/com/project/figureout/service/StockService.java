@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+//import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -93,13 +93,13 @@ public class StockService {
     public void dropInStock(Stock stock, int quantity) {
 
         StockHistory stockHistory = new StockHistory();
-        stockHistory.setDateChangeOfStockQuantity(LocalDateTime.now());
+        stockHistory.setDateChangeOfStockQuantity(LocalDate.now());
         stockHistory.setSupplier(getSupplierByListOfIds(stock.getSupplier().stream().map(Supplier::getId).collect(Collectors.toList())));
         stockHistory.setProductQuantityAvailablePreviously(stock.getProductQuantityAvailable());
         stockHistory.setStock(stock);
 
         stock.setProductQuantityAvailable(stock.getProductQuantityAvailable() - quantity);
-        stock.setLatestDropDate(LocalDateTime.now());
+        stock.setLatestDropDate(LocalDate.now());
 
         stockHistory.setProductQuantityAvailable(stock.getProductQuantityAvailable());
         stockHistoryRepository.save(stockHistory);
@@ -113,7 +113,7 @@ public class StockService {
                 ProductsActivation productsActivation = new ProductsActivation();
                 productsActivation.setActive(false);
                 productsActivation.setReason("Produto inativado por estar fora de estoque.");
-                productsActivation.setDateTime(LocalDateTime.now());
+                productsActivation.setDateTime(LocalDate.now().atStartOfDay());
                 productsActivation.setProduct(product);
                 productsActivation.setCategory(ProductActivationEnum.FORA_DE_MERCADO);
                 productsActivationRepository.save(productsActivation);
@@ -143,13 +143,13 @@ public class StockService {
     public void addInStock(Stock stock, int quantity) {
 
         StockHistory stockHistory = new StockHistory();
-        stockHistory.setDateChangeOfStockQuantity(LocalDateTime.now());
+        stockHistory.setDateChangeOfStockQuantity(LocalDate.now());
         stockHistory.setSupplier(getSupplierByListOfIds(stock.getSupplier().stream().map(Supplier::getId).collect(Collectors.toList())));
         stockHistory.setStock(stock);
         stockHistory.setProductQuantityAvailablePreviously(stock.getProductQuantityAvailable());
 
         stock.setProductQuantityAvailable(stock.getProductQuantityAvailable() + quantity);
-        stock.setLatestEntryDate(LocalDateTime.now());
+        stock.setLatestEntryDate(LocalDate.now());
 
         stockHistory.setProductQuantityAvailable(stock.getProductQuantityAvailable());
         stockHistoryRepository.save(stockHistory);

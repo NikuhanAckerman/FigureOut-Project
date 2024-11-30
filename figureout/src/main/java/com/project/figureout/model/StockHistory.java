@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -36,6 +37,6 @@ public class StockHistory {
     private List<Supplier> supplier;
 
     @Column(name = "hes_datahora_mudanca_estoque")
-    private LocalDateTime dateChangeOfStockQuantity;
+    private LocalDate dateChangeOfStockQuantity;
 
 }
