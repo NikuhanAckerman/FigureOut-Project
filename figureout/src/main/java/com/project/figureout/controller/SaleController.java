@@ -297,6 +297,18 @@ public class SaleController {
             }
         }
 
+        if(sale.getPromotionalCouponApplied() != null) {
+            for(Sale currentSale : clientService.getClientSales(sale.getCart().getClient().getId())) {
+                if(currentSale.getPromotionalCouponApplied() == sale.getPromotionalCouponApplied()) {
+                    errors.add("O cupom promocional " + sale.getPromotionalCouponApplied().getCouponName() + " já foi usado. Remova-o da compra.");
+                }
+            }
+
+            if(sale.getPromotionalCouponApplied().getCouponExpirationDate().isBefore(LocalDate.now())) {
+                errors.add("O cupom promocional " + sale.getPromotionalCouponApplied().getCouponName() + " expirou. Remova-o da compra.");
+            }
+        }
+
         // Log dos preços finais para depuração
         System.out.println("Preço final da venda: " + saleFinalPrice);
         System.out.println("Total pago pelos cartões: " + totalPaidByCards);
@@ -408,18 +420,11 @@ public class SaleController {
             creditCard.setBalance(creditCard.getBalance().subtract(saleCard.getAmountPaid()));
 
             creditCardService.saveCreditCard(creditCard);
-
-
         }
 
         ChangeSaleStatusDTO changeSaleStatusDTO = new ChangeSaleStatusDTO();
         changeSaleStatusDTO.setStatus(SaleStatusEnum.PAGAMENTO_REALIZADO);
         saleService.changeSaleStatus(sale, changeSaleStatusDTO);
-
-        //for(CartsProducts currentSaleProduct: cart.getCartProducts()) {
-        //    Product saleProduct = currentSaleProduct.getProduct();
-        //    chatGptService.updateProduct(saleProduct.getId(), saleProduct);
-        //}
 
         // Redireciona o usuário para a página de compras após concluir o pedido
         return "redirect:/products/shop";

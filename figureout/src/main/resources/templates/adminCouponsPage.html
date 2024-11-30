@@ -45,6 +45,7 @@
             <th scope="col">Código do Cupom</th>
             <th scope="col">Desconto do Cupom</th>
             <th scope="col">Validade do Cupom</th>
+            <th scope="col">Deletar</th>
         </tr>
         </thead>
         <tbody>
@@ -77,6 +78,14 @@
                     <button th:id="changePromotionalDate- + ${promotionalCoupon.id}" class="btn btn-danger" type="submit">Mudar</button>
                 </form>
             </td>
+
+            <td>
+                <form th:action="@{/coupons/deletePromotionalCoupon/{promotionalCouponId}(promotionalCouponId = ${promotionalCoupon.id})}" method="POST">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button th:id="deletePromotionalCoupon- + ${promotionalCoupon.id}" class="btn btn-danger" onclick="return confirm('Tem certeza?')" type="submit">Deletar</button>
+                </form>
+            </td>
+
         </tr>
         </tbody>
     </table>
@@ -95,9 +104,9 @@
         <tbody>
         <tr th:each="exchangeCoupon : ${exchangeCoupons}">
             <td class="id-cupom" th:text="${exchangeCoupon.id}"></td>
-            <td class="id-cliente" th:text="${exchangeCoupon.client.id}"></td>
+            <td class="cliente" th:text="${exchangeCoupon.client.id + ' - ' + exchangeCoupon.client.name}"></td>
             <td th:text="${exchangeCoupon.exchangeCouponCode}"></td>
-            <td th:text="${exchangeCoupon.amountWorth * 100}"></td>
+            <td th:text="${'R$' + exchangeCoupon.amountWorth}"></td>
         </tr>
         </tbody>
     </table>

@@ -38,6 +38,10 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
+    public List<Sale> getClientSales(long clientId) {
+        return clientRepository.getSalesByClientId(clientId);
+    }
+
     private void populateClientsAndSalesMap() {
         List<Client> allClients = getAllClients();
 

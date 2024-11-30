@@ -72,11 +72,6 @@ public class AdminController {
         return "redirect:/index";
     }
 
-    @GetMapping("/statistics")
-    public String getStatistics() {
-        return "statistics";
-    }
-
     @GetMapping("/statistics/clientRanking/")
     public String getClientRanking(Model model) {
         List<Client> allClients = clientService.getAllClients();

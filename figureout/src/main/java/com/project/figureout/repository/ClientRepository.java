@@ -11,4 +11,5 @@ import java.util.Optional;
 
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
+    public List<Sale> getSalesByClientId(Long clientId);
 }
