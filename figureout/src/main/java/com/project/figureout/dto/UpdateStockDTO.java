@@ -21,7 +21,7 @@ public class UpdateStockDTO {
 
     @PastOrPresent(message = "A data de mudança deve estar no passado ou no presente.")
     @NotNull(message = "O campo de data de mudança não pode ser nulo.")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateChangeOfStockQuantity;
 
     private List<Long> supplier = new ArrayList<>();
