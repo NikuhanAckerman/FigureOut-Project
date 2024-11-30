@@ -99,6 +99,11 @@ public class CartService {
     }
 
     public void applyPromotionalCoupon(Cart cart, PromotionalCoupon promotionalCoupon) {
+
+        if(promotionalCoupon.getCouponExpirationDate().isBefore(LocalDate.now())) {
+            return;
+        }
+
         List<CartsProducts> cartsProducts = cart.getCartProducts();
 
         if(cart.getPromotionalCoupon() != null) {

@@ -101,6 +101,12 @@ public class CouponController {
         return "redirect:/coupons/";
     }
 
+    @DeleteMapping("/deletePromotionalCoupon/{promotionalCouponId}")
+    public String deletePromotionalCoupon(@PathVariable long promotionalCouponId) {
+        promotionalCouponRepository.deleteById(promotionalCouponId);
+        return "redirect:/coupons/";
+    }
+
 
 
 
