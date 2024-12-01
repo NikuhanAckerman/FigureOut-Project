@@ -23,7 +23,7 @@ class ProductFormTest(unittest.TestCase):
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         self.driver.get("http://localhost:8080/index")
 
-    def test_fill_product_form(self):
+    def test_create_random_sale(self):
         '''
         -- FUNÇÕES CRIADAS PARA TESTES --
         click_button(self, id): Clica em botão da página.
@@ -35,9 +35,10 @@ class ProductFormTest(unittest.TestCase):
         select_product(self, produto): Seleciona um produto da loja pelo nome dele.
         send_image(self, id, pasta, arquivo): Envia uma imagem.
         '''
+        purchases = int(input("Quantas vendas serão feitas? "))
 
         ## Define quantas compras aleatórias serão feitas.
-        for i in range(2):
+        for i in range(purchases):
             print()
             print("======== ITERAÇÃO " + str(i + 1) + " ========")
             # Selecionando um cliente aleatório com ID entre 0 a 10.
