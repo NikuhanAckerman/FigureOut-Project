@@ -65,6 +65,7 @@ def select_product(self, product):
         if card_title.text == product_to_select:
             # Localiza o botão no mesmo card-body
             button = card_body.find_element(By.ID, 'seeProduct')
+            time.sleep(1)
             button.click()
             break  # Stop after clicking the desired product
 
