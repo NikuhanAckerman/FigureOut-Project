@@ -175,9 +175,14 @@ public class CartService {
         if(cart.getExchangeCoupons().contains(exchangeCoupon)) {
             return;
         }
+        if(exchangeCoupon.isUsed()) {
+            return;
+        }
 
         cart.getExchangeCoupons().add(exchangeCoupon);
         saveCart(cart);
+
+
 
         setCartTotal(cart);
     }

@@ -44,3 +44,4 @@ TC29 - (buscar trocas em perfil de cliente)
 GRUPO: OUTROS
 TC30 - Visualizar gráfico de vendas
 TC31 - Interação com IA
+TC32 - Visualizar ranking de clientes

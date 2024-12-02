@@ -83,7 +83,6 @@ public class AdminController {
         return "clientRanking";
     }
 
-
     @GetMapping("/chart")
     public String chart(@RequestParam(defaultValue = "2024-01-01T00:00:00") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
                         @RequestParam(defaultValue = "2024-12-31T00:00:00") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate,

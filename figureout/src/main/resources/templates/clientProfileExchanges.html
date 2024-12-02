@@ -108,7 +108,7 @@
         <div th:if="${exchangeCoupon.used} == true">
 
           <h5 class="text-danger"
-              th:text="'O cupom ' + ${exchangeCoupon.exchangeCouponCode} + 'de quantia: R$' + ${exchangeCoupon.amountWorth} + 'já foi usado.'">
+              th:text="'O cupom ' + ${exchangeCoupon.exchangeCouponCode} + ' de quantia: R$' + ${exchangeCoupon.amountWorth} + ' já foi usado.'">
           </h5>
 
         </div>
@@ -130,7 +130,7 @@
           <div th:if="${exchange.coupon != null}">
             <p class="card-text" th:text="'Cupom de troca: ' + ${exchange.coupon.exchangeCouponCode}"></p>
             <p class="card-text" th:text="'Quantia do cupom: R$' + ${exchange.coupon.amountWorth}"></p>
-            <p class="card-text text-primary" th:if="${exchange.coupon.used == true}" th:text="(este cupom já foi usado.)"></p>
+
           </div>
           <!--
           <p class="card-text">
