@@ -35,6 +35,11 @@ class ProductFormTest(unittest.TestCase):
         select_product(self, produto): Seleciona um produto da loja pelo nome dele.
         send_image(self, id, pasta, arquivo): Envia uma imagem.
         '''
+        slowMode = input("Ativar modo lento [y/n]? ").strip().lower()
+
+        if slowMode == 'y':
+            print('Modo lento ativado!')
+        
         purchases = int(input("Quantas vendas serão feitas? "))
 
         ## Define quantas compras aleatórias serão feitas.
@@ -66,6 +71,10 @@ class ProductFormTest(unittest.TestCase):
                 
                 # Função para comprar um produto.
                 print("Produto: " + str(product_name) + " x " + str(quantity))
+
+                if slowMode == 'y':
+                    time.sleep(1)
+                    
                 buy_product(self, product_name, quantity)
 
                 # Remove o produto escolhido no conjunto cópia.
