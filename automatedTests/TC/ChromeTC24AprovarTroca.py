@@ -35,7 +35,15 @@ class ProductFormTest(unittest.TestCase):
         # send_image(self, id, pasta, arquivo): Envia uma imagem.
         
         # Informações gerais.
-        time.sleep(1)     
+        select_option(self, "saleStatus1", "TROCA_AUTORIZADA")
+        time.sleep(1)
+        
+        select_option(self, "saleStatus1", "EM_TROCA")
+        time.sleep(1)
+
+        select_option(self, "saleStatus1", "TROCA_RECEBIDA")
+        time.sleep(1)
+        
         select_option(self, "saleStatus1", "TROCA_FINALIZADA")
         time.sleep(4)
 
