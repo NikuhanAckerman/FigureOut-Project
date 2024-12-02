@@ -34,7 +34,7 @@ class ProductFormTest(unittest.TestCase):
         # select_product(self, produto): Seleciona um produto da loja pelo nome dele.
         # send_image(self, id, pasta, arquivo): Envia uma imagem.
         
-        time.sleep(10)
+        time.sleep(5)
 
     def tearDown(self):
         # Fecha o browser
