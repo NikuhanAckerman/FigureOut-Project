@@ -22,18 +22,8 @@ class ProductFormTest(unittest.TestCase):
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         self.driver.get("http://localhost:8080/statistics/clientRanking/")
 
-    def test_show_client_password(self):
+    def test_ranking_client_page(self):
 
-        # -- FUNÇÕES CRIADAS PARA TESTES --
-        # click_button(self, id): Clica em botão da página.
-        # input_string(self, id, valor): Insere texto.
-        # select_radio(self, id, valor): Seleciona botão de rádio.
-        # check_checkbox(self, id): Checha checkbox.
-        # select_option(self, id, valor): Seleciona opção de um menu dropdown pelo texto visível.
-        # select_option_by_value(self, id, value): Seleciona opção de menu dropdown pelo valor.
-        # select_product(self, produto): Seleciona um produto da loja pelo nome dele.
-        # send_image(self, id, pasta, arquivo): Envia uma imagem.
-        
         time.sleep(5)
 
     def tearDown(self):
