@@ -228,12 +228,6 @@ public class SaleService {
 
                 exchangeService.generateExchangeCoupon(exchangeInProcess);
 
-                /*for(CartsProducts currentSaleProduct: sale.getCart().getCartProducts()) {
-                    Product saleProduct = currentSaleProduct.getProduct();
-                    chatGptService.updateProduct(saleProduct.getId(), saleProduct);
-                }*/
-
-
             }
 
         }

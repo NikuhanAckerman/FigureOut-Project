@@ -286,6 +286,15 @@ public class SaleController {
             }
         }
 
+        if(!cart.getExchangeCoupons().isEmpty()) {
+            List<ExchangeCoupon> listOfExchangeCoupons = cart.getExchangeCoupons();
+
+            for(ExchangeCoupon exchangeCoupon : listOfExchangeCoupons) {
+                sale.getExchangeCouponsApplied().add(exchangeCoupon);
+            }
+
+        }
+
         // Verifica se não há cupom promocional e se não há cupons de troca aplicados
         if (sale.getPromotionalCouponApplied() == null && sale.getExchangeCouponsApplied().isEmpty()) {
 
@@ -306,6 +315,14 @@ public class SaleController {
 
             if(sale.getPromotionalCouponApplied().getCouponExpirationDate().isBefore(LocalDate.now())) {
                 errors.add("O cupom promocional " + sale.getPromotionalCouponApplied().getCouponName() + " expirou. Remova-o da compra.");
+            }
+
+            List<Sale> listOfClientSales = saleService.getClientSalesByClientId(sale.getCart().getClient().getId());
+
+            for(Sale currentSale : listOfClientSales) {
+                if(currentSale.getPromotionalCouponApplied().getId() == sale.getPromotionalCouponApplied().getId()) {
+                    errors.add("O cupom promocional " + sale.getPromotionalCouponApplied().getCouponName() + " já foi utilizado. Remova-o da compra.");
+                }
             }
         }
 
@@ -425,6 +442,11 @@ public class SaleController {
         ChangeSaleStatusDTO changeSaleStatusDTO = new ChangeSaleStatusDTO();
         changeSaleStatusDTO.setStatus(SaleStatusEnum.PAGAMENTO_REALIZADO);
         saleService.changeSaleStatus(sale, changeSaleStatusDTO);
+
+        for (ExchangeCoupon exchangeCoupon : sale.getExchangeCouponsApplied()) {
+            exchangeCoupon.setUsed(true);
+            exchangeService.getExchangeCouponRepository().save(exchangeCoupon);
+        }
 
         // Redireciona o usuário para a página de compras após concluir o pedido
         return "redirect:/products/shop";
