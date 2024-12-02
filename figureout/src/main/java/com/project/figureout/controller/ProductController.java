@@ -269,8 +269,10 @@ public class ProductController {
                               @RequestParam(required = false) Float length,
                               @RequestParam(required = false) BigDecimal purchaseAmount,
                               @RequestParam(required = false) BigDecimal price,
+                              @RequestParam(required = false) PricingGroup pricingGroup,
                               Model model) {
-        List<Product> products = productService.filterProducts(id, name, height, width, weight, length, purchaseAmount, price);
+
+        List<Product> products = productService.filterProducts(id, name, height, width, weight, length, purchaseAmount, price, pricingGroup);
 
         model.addAttribute("products", products);
         model.addAttribute("filterId", id);
@@ -281,6 +283,7 @@ public class ProductController {
         model.addAttribute("filterLength", length);
         model.addAttribute("filterPurchaseAmount", purchaseAmount);
         model.addAttribute("filterPrice", price);
+        model.addAttribute("filterPricingGroup", pricingGroup);
 
         return "adminSeeProducts";
     }

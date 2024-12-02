@@ -195,7 +195,8 @@ public class ProductService {
                                         Float weight,
                                         Float length,
                                         BigDecimal purchaseAmount,
-                                        BigDecimal price) {
+                                        BigDecimal price,
+                                        PricingGroup pricingGroup) {
         List<Product> products = getAllProducts();
 
         System.out.println(id);
@@ -208,7 +209,6 @@ public class ProductService {
         System.out.println(price);
 
         if (id != null && id > 0) {
-            System.out.println("id is not null and bigger than 0" + id);
             products = products.stream()
                     .filter(product -> product.getId() == id) // Comparação direta
                     .collect(Collectors.toList());
@@ -218,41 +218,52 @@ public class ProductService {
                     .filter(product -> product.getName().toLowerCase().contains(name.toLowerCase()))
                     .collect(Collectors.toList());
         }
-        if (height != null && height > 0) {
+        if (name != null && !name.isEmpty()) {
             products = products.stream()
-                    .filter(product -> product.getHeight() >= height)
+                    .filter(product -> product.getName().toLowerCase().contains(name.toLowerCase()))
                     .collect(Collectors.toList());
         }
-        if (width != null && width > 0) {
+        if (height != null) {
             products = products.stream()
-                    .filter(product -> product.getWidth() >= width)
+                    .filter(product -> product.getHeight() != null && product.getHeight().equals(height)) // Verificação de igualdade exata
                     .collect(Collectors.toList());
         }
-        if (weight != null && weight > 0) {
+        if (width != null) {
             products = products.stream()
-                    .filter(product -> product.getWeight() >= weight)
+                    .filter(product -> product.getWidth() != null && product.getWidth().equals(width)) // Verificação de igualdade exata
                     .collect(Collectors.toList());
         }
-        if (length != null && length > 0) {
+        if (weight != null) {
             products = products.stream()
-                    .filter(product -> product.getLength() >= length)
+                    .filter(product -> product.getWeight() != null && product.getWeight().equals(weight)) // Verificação de igualdade exata
+                    .collect(Collectors.toList());
+        }
+        if (length != null) {
+            products = products.stream()
+                    .filter(product -> product.getLength() != null && product.getLength().equals(length)) // Verificação de igualdade exata
                     .collect(Collectors.toList());
         }
         if (purchaseAmount != null) {
             products = products.stream()
-                    .filter(product -> product.getPurchaseAmount() != null && product.getPurchaseAmount().compareTo(purchaseAmount) >= 0)
+                    .filter(product -> product.getPurchaseAmount() != null && product.getPurchaseAmount().compareTo(purchaseAmount) == 0) // Comparação exata com BigDecimal
                     .collect(Collectors.toList());
         }
         if (price != null) {
             products = products.stream()
-                    .filter(product -> product.getPrice() != null && product.getPrice().compareTo(price) >= 0)
+                    .filter(product -> product.getPrice() != null && product.getPrice().compareTo(price) == 0) // Comparação exata com BigDecimal
+                    .collect(Collectors.toList());
+        }
+
+        if (pricingGroup != null) {
+            products = products.stream()
+                    .filter(product -> product.getPricingGroup() != null && product.getPricingGroup().equals(pricingGroup))
                     .collect(Collectors.toList());
         }
 
         if(products.isEmpty()) {
-            System.out.println("no filter");
+            System.out.println("sem filtro");
         } else {
-            System.out.println("filter");
+            System.out.println("filtro");
         }
 
         return products.isEmpty() ? new ArrayList<>() : products; // Retornar uma lista vazia se nenhum filtro bater

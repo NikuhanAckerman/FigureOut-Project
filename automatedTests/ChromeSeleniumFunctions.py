@@ -66,7 +66,7 @@ def select_product(self, product):
             # Localiza o botão no mesmo card-body
             button = card_body.find_element(By.ID, 'seeProduct')
 
-            time.sleep(1)      
+            time.sleep(0.5)      
             button.click()
             break
 

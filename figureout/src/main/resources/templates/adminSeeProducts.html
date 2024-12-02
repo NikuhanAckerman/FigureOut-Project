@@ -33,7 +33,7 @@
 
     <!--BOTÃO DE FILTRAR -->
 
-    <a class="btn btn-outline-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+    <a class="btn btn-outline-primary" id="filterProducts" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
             <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
         </svg> Filtrar</a>
@@ -62,10 +62,10 @@
                             <input type="text" name="width" class="form-control" id="filterWidth" th:value="${filterWidth}" placeholder="Largura">
                         </div>
                         <div class="col-md-3">
-                            <input type="text" name="weight" class="form-control" id="filterWeight" th:value="${filterWeight}" placeholder="Peso">
+                            <input type="text" name="length" class="form-control" id="filterLength" th:value="${filterLength}" placeholder="Comprimento">
                         </div>
                         <div class="col-md-3">
-                            <input type="text" name="length" class="form-control" id="filterLength" th:value="${filterLength}" placeholder="Comprimento">
+                            <input type="text" name="weight" class="form-control" id="filterWeight" th:value="${filterWeight}" placeholder="Peso">
                         </div>
                     </div>
 
@@ -73,12 +73,12 @@
                         <input type="text" name="purchaseAmount" class="form-control" id="filterPurchaseValue" th:value="${filterPurchaseAmount}" placeholder="Filtrar por Valor de compra">
                     </div>
                     <div class="mb-3">
-                        <select id="Pricing-dropdown" class="form-control">
-                            <option value="0" disabled selected>Selecione um Grupo de precificação</option>
-                            <option value="1">Ouro</option>
-                            <option value="2">Prata</option>
-                            <option value="3">Bronze</option>
-                            <option value="4">Ferro</option>
+                        <select id="filterPricingGroup" name="pricingGroup" class="form-control">
+                            <option value="0" selected>Selecione um Grupo de precificação</option>
+                            <option value="1" th:selected="${filterPricingGroup == 1}">Ouro</option>
+                            <option value="2" th:selected="${filterPricingGroup == 2}">Prata</option>
+                            <option value="3" th:selected="${filterPricingGroup == 3}">Bronze</option>
+                            <option value="4" th:selected="${filterPricingGroup == 4}">Ferro</option>
                         </select>
                     </div>
                     <div class="mb-3">
