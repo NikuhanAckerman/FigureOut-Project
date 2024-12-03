@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -45,25 +46,42 @@ public class AdminController {
     private ClientNavigator clientNavigator;
 
     @GetMapping({"","/","/index"})
-    public String getControlPanel(Model model) {
+    public String getControlPanel(Model model, ArrayList<String> errors) {
         model.addAttribute("clientList", clientService.getAllClients());
         model.addAttribute("changeClientNavigatorDTO", new ChangeClientNavigatorDTO());
-
-        model.addAttribute("isClientIdNull", false);
+        model.addAttribute("isClientIdNull", clientNavigator.getInstance().getClientId() == 0);
 
         if(clientNavigator.getInstance().getClientId() == 0) {
-            System.out.println("é zero lol");
             model.addAttribute("isClientIdNull", true);
         } else {
             Client client = clientService.getClientById(clientNavigator.getInstance().getClientId());
             model.addAttribute("currentClientNavigator", client);
         }
 
+        if (errors != null && !errors.isEmpty()) {
+            model.addAttribute("errors", errors);
+        }
+
         return "adminControlPanel";
     }
 
     @PutMapping("/changeClientNavigator/")
-    public String changeClientNavigator(Model model, @ModelAttribute ChangeClientNavigatorDTO changeClientNavigatorDTO) {
+    public String changeClientNavigator(Model model, @ModelAttribute ChangeClientNavigatorDTO changeClientNavigatorDTO,
+                                        RedirectAttributes redirectAttributes) {
+        Client client = clientService.getClientById(changeClientNavigatorDTO.getClientId());
+
+        List<String> errors = new ArrayList<>();
+
+        if(!client.isEnabled()) {
+            errors.add("O cliente selecionado está inativado. Ative-o ou escolha outro cliente.");
+            model.addAttribute("isClientIdNull", clientNavigator.getInstance().getClientId() == 0);
+        }
+
+        if(!errors.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errors", errors);
+            redirectAttributes.addFlashAttribute("isClientIdNull", clientNavigator.getInstance().getClientId() == 0);
+            return "redirect:/index";
+        }
 
         clientNavigator.getInstance().setClientId(changeClientNavigatorDTO.getClientId());
 
@@ -90,16 +108,10 @@ public class AdminController {
         List<Sale> salesInsideRange = saleService.getSalesInsideDateRange(startDate, endDate);
         List<ProductInChartDTO> productInChartDTOList = new ArrayList<>();
 
-        long amountOfDaysBetween = ChronoUnit.DAYS.between(startDate, endDate);
-        ChronoUnit groupingLogic = amountOfDaysBetween <= 30 ? ChronoUnit.DAYS :
-                amountOfDaysBetween <= 365 ? ChronoUnit.MONTHS : ChronoUnit.YEARS;
-
         for(Sale sale: salesInsideRange) {
 
             for (CartsProducts cartProduct: sale.getCart().getCartProducts()) {
                 String productName = cartProduct.getProduct().getName();
-                BigDecimal productPrice = cartProduct.getFinalPrice();
-                int productQuantity = cartProduct.getProductQuantity();
 
                 if(!productInChartDTOList.stream().anyMatch(dto -> dto.getName().equals(productName))) {
                     System.out.println("the product hasnt been set yet! add the fakers!");

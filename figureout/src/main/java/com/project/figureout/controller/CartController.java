@@ -111,14 +111,6 @@ public class CartController {
 
         cartService.addProductToCart(cart, product, changeCartProductQuantityDTO);
 
-        // Get the previous page URL from the Referer header
-
-
-        // log de transação do método.
-        //Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
-        //logService.logTransaction(String.valueOf(navigator), "insert", product.toString());
-
-        // Redirect back to the same page
         return "redirect:" + referer;
     }
 

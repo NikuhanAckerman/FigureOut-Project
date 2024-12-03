@@ -125,12 +125,6 @@ public class ProductController {
         stockService.productInStockDataSetter(stock, product, productDTO);
         stockService.saveProductInStock(stock);
 
-        //chatGptService.addProduct(product);
-
-        // log de transação do método.
-        //Client navigator = clientService.getClientById(clientNavigator.getInstance().getClientId());
-        //logService.logTransaction(String.valueOf(navigator), "insert", product.toString());
-
         return "redirect:/products/seeProducts";
     }
 
@@ -151,8 +145,6 @@ public class ProductController {
     @DeleteMapping("/deleteProduct/{id}")
     public String deleteProduct(@PathVariable Long id) throws IOException {
         productService.deleteProductById(id);
-
-        //chatGptService.deleteProduct(id);
 
         return "redirect:/products/seeProducts";
     }
@@ -235,8 +227,6 @@ public class ProductController {
         Product product = productService.getProductById(id);
 
         productService.updateProduct(product, productDTO);
-
-        //chatGptService.updateProduct(product.getId(), product);
 
         return "redirect:/products/seeProducts";
     }

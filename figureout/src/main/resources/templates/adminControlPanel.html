@@ -124,6 +124,12 @@
 
         </form>
 
+        <div th:if="${errors} != null">
+            <div th:each="err : ${errors}">
+                <p class="text-danger" th:text="${err}">
+            </div>
+        </div>
+
         <div th:if="${isClientIdNull == false}">
             <h2 class="mt-3 text-primary" th:text="'Cliente atual: ID - ' + ${currentClientNavigator.id} + ' Nome - ' + ${currentClientNavigator.name}"></h2>
         </div>

@@ -307,11 +307,6 @@ public class SaleController {
         }
 
         if(sale.getPromotionalCouponApplied() != null) {
-            //for(Sale currentSale : clientService.getClientSales(sale.getCart().getClient().getId())) {
-            //    if(currentSale.getPromotionalCouponApplied() == sale.getPromotionalCouponApplied()) {
-            //        errors.add("O cupom promocional " + sale.getPromotionalCouponApplied().getCouponName() + " já foi usado. Remova-o da compra.");
-            //    }
-            //}
 
             if(sale.getPromotionalCouponApplied().getCouponExpirationDate().isBefore(LocalDate.now())) {
                 errors.add("O cupom promocional " + sale.getPromotionalCouponApplied().getCouponName() + " expirou. Remova-o da compra.");
@@ -324,6 +319,7 @@ public class SaleController {
                     errors.add("O cupom promocional " + sale.getPromotionalCouponApplied().getCouponName() + " já foi utilizado. Remova-o da compra.");
                 }
             }
+
         }
 
         // Log dos preços finais para depuração
