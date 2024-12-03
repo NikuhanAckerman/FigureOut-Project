@@ -269,5 +269,4 @@ public class ProductService {
         return products.isEmpty() ? new ArrayList<>() : products; // Retornar uma lista vazia se nenhum filtro bater
     }
 
-
 }

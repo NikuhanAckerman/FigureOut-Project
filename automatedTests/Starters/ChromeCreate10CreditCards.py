@@ -85,7 +85,7 @@ class ProductFormTest(unittest.TestCase):
         click_button(self, "addCreditCardButton")
 
         # Preenche o número do cartão
-        input_string(self, "cardNumber", "5169343132105354")
+        input_string(self, "cardNumber", "5497916374255558")
 
         # Preenche o apelido
         input_string(self, "nickname", "Itaú")

@@ -68,7 +68,6 @@ public class ProductController {
         return "adminSeeProducts";
     }
 
-
     @GetMapping("/seeSales")
     public String showSalesGet(Model model) {
         List<Product> products =  productService.getAllProducts();
@@ -136,10 +135,10 @@ public class ProductController {
         byte[] image = product.getPicture();
         System.out.println("Image byte length: " + image.length);
         if (image == null) {
-            return ResponseEntity.notFound().build();  // Handle no image case
+            return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok()
-                .contentType(MediaType.IMAGE_JPEG)  // Or whatever image type you're using
+                .contentType(MediaType.IMAGE_JPEG)
                 .body(image);
     }
 
