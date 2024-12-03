@@ -93,7 +93,7 @@ public class ClientController {
 
         addressService.registerAddress(client, addressDTO);
 
-        return "redirect:/showAllClients";
+        return "redirect:/showAllClients" ;
     }
 
     @DeleteMapping("/deleteAddress/{id}")
@@ -495,7 +495,6 @@ public class ClientController {
         List<Address> clientAddresses = clientService.getClientAddresses(id);
         int notificationQuantity = notificationService.getClientNotifications(id).size();
         model.addAttribute("notificationQuantity", notificationQuantity);
-
 
         model.addAttribute("id", id);
         model.addAttribute("addresses", clientAddresses);

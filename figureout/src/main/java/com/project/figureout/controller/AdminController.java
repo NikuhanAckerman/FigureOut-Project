@@ -46,7 +46,7 @@ public class AdminController {
     private ClientNavigator clientNavigator;
 
     @GetMapping({"","/","/index"})
-    public String getControlPanel(Model model, ArrayList<String> errors) {
+    public String getControlPanel(Model model) {
         model.addAttribute("clientList", clientService.getAllClients());
         model.addAttribute("changeClientNavigatorDTO", new ChangeClientNavigatorDTO());
         model.addAttribute("isClientIdNull", clientNavigator.getInstance().getClientId() == 0);
@@ -56,10 +56,6 @@ public class AdminController {
         } else {
             Client client = clientService.getClientById(clientNavigator.getInstance().getClientId());
             model.addAttribute("currentClientNavigator", client);
-        }
-
-        if (errors != null && !errors.isEmpty()) {
-            model.addAttribute("errors", errors);
         }
 
         return "adminControlPanel";
@@ -79,7 +75,6 @@ public class AdminController {
 
         if(!errors.isEmpty()) {
             redirectAttributes.addFlashAttribute("errors", errors);
-            redirectAttributes.addFlashAttribute("isClientIdNull", clientNavigator.getInstance().getClientId() == 0);
             return "redirect:/index";
         }
 

@@ -65,7 +65,7 @@ public class CartController {
     @PostMapping("/addProductToCart/{productId}/{cartId}")
     public String addProductToCart(@PathVariable Long productId, @PathVariable Long cartId,
                                    @ModelAttribute ChangeCartProductQuantityDTO changeCartProductQuantityDTO, HttpServletRequest request,
-                                   Model model) {
+                                   Model model, RedirectAttributes redirectAttributes) {
         Product product = productService.getProductById(productId);
         Cart cart = cartService.getCartById(cartId);
 
@@ -97,16 +97,17 @@ public class CartController {
         }
 
         if(!errors.isEmpty()) {
-            Stock stock = stockService.getProductInStockByProductId(productId);
-            List<Category> productCategoryList = product.getCategories();
-            Client client = clientService.getClientById(clientNavigator.getInstance().getClientId());
-            model.addAttribute("errors", errors);
-            model.addAttribute("stock", stock);
-            model.addAttribute("changeCartProductQuantityDTO", new ChangeCartProductQuantityDTO());
-            model.addAttribute("product", product);
-            model.addAttribute("cart", client.getCartList().getLast());
+            redirectAttributes.addFlashAttribute("errors", errors);
+            //Stock stock = stockService.getProductInStockByProductId(productId);
+            //List<Category> productCategoryList = product.getCategories();
+            //Client client = clientService.getClientById(clientNavigator.getInstance().getClientId());
+            ////model.addAttribute("errors", errors);
+            //model.addAttribute("stock", stock);
+            //model.addAttribute("changeCartProductQuantityDTO", new ChangeCartProductQuantityDTO());
+            //model.addAttribute("product", product);
+            //model.addAttribute("cart", client.getCartList().getLast());
 
-            return "product";
+            return "redirect:/products/specificProduct/" + productId;
         }
 
         cartService.addProductToCart(cart, product, changeCartProductQuantityDTO);
@@ -120,6 +121,13 @@ public class CartController {
         Cart cart = cartService.getCartById(cartId);
 
         cartService.deleteProductFromCart(cart, product);
+
+        if(cart.getCartProducts().isEmpty()) {
+            System.out.println("cart is empty");
+            return "redirect:/products/shop";
+        }
+
+        System.out.println("cart is populated");
 
         // Get the previous page URL from the Referer header
         String referer = request.getHeader("Referer");

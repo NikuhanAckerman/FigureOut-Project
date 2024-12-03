@@ -80,7 +80,7 @@
       <p th:text="'Apelido do cartão: ' + ${saleCard.creditCard.nickname}"><b></b></p>
 
       <div>
-        <input type="number" class="form-control" th:field="*{amountPaid[__${saleCard.creditCard.id}__]}" step="0.01" min="0" placeholder="Insira o quanto irá pagar com este cartão" />
+        <input type="number" class="form-control" th:field="*{amountPaid[__${saleCard.creditCard.id}__]}" step="0.01" min="0" placeholder="Insira o quanto irá pagar com este cartão" required/>
       </div>
     </div>
 

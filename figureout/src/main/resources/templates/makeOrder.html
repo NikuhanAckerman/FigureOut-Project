@@ -135,7 +135,7 @@
                 </td>
 
                 <td>
-                    <form th:action="@{/cart/removeProductFromCart/{productId}/{clientId}(productId = ${cartProduct.product.id}, clientId = ${clientId})}" method="POST">
+                    <form th:action="@{/cart/removeProductFromCart/{productId}/{cartId}(productId = ${cartProduct.product.id}, cartId = ${cartId})}" method="POST">
                         <input type="hidden" name="_method" value="DELETE"/>
                         <button class="btn btn-danger" onclick="return confirm ('Tem certeza?')">Tirar do carrinho</button>
                     </form>
@@ -168,7 +168,7 @@
 
         <p><b>Selecione um ou mais Cartões de Crédito:</b></p>
         <div id="cartao-dropdown-container" class="mb-3">
-            <select multiple class="form-control" th:field="*{salesCardsIds}">
+            <select multiple class="form-control" th:field="*{salesCardsIds}" required>
                 <option value="" disabled selected>Selecione o(s) cartão(ões)</option>
                 <option th:each="creditCard : ${creditCardClientList}" th:value="${creditCard.id}" th:text="${creditCard.nickname}"></option>
             </select>
@@ -181,7 +181,7 @@
         <!-- Seção de Endereço -->
         <p><b>Selecione um Endereço:</b></p>
         <div class="mb-3">
-            <select id="address-dropdown" class="form-control" th:field="*{deliveryAddressId}">
+            <select id="address-dropdown" class="form-control" th:field="*{deliveryAddressId}" required>
                 <option value="0" disabled selected>Selecione um endereço</option>
                 <option th:each="address : ${addressClientList}" th:value="${address.id}" th:text="${address.nickname}"></option>
             </select>
@@ -200,6 +200,12 @@
         </div>
 
     </form>
+
+    <div th:if="${errors} != null">
+        <div th:each="err : ${errors}">
+            <p class="text-danger" th:text="${err}">
+        </div>
+    </div>
 
 </div>
 

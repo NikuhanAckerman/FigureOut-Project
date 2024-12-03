@@ -124,13 +124,27 @@ public class SaleController {
 
 
     @PostMapping("/makeOrder/{cartId}")
-    public String makeOrderPost(@PathVariable long cartId, @ModelAttribute SaleDTO saleDTO, Model model, RedirectAttributes redirectAttributes) {
+    public String makeOrderPost(@PathVariable long cartId, @ModelAttribute SaleDTO saleDTO, Model model, RedirectAttributes redirectAttributes,
+                                HttpServletRequest request) {
         // Obtém o carrinho de compras
         Cart cart = cartService.getCartById(cartId);
         System.out.println("address in saleDTO: " + saleDTO.getDeliveryAddressId());
 
+        List<String> errors = new ArrayList<>();
+
         // Obtém o endereço de entrega usando o ID fornecido no DTO
-        Address deliveryAddress = addressService.getAddressById(saleDTO.getDeliveryAddressId());
+        try {
+            Address deliveryAddress = addressService.getAddressById(saleDTO.getDeliveryAddressId());
+            model.addAttribute("deliveryAddress", deliveryAddress);
+        } catch (NoSuchElementException exception) {
+            errors.add("Nenhum endereço de entrega foi selecionado.");
+        }
+
+        if(!errors.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errors", errors);
+            String referer = request.getHeader("Referer");
+            return "redirect:" + referer;
+        }
 
         // Inicializa a lista de cartões de crédito usados na compra
         List<SalesCards> salesCardsList = new ArrayList<>();
@@ -156,7 +170,7 @@ public class SaleController {
 
         // Adiciona os dados ao modelo e redireciona para a página de finalização do pedido
         model.addAttribute("salesCardsList", salesCardsList);
-        model.addAttribute("deliveryAddress", deliveryAddress);
+
         model.addAttribute("cartProductTotalPrices", cartProductTotalPrices);
 
         System.out.println("Lista de salescards: " + salesCardsList);
@@ -216,7 +230,7 @@ public class SaleController {
     public String createSale(@PathVariable long cartId, @ModelAttribute SaleCardDTO saleCardDTO, Model model,
                              @RequestParam("freight") BigDecimal freight,
                              @RequestParam("saleFinalPrice") BigDecimal saleFinalPrice,
-                             HttpServletRequest request) throws IOException {
+                             RedirectAttributes redirectAttributes) throws IOException {
 
         // Obtém o carrinho de compras (Cart) com base no ID fornecido na URL
         Cart cart = cartService.getCartById(cartId);
@@ -243,6 +257,7 @@ public class SaleController {
 
         // Obtém o endereço de entrega do modelo (provavelmente setado anteriormente na página)
         Address deliveryAddress = (Address) model.getAttribute("deliveryAddress");
+
         sale.setDeliveryAddress(deliveryAddress);
 
         // Obtém a lista de cartões de crédito usados no pagamento da venda
@@ -265,6 +280,10 @@ public class SaleController {
         for (Map.Entry<Long, BigDecimal> entry : saleCardDTO.getAmountPaid().entrySet()) {
             Long key = entry.getKey();
             BigDecimal value = entry.getValue();
+
+            if(listSalesCards.isEmpty()) {
+                errors.add("Você não selecionou nenhum cartão.");
+            }
 
             // Para cada cartão de crédito na lista de cartões, verifica se o ID corresponde ao cartão atual
             for (SalesCards saleCard : listSalesCards) {
@@ -334,18 +353,33 @@ public class SaleController {
         // Obtém o preço total dos produtos no carrinho (presumivelmente calculado anteriormente)
         HashMap<Long, BigDecimal> cartProductTotalPrice = (HashMap<Long, BigDecimal>) model.getAttribute("cartProductTotalPrice");
 
+        if(sale.getCart().getCartProducts().isEmpty()) {
+            errors.add("Você não pode fazer uma compra com nenhum produto.");
+        }
+
+        if(!sale.getCart().getClient().isEnabled()) {
+            errors.add("Você não pode fazer compras com uma conta inativada.");
+        }
+
+        for(CartsProducts currentCartProduct: sale.getCart().getCartProducts()) {
+            Stock stock = stockService.getProductInStockByProductId(currentCartProduct.getProduct().getId());
+
+            if(currentCartProduct.getProductQuantity() > stock.getProductQuantityAvailable()) {
+                errors.add("O produto " + currentCartProduct.getProduct().getName() + " só tem " + stock.getProductQuantityAvailable() + " unidades disponíveis para compra.");
+            }
+
+            if(!currentCartProduct.getProduct().isActive()) {
+                errors.add("O produto " + currentCartProduct.getProduct().getName() + " está atualmente inativo para compras.");
+            }
+
+        }
+
         // Se houver erros, adiciona os dados ao modelo e retorna para a página de "finalizar pedido"
         if (!errors.isEmpty()) {
-            model.addAttribute("errors", errors);
-            model.addAttribute("cartProductTotalPrice", cartProductTotalPrice);
-            model.addAttribute("saleCart", cart);
-            model.addAttribute("saleFinalPrice", saleFinalPrice);
-            model.addAttribute("freight", freight);
-            model.addAttribute("deliveryAddress", deliveryAddress);
-            model.addAttribute("salesCardsList", listSalesCards);
-            model.addAttribute("saleCardDTO", saleCardDTO);
+            redirectAttributes.addFlashAttribute("errors", errors);
+            redirectAttributes.addFlashAttribute("saleCart", cart);
 
-            return "finishOrder";
+            return "redirect:/sales/finishOrder/" + cartId;
         }
 
         // Salva a venda no banco de dados
@@ -410,14 +444,6 @@ public class SaleController {
 
             if(currentCartProduct.getProductQuantity() >= stock.getProductQuantityAvailable()) {
                 productService.inactivateProduct(stock.getProduct());
-            }
-
-            if(currentCartProduct.getProductQuantity() > stock.getProductQuantityAvailable()) {
-                errors.add("O produto " + currentCartProduct.getProduct().getName() + " só tem " + stock.getProductQuantityAvailable() + " unidades disponíveis para compra.");
-            }
-
-            if(!currentCartProduct.getProduct().isActive()) {
-                errors.add("O produto " + currentCartProduct.getProduct().getName() + " está atualmente inativo para compras.");
             }
 
         }
