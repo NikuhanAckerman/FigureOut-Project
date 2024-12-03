@@ -39,7 +39,7 @@ class ClientTest(unittest.TestCase):
         
         # Preenche os campos do formulário de criar cartão de crédito.
         blank_field(self, "cardNumber")
-        input_string(self, "cardNumber", "5503935828135507")
+        input_string(self, "cardNumber", "5554786883472238")
         time.sleep(1)
         
         blank_field(self, "nickname")
