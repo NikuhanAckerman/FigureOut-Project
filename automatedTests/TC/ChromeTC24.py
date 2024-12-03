@@ -24,16 +24,16 @@ class TransactionTest(unittest.TestCase):
 
     def test_approve_exchange(self):
         
-        select_option(self, "saleStatus1", "TROCA_AUTORIZADA")
+        select_option(self, "saleStatus21", "TROCA_AUTORIZADA")
         time.sleep(1)
         
-        select_option(self, "saleStatus1", "EM_TROCA")
+        select_option(self, "saleStatus21", "EM_TROCA")
         time.sleep(1)
 
-        select_option(self, "saleStatus1", "TROCA_RECEBIDA")
+        select_option(self, "saleStatus21", "TROCA_RECEBIDA")
         time.sleep(1)
         
-        select_option(self, "saleStatus1", "TROCA_FINALIZADA")
+        select_option(self, "saleStatus21", "TROCA_FINALIZADA")
         time.sleep(4)
 
     def tearDown(self):
