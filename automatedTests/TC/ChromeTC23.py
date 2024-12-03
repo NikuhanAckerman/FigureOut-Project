@@ -36,7 +36,7 @@ class TransactionTest(unittest.TestCase):
         click_button(self, "purchases")
         time.sleep(1)
 
-        click_button(self, "moreInformation-1")
+        click_button(self, "moreInformation-21")
         time.sleep(1)
 
         click_button(self, "createExchange-1")
