@@ -12,7 +12,7 @@ import time
 import csv
 from ChromeSeleniumFunctions import *
 
-class ProductFormTest(unittest.TestCase):
+class CouponTest(unittest.TestCase):
     def setUp(self):
         # Configura as opções do Chrome
         chrome_options = Options()
@@ -23,7 +23,7 @@ class ProductFormTest(unittest.TestCase):
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         self.driver.get("http://localhost:8080/coupons/")
 
-    def test_update_coupon(self):
+    def test_remove_coupon(self):
         
         click_button(self, "deletePromotionalCoupon-3")
         time.sleep(1)

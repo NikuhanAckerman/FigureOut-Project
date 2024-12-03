@@ -11,7 +11,7 @@ from selenium.webdriver.chrome.service import Service
 import time
 from ChromeSeleniumFunctions import *
 
-class ProductFormTest(unittest.TestCase):
+class AdminTest(unittest.TestCase):
     def setUp(self):
         # Configura as opções do Chrome.
         chrome_options = Options()
@@ -22,7 +22,7 @@ class ProductFormTest(unittest.TestCase):
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         self.driver.get("http://localhost:8080/chart")
 
-    def test_show_client_password(self):
+    def test_view_chart(self):
 
         # -- FUNÇÕES CRIADAS PARA TESTES --
         # click_button(self, id): Clica em botão da página.

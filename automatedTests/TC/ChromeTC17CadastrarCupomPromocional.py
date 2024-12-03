@@ -12,7 +12,7 @@ import time
 import csv
 from ChromeSeleniumFunctions import *
 
-class ProductFormTest(unittest.TestCase):
+class CouponTest(unittest.TestCase):
     def setUp(self):
         # Configura as opções do Chrome
         chrome_options = Options()

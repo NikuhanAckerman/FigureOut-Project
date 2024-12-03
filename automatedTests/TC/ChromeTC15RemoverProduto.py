@@ -23,7 +23,7 @@ class ProductFormTest(unittest.TestCase):
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         self.driver.get("http://localhost:8080/products/seeProducts")
 
-    def test_create_products(self):
+    def test_remove_product(self):
 
         # Clica no botão de "Deletar".
         click_button(self, "deleteProduct-6")

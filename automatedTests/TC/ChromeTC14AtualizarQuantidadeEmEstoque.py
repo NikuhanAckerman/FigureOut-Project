@@ -23,7 +23,7 @@ class ProductFormTest(unittest.TestCase):
         self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         self.driver.get("http://localhost:8080/stock/seeStock")
 
-    def test_create_products(self):
+    def test_update_stock(self):
 
         time.sleep(1)
         click_button(self, "updateStock-1")

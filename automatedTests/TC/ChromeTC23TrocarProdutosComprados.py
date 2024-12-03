@@ -11,7 +11,7 @@ from selenium.webdriver.chrome.service import Service
 import time
 from ChromeSeleniumFunctions import *
 
-class ProductFormTest(unittest.TestCase):
+class TransactionTest(unittest.TestCase):
     def setUp(self):
         # Configura as opções do Chrome.
         chrome_options = Options()
@@ -23,25 +23,13 @@ class ProductFormTest(unittest.TestCase):
         self.driver.get("http://localhost:8080/index")
 
     def test_exchange_product(self):
-
-        # -- FUNÇÕES CRIADAS PARA TESTES --
-        # click_button(self, id): Clica em botão da página.
-        # input_string(self, id, valor): Insere texto.
-        # select_radio(self, id, valor): Seleciona botão de rádio.
-        # check_checkbox(self, id): Checha checkbox.
-        # select_option(self, id, valor): Seleciona opção de um menu dropdown pelo texto visível.
-        # select_option_by_value(self, id, value): Seleciona opção de menu dropdown pelo valor.
-        # select_product(self, produto): Seleciona um produto da loja pelo nome dele.
-        # send_image(self, id, pasta, arquivo): Envia uma imagem.
         
-        # Informações gerais.
         select_option_by_value(self, "clientNavigate", "1")
         time.sleep(2)
         
         click_button(self, "seeShop")
         time.sleep(1)
 
-        # Adicionando o produto "Paimon" no carrinho.
         click_button(self, "clientProfile")
         time.sleep(1)
 

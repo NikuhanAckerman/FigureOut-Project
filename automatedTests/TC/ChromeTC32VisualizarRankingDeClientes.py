@@ -11,7 +11,7 @@ from selenium.webdriver.chrome.service import Service
 import time
 from ChromeSeleniumFunctions import *
 
-class ProductFormTest(unittest.TestCase):
+class AdminTest(unittest.TestCase):
     def setUp(self):
         # Configura as opções do Chrome.
         chrome_options = Options()
