@@ -303,6 +303,8 @@ public class SaleController {
                     totalPaidByCards = totalPaidByCards.add(saleCard.getAmountPaid());
                 }
             }
+
+
         }
 
         if(!cart.getExchangeCoupons().isEmpty()) {
