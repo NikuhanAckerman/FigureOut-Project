@@ -484,12 +484,14 @@ public class SaleController {
     public String seeSales(Model model) {
         // Cria uma nova instância de ChangeSaleStatusDTO e a adiciona ao modelo
         model.addAttribute("changeSaleStatusDTO", new ChangeSaleStatusDTO());
+        model.addAttribute("changeExchangeStatusDTO", new ChangeExchangeStatusDTO());
 
         // Cria uma nova instância de ChangeSaleDateTimeDTO e a adiciona ao modelo
         model.addAttribute("changeSaleDateTimeDTO", new ChangeSaleDateTimeDTO());
 
         // Adiciona todos os valores possíveis do enum SaleStatusEnum ao modelo para seleção no front-end
         model.addAttribute("status", SaleStatusEnum.values());
+        model.addAttribute("exchangeStatus", ExchangeStatusEnum.values());
 
         // Adiciona a lista de todas as vendas ao modelo, obtida do serviço saleService
         model.addAttribute("sales", saleService.getAllSales());

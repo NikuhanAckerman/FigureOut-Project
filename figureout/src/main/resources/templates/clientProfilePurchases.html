@@ -176,18 +176,22 @@
                       <!-- Informações de troca -->
                       <div class="d-flex flex-column align-items-start">
                         <div th:if="${productIdExchangeInfo[cartProduct.id] != null and !productIdExchangeInfo[cartProduct.id].isEmpty()}">
-                          <p class="text-primary">Este produto está sendo trocado ou foi trocado:</p>
 
-                          <span class="badge bg-info text-dark mb-2" th:text="'Quantidade ainda devolvível do produto: ' + ${cartProduct.exchangeableQuantity}"></span>
+                          <!--<p class="text-primary">Este produto está sendo trocado ou foi trocado:</p>
+                          <span class="badge bg-info text-dark mb-2" th:text="'Quantidade ainda devolvível do produto: ' + ${cartProduct.exchangeableQuantity}"></span>-->
 
                           <div th:each="exchangeCartProduct : ${productIdExchangeInfo[cartProduct.id]}">
-                            <span class="badge bg-warning text-dark" th:text="'Código da troca: ' + ${exchangeCartProduct.exchangeCode}"></span>
-                            <span class="badge bg-warning text-dark" th:text="' Status da troca: ' + ${exchangeCartProduct.status}"></span>
-                            <span class="badge bg-warning text-dark" th:text="${exchangeCartProduct.status.name()} == 'TROCA_RECEBIDA' or ${exchangeCartProduct.status.name()} == 'TROCA_FINALIZADA'?
+
+                            <div th:if="${exchangeCartProduct.quantityReturned > 0}">
+                              <span class="badge bg-info text-dark" th:text="'Código da troca: ' + ${exchangeCartProduct.exchangeCode}"></span>
+                              <span class="badge bg-warning text-dark" th:text="' Status da troca: ' + ${exchangeCartProduct.status}"></span>
+                              <span class="badge bg-warning text-dark" th:text="${exchangeCartProduct.status.name()} == 'TROCA_RECEBIDA' or ${exchangeCartProduct.status.name()} == 'TROCA_FINALIZADA'?
                             'Devolvido: ' + ${exchangeCartProduct.quantityReturned} :
                             'Devolvendo: ' + ${exchangeCartProduct.quantityReturned}"
-                            ></span>
+                              ></span>
+                            </div>
                           </div>
+
                         </div>
                       </div>
 

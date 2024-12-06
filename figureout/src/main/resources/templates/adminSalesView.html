@@ -116,7 +116,20 @@
                 <button type="button" class="btn btn-secondary" th:data-bs-sale-id = "${exchange.sale.id}" data-bs-toggle="modal" data-bs-target="#seeCartModal">Ver venda</button>
             </td>
 
-            <td class="text-primary" th:text="${exchange.status}"></td>
+            <td >
+                <p class="text-primary" th:text="${exchange.status}"></p>
+                <form th:action="@{/exchange/seeExchanges/changeExchangeStatus/{exchangeId}(exchangeId=${exchange.id})}" method="POST" th:object="${changeExchangeStatusDTO}">
+                    <input type="hidden" name="_method" value="PUT">
+
+                    <select th:id="exchangeStatus + ${exchange.id}" name="status" class="form-control" th:field="*{status}" onchange="this.form.submit(); ">
+                        <option value="0" selected>Selecione um status</option>
+                        <option th:each="exchangeStatus : ${exchangeStatus}"
+                                th:value="${exchangeStatus.name()}" th:text="${exchangeStatus.name()}">
+                        </option>
+                    </select>
+
+                </form>
+            </td>
 
         </tr>
 

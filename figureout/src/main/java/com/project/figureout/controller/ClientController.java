@@ -441,6 +441,8 @@ public class ClientController {
 
         }
 
+        boolean anyGreaterThanZero = productIdExchangeInfo.values().stream().flatMap(List::stream).anyMatch(dto -> dto.getQuantityReturned() > 0);
+
         productIdExchangeInfo.forEach((key, values ) -> {
             for (ExchangeShowOnPurchasesDTO value : values) {
                 System.out.println("");

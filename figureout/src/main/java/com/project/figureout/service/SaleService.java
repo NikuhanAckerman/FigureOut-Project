@@ -1,5 +1,6 @@
 package com.project.figureout.service;
 
+import com.project.figureout.dto.ChangeExchangeStatusDTO;
 import com.project.figureout.dto.ChangeSaleStatusDTO;
 import com.project.figureout.dto.NotificationDTO;
 import com.project.figureout.dto.SaleDTO;
@@ -114,16 +115,15 @@ public class SaleService {
 //    }
 
     public void changeSaleStatus(Sale sale, ChangeSaleStatusDTO changeSaleStatusDTO) throws IOException {
-        SaleStatusEnum saleStatus = sale.getStatus();
         SaleStatusEnum changeSaleStatusDTOStatus = changeSaleStatusDTO.getStatus();
-        SaleStatusEnum emProcessamento = SaleStatusEnum.EM_PROCESSAMENTO;
-        SaleStatusEnum pagamentoRealizado = SaleStatusEnum.PAGAMENTO_REALIZADO;
+
         SaleStatusEnum trocaSolicitada = SaleStatusEnum.TROCA_SOLICITADA;
         SaleStatusEnum trocaNaoAutorizada = SaleStatusEnum.TROCA_NAO_AUTORIZADA;
         SaleStatusEnum trocaAutorizada = SaleStatusEnum.TROCA_AUTORIZADA;
         SaleStatusEnum emTroca = SaleStatusEnum.EM_TROCA;
         SaleStatusEnum trocaRecebida = SaleStatusEnum.TROCA_RECEBIDA;
         SaleStatusEnum trocaFinalizada = SaleStatusEnum.TROCA_FINALIZADA;
+
         List<Enum> exchangeEnumerations = new ArrayList<>();
         exchangeEnumerations.add(trocaSolicitada);
         exchangeEnumerations.add(trocaNaoAutorizada);
@@ -132,155 +132,52 @@ public class SaleService {
         exchangeEnumerations.add(trocaRecebida);
         exchangeEnumerations.add(trocaFinalizada);
 
-
-        List<CartsProducts> saleCartsProducts = sale.getCart().getCartProducts();
-
-        Exchange exchangeInProcessFirst = null;
+        Exchange currentSaleExchange = null;
 
         for(Exchange currentExchange: sale.getExchangeList()) {
 
             if(currentExchange.isCurrentExchange()) {
 
-                exchangeInProcessFirst = currentExchange;
+                currentSaleExchange = currentExchange;
                 break;
             }
 
         }
 
-        LocalDateTime now = LocalDateTime.now();
+        if(currentSaleExchange != null) {
 
-        for(ExchangeStatusEnum currentEnum: ExchangeStatusEnum.values()) {
+            ChangeExchangeStatusDTO changeExchangeStatusDTO = new ChangeExchangeStatusDTO();
+            changeExchangeStatusDTO.setStatus(ExchangeStatusEnum.valueOf(changeSaleStatusDTOStatus.name()));
+            System.out.println(changeSaleStatusDTOStatus.name());
 
-            if(changeSaleStatusDTOStatus.name().equals(currentEnum.name())) {
-
-                if(exchangeInProcessFirst == null) {
-                    for(Enum enumer: exchangeEnumerations) {
-                        if(changeSaleStatusDTOStatus.equals(enumer)) {
-                            return;
-                        }
-                    }
-
-                    sale.setStatus(changeSaleStatusDTOStatus);
-
-                    NotificationDTO notificationDTO = new NotificationDTO();
-                    notificationDTO.setCategory(NotificationCategoryEnum.VENDA);
-                    notificationDTO.setTitle("O status da venda de código '" + sale.getSaleCode() + "' foi alterado.");
-                    notificationDTO.setDescription("O status desta venda foi alterado de " + sale.getStatus().name() + " para " + changeSaleStatusDTO.getStatus().name() + ".");
-                    notificationService.createNotification(sale.getCart().getClient(), notificationDTO);
-                    return;
-                }
-
-                exchangeInProcessFirst.setStatus(currentEnum);
-
-                if(currentEnum.equals(trocaAutorizada)) {
-                    exchangeInProcessFirst.setExchangeAcceptedTime(now);
-                }
-
-                if(currentEnum.equals(trocaFinalizada)) {
-                    exchangeInProcessFirst.setExchangeFinishTime(now);
-                }
+            if(exchangeEnumerations.contains(changeSaleStatusDTOStatus)) {
+                exchangeService.changeExchangeStatus(currentSaleExchange, changeExchangeStatusDTO);
 
                 NotificationDTO notificationDTO = new NotificationDTO();
-                notificationDTO.setCategory(NotificationCategoryEnum.TROCA);
-                notificationDTO.setTitle("O status da troca de código '" + exchangeInProcessFirst.getExchangeCode() + "' foi alterado.");
-                notificationDTO.setDescription("O status desta troca foi alterado de " + exchangeInProcessFirst.getStatus().name() + " para " + changeSaleStatusDTO.getStatus().name() + ".");
+                notificationDTO.setCategory(NotificationCategoryEnum.VENDA);
+                notificationDTO.setTitle("O status da venda de código '" + sale.getSaleCode() + "' foi alterado.");
+                notificationDTO.setDescription("O status desta venda foi alterado de " + sale.getStatus().name() + " para " + changeSaleStatusDTO.getStatus().name() + ".");
                 notificationService.createNotification(sale.getCart().getClient(), notificationDTO);
 
+                sale.setStatus(changeSaleStatusDTOStatus);
+
+                saveSale(sale);
             }
 
+            return;
         }
 
-        if(changeSaleStatusDTOStatus.equals(trocaFinalizada) || changeSaleStatusDTOStatus.equals(trocaNaoAutorizada)) {
+        if(!exchangeEnumerations.contains(changeSaleStatusDTOStatus)) {
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setCategory(NotificationCategoryEnum.VENDA);
+            notificationDTO.setTitle("O status da venda de código '" + sale.getSaleCode() + "' foi alterado.");
+            notificationDTO.setDescription("O status desta venda foi alterado de " + sale.getStatus().name() + " para " + changeSaleStatusDTO.getStatus().name() + ".");
+            notificationService.createNotification(sale.getCart().getClient(), notificationDTO);
 
-            if(changeSaleStatusDTOStatus.equals(trocaNaoAutorizada)) {
+            sale.setStatus(changeSaleStatusDTOStatus);
 
-                if(exchangeInProcessFirst != null) {
-
-                    for(ExchangeProducts currentProduct: exchangeInProcessFirst.getReturnedProducts()) {
-
-                        currentProduct.setFinalAmount(BigDecimal.valueOf(0.00));
-                        currentProduct.setQuantityReturned(0);
-
-                    }
-
-                    exchangeInProcessFirst.setCurrentExchange(false);
-
-                }
-
-            }
-
-            if(exchangeInProcessFirst != null) {
-
-                exchangeInProcessFirst.setCurrentExchange(false);
-
-            }
-
+            saveSale(sale);
         }
-
-        if(saleStatus.equals(emTroca)) {
-
-            if(changeSaleStatusDTOStatus.equals(trocaRecebida)) {
-
-                Exchange exchangeInProcess = null;
-
-                for(Exchange currentExchange: sale.getExchangeList()) {
-
-                    if(currentExchange.isCurrentExchange()) {
-                        exchangeInProcess = currentExchange;
-                        break;
-                    }
-
-                }
-
-                if(exchangeInProcess == null) {
-                    for(Enum enumer: exchangeEnumerations) {
-                        if(changeSaleStatusDTOStatus.equals(enumer)) {
-                            return;
-                        }
-                    }
-
-                    sale.setStatus(changeSaleStatusDTOStatus);
-                    return;
-                }
-
-                List<ExchangeProducts> exchangeProducts = exchangeInProcess.getReturnedProducts();
-
-                HashMap<Stock, Integer> cartProductQuantityToAdd = new HashMap<>();
-
-                for(CartsProducts cartProduct : saleCartsProducts) {
-                    Stock stock = stockService.getProductInStockByProductId(cartProduct.getProduct().getId());
-
-                    for(ExchangeProducts currentExchangeProduct : exchangeProducts) {
-
-                        if(currentExchangeProduct.getCartProduct().getId() == cartProduct.getId()) {
-
-                            cartProductQuantityToAdd.put(stock, currentExchangeProduct.getQuantityReturned());
-                            cartProduct.setExchangeableQuantity(cartProduct.getExchangeableQuantity() - currentExchangeProduct.getQuantityReturned());
-
-                        }
-
-                    }
-
-                }
-
-                stockService.addInStockList(cartProductQuantityToAdd);
-
-                exchangeService.generateExchangeCoupon(exchangeInProcess);
-
-            }
-
-        }
-
-        // creating notification
-        NotificationDTO notificationDTO = new NotificationDTO();
-        notificationDTO.setCategory(NotificationCategoryEnum.VENDA);
-        notificationDTO.setTitle("O status da venda de código '" + sale.getSaleCode() + "' foi alterado.");
-        notificationDTO.setDescription("O status desta venda foi alterado de " + sale.getStatus().name() + " para " + changeSaleStatusDTO.getStatus().name() + ".");
-        notificationService.createNotification(sale.getCart().getClient(), notificationDTO);
-
-        sale.setStatus(changeSaleStatusDTOStatus);
-
-        saveSale(sale);
 
     }
 

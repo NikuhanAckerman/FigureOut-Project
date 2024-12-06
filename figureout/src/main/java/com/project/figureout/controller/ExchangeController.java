@@ -1,5 +1,7 @@
 package com.project.figureout.controller;
 
+import com.project.figureout.dto.ChangeExchangeStatusDTO;
+import com.project.figureout.dto.ChangeSaleStatusDTO;
 import com.project.figureout.dto.ExchangeDTO;
 import com.project.figureout.dto.NotificationDTO;
 import com.project.figureout.model.*;
@@ -15,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -187,7 +190,14 @@ public class ExchangeController {
         return "redirect:/clientProfileExchanges/" + client.getId();
     }
 
+    @PutMapping("/seeExchanges/changeExchangeStatus/{exchangeId}")
+    public String changeExchangeStatus(@PathVariable long exchangeId, @ModelAttribute ChangeExchangeStatusDTO changeExchangeStatusDTO) throws IOException {
+        // Chama o serviço saleService para alterar o status da venda, passando a venda encontrada pelo ID e os dados do DTO
+        exchangeService.changeExchangeStatus(exchangeService.getExchangeById(exchangeId), changeExchangeStatusDTO);
 
+        // Após alterar o status da venda, redireciona o usuário para a página "/sales/seeSales"
+        return "redirect:/sales/seeSales";
+    }
 
 
 
