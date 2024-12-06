@@ -42,7 +42,6 @@
         <tr>
             <th scope="col">ID da Venda</th>
             <th scope="col">Código da Venda</th>
-            <th scope="col">Mudar data-hora da venda</th>
             <th scope="col">Cliente</th>
             <th scope="col">Carrinho</th>
             <th scope="col">Trocas</th>
@@ -53,15 +52,15 @@
         <tr th:each="sale : ${sales}">
             <td class="id-venda" th:text="${sale.id}"></td>
             <td th:text="${sale.saleCode}"></td>
-            <td>
+            <!--<td>
                 <form th:action="@{/sales/seeSales/changeSaleDateTime/{saleId}(saleId=${sale.id})}" th:object="${changeSaleDateTimeDTO}" method="POST">
                     <input type="hidden" name="_method" value="PUT">
                     <label><b>Escolha uma nova data-hora</b></label>
                     <input th:id="inputDate + ${sale.id}" class="form-group" type="datetime" th:field="*{newDateTime}" required>
                     <button th:id="changeDate + ${sale.id}" class="btn btn-danger" type="submit">Mudar</button>
                 </form>
+            </td>-->
 
-            </td>
             <td th:text="'ID: ' + ${sale.cart.client.id} + ' Nome: ' + ${sale.cart.client.name}"></td>
             <td>
                 <button type="button" class="btn btn-secondary" th:data-bs-sale-id = "${sale.id}" data-bs-toggle="modal" data-bs-target="#seeCartModal">Ver carrinho</button>
@@ -504,21 +503,26 @@
                     exchange.returnedProducts.forEach(returnedProduct => {
                         let unitaryPrice = returnedProduct.cartProduct.unitaryPrice.toFixed(2);
                         let totalAmount = returnedProduct.finalAmount.toFixed(2);
+                        let quantityReturned = returnedProduct.quantityReturned
+                        console.log(quantityReturned);
 
-                        const returnedProductItem = `
+                        if(quantityReturned > 0) {
+                            const returnedProductItem = `
                                     <div class="card mt-3">
                                         <div class="card-body">
                                             <p class="card-title">ID do produto: ${returnedProduct.cartProduct.id.productId}</p>
                                             <p class="card-text">Nome: ${returnedProduct.cartProduct.product.name}</p>
                                             <p class="card-text">Preço unitário: R$${unitaryPrice}</p>
-                                            <p class="card-text">Quantidade do produto: ${returnedProduct.quantityReturned}</p>
+                                            <p class="card-text">Quantidade devolvida do produto: ${quantityReturned}</p>
                                             <p class="card-text">Quantia total: R$${totalAmount}</p>
                                             <p class="card-text">Quantidade ainda devolvível do produto: ${returnedProduct.cartProduct.exchangeableQuantity}</p>
                                         </div>
                                     </div>
                                     `;
 
-                        currentExchange.insertAdjacentHTML('beforeend', returnedProductItem);
+                            currentExchange.insertAdjacentHTML('beforeend', returnedProductItem);
+                        }
+
                     });
 
                 });
@@ -592,21 +596,25 @@
                 exchange.returnedProducts.forEach(returnedProduct => {
                     let unitaryPrice = returnedProduct.cartProduct.unitaryPrice.toFixed(2);
                     let totalAmount = returnedProduct.finalAmount.toFixed(2);
+                    let quantityReturned = returnedProduct.quantityReturned;
 
-                    const returnedProductItem = `
+                    if(quantityReturned > 0) {
+                        const returnedProductItem = `
                                     <div class="card mt-3">
                                         <div class="card-body">
                                             <p class="card-title">ID do produto: ${returnedProduct.cartProduct.id.productId}</p>
                                             <p class="card-text">Nome: ${returnedProduct.cartProduct.product.name}</p>
                                             <p class="card-text">Preço unitário: R$${unitaryPrice}</p>
-                                            <p class="card-text">Quantidade do produto: ${returnedProduct.quantityReturned}</p>
+                                            <p class="card-text">Quantidade devolvida do produto: ${quantityReturned}</p>
                                             <p class="card-text">Quantia total: R$${totalAmount}</p>
                                             <p class="card-text">Quantidade ainda devolvível do produto: ${returnedProduct.cartProduct.exchangeableQuantity}</p>
                                         </div>
                                     </div>
                       `;
 
-                    specificExchangeProductListDivElement.insertAdjacentHTML('beforeend', returnedProductItem);
+                        specificExchangeProductListDivElement.insertAdjacentHTML('beforeend', returnedProductItem);
+                    }
+
                 });
 
             })

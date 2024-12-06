@@ -651,6 +651,7 @@ public class SaleController {
     }
 
     // Define o método para lidar com requisições HTTP PUT no caminho "/seeSales/changeSaleDateTime/{saleId}"
+    /*
     @PutMapping("/seeSales/changeSaleDateTime/{saleId}")
     public String changeSaleDateTime(@PathVariable long saleId, @ModelAttribute ChangeSaleDateTimeDTO changeSaleDateTimeDTO) {
         // Obtém a venda com o ID fornecido (saleId) usando o serviço saleService.
@@ -664,7 +665,7 @@ public class SaleController {
 
         // Redireciona o usuário para a página "/sales/seeSales" após a alteração
         return "redirect:/sales/seeSales";
-    }
+    }*/
 
 
 

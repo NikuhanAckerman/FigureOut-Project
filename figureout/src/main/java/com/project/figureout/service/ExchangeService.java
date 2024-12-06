@@ -35,7 +35,9 @@ public class ExchangeService {
     private NotificationService notificationService;
 
     private BigDecimal percentileToCreateNewExchangeCoupon = BigDecimal.valueOf(0.20); // if I use an exchange coupon and the
-                                                                                      // leftover value is bigger than 100% + (percentile*100)%
+    @Autowired
+    private SaleRepository saleRepository;
+    // leftover value is bigger than 100% + (percentile*100)%
                                                                                      // then I create a new exchange coupon with the value of
                                                                                     // the leftover.
 
@@ -162,6 +164,20 @@ public class ExchangeService {
         }
 
         exchange.setStatus(changeExchangeStatusDTO.getStatus());
+
+        if(exchange.isCurrentExchange()) {
+            Sale sale = exchange.getSale();
+
+            NotificationDTO notificationDTO = new NotificationDTO();
+            notificationDTO.setCategory(NotificationCategoryEnum.VENDA);
+            notificationDTO.setTitle("O status da venda de código '" + sale.getSaleCode() + "' foi alterado.");
+            notificationDTO.setDescription("O status desta venda foi alterado de " + sale.getStatus().name() + " para " + exchange.getStatus());
+            notificationService.createNotification(sale.getCart().getClient(), notificationDTO);
+
+            sale.setStatus(SaleStatusEnum.valueOf(String.valueOf(exchange.getStatus())));
+
+            saleRepository.save(sale);
+        }
 
         NotificationDTO notificationDTO = new NotificationDTO();
         notificationDTO.setCategory(NotificationCategoryEnum.TROCA);
