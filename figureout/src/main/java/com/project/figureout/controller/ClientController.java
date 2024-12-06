@@ -152,9 +152,6 @@ public class ClientController {
 
         List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
 
-         // necessary to pre-set this in the form via hidden field
-        //System.out.println("GET METHOD: " + creditCardDTO.getClientId());
-
         model.addAttribute("creditCardDTO", creditCardDTO);
         model.addAttribute("clientId", id);
         model.addAttribute("creditCardBrandList", creditCardBrandList);

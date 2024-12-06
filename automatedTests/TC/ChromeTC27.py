@@ -36,7 +36,7 @@ class ProfilePageTest(unittest.TestCase):
         click_button(self, "notifications")
         time.sleep(2)
 
-        click_button(self, "close-1")
+        click_button(self, "close-5")
         time.sleep(2)
 
     def tearDown(self):

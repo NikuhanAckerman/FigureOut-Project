@@ -28,6 +28,14 @@
                         <p class="text-primary" th:text="'Desconto: ' + ${cart.promotionalCoupon.couponDiscount * 100} + '%'"></p>
                     </div>
 
+                    <div th:if="${cart.exchangeCoupons.size() >= 0} ">
+                        <p class="text-primary" th:text="'Cupons de troca aplicados neste carrinho:'"></p>
+                        <div th:each="exchangeCoupon : ${cart.exchangeCoupons}">
+                            <p class="text-primary" th:text="'Código do cupom: ' + ${exchangeCoupon.exchangeCouponCode}"></p>
+                            <p class="text-primary" th:text="'Desconto: ' + ${exchangeCoupon.amountWorth}"></p>
+                        </div>
+                    </div>
+
                     <p class="text-success" th:text="'Total do carrinho: R$' + ${cart.totalPrice}"></p>
 
                     <div class="card mb-3" th:each="cartProduct : ${cart.cartProducts}">

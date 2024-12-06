@@ -210,13 +210,14 @@ public class CartController {
 
     @PutMapping("/addExchangeCoupon/{cartId}")
     public String addExchangeCoupon(@PathVariable long cartId, @ModelAttribute ExchangeCouponIndividualDTO exchangeCouponIndividualDTO,
-                                    HttpServletRequest request, Model model, RedirectAttributes redirectAttributes) {
+                                    HttpServletRequest request, RedirectAttributes redirectAttributes) {
         Cart cart = cartService.getCartById(cartId);
 
         List<String> errors = new ArrayList<>();
         String referer = request.getHeader("Referer");
 
         long exchangeCouponId = 0;
+
 
         for(ExchangeCoupon exchangeCoupon: exchangeCouponRepository.findAll()) {
 
@@ -230,6 +231,10 @@ public class CartController {
 
         if(exchangeCouponId != 0) {
             ExchangeCoupon exchangeCoupon = exchangeCouponRepository.findById(exchangeCouponId).orElseThrow(() -> new NoSuchElementException("Cupom de troca não encontrado por ID."));
+
+            if(cart.getExchangeCoupons().size() >= 3) {
+                errors.add("Você não pode adicionar mais cupons de troca.");
+            }
 
             if(cart.getClient().getId() == exchangeCoupon.getClient().getId()) { // same client
 
@@ -253,7 +258,7 @@ public class CartController {
 
             } else {
 
-                errors.add("Você não pode adicionar um cupom de troca não proveniente de sua conta.");
+                errors.add("Você não pode usar esse cupom de troca.");
 
             }
 

@@ -303,6 +303,8 @@ public class SaleController {
                     totalPaidByCards = totalPaidByCards.add(saleCard.getAmountPaid());
                 }
             }
+
+
         }
 
         if(!cart.getExchangeCoupons().isEmpty()) {
@@ -334,8 +336,10 @@ public class SaleController {
             List<Sale> listOfClientSales = saleService.getClientSalesByClientId(sale.getCart().getClient().getId());
 
             for(Sale currentSale : listOfClientSales) {
-                if(currentSale.getPromotionalCouponApplied().getId() == sale.getPromotionalCouponApplied().getId()) {
-                    errors.add("O cupom promocional " + sale.getPromotionalCouponApplied().getCouponName() + " já foi utilizado. Remova-o da compra.");
+                if(currentSale.getPromotionalCouponApplied() != null) {
+                    if(currentSale.getPromotionalCouponApplied().getId() == sale.getPromotionalCouponApplied().getId()) {
+                        errors.add("O cupom promocional " + sale.getPromotionalCouponApplied().getCouponName() + " já foi utilizado. Remova-o da compra.");
+                    }
                 }
             }
 
