@@ -22,6 +22,7 @@
             <form th:action="@{/createAddress/{id}(id=${clientId})}" th:object="${addressDTO}" method="POST">
                 <div class="form-group">
 
+                    <input type="hidden" name="redirectToInPost" th:value="${param.redirectToInPost}"/>
                     <p class="text-danger" th:errors="${addressDTO}"></p>
 
                     <div class="card">
@@ -136,7 +137,7 @@
                     </div>
 
             <button type="submit" id="createButton" class="btn btn-primary add-delete-button">Adicionar</button>
-            <a class="btn btn-danger add-delete-button" th:href="@{/index}">Voltar</a>
+            <a class="btn btn-danger add-delete-button" th:href="${redirectToInPost}">Voltar</a>
 
             </div>
 

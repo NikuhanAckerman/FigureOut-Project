@@ -110,14 +110,14 @@
                             </span>
                         </p>
 
-                        <a class="btn btn-primary" th:href="@{/updateAddress/{id}(id=${address.id})}">Atualizar</a>
+                        <a class="btn btn-primary" th:href="@{/updateAddress/{id}(id=${address.id}, redirectToInPut='/clientProfileAddresses/' + ${clientId})}">Atualizar</a>
 
                 </div>
 
             </div>
             </div>
 
-    <a class="btn btn-success" th:href="@{/createAddress/{id}(id=${clientId})}">Adicionar endereço</a>
+    <a class="btn btn-success" th:href="@{/createAddress/{id}(id=${clientId}, redirectToInPost='/clientProfileAddresses/' + ${clientId})}">Adicionar endereço</a>
 
 </div>
 

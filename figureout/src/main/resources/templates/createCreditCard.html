@@ -22,6 +22,7 @@
   <form th:action="@{/createCreditCard/{id}(id=${clientId})}" th:object="${creditCardDTO}" method="POST">
     <div class="form-group">
       <input type="hidden" th:field="*{clientId}"/>
+      <input type="hidden" name="redirectToInPost" th:value="${param.redirectToInPost}">
 
       <p class="text-danger" th:errors="${creditCardDTO}"></p>
 
@@ -83,7 +84,7 @@
     </div>
 
     <button type="submit" class="btn btn-primary add-delete-button" id="createButton">Criar</button>
-    <a class="btn btn-danger add-delete-button" id="backButton" th:href="@{/showAllClients}">Voltar</a>
+    <a class="btn btn-danger add-delete-button" id="backButton" th:href="${redirectToInPost}">Voltar</a>
 
   </form>
 

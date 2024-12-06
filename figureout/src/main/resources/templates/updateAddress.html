@@ -21,8 +21,7 @@
 <div class="container mt-5">
     <form th:action="@{/updateAddress/{id}(id=${addressId})}" th:object="${addressDTO}" method="POST">
         <input type="hidden" name="_method" value="PUT">
-
-        <h1 th:text="'ID do endereço: ' + ${addressId}"></h1>
+        <input type="hidden" name="redirectToInPut" th:value="${param.redirectToInPut}" />
 
         <div class="form-group">
 
@@ -143,8 +142,9 @@
 
         </div>
 
+        <p th:text="${redirectToInPost}"></p>
         <button type="submit" id="updateAddress" class="btn btn-primary add-delete-button">Atualizar</button>
-        <a class="btn btn-danger add-delete-button" th:href="@{/index}">Voltar</a>
+        <a class="btn btn-danger add-delete-button" th:href="${redirectToInPut}">Voltar</a>
 
     </form>
 
