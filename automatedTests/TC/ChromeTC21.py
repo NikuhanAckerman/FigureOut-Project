@@ -24,10 +24,10 @@ class TransactionTest(unittest.TestCase):
 
     def test_approve_purchase(self):
 
-        select_option(self, "saleStatus1", "EM_TRANSPORTE")
+        select_option(self, "saleStatus21", "EM_TRANSPORTE")
         time.sleep(1)
         
-        select_option(self, "saleStatus1", "ENTREGUE")
+        select_option(self, "saleStatus21", "ENTREGUE")
         time.sleep(4)
 
     def tearDown(self):
