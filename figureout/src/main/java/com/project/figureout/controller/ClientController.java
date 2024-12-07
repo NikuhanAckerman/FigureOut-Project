@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(path = "/")
@@ -458,6 +459,8 @@ public class ClientController {
 
         }
 
+
+
         productIdExchangeInfo.forEach((key, values ) -> {
             for (ExchangeShowOnPurchasesDTO value : values) {
                 System.out.println("");
@@ -475,6 +478,35 @@ public class ClientController {
         model.addAttribute("productIdExchangeInfo", productIdExchangeInfo);
 
         return "clientProfilePurchases";
+    }
+
+    // Método para filtrar as compras do cliente pela data de compra.
+    @GetMapping("/clientProfilePurchasesFilter/{id}")
+    public String getProfile(@PathVariable long id,
+                             @RequestParam(value = "filterDate", required = false) String filterDate,
+                             Model model) {
+
+        // Carrega todas as compras do cliente específico
+        List<Sale> clientSales = saleService.getClientSalesByClientId(id);
+
+        if (filterDate != null && !filterDate.isEmpty()) {
+            // Converte a data recebida no formato String para LocalDate
+            LocalDate date = LocalDate.parse(filterDate);
+
+            // Filtra as compras do cliente pela data, ignorando a parte da hora
+            clientSales = clientSales.stream()
+                    .filter(sale -> sale.getDateTimeSale().toLocalDate().equals(date))  // Filtra pela data
+                    .collect(Collectors.toList());
+
+            // Passa o filtro de data para o modelo para exibição
+            model.addAttribute("filterDate", filterDate);
+        }
+
+        // Passa as compras filtradas para o modelo
+        model.addAttribute("sales", clientSales);
+        model.addAttribute("id", id);  // Passa o id do cliente para a view
+
+        return "clientProfilePurchases";  // Retorna a página Thymeleaf
     }
 
     @GetMapping("/clientProfileExchanges/{id}")

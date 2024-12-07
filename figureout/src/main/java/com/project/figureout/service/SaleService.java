@@ -181,5 +181,9 @@ public class SaleService {
 
     }
 
+    public List<Sale> findSalesByDate(LocalDateTime date) {
+        return saleRepository.findByDateTimeSale(date);
+    }
+
 
 }
