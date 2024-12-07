@@ -95,7 +95,7 @@
               <strong>Bandeira: </strong><span th:text="${creditCard.brand.name}"></span>
             </p>
 
-            <a class="btn btn-primary" th:href="@{/updateCreditCard/{id}(id=${creditCard.id})}">Atualizar</a>
+            <a class="btn btn-primary" th:href="@{/updateCreditCard/{id}(id=${creditCard.id}, redirectToInPut='/clientProfileCreditCards/' + ${id})}">Atualizar</a>
           </div>
         </div>
 
@@ -103,7 +103,7 @@
 
 
 
-      <a class="btn btn-success" th:href="@{/createCreditCard/{id}(id = ${id})}">Adicionar cartão de crédito</a>
+      <a class="btn btn-success" th:href="@{/createCreditCard/{id}(id = ${id}, redirectToInPost='/clientProfileCreditCards/' + ${id})}">Adicionar cartão de crédito</a>
 
   </div>
 

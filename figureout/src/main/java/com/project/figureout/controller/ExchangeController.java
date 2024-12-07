@@ -1,5 +1,6 @@
 package com.project.figureout.controller;
 
+import com.project.figureout.dto.ChangeExchangeStatusDTO;
 import com.project.figureout.dto.ExchangeDTO;
 import com.project.figureout.dto.NotificationDTO;
 import com.project.figureout.model.*;
@@ -15,12 +16,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
 @RequestMapping("/exchange")
@@ -90,6 +92,7 @@ public class ExchangeController {
             exchangeDTO.getCartProductQuantity().forEach((key, value) -> {
                 CartsProducts cartProduct = cartsProductsRepository.getCartsProductsByProductIdAndCart(key, sale.getCart());
                 String name = cartProduct.getProduct().getName();
+
                 if(value < 0) {
                     errors.add("Não se pode trocar menos que 0 de '" + name + "'.");
                 }
@@ -97,6 +100,10 @@ public class ExchangeController {
                     errors.add("Não é possível trocar essa quantidade do produto '" + name + "' pois a quantidade disponível para troca é menor do que a digitada.");
                 }
             });
+
+            if(exchangeDTO.getCartProductQuantity().values().stream().allMatch(value -> value == 0)) {
+                errors.add("Não é possível realizar uma troca de 0 produtos no total.");
+            }
 
             if(!errors.isEmpty()) {
                 String referer = request.getHeader("Referer");
@@ -182,12 +189,25 @@ public class ExchangeController {
             notificationDTO.setDescription("Uma troca de código '" + newExchange.getExchangeCode() + "' foi requisitada.");
             notificationService.createNotification(sale.getCart().getClient(), notificationDTO);
 
+        } else {
+            errors.add("Você não pode requisitar uma troca envolvendo esta compra atualmente.");
+
+            String referer = request.getHeader("Referer");
+            redirectAttributes.addFlashAttribute("errorsExchangeRequest", errors);
+            return "redirect:" + referer;
         }
 
         return "redirect:/clientProfileExchanges/" + client.getId();
     }
 
+    @PutMapping("/seeExchanges/changeExchangeStatus/{exchangeId}")
+    public String changeExchangeStatus(@PathVariable long exchangeId, @ModelAttribute ChangeExchangeStatusDTO changeExchangeStatusDTO) throws IOException {
+        // Chama o serviço saleService para alterar o status da venda, passando a venda encontrada pelo ID e os dados do DTO
+        exchangeService.changeExchangeStatus(exchangeService.getExchangeById(exchangeId), changeExchangeStatusDTO);
 
+        // Após alterar o status da venda, redireciona o usuário para a página "/sales/seeSales"
+        return "redirect:/sales/seeSales";
+    }
 
 
 

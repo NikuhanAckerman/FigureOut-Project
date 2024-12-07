@@ -484,12 +484,14 @@ public class SaleController {
     public String seeSales(Model model) {
         // Cria uma nova instância de ChangeSaleStatusDTO e a adiciona ao modelo
         model.addAttribute("changeSaleStatusDTO", new ChangeSaleStatusDTO());
+        model.addAttribute("changeExchangeStatusDTO", new ChangeExchangeStatusDTO());
 
         // Cria uma nova instância de ChangeSaleDateTimeDTO e a adiciona ao modelo
         model.addAttribute("changeSaleDateTimeDTO", new ChangeSaleDateTimeDTO());
 
         // Adiciona todos os valores possíveis do enum SaleStatusEnum ao modelo para seleção no front-end
         model.addAttribute("status", SaleStatusEnum.values());
+        model.addAttribute("exchangeStatus", ExchangeStatusEnum.values());
 
         // Adiciona a lista de todas as vendas ao modelo, obtida do serviço saleService
         model.addAttribute("sales", saleService.getAllSales());
@@ -649,6 +651,7 @@ public class SaleController {
     }
 
     // Define o método para lidar com requisições HTTP PUT no caminho "/seeSales/changeSaleDateTime/{saleId}"
+    /*
     @PutMapping("/seeSales/changeSaleDateTime/{saleId}")
     public String changeSaleDateTime(@PathVariable long saleId, @ModelAttribute ChangeSaleDateTimeDTO changeSaleDateTimeDTO) {
         // Obtém a venda com o ID fornecido (saleId) usando o serviço saleService.
@@ -662,7 +665,7 @@ public class SaleController {
 
         // Redireciona o usuário para a página "/sales/seeSales" após a alteração
         return "redirect:/sales/seeSales";
-    }
+    }*/
 
 
 

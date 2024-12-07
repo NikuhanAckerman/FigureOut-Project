@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -64,7 +65,7 @@ public class ClientController {
     }
 
     @GetMapping("/createAddress/{id}")
-    public String addClientGet(Model model, @PathVariable long id) {
+    public String addClientGet(Model model, @PathVariable long id, @RequestParam(defaultValue = "/showAllClients") String redirectToInPost) {
         AddressDTO addressDTO = new AddressDTO();
 
         List<State> stateList = stateAndCountryService.getAllStates();
@@ -74,12 +75,14 @@ public class ClientController {
         model.addAttribute("countryList", countryList);
         model.addAttribute("addressDTO", addressDTO);
         model.addAttribute("clientId", id);
+        model.addAttribute("redirectToInPost", redirectToInPost);
 
         return "createAddress";
     }
 
     @PostMapping("createAddress/{id}")
-    public String createClientAddressPost(@PathVariable long id, @Valid @ModelAttribute("addressDTO") AddressDTO addressDTO, BindingResult result, Model model) {
+    public String createClientAddressPost(@PathVariable long id, @Valid @ModelAttribute("addressDTO") AddressDTO addressDTO, BindingResult result, Model model,
+                                          @RequestParam(defaultValue = "/showAllClients") String redirectToInPost) {
         Client client = clientService.getClientById(id);
 
         if(result.hasErrors()) {
@@ -88,13 +91,14 @@ public class ClientController {
             model.addAttribute("stateList", stateList);
             model.addAttribute("countryList", countryList);
             model.addAttribute("clientId", id);
+            model.addAttribute("redirectToInPost", redirectToInPost);
 
             return "createAddress";
         }
 
         addressService.registerAddress(client, addressDTO);
 
-        return "redirect:/showAllClients" ;
+        return "redirect:" + redirectToInPost;
     }
 
     @DeleteMapping("/deleteAddress/{id}")
@@ -105,9 +109,12 @@ public class ClientController {
     }
 
     @GetMapping("updateAddress/{addressId}")
-    public String updateClientAddressGet(@PathVariable long addressId, Model model) {
+    public String updateClientAddressGet(@PathVariable long addressId, Model model,
+                                         @RequestParam(defaultValue = "/showAllClients") String redirectToInPut) {
         Address address = addressService.getAddressById(addressId);
         AddressDTO addressDTO = new AddressDTO();
+
+        System.out.println(redirectToInPut);
 
         List<State> stateList = stateAndCountryService.getAllStates();
         List<Country> countryList = stateAndCountryService.getAllCountries();
@@ -117,12 +124,14 @@ public class ClientController {
         model.addAttribute("addressDTO", addressDTO);
         model.addAttribute("stateList", stateList);
         model.addAttribute("countryList", countryList);
+        model.addAttribute("redirectToInPut", redirectToInPut);
 
         return "updateAddress";
     }
 
     @PutMapping("updateAddress/{addressId}")
-    public String updateClientAddressPost(@PathVariable long addressId, @Valid @ModelAttribute("addressDTO") AddressDTO addressDTO, BindingResult result, Model model) {
+    public String updateClientAddressPost(@PathVariable long addressId, @Valid @ModelAttribute("addressDTO") AddressDTO addressDTO, BindingResult result, Model model,
+                                          @RequestParam(defaultValue = "/showAllClients") String redirectToInPut) {
         Address addressToUpdate = addressService.getAddressById(addressId);
         List<State> stateList = stateAndCountryService.getAllStates();
         List<Country> countryList = stateAndCountryService.getAllCountries();
@@ -131,13 +140,14 @@ public class ClientController {
             model.addAttribute("addressId", addressId);
             model.addAttribute("stateList", stateList);
             model.addAttribute("countryList", countryList);
+            model.addAttribute("redirectToInPut", redirectToInPut);
 
             return "updateAddress";
         }
 
         addressService.updateAddress(addressId, addressDTO);
 
-        return "redirect:/showAllClients";
+        return "redirect:" + redirectToInPut;
     }
 
     @GetMapping("index/{id}/creditCards")
@@ -147,7 +157,7 @@ public class ClientController {
     }
 
     @GetMapping("createCreditCard/{id}")
-    public String createClientCreditCardGet(@PathVariable long id, Model model) {
+    public String createClientCreditCardGet(@PathVariable long id, Model model, @RequestParam(defaultValue = "/showAllClients") String redirectToInPost) {
         CreditCardDTO creditCardDTO = new CreditCardDTO();
         creditCardDTO.setClientId(id);
 
@@ -156,12 +166,14 @@ public class ClientController {
         model.addAttribute("creditCardDTO", creditCardDTO);
         model.addAttribute("clientId", id);
         model.addAttribute("creditCardBrandList", creditCardBrandList);
+        model.addAttribute("redirectToInPost", redirectToInPost);
 
         return "createCreditCard";
     }
 
     @PostMapping("createCreditCard/{id}")
-    public String createClientCreditCardPost(@PathVariable long id, @Valid @ModelAttribute CreditCardDTO creditCardDTO, BindingResult result, Model model) {
+    public String createClientCreditCardPost(@PathVariable long id, @Valid @ModelAttribute CreditCardDTO creditCardDTO, BindingResult result, Model model,
+                                             @RequestParam(defaultValue = "/showAllClients") String redirectToInPost) {
         Client client = clientService.getClientById(id);
         String ANSI_RESET = "\u001B[0m";
         String ANSI_RED = "\u001B[31m";
@@ -174,6 +186,7 @@ public class ClientController {
             model.addAttribute("creditCardDTO", creditCardDTO);
             model.addAttribute("clientId", id);
             model.addAttribute("creditCardBrandList", creditCardBrandList);
+            model.addAttribute("redirectToInPost", redirectToInPost);
 
             return "createCreditCard";
         }
@@ -182,7 +195,7 @@ public class ClientController {
 
         creditCardService.registerCreditCard(client, creditCardDTO);
 
-        return "redirect:/showAllClients";
+        return "redirect:" + redirectToInPost;
 
     }
 
@@ -194,7 +207,8 @@ public class ClientController {
     }
 
     @GetMapping("updateCreditCard/{id}")
-    public String updateClientCreditCardGet(@PathVariable long id, Model model) {
+    public String updateClientCreditCardGet(@PathVariable long id, Model model,
+                                            @RequestParam(defaultValue = "/showAllClients") String redirectToInPut) {
         CreditCard creditCard = creditCardService.getCreditCardById(id);
         Client client = creditCard.getClient();
 
@@ -209,25 +223,28 @@ public class ClientController {
         model.addAttribute("creditCardDTO", creditCardDTO);
         model.addAttribute("creditCardBrandList", creditCardBrandList);
         model.addAttribute("creditCardId", id);
+        model.addAttribute("redirectToInPut", redirectToInPut);
 
         return "updateCreditCard";
     }
 
     @PutMapping("updateCreditCard/{id}")
-    public String updateClientCreditCardPut(@PathVariable long id, @Valid @ModelAttribute CreditCardDTO creditCardDTO, BindingResult result, Model model) {
+    public String updateClientCreditCardPut(@PathVariable long id, @Valid @ModelAttribute CreditCardDTO creditCardDTO, BindingResult result, Model model,
+                                            @RequestParam(defaultValue = "/showAllClients") String redirectToInPut) {
         CreditCard creditCardToUpdate = creditCardService.getCreditCardById(id);
         List<CreditCardBrand> creditCardBrandList = creditCardService.getAllCreditCardBrands();
 
         if(result.hasErrors()) {
             model.addAttribute("creditCardId", id);
             model.addAttribute("creditCardBrandList", creditCardBrandList);
+            model.addAttribute("redirectToInPut", redirectToInPut);
 
             return "updateCreditCard";
         }
 
         creditCardService.updateCreditCard(creditCardToUpdate, creditCardDTO);
 
-        return "redirect:/showAllClients";
+        return "redirect:" + redirectToInPut;
     }
 
     @GetMapping("/createClient")
@@ -526,6 +543,7 @@ public class ClientController {
         model.addAttribute("notificationQuantity", notificationQuantity);
 
         model.addAttribute("id", id);
+        model.addAttribute("clientId", id);
         model.addAttribute("addresses", clientAddresses);
 
         return "clientProfileAddresses";

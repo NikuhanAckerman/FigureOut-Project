@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualização de Vendas</title>
+    <title>Vendas e trocas</title>
     <link rel="stylesheet" href="/CSS/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
@@ -42,7 +42,6 @@
         <tr>
             <th scope="col">ID da Venda</th>
             <th scope="col">Código da Venda</th>
-            <th scope="col">Mudar data-hora da venda</th>
             <th scope="col">Cliente</th>
             <th scope="col">Carrinho</th>
             <th scope="col">Trocas</th>
@@ -53,15 +52,15 @@
         <tr th:each="sale : ${sales}">
             <td class="id-venda" th:text="${sale.id}"></td>
             <td th:text="${sale.saleCode}"></td>
-            <td>
+            <!--<td>
                 <form th:action="@{/sales/seeSales/changeSaleDateTime/{saleId}(saleId=${sale.id})}" th:object="${changeSaleDateTimeDTO}" method="POST">
                     <input type="hidden" name="_method" value="PUT">
                     <label><b>Escolha uma nova data-hora</b></label>
                     <input th:id="inputDate + ${sale.id}" class="form-group" type="datetime" th:field="*{newDateTime}" required>
                     <button th:id="changeDate + ${sale.id}" class="btn btn-danger" type="submit">Mudar</button>
                 </form>
+            </td>-->
 
-            </td>
             <td th:text="'ID: ' + ${sale.cart.client.id} + ' Nome: ' + ${sale.cart.client.name}"></td>
             <td>
                 <button type="button" class="btn btn-secondary" th:data-bs-sale-id = "${sale.id}" data-bs-toggle="modal" data-bs-target="#seeCartModal">Ver carrinho</button>
@@ -116,7 +115,20 @@
                 <button type="button" class="btn btn-secondary" th:data-bs-sale-id = "${exchange.sale.id}" data-bs-toggle="modal" data-bs-target="#seeCartModal">Ver venda</button>
             </td>
 
-            <td class="text-primary" th:text="${exchange.status}"></td>
+            <td >
+                <p class="text-primary" th:text="${exchange.status}"></p>
+                <form th:action="@{/exchange/seeExchanges/changeExchangeStatus/{exchangeId}(exchangeId=${exchange.id})}" method="POST" th:object="${changeExchangeStatusDTO}">
+                    <input type="hidden" name="_method" value="PUT">
+
+                    <select th:id="exchangeStatus + ${exchange.id}" name="status" class="form-control" th:field="*{status}" onchange="this.form.submit(); ">
+                        <option value="0" selected>Selecione um status</option>
+                        <option th:each="exchangeStatus : ${exchangeStatus}"
+                                th:value="${exchangeStatus.name()}" th:text="${exchangeStatus.name()}">
+                        </option>
+                    </select>
+
+                </form>
+            </td>
 
         </tr>
 
@@ -491,21 +503,26 @@
                     exchange.returnedProducts.forEach(returnedProduct => {
                         let unitaryPrice = returnedProduct.cartProduct.unitaryPrice.toFixed(2);
                         let totalAmount = returnedProduct.finalAmount.toFixed(2);
+                        let quantityReturned = returnedProduct.quantityReturned
+                        console.log(quantityReturned);
 
-                        const returnedProductItem = `
+                        if(quantityReturned > 0) {
+                            const returnedProductItem = `
                                     <div class="card mt-3">
                                         <div class="card-body">
                                             <p class="card-title">ID do produto: ${returnedProduct.cartProduct.id.productId}</p>
                                             <p class="card-text">Nome: ${returnedProduct.cartProduct.product.name}</p>
                                             <p class="card-text">Preço unitário: R$${unitaryPrice}</p>
-                                            <p class="card-text">Quantidade do produto: ${returnedProduct.quantityReturned}</p>
+                                            <p class="card-text">Quantidade devolvida do produto: ${quantityReturned}</p>
                                             <p class="card-text">Quantia total: R$${totalAmount}</p>
                                             <p class="card-text">Quantidade ainda devolvível do produto: ${returnedProduct.cartProduct.exchangeableQuantity}</p>
                                         </div>
                                     </div>
                                     `;
 
-                        currentExchange.insertAdjacentHTML('beforeend', returnedProductItem);
+                            currentExchange.insertAdjacentHTML('beforeend', returnedProductItem);
+                        }
+
                     });
 
                 });
@@ -579,21 +596,25 @@
                 exchange.returnedProducts.forEach(returnedProduct => {
                     let unitaryPrice = returnedProduct.cartProduct.unitaryPrice.toFixed(2);
                     let totalAmount = returnedProduct.finalAmount.toFixed(2);
+                    let quantityReturned = returnedProduct.quantityReturned;
 
-                    const returnedProductItem = `
+                    if(quantityReturned > 0) {
+                        const returnedProductItem = `
                                     <div class="card mt-3">
                                         <div class="card-body">
                                             <p class="card-title">ID do produto: ${returnedProduct.cartProduct.id.productId}</p>
                                             <p class="card-text">Nome: ${returnedProduct.cartProduct.product.name}</p>
                                             <p class="card-text">Preço unitário: R$${unitaryPrice}</p>
-                                            <p class="card-text">Quantidade do produto: ${returnedProduct.quantityReturned}</p>
+                                            <p class="card-text">Quantidade devolvida do produto: ${quantityReturned}</p>
                                             <p class="card-text">Quantia total: R$${totalAmount}</p>
                                             <p class="card-text">Quantidade ainda devolvível do produto: ${returnedProduct.cartProduct.exchangeableQuantity}</p>
                                         </div>
                                     </div>
                       `;
 
-                    specificExchangeProductListDivElement.insertAdjacentHTML('beforeend', returnedProductItem);
+                        specificExchangeProductListDivElement.insertAdjacentHTML('beforeend', returnedProductItem);
+                    }
+
                 });
 
             })
