@@ -27,40 +27,11 @@ public class ClientService {
     @Autowired
     private CartService cartService;
 
-    @Autowired
-    private SaleService saleService;
-
-    //private HashMap<Long, BigDecimal> clientAndSaleTotals = new HashMap<>();
-
     // Client Methods
 
     public List<Client> getAllClients() {
         return clientRepository.findAll();
     }
-
-    /*private void populateClientsAndSalesMap() {
-        List<Client> allClients = getAllClients();
-
-        if(!clientAndSaleTotals.isEmpty()) {
-            clientAndSaleTotals.clear();
-        }
-
-        for(Client currentClient : allClients) {
-
-            List<Sale> clientSaleList = new ArrayList<>();
-            clientSaleList.addAll(saleService.getClientSalesByClientId(currentClient.getId()));
-
-            BigDecimal salesTotals = BigDecimal.valueOf(0.00);
-
-            for(Sale currentSale: clientSaleList) {
-                salesTotals = salesTotals.add(currentSale.getFinalPrice());
-            }
-
-            clientAndSaleTotals.put(currentClient.getId(), salesTotals);
-
-        }
-
-    }*/
 
     public Client getClientById(long id) {
         return clientRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Cliente não encontrado com base no ID."));
@@ -146,7 +117,6 @@ public class ClientService {
         client.setPhone(phone);
 
         client.setTotalAmountSpent(BigDecimal.valueOf(0.00));
-        //client.setRanking(0);
     }
 
     public List<Gender> getAllGenders() {
@@ -245,31 +215,6 @@ public class ClientService {
 
 
         return clients.isEmpty() ? new ArrayList<>() : clients; // Retornar uma lista vazia se nenhum filtro bater
-    }
-
-    public void recalculateClientRanking() {
-
-        /*populateClientsAndSalesMap();
-
-        List<Map.Entry<Long, BigDecimal>> sortedClientsBySales = clientAndSaleTotals.entrySet()
-                .stream()
-                .sorted(Map.Entry.<Long, BigDecimal>comparingByValue().reversed()) // Sort by value, descending
-                .toList();
-
-        int rank = 1;
-        for (Map.Entry<Long, BigDecimal> entry : sortedClientsBySales) {
-            Long clientId = entry.getKey();
-            BigDecimal totalSales = entry.getValue();
-
-            Client client = getClientById(clientId);
-            client.setRanking(rank);
-            client.setTotalAmountSpent(totalSales);
-            saveClient(client);
-
-            System.out.println("Rank " + rank + ": Client " + getClientById(clientId).getName() + " - Total Sales: $" + totalSales);
-            rank++;
-        }*/
-
     }
 
 }

@@ -35,7 +35,7 @@ public class Sale {
     @JoinColumn(name = "ven_end_id")
     private Address deliveryAddress;
 
-    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<SalesCards> cardsUsedInThisSale = new ArrayList<>();
 
     @Enumerated(EnumType.ORDINAL)

@@ -423,7 +423,12 @@ public class ClientController {
 
     @GetMapping("/clientProfilePurchases/{id}")
     public String seeClientProfilePurchases(@PathVariable long id, Model model) {
-        List<Sale> clientSales = saleService.getClientSalesByClientId(id);
+        List<Sale> clientSales = (List<Sale>) model.asMap().get("sales");
+
+        if (clientSales == null) {
+            clientSales = saleService.getClientSalesByClientId(id);
+        }
+
         int notificationQuantity = notificationService.getClientNotifications(id).size();
 
         model.addAttribute("id", id);
@@ -459,9 +464,7 @@ public class ClientController {
 
         }
 
-
-
-        productIdExchangeInfo.forEach((key, values ) -> {
+        /*productIdExchangeInfo.forEach((key, values ) -> {
             for (ExchangeShowOnPurchasesDTO value : values) {
                 System.out.println("");
                 System.out.println("Key (Cart ID): " + key);
@@ -473,7 +476,7 @@ public class ClientController {
                 System.out.println("");
             }
 
-        });
+        });*/
 
         model.addAttribute("productIdExchangeInfo", productIdExchangeInfo);
 
@@ -484,12 +487,13 @@ public class ClientController {
     @GetMapping("/clientProfilePurchasesFilter/{id}")
     public String getProfile(@PathVariable long id,
                              @RequestParam(value = "filterDate", required = false) String filterDate,
-                             Model model) {
+                             Model model, RedirectAttributes redirectAttributes) {
 
         // Carrega todas as compras do cliente específico
         List<Sale> clientSales = saleService.getClientSalesByClientId(id);
 
         if (filterDate != null && !filterDate.isEmpty()) {
+            System.out.println("condition is going");
             // Converte a data recebida no formato String para LocalDate
             LocalDate date = LocalDate.parse(filterDate);
 
@@ -499,14 +503,17 @@ public class ClientController {
                     .collect(Collectors.toList());
 
             // Passa o filtro de data para o modelo para exibição
-            model.addAttribute("filterDate", filterDate);
+            redirectAttributes.addFlashAttribute("filterDate", filterDate);
         }
 
-        // Passa as compras filtradas para o modelo
-        model.addAttribute("sales", clientSales);
-        model.addAttribute("id", id);  // Passa o id do cliente para a view
+        System.out.println("condition maybe went");
 
-        return "clientProfilePurchases";  // Retorna a página Thymeleaf
+        // Passa as compras filtradas para o modelo
+        //model.addAttribute("sales", clientSales);
+        //model.addAttribute("id", id);  // Passa o id do cliente para a view
+        redirectAttributes.addFlashAttribute("sales", clientSales);
+
+        return "redirect:/clientProfilePurchases/" + id;  // Retorna a página Thymeleaf
     }
 
     @GetMapping("/clientProfileExchanges/{id}")
