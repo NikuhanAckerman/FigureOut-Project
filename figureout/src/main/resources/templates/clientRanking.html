@@ -40,7 +40,7 @@
     <tbody>
     <tr th:each="client, iterStat : ${clients}">
       <td th:text="${client.id}"></td>
-      <td th:text="${client.ranking}"></td>
+      <td th:text="${iterStat.index + 1}"></td>
       <td>
         <span th:text="${client.name}"></span>
         <span th:if="${iterStat.index == 0}">🥇</span>

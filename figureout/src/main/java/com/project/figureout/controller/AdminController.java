@@ -89,7 +89,7 @@ public class AdminController {
     public String getClientRanking(Model model) {
         List<Client> allClients = clientService.getAllClients();
 
-        allClients.sort(Comparator.comparingInt(Client::getRanking));
+        allClients.sort(Comparator.comparing(Client::getTotalAmountSpent).reversed());
 
         model.addAttribute("clients", allClients);
 

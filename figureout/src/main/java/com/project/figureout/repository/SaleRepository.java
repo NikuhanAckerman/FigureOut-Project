@@ -1,6 +1,7 @@
 package com.project.figureout.repository;
 
 import com.project.figureout.dto.SaleDTO;
+import com.project.figureout.model.Cart;
 import com.project.figureout.model.Sale;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,5 +13,6 @@ import java.util.List;
 
 @Repository
 public interface SaleRepository extends JpaRepository<Sale, Long> {
+
 
 }

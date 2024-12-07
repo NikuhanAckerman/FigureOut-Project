@@ -66,8 +66,8 @@ public class Client {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<ExchangeCoupon> exchangeCouponList = new ArrayList<>();
 
-    @Column(name = "cli_ranking")
-    private Integer ranking = 1;
+    //@Column(name = "cli_ranking")
+    //private Integer ranking = 1;
 
     @Column(name = "cli_total_gasto_vendas")
     private BigDecimal totalAmountSpent = BigDecimal.valueOf(0.00);

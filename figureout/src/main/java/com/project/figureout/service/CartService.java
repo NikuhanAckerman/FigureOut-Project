@@ -7,6 +7,7 @@ import com.project.figureout.model.*;
 import com.project.figureout.repository.CartRepository;
 import com.project.figureout.repository.CartsProductsRepository;
 import com.project.figureout.repository.ClientRepository;
+import com.project.figureout.repository.SaleRepository;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.hibernate.Hibernate;
@@ -39,6 +40,9 @@ public class CartService {
 
     @Autowired
     private CartsProductsRepository cartsProductsRepository;
+
+    @Autowired
+    private SaleService saleService;
 
     public Cart getCartById(long id) {
         return cartRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Carrinho não encontrado com base no ID."));
@@ -101,6 +105,11 @@ public class CartService {
     public void applyPromotionalCoupon(Cart cart, PromotionalCoupon promotionalCoupon) {
 
         if(promotionalCoupon.getCouponExpirationDate().isBefore(LocalDate.now())) {
+            return;
+        }
+
+        List<Sale> clientSales = saleService.getClientSalesByClientId(cart.getClient().getId());
+        if(clientSales.stream().map(Sale::getPromotionalCouponApplied).anyMatch(promotionalCouponOnSale -> promotionalCouponOnSale.equals(promotionalCoupon))) {
             return;
         }
 

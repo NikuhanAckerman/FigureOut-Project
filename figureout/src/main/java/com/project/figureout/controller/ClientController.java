@@ -280,7 +280,7 @@ public class ClientController {
 
         clientService.registerClient(client, clientDTO);
 
-        clientService.recalculateClientRanking();
+        //clientService.recalculateClientRanking();
 
         return "redirect:/showAllClients";
     }
@@ -350,7 +350,7 @@ public class ClientController {
     @DeleteMapping("/deleteClient/{id}")
     public String deleteClient(@PathVariable long id) {
         clientService.deleteClientById(id);
-        clientService.recalculateClientRanking();
+        //clientService.recalculateClientRanking();
 
         return "redirect:/showAllClients";
     }

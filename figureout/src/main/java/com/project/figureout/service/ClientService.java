@@ -30,7 +30,7 @@ public class ClientService {
     @Autowired
     private SaleService saleService;
 
-    private HashMap<Long, BigDecimal> clientAndSaleTotals = new HashMap<>();
+    //private HashMap<Long, BigDecimal> clientAndSaleTotals = new HashMap<>();
 
     // Client Methods
 
@@ -38,12 +38,7 @@ public class ClientService {
         return clientRepository.findAll();
     }
 
-    public List<Sale> getClientSales(long clientId) {
-        //return clientRepository.getSalesByClientId(clientId);
-        return null;
-    }
-
-    private void populateClientsAndSalesMap() {
+    /*private void populateClientsAndSalesMap() {
         List<Client> allClients = getAllClients();
 
         if(!clientAndSaleTotals.isEmpty()) {
@@ -65,19 +60,20 @@ public class ClientService {
 
         }
 
-    }
+    }*/
 
     public Client getClientById(long id) {
         return clientRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Cliente não encontrado com base no ID."));
     }
 
     public void deleteClientById(long id) {
-        clientRepository.deleteById(id); // add exception throwing to this later, apparently this doesnt throw EmptyResultDataAccessException anymore
+
+
+        clientRepository.deleteById(id);
+
     }
 
     public void saveClient(Client client) {
-
-
 
         clientRepository.save(client);
 
@@ -149,7 +145,8 @@ public class ClientService {
         client.setGender(gender);
         client.setPhone(phone);
 
-        client.setRanking(0);
+        client.setTotalAmountSpent(BigDecimal.valueOf(0.00));
+        //client.setRanking(0);
     }
 
     public List<Gender> getAllGenders() {
@@ -252,7 +249,7 @@ public class ClientService {
 
     public void recalculateClientRanking() {
 
-        populateClientsAndSalesMap();
+        /*populateClientsAndSalesMap();
 
         List<Map.Entry<Long, BigDecimal>> sortedClientsBySales = clientAndSaleTotals.entrySet()
                 .stream()
@@ -271,7 +268,7 @@ public class ClientService {
 
             System.out.println("Rank " + rank + ": Client " + getClientById(clientId).getName() + " - Total Sales: $" + totalSales);
             rank++;
-        }
+        }*/
 
     }
 

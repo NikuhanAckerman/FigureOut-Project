@@ -455,7 +455,9 @@ public class SaleController {
         stockService.dropInStockList(cartProductQuantityToRemove);
 
         // Recalcula o ranking do cliente após a compra
-        clientService.recalculateClientRanking();
+        client.setTotalAmountSpent(client.getTotalAmountSpent().add(saleFinalPrice));
+        clientService.saveClient(client);
+        //clientService.recalculateClientRanking();
 
         for (SalesCards saleCard : listSalesCards) {
             CreditCard creditCard = saleCard.getCreditCard();
