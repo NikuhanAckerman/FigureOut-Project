@@ -1,11 +1,18 @@
 package com.project.figureout.service;
 
+import com.password4j.Hash;
+import com.password4j.Password;
+import com.project.figureout.PasswordEncryption;
 import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,6 +33,11 @@ public class ClientService {
 
     @Autowired
     private CartService cartService;
+
+    @Autowired
+    private PasswordEncryption passwordEncryption;
+
+
 
     // Client Methods
 
@@ -50,7 +62,7 @@ public class ClientService {
 
     }
 
-    public void registerClient(Client client, ClientDTO clientDTO) {
+    public void registerClient(Client client, ClientDTO clientDTO) throws Exception {
 
         clientBasicDataSetter(client, clientDTO.getClientBasicDataDTO());
 
@@ -61,14 +73,14 @@ public class ClientService {
         addressService.registerAddress(client, clientDTOAddress);
     }
 
-    public void updateClient(Client client, ClientBasicDataDTO clientBasicDataDTO) {
+    public void updateClient(Client client, ClientBasicDataDTO clientBasicDataDTO) throws Exception {
         clientBasicDataSetter(client, clientBasicDataDTO);
 
         saveClient(client);
     }
 
     // Serviço para mudar a senha.
-    public boolean changePassword(Long id, ClientChangePasswordDTO changePasswordDTO) {
+    public boolean changePassword(Long id, ClientChangePasswordDTO changePasswordDTO) throws Exception {
         // Pegar o usuário pelo ID.
         Client client = getClientById(id);
 
@@ -78,7 +90,7 @@ public class ClientService {
             // Checar se a nova senha e a confimação batem.
             if (changePasswordDTO.getNewPassword().equals(changePasswordDTO.getConfirmPassword())) {
                 // Atualizar a senha.
-                client.setPassword(changePasswordDTO.getNewPassword());
+                client.setPassword(passwordEncryption.encryptPassword(changePasswordDTO.getNewPassword()));
                 saveClient(client);
                 return true;
             }
@@ -95,12 +107,14 @@ public class ClientService {
         return getClientById(id).getCreditCards();
     }
 
-    public void clientBasicDataSetter(Client client, ClientBasicDataDTO clientBasicDataDTO) {
+    public void clientBasicDataSetter(Client client, ClientBasicDataDTO clientBasicDataDTO) throws Exception {
         System.out.println("calling basic data setter");
         client.setName(clientBasicDataDTO.getName());
         client.setEmail(clientBasicDataDTO.getEmail());
         client.setCpf(treatMaskedCpf(clientBasicDataDTO.getCpf()));
-        client.setPassword(clientBasicDataDTO.getPassword());
+
+        client.setPassword(passwordEncryption.encryptPassword(clientBasicDataDTO.getPassword()));
+
         client.setBirthday(clientBasicDataDTO.getBirthday());
         client.setEnabled(clientBasicDataDTO.isEnabled());
 
@@ -123,12 +137,14 @@ public class ClientService {
         return genderRepository.findAll();
     }
 
-    public void populateClientBasicDataDTO(ClientBasicDataDTO clientBasicDataDTO, Client client) {
+    public void populateClientBasicDataDTO(ClientBasicDataDTO clientBasicDataDTO, Client client) throws Exception {
 
         clientBasicDataDTO.setName(client.getName());
         clientBasicDataDTO.setEmail(client.getEmail());
         clientBasicDataDTO.setCpf(addMaskToCpf(client.getCpf()));
+
         clientBasicDataDTO.setPassword(client.getPassword());
+
         clientBasicDataDTO.setBirthday(client.getBirthday());
         clientBasicDataDTO.setEnabled(client.isEnabled());
 
@@ -179,7 +195,13 @@ public class ClientService {
         }
         if (password != null && !password.isEmpty()) {
             clients = clients.stream()
-                    .filter(client -> client.getPassword().toLowerCase().contains(password.toLowerCase()))
+                    .filter(client -> {
+                        try {
+                            return client.getPassword().toLowerCase().contains(password.toLowerCase());
+                        } catch (Exception e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
                     .collect(Collectors.toList());
         }
         if (cpf != null && !cpf.isEmpty()) {
@@ -216,5 +238,10 @@ public class ClientService {
 
         return clients.isEmpty() ? new ArrayList<>() : clients; // Retornar uma lista vazia se nenhum filtro bater
     }
+
+
+
+
+
 
 }

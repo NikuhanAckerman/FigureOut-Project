@@ -1,7 +1,10 @@
 package com.project.figureout.validation;
 
+import com.project.figureout.dto.ClientBasicDataDTO;
+import com.project.figureout.dto.ClientChangePasswordDTO;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -21,6 +24,10 @@ public class PasswordsMatchValidator implements ConstraintValidator<PasswordsMat
     public boolean isValid(Object obj, ConstraintValidatorContext constraintValidatorContext) {
 
         try {
+            if(obj instanceof ClientChangePasswordDTO) {
+                passwordFieldName = "newPassword";
+                confirmPasswordFieldName = "confirmPassword";
+            }
             Field passwordField = obj.getClass().getDeclaredField(passwordFieldName);
             Field confirmPasswordField = obj.getClass().getDeclaredField(confirmPasswordFieldName);
 

@@ -24,16 +24,20 @@ public class OldPasswordCorrectValidator implements ConstraintValidator<OldPassw
 
             Client client = clientService.getClientById(clientChangePasswordDTO.getClientId());
 
-            if(client.getPassword().equals(clientChangePasswordDTO.getOldPassword())) {
-                System.out.println("The old password is equal to the DTO (doesnt make sense");
-                return true;
-            } else {
-                constraintValidatorContext.disableDefaultConstraintViolation();
+            try {
+                if(client.getPassword().equals(clientChangePasswordDTO.getOldPassword())) {
+                    System.out.println("The old password is equal to the DTO (doesnt make sense");
+                    return true;
+                } else {
+                    constraintValidatorContext.disableDefaultConstraintViolation();
 
-                constraintValidatorContext.buildConstraintViolationWithTemplate(constraintValidatorContext.getDefaultConstraintMessageTemplate())
-                        .addPropertyNode("oldPassword").addConstraintViolation();
+                    constraintValidatorContext.buildConstraintViolationWithTemplate(constraintValidatorContext.getDefaultConstraintMessageTemplate())
+                            .addPropertyNode("oldPassword").addConstraintViolation();
 
-                return false;
+                    return false;
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
 
         }

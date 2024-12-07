@@ -1,5 +1,6 @@
 package com.project.figureout.dto;
 
+import com.project.figureout.validation.OldPasswordCorrect;
 import com.project.figureout.validation.PasswordsMatch;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -9,6 +10,7 @@ import lombok.Setter;
 
 @Getter @Setter
 @PasswordsMatch
+@OldPasswordCorrect
 public class ClientChangePasswordDTO {
 
     private long clientId;
@@ -21,7 +23,7 @@ public class ClientChangePasswordDTO {
     private String newPassword;
 
     @NotBlank(message = "A confirmação da nova senha não pode estar em branco.")
-    //@Pattern(message = "A senha digitada é inválida.", regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*\\p{Punct})[A-Za-z\\d\\p{Punct}]{8,}$")
+    @Pattern(message = "A senha digitada é inválida.", regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*\\p{Punct})[A-Za-z\\d\\p{Punct}]{8,}$")
     private String confirmPassword;
 
 }

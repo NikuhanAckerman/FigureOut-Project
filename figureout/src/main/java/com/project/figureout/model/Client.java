@@ -2,10 +2,12 @@ package com.project.figureout.model;
 
 //import com.project.figureout.validation.CpfCantBeUsedByMultipleAccounts;
 //import com.project.figureout.validation.EmailCantBeUsedByMultipleAccounts;
+import com.project.figureout.PasswordEncryption;
 import com.project.figureout.validation.OnlyOnePreferentialCreditCard;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
@@ -66,10 +68,11 @@ public class Client {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<ExchangeCoupon> exchangeCouponList = new ArrayList<>();
 
-    //@Column(name = "cli_ranking")
-    //private Integer ranking = 1;
-
     @Column(name = "cli_total_gasto_vendas")
     private BigDecimal totalAmountSpent = BigDecimal.valueOf(0.00);
 
+    public String getPassword() throws Exception {
+        PasswordEncryption passwordEncryption = new PasswordEncryption();
+        return passwordEncryption.decryptPassword(this.password);
+    }
 }

@@ -89,6 +89,12 @@
 			<version>20240303</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.password4j</groupId>
+			<artifactId>password4j</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+
 
 	</dependencies>
 

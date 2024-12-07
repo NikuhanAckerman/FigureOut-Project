@@ -263,7 +263,7 @@ public class ClientController {
     }
 
     @PostMapping("/createClient")
-    public String addClientPost(@Valid @ModelAttribute("clientDTO") ClientDTO clientDTO, BindingResult result, Model model) {
+    public String addClientPost(@Valid @ModelAttribute("clientDTO") ClientDTO clientDTO, BindingResult result, Model model) throws Exception {
 
         Client client = new Client();
 
@@ -290,25 +290,33 @@ public class ClientController {
     @GetMapping("/changePassword/{clientId}")
     public String showChangePasswordForm(@ModelAttribute ClientChangePasswordDTO changePasswordDTO,
                                          @PathVariable Long clientId,
-                                         Model model) {
+                                         Model model,
+                                         @RequestParam(defaultValue = "/showAllClients") String redirectToInPost) {
         model.addAttribute("changePasswordDTO", new ClientChangePasswordDTO());
         model.addAttribute("clientId", clientId);
+        model.addAttribute("redirectToInPost", redirectToInPost);
 
         return "changePassword"; // Template do thymeleaf
     }
 
     @PostMapping("/changePassword/{clientId}")
-    public String changePassword(@ModelAttribute ClientChangePasswordDTO changePasswordDTO,
+    public String changePassword(@Valid @ModelAttribute("changePasswordDTO") ClientChangePasswordDTO changePasswordDTO, BindingResult result,
                                  @PathVariable Long clientId,
-                                 Model model) {
+                                 Model model,
+                                 @RequestParam(defaultValue = "/showAllClients") String redirectToInPost) throws Exception {
         // Chamar o serviço para mudar a senha.
+        if(result.hasErrors()) {
+            model.addAttribute("redirectToInPost", redirectToInPost);
+            return "changePassword";
+        }
+
         clientService.changePassword(clientId, changePasswordDTO);
 
-        return "redirect:/showAllClients";
+        return "redirect:" + redirectToInPost;
     }
 
     @GetMapping("/updateClient/{id}")
-    public String updateClientGet(@PathVariable long id, Model model) {
+    public String updateClientGet(@PathVariable long id, Model model) throws Exception {
 
         Client client = clientService.getClientById(id);
 
@@ -329,7 +337,7 @@ public class ClientController {
     }
 
     @PutMapping("/updateClient/{id}")
-    public String updateClient(@PathVariable long id, @Valid @ModelAttribute ClientBasicDataDTO clientBasicDataDTO, BindingResult result, Model model) {
+    public String updateClient(@PathVariable long id, @Valid @ModelAttribute ClientBasicDataDTO clientBasicDataDTO, BindingResult result, Model model) throws Exception {
 
         Client clientToUpdate = clientService.getClientById(id);
 
@@ -368,7 +376,7 @@ public class ClientController {
                              @RequestParam(required = false) String active,
                              @RequestParam(required = false) String gender,
                              @RequestParam(required = false) Long id,
-                             Model model) {
+                             Model model) throws Exception {
         List<Client> clients = clientService.filterClients(name, email, password, cpf, birthday, phone, active, gender, id);
         model.addAttribute("clients", clients);
         model.addAttribute("filterName", name);
@@ -384,7 +392,7 @@ public class ClientController {
     }
 
     @GetMapping("/clientProfileGeneral/{id}")
-    public String seeClientProfile(@PathVariable long id, Model model) {
+    public String seeClientProfile(@PathVariable long id, Model model) throws Exception {
         Client client = clientService.getClientById(id);
 
         int notificationQuantity = notificationService.getClientNotifications(client.getId()).size();
@@ -464,20 +472,6 @@ public class ClientController {
 
         }
 
-        /*productIdExchangeInfo.forEach((key, values ) -> {
-            for (ExchangeShowOnPurchasesDTO value : values) {
-                System.out.println("");
-                System.out.println("Key (Cart ID): " + key);
-                System.out.println("Product ID: " + value.getCartsProductsKey().getProductId());
-                System.out.println("Cart ID: " + value.getCartsProductsKey().getCartId());
-                System.out.println("Código da troca: " + value.getExchangeCode());
-                System.out.println("Status da troca: " + value.getStatus());
-                System.out.println("Quantidade retornada: " + value.getQuantityReturned());
-                System.out.println("");
-            }
-
-        });*/
-
         model.addAttribute("productIdExchangeInfo", productIdExchangeInfo);
 
         return "clientProfilePurchases";
@@ -519,10 +513,11 @@ public class ClientController {
     @GetMapping("/clientProfileExchanges/{id}")
     public String seeClientProfileExchanges(@PathVariable long id, Model model) {
         List<Sale> clientSales = saleService.getClientSalesByClientId(id);
-        List<Exchange> clientExchanges = new ArrayList<>();
+
         int notificationQuantity = notificationService.getClientNotifications(id).size();
         model.addAttribute("notificationQuantity", notificationQuantity);
 
+        List<Exchange> clientExchanges = new ArrayList<>();
         for(Sale currentSale : clientSales) {
 
             clientExchanges.addAll(currentSale.getExchangeList());
