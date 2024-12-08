@@ -634,9 +634,66 @@ public class ClientController {
 
     @GetMapping("seeClientSales/{clientId}")
     @ResponseBody
-    public List<Sale> getAllClientSales(@PathVariable long clientId) {
-        return saleService.getClientSalesByClientId(clientId);
-    }
+    public List<ShowSaleOnClientCrudModalDTO> getAllClientSales(@PathVariable long clientId) {
+        List<Sale> clientSales = saleService.getClientSalesByClientId(clientId);
+        List<ShowSaleOnClientCrudModalDTO> dtoList = new ArrayList<>();
+
+        for(Sale currentSale: clientSales) {
+            ShowSaleOnClientCrudModalDTO showSaleOnClientCrudModalDTO = new ShowSaleOnClientCrudModalDTO();
+            showSaleOnClientCrudModalDTO.setSaleId(currentSale.getId());
+            showSaleOnClientCrudModalDTO.setSaleCode(currentSale.getSaleCode());
+            showSaleOnClientCrudModalDTO.setSaleFinalPrice(currentSale.getFinalPrice());
+            showSaleOnClientCrudModalDTO.setSaleStatusEnum(currentSale.getStatus());
+            showSaleOnClientCrudModalDTO.setDeliveryAddressNickname(currentSale.getDeliveryAddress().getNickname());
+            showSaleOnClientCrudModalDTO.setFreight(currentSale.getFreight());
+            showSaleOnClientCrudModalDTO.setDateTimeSale(currentSale.getDateTimeSale());
+
+            if(currentSale.getPromotionalCouponApplied() != null) {
+                showSaleOnClientCrudModalDTO.setPromotionalCouponApplied(currentSale.getPromotionalCouponApplied().getCouponName());
+            }
+
+            for(SalesCards saleCard: currentSale.getCardsUsedInThisSale()) {
+                SalesCardsClientCrudModalDTO salesCardsClientCrudModalDTO = new SalesCardsClientCrudModalDTO();
+                salesCardsClientCrudModalDTO.setCreditCardNickname(saleCard.getCreditCard().getNickname());
+                salesCardsClientCrudModalDTO.setAmountPaid(saleCard.getAmountPaid());
+
+                showSaleOnClientCrudModalDTO.getSalesCardsList().add(salesCardsClientCrudModalDTO);
+            }
+
+            for(CartsProducts cartProduct: currentSale.getCart().getCartProducts()) {
+                CartProductClientCrudModalDTO cartProductClientCrudModalDTO = new CartProductClientCrudModalDTO();
+                cartProductClientCrudModalDTO.setProductName(cartProduct.getProduct().getName());
+                cartProductClientCrudModalDTO.setProductQuantity(cartProduct.getProductQuantity());
+                cartProductClientCrudModalDTO.setUnitaryPrice(cartProduct.getUnitaryPrice());
+                cartProductClientCrudModalDTO.setFinalPrice(cartProduct.getFinalPrice());
+
+                showSaleOnClientCrudModalDTO.getCartProductList().add(cartProductClientCrudModalDTO);
+            }
+
+            if(!currentSale.getExchangeCouponsApplied().isEmpty()) {
+                for(ExchangeCoupon exchangeCoupon: currentSale.getExchangeCouponsApplied()) {
+                    ExchangeCouponClientCrudModalDTO exchangeCouponClientCrudModalDTO = new ExchangeCouponClientCrudModalDTO();
+                    exchangeCouponClientCrudModalDTO.setExchangeCouponCode(exchangeCoupon.getExchangeCouponCode());
+                    exchangeCouponClientCrudModalDTO.setAmountWorth(exchangeCoupon.getAmountWorth());
+
+                    showSaleOnClientCrudModalDTO.getExchangeCouponList().add(exchangeCouponClientCrudModalDTO);
+                }
+
+            }
+
+
+            dtoList.add(showSaleOnClientCrudModalDTO);
+        }
+
+        for(ShowSaleOnClientCrudModalDTO dto: dtoList) {
+            System.out.println(dto.getPromotionalCouponApplied());
+            System.out.println(dto.getCartProductList());
+            System.out.println(dto.getExchangeCouponList());
+            System.out.println(dto.getSalesCardsList());
+        }
+
+        return dtoList;
+    } // you need to apply the ShowSaleOnClientCrudModalDTO lil bro (apparently the JSON is otherwise too big so gotta use a DTO)
 
 
 

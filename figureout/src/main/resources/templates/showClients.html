@@ -494,7 +494,7 @@
 							sales.forEach(sale => {
 								console.log("Sale object:", sale); // Log individual sale objects
 							});
-							/*let listOfSales = ``;
+							let listOfSales = ``;
 							sales.forEach(currentSale => {
 								console.log(currentSale.saleCode);
 
@@ -503,8 +503,8 @@
 								let listOfExchangeCouponsApplied = ``;
 								let promotionalCouponApplied;
 
-								let cardsUsedInThisSale = currentSale.cardsUsedInThisSale;
-								let cartProducts = currentSale.cart.cartProducts;
+								let cardsUsedInThisSale = currentSale.salesCardsList;
+								let cartProducts = currentSale.cartProductList;
 
 								console.log('cardsUsedInThisSale:', cardsUsedInThisSale);
 
@@ -520,31 +520,41 @@
 
 								cardsUsedInThisSale.forEach(saleCard => {
 									const saleCardItem = `
-									<p>Apelido do cartão de crédito: ${saleCard.creditCard.nickname}</p>
-									<p>Quantia de pagamento: ${saleCard.amountPaid}</p>
+									<div class="card">
+										<p>Apelido do cartão de crédito: ${saleCard.creditCardNickname}</p>
+										<p>Quantia de pagamento: ${saleCard.amountPaid}</p>
+									</div>
+
 								`
 									listOfSalesCards += saleCardItem;
 								})
 
 								cartProducts.forEach(cartProduct => {
 									const cartProductItem = `
-									<p>Nome do produto: ${cartProduct.product.name}</p>
-									<p>Quantidade pedida: ${cartProduct.productQuantity}</p>
-									<p>Preço unitário: ${cartProduct.unitaryPrice}</p>
-									<p>Preço final: ${cartProduct.finalPrice}</p>
+									<div class="card">
+										<p>Nome do produto: ${cartProduct.productName}</p>
+										<p>Quantidade pedida: ${cartProduct.productQuantity}</p>
+										<p>Preço unitário: ${cartProduct.unitaryPrice}</p>
+										<p>Preço final: ${cartProduct.finalPrice}</p>
+									</div>
+
 							    `;
 
 									listOfCartProducts += cartProductItem;
 								})
 
-								if(currentSale.exchangeCouponsApplied.length === 0) {
+								let exchangeCouponsApplied = currentSale.exchangeCouponList;
+
+								if(exchangeCouponsApplied.length === 0) {
 									listOfExchangeCouponsApplied = `<p>Nenhum cupom de troca aplicado.</p>`
 								} else {
-									let exchangeCouponsApplied = currentSale.exchangeCouponsApplied;
 									exchangeCouponsApplied.forEach(exchangeCoupon => {
 										const exchangeCouponItem = `
-									<p>Código do cupom: ${exchangeCoupon.exchangeCouponCode}</p>
-									<p>Desconto do cupom: ${exchangeCoupon.amountWorth}</p>
+									<div class="card">
+										<p>Código do cupom: ${exchangeCoupon.exchangeCouponCode}</p>
+										<p>Desconto do cupom: ${exchangeCoupon.amountWorth}</p>
+									</div>
+
 							    `;
 
 										listOfExchangeCouponsApplied += exchangeCouponItem;
@@ -554,18 +564,18 @@
 								const saleItem = `
 														<div class="card mt-3">
 															<div class="card-body">
-																<h3 class="card-title">ID: ${currentSale.id}</h3>
-																<button class="btn" data-bs-toggle="collapse" id="saleCollapse-${currentSale.id}" data-bs-target="#saleInfo_${currentSale.id}">
+																<h3 class="card-title">ID: ${currentSale.saleId}</h3>
+																<button class="btn" data-bs-toggle="collapse" id="saleCollapse-${currentSale.saleId}" data-bs-target="#saleInfo_${currentSale.saleId}">
 																	<i class="bi bi-chevron-down"></i>
 																</button>
-																<div id="saleInfo_${currentSale.id}" class="collapse">
-
+																<div id="saleInfo_${currentSale.saleId}" class="collapse">
 
 																	<p>Código da venda: ${currentSale.saleCode}</p>
+																	<p>Status da compra: ${currentSale.saleStatusEnum}</p>
 																	<p>Data-hora da compra: ${new Date(currentSale.dateTimeSale).toLocaleString('pt-BR')}</p>
-																	<p>Preço final: ${currentSale.finalPrice}</p>
-																	<p>Frete: ${currentSale.freight}</p>
-																	<p>Endereço de entrega: ${currentSale.deliveryAddress.nickname}</p>
+																	<p>Preço final: R$${currentSale.saleFinalPrice}</p>
+																	<p>Frete: ${currentSale.freight * 100}% do total da compra</p>
+																	<p>Endereço de entrega: ${currentSale.deliveryAddressNickname}</p>
 																	${promotionalCouponApplied}
 
 																	<div class="card">
@@ -583,8 +593,6 @@
 																		${listOfExchangeCouponsApplied}
 																	</div>
 
-																	<p>Status da compra: ${currentSale.status}</p>
-
 																</div>
 															</div>
 														</div>`;
@@ -594,7 +602,7 @@
 							})
 
 							saleListDiv.insertAdjacentHTML('beforeend', listOfSales);
-							*/
+
 						})
 						.catch(error => {
 							console.error(error);
