@@ -32,10 +32,11 @@
 
 			<!--BOTÃO DE FILTRAR -->
 
-			<a class="btn btn-outline-primary" id="filterButton" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+			<a class="btn btn-outline-primary mb-3" id="filterButton" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
 				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-filter" viewBox="0 0 16 16">
 					<path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5m-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5"/>
-				</svg> Filtrar</a>
+				</svg> Filtrar
+			</a>
 
 			<!--COMEÇA O FILTRO -->
 			<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
@@ -123,6 +124,7 @@
 							<th>Data de nascimento</th>
 							<th>CPF</th>
 							<th>Email</th>
+							<th>Compras</th>
 							<th>Endereços</th>
 							<th>Cartões</th>
 							<th>Telefone</th>
@@ -145,10 +147,13 @@
 							<td th:text = "${client.cpf}"></td>
 							<td th:text = "${client.email}"></td>
 							<td>
-								<button type="button" class="btn btn-secondary" th:id="'seeAddresses-' + ${client.id}" th:data-bs-client-id = "${client.id}" data-bs-toggle="modal" data-bs-target="#seeAddressModal" >Ver endereços</button>
+								<button type="button" class="btn btn-secondary" th:id="'seeSales-' + ${client.id}" th:data-bs-client-id = "${client.id}" data-bs-toggle="modal" data-bs-target="#seeSalesModal">Ver compras</button>
 							</td>
 							<td>
-								<button type="button" class="btn btn-secondary" th:id="'seeCreditCards-' + ${client.id}" th:data-bs-client-id = "${client.id}" data-bs-toggle="modal" data-bs-target="#seeCreditCardModal" >Ver cartões</button>
+								<button type="button" class="btn btn-secondary" th:id="'seeAddresses-' + ${client.id}" th:data-bs-client-id = "${client.id}" data-bs-toggle="modal" data-bs-target="#seeAddressModal">Ver endereços</button>
+							</td>
+							<td>
+								<button type="button" class="btn btn-secondary" th:id="'seeCreditCards-' + ${client.id}" th:data-bs-client-id = "${client.id}" data-bs-toggle="modal" data-bs-target="#seeCreditCardModal">Ver cartões</button>
 							</td>
 
 							<td th:text ="${'(' + client.phone.ddd + ') ' + client.phone.phoneNumber}"></td>
@@ -227,6 +232,35 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-danger" id="closeSeeCreditCards" data-bs-dismiss="modal">Fechar</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="seeSalesModal" class="modal fade">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h3 class="modal-title">Ver compras</h3>
+						<button type="button" class="btn btn-close" data-bs-dismiss="modal"></button>
+					</div>
+					<div class="modal-body">
+						<div>
+							<h1 id="clientIdSale"></h1>
+
+							<div class="card mt-3">
+								<div class="card-body">
+									<h2 class="card-title">Compras</h2>
+									<div id="saleList">
+
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" id="closeSeeSales" data-bs-dismiss="modal">Fechar</button>
 					</div>
 				</div>
 			</div>
@@ -365,7 +399,6 @@
 							}
 							return response.json();
 						})
-
 						.then(creditCards => {
 							creditCards.forEach(creditCard => {
 								let balance = creditCard.balance.toFixed(2);
@@ -431,8 +464,143 @@
 
 			});
 
+		</script>
+
+		<script>
+			const seeSalesModal = document.getElementById("seeSalesModal")
+
+			seeSalesModal.addEventListener('show.bs.modal', function(event) {
+				console.log("mostrou modal de vendas")
+				const button = event.relatedTarget
+
+				const clientId = button.getAttribute('data-bs-client-id');
+
+				const elementWithId = document.getElementById('clientIdSale');
+				elementWithId.textContent = 'ID do cliente: '
+				elementWithId.textContent = elementWithId.textContent + " " + clientId;
+
+				const saleListDiv = document.getElementById('saleList');
+				saleListDiv.innerHTML = '';
+
+				fetch(`/seeClientSales/${clientId}`)
+						.then(response => {
+							if(!response.ok) {
+								throw new Error("Erro ao retornar compras.");
+							}
+							return response.json();
+						})
+						.then(sales => {
+							console.log("Full response from server:", sales); // Log the entire JSON response
+							sales.forEach(sale => {
+								console.log("Sale object:", sale); // Log individual sale objects
+							});
+							/*let listOfSales = ``;
+							sales.forEach(currentSale => {
+								console.log(currentSale.saleCode);
+
+								let listOfSalesCards = ``;
+								let listOfCartProducts = ``;
+								let listOfExchangeCouponsApplied = ``;
+								let promotionalCouponApplied;
+
+								let cardsUsedInThisSale = currentSale.cardsUsedInThisSale;
+								let cartProducts = currentSale.cart.cartProducts;
+
+								console.log('cardsUsedInThisSale:', cardsUsedInThisSale);
+
+								if(currentSale.promotionalCouponApplied != null) {
+									promotionalCouponApplied = `
+									<p>Cupom promocional: ${currentSale.promotionalCouponApplied}</p>
+									`
+								} else {
+									promotionalCouponApplied = `
+									<p>Nenhum cupom promocional.</p>
+									`
+								}
+
+								cardsUsedInThisSale.forEach(saleCard => {
+									const saleCardItem = `
+									<p>Apelido do cartão de crédito: ${saleCard.creditCard.nickname}</p>
+									<p>Quantia de pagamento: ${saleCard.amountPaid}</p>
+								`
+									listOfSalesCards += saleCardItem;
+								})
+
+								cartProducts.forEach(cartProduct => {
+									const cartProductItem = `
+									<p>Nome do produto: ${cartProduct.product.name}</p>
+									<p>Quantidade pedida: ${cartProduct.productQuantity}</p>
+									<p>Preço unitário: ${cartProduct.unitaryPrice}</p>
+									<p>Preço final: ${cartProduct.finalPrice}</p>
+							    `;
+
+									listOfCartProducts += cartProductItem;
+								})
+
+								if(currentSale.exchangeCouponsApplied.length === 0) {
+									listOfExchangeCouponsApplied = `<p>Nenhum cupom de troca aplicado.</p>`
+								} else {
+									let exchangeCouponsApplied = currentSale.exchangeCouponsApplied;
+									exchangeCouponsApplied.forEach(exchangeCoupon => {
+										const exchangeCouponItem = `
+									<p>Código do cupom: ${exchangeCoupon.exchangeCouponCode}</p>
+									<p>Desconto do cupom: ${exchangeCoupon.amountWorth}</p>
+							    `;
+
+										listOfExchangeCouponsApplied += exchangeCouponItem;
+									})
+								}
+
+								const saleItem = `
+														<div class="card mt-3">
+															<div class="card-body">
+																<h3 class="card-title">ID: ${currentSale.id}</h3>
+																<button class="btn" data-bs-toggle="collapse" id="saleCollapse-${currentSale.id}" data-bs-target="#saleInfo_${currentSale.id}">
+																	<i class="bi bi-chevron-down"></i>
+																</button>
+																<div id="saleInfo_${currentSale.id}" class="collapse">
 
 
+																	<p>Código da venda: ${currentSale.saleCode}</p>
+																	<p>Data-hora da compra: ${new Date(currentSale.dateTimeSale).toLocaleString('pt-BR')}</p>
+																	<p>Preço final: ${currentSale.finalPrice}</p>
+																	<p>Frete: ${currentSale.freight}</p>
+																	<p>Endereço de entrega: ${currentSale.deliveryAddress.nickname}</p>
+																	${promotionalCouponApplied}
+
+																	<div class="card">
+																		<h4 class="card-title">Cartões utilizados</h4>
+																		${listOfSalesCards}
+																	</div>
+
+																	<div class="card">
+																		<h4 class="card-title">Produtos comprados</h4>
+																		${listOfCartProducts}
+																	</div>
+
+																	<div class="card">
+																		<h4 class="card-title">Cupons de troca aplicados</h4>
+																		${listOfExchangeCouponsApplied}
+																	</div>
+
+																	<p>Status da compra: ${currentSale.status}</p>
+
+																</div>
+															</div>
+														</div>`;
+
+								listOfSales += saleItem;
+
+							})
+
+							saleListDiv.insertAdjacentHTML('beforeend', listOfSales);
+							*/
+						})
+						.catch(error => {
+							console.error(error);
+							saleListDiv.innerHTML = `<p>Erro ao carregar as vendas: ${error.message}</p>`;
+						});
+				})
 		</script>
 
 		<footer id="footer">

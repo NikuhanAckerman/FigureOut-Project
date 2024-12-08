@@ -1,6 +1,7 @@
 package com.project.figureout.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.figureout.dto.PromotionalCouponDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -48,7 +49,7 @@ public class Sale {
     @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ExchangeCoupon> exchangeCouponsApplied = new ArrayList<>();
 
-    @JoinColumn(name = "ven_frete")
+    @Column(name = "ven_frete")
     private BigDecimal freight;
 
     @Column(name = "ven_data_hora")

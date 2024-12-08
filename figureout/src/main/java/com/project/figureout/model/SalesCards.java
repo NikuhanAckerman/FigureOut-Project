@@ -1,5 +1,7 @@
 package com.project.figureout.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +19,7 @@ public class SalesCards {
     @ManyToOne
     @MapsId("saleId")
     @JoinColumn(name = "vdc_ven_id")
+    @JsonIgnore
     private Sale sale;
 
     @ManyToOne

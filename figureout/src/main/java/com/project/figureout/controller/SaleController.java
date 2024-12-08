@@ -182,7 +182,6 @@ public class SaleController {
         return "redirect:/sales/finishOrder/" + cartId;
     }
 
-
     @GetMapping("/finishOrder/{cartId}")
     public String finishOrderGet(@PathVariable long cartId, Model model) {
         // Obtém o carrinho de compras e o cliente associado
@@ -192,6 +191,7 @@ public class SaleController {
         // Obtém o endereço de entrega do modelo (que foi adicionado na requisição anterior)
         Address deliveryAddress = (Address) model.getAttribute("deliveryAddress");
         System.out.println(deliveryAddress.getNickname());
+
 
         // Obtém a lista de cartões de crédito usados no pedido (que foi adicionado anteriormente)
         List<SalesCards> listSalesCards = (List<SalesCards>) model.getAttribute("salesCardsList");
@@ -219,6 +219,7 @@ public class SaleController {
 
         // Adiciona o preço final ao modelo
         model.addAttribute("saleFinalPrice", saleFinalPrice);
+        model.addAttribute("saleCart", cart);
 
         // Retorna a view "finishOrder"
         return "finishOrder";

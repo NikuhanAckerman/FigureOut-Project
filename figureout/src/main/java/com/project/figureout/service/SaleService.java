@@ -84,6 +84,7 @@ public class SaleService {
         List<Sale> clientSales = new ArrayList<>();
 
         for(Sale sale : allSales) {
+
             Cart saleCart = sale.getCart();
             long saleCartClientId = saleCart.getClient().getId();
 
@@ -91,6 +92,11 @@ public class SaleService {
                 clientSales.add(sale);
             }
 
+        }
+
+        for(Sale sale: clientSales) {
+            System.out.println(sale.getSaleCode());
+            System.out.println(sale.getDateTimeSale().toString());
         }
 
         return clientSales;

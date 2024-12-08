@@ -1,5 +1,7 @@
 package com.project.figureout.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.figureout.ClientNavigator;
 import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
@@ -629,6 +631,13 @@ public class ClientController {
 
         return "redirect:/showAllClients";
     }
+
+    @GetMapping("seeClientSales/{clientId}")
+    @ResponseBody
+    public List<Sale> getAllClientSales(@PathVariable long clientId) {
+        return saleService.getClientSalesByClientId(clientId);
+    }
+
 
 
 

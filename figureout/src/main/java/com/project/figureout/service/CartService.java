@@ -109,7 +109,7 @@ public class CartService {
         }
 
         List<Sale> clientSales = saleService.getClientSalesByClientId(cart.getClient().getId());
-        if(clientSales.stream().map(Sale::getPromotionalCouponApplied).anyMatch(promotionalCouponOnSale -> promotionalCouponOnSale.equals(promotionalCoupon))) {
+        if(clientSales.stream().map(Sale::getPromotionalCouponApplied).anyMatch(promotionalCouponOnSale -> promotionalCouponOnSale != null && promotionalCouponOnSale.equals(promotionalCoupon))) {
             return;
         }
 

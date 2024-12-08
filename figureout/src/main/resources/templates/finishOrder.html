@@ -46,7 +46,7 @@
     <tr th:each="cartProduct : ${saleCart.cartProducts}">
 
       <td>
-        <img th:src="@{/products/productPicture/{id}(id=${cartProduct.product.id})}" class="card-img-top">
+        <img th:src="@{/products/productPicture/{id}(id=${cartProduct.product.id})}" style="object-fit: cover; height: 300px; width: 100%" class="card-img-top">
       </td>
 
       <td th:text="${cartProduct.product.name}"></td>

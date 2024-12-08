@@ -39,7 +39,7 @@
                     <p class="text-success" th:text="'Total do carrinho: R$' + ${cart.totalPrice}"></p>
 
                     <div class="card mb-3" th:each="cartProduct : ${cart.cartProducts}">
-                        <img th:src="@{/products/productPicture/{id}(id=${cartProduct.product.id})}" class="card-img-top">
+                        <img th:src="@{/products/productPicture/{id}(id=${cartProduct.product.id})}" style="object-fit: cover; height: 300px; width: 100%;" class="card-img-top">
                         <div class="card-body">
                             <h5 class="card-title" th:text="${cartProduct.product.name}"></h5>
                             <p class="card-text" th:text="'por unidade: R$' + ${cartProduct.unitaryPrice}"></p>

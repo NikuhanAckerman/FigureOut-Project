@@ -37,8 +37,6 @@ public class ClientService {
     @Autowired
     private PasswordEncryption passwordEncryption;
 
-
-
     // Client Methods
 
     public List<Client> getAllClients() {
@@ -238,10 +236,5 @@ public class ClientService {
 
         return clients.isEmpty() ? new ArrayList<>() : clients; // Retornar uma lista vazia se nenhum filtro bater
     }
-
-
-
-
-
 
 }
