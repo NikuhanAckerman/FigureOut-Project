@@ -188,5 +188,9 @@ public class ExchangeService {
         saveExchange(exchange);
     }
 
+    public List<Sale> findExchangesByDate(LocalDateTime date) {
+        return exchangeRepository.findByExchangeRequestTime(date);
+    }
+
 
 }

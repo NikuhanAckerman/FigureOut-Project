@@ -43,6 +43,9 @@ public class ClientController {
     private SaleService saleService;
 
     @Autowired
+    private ExchangeService exchangeService;
+
+    @Autowired
     private SalesCardsRepository salesCardsRepository;
 
     @Autowired
@@ -536,6 +539,45 @@ public class ClientController {
         model.addAttribute("client", clientService.getClientById(id));
 
         return "clientProfileExchanges";
+    }
+
+    // Método para filtrar as compras do cliente pela data de compra.
+    @GetMapping("/clientProfileExchangesFilter/{id}")
+    public String filterExchanges(@PathVariable long id,
+                             @RequestParam(value = "filterDate", required = false) String filterDate,
+                             Model model, RedirectAttributes redirectAttributes) {
+        List<Sale> clientSales = saleService.getClientSalesByClientId(id);
+
+        // Carrega todas as trocas do cliente específico
+        List<Exchange> clientExchanges = new ArrayList<>();
+        for(Sale currentSale : clientSales) {
+
+            clientExchanges.addAll(currentSale.getExchangeList());
+
+        }
+
+        if (filterDate != null && !filterDate.isEmpty()) {
+            System.out.println("condition is going");
+            // Converte a data recebida no formato String para LocalDate
+            LocalDate date = LocalDate.parse(filterDate);
+
+            // Filtra as trocas do cliente pela data, ignorando a parte da hora
+            clientExchanges = clientExchanges.stream()
+                    .filter(exchange -> exchange.getExchangeRequestTime().toLocalDate().equals(date))  // Filtra pela data
+                    .collect(Collectors.toList());
+
+            // Passa o filtro de data para o modelo para exibição
+            redirectAttributes.addFlashAttribute("filterDate", filterDate);
+        }
+
+        System.out.println("condition maybe went");
+
+        // Passa as trocas filtradas para o modelo
+        //model.addAttribute("sales", clientSales);
+        //model.addAttribute("id", id);  // Passa o id do cliente para a view
+        redirectAttributes.addFlashAttribute("exchanges", clientExchanges);
+
+        return "redirect:/clientProfileExchanges/" + id;  //
     }
 
     @GetMapping("/clientProfileAddresses/{id}")
