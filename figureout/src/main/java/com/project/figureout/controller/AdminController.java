@@ -4,7 +4,6 @@ import com.project.figureout.ClientNavigator;
 import com.project.figureout.dto.ChangeClientNavigatorDTO;
 import com.project.figureout.dto.ProductInChartDTO;
 import com.project.figureout.model.*;
-import com.project.figureout.repository.PromotionalCouponRepository;
 import com.project.figureout.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -15,7 +14,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 @Controller
@@ -26,22 +24,7 @@ public class AdminController {
     ClientService clientService;
 
     @Autowired
-    AddressService addressService;
-
-    @Autowired
     SaleService saleService;
-
-    @Autowired
-    CreditCardService creditCardService;
-
-    @Autowired
-    ProductService productService;
-
-    @Autowired
-    StockService stockService;
-
-    @Autowired
-    PromotionalCouponRepository promotionalCouponRepository;
 
     private ClientNavigator clientNavigator;
 
@@ -140,7 +123,5 @@ public class AdminController {
 
         return "chart";
     }
-
-
 
 }

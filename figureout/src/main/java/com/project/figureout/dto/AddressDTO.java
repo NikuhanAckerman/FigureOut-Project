@@ -1,7 +1,6 @@
 package com.project.figureout.dto;
 
 import com.project.figureout.validation.AddressAtLeastOneType;
-import jakarta.persistence.Column;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Getter;

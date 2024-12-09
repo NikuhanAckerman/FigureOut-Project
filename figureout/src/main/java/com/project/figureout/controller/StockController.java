@@ -1,10 +1,8 @@
 package com.project.figureout.controller;
 
 import com.project.figureout.ClientNavigator;
-import com.project.figureout.dto.ProductDTO;
 import com.project.figureout.dto.UpdateStockDTO;
 import com.project.figureout.model.*;
-import com.project.figureout.repository.ProductRepository;
 import com.project.figureout.repository.ProductsActivationRepository;
 import com.project.figureout.repository.StockHistoryRepository;
 import com.project.figureout.repository.SupplierRepository;
@@ -17,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Controller
@@ -32,12 +29,6 @@ public class StockController {
 
     @Autowired
     private SupplierRepository supplierRepository;
-
-    @Autowired
-    private ManufacturerService manufacturerService;
-
-    @Autowired
-    private SizeService sizeService;
 
     @Autowired
     private StockHistoryRepository stockHistoryRepository;

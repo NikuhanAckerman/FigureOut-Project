@@ -1,11 +1,9 @@
 package com.project.figureout.model;
 
-import com.project.figureout.repository.CartsProductsRepository;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
 

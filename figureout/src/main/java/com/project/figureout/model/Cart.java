@@ -1,12 +1,8 @@
 package com.project.figureout.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project.figureout.dto.PromotionalCouponDTO;
-import com.project.figureout.service.CartService;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

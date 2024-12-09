@@ -1,11 +1,7 @@
 package com.project.figureout.dto;
 
-import com.project.figureout.model.Category;
-import com.project.figureout.model.Manufacturer;
-import com.project.figureout.model.PricingGroup;
 import com.project.figureout.validation.NameCantBeUsedByMultipleProducts;
 import com.project.figureout.validation.ProductPriceMustBeHigherThanPurchaseAmount;
-import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

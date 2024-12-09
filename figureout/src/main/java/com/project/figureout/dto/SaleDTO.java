@@ -1,6 +1,5 @@
 package com.project.figureout.dto;
 
-import com.project.figureout.model.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;

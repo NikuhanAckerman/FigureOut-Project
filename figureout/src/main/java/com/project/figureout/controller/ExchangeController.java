@@ -5,8 +5,6 @@ import com.project.figureout.dto.ExchangeDTO;
 import com.project.figureout.dto.NotificationDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartsProductsRepository;
-import com.project.figureout.repository.ExchangeProductsRepository;
-import com.project.figureout.repository.ProductRepository;
 import com.project.figureout.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.text.RandomStringGenerator;
@@ -22,7 +20,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
 @RequestMapping("/exchange")
@@ -32,22 +29,10 @@ public class ExchangeController {
     SaleService saleService;
 
     @Autowired
-    ClientService clientService;
-
-    @Autowired
-    CartService cartService;
-
-    @Autowired
     CartsProductsRepository cartsProductsRepository;
 
     @Autowired
     ExchangeService exchangeService;
-
-    @Autowired
-    private ExchangeProductsRepository exchangeProducts;
-
-    @Autowired
-    private ProductRepository productRepository;
 
     @Autowired
     private NotificationService notificationService;
@@ -85,6 +70,10 @@ public class ExchangeController {
                 break;
             }
 
+        }
+
+        if(!(sale.getStatus().equals(deliveredStatus) || sale.getStatus().equals(exchangeEndedStatus))) {
+            errors.add("Não é possível realizar uma troca envolvendo essa compra por conta do status da compra.");
         }
 
         if(canRequestExchange) {

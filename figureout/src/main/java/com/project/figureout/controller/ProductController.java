@@ -3,14 +3,8 @@ package com.project.figureout.controller;
 import com.project.figureout.ClientNavigator;
 import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
-import com.project.figureout.repository.CartRepository;
-import com.project.figureout.repository.StockRepository;
 import com.project.figureout.repository.SupplierRepository;
 import com.project.figureout.service.*;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapsId;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -22,10 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/products")
@@ -36,9 +27,6 @@ public class ProductController {
 
     @Autowired
     ClientService clientService;
-
-    @Autowired
-    CartService cartService;
 
     @Autowired
     private StockService stockService;
@@ -55,11 +43,7 @@ public class ProductController {
     @Autowired
     private NotificationService notificationService;
 
-    @Autowired
-    private ChatGptService chatGptService;
-
     private ClientNavigator clientNavigator;
-
 
     @GetMapping("/seeProducts")
     public String showProductsGet(Model model) {
