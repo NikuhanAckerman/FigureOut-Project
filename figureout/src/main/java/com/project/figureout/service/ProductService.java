@@ -269,4 +269,52 @@ public class ProductService {
         return products.isEmpty() ? new ArrayList<>() : products; // Retornar uma lista vazia se nenhum filtro bater
     }
 
+    // Método para filtrar os atributos dos produtos na loja.
+    public List<Product> filterShop(
+                                        String category,
+                                        String manufacturer,
+                                        String size,
+                                        BigDecimal price) {
+        List<Product> products = getAllProducts();
+
+        System.out.println(category);
+        System.out.println(manufacturer);
+        System.out.println(size);
+        System.out.println(price);
+
+
+        if (category != null && !category.isEmpty()) {
+            products = products.stream()
+                    .filter(product -> product.getName().toLowerCase().contains(category.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        if (manufacturer != null && !manufacturer.isEmpty()) {
+            products = products.stream()
+                    .filter(product -> product.getName().toLowerCase().contains(manufacturer.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        if (size != null && !size.isEmpty()) {
+            products = products.stream()
+                    .filter(product -> product.getName().toLowerCase().contains(size.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        if (price != null) {
+            products = products.stream()
+                    .filter(product -> product.getPrice() != null && product.getPrice().compareTo(price) == 0) // Comparação exata com BigDecimal
+                    .collect(Collectors.toList());
+        }
+
+
+        if(products.isEmpty()) {
+            System.out.println("sem filtro");
+        } else {
+            System.out.println("filtro");
+        }
+
+        return products.isEmpty() ? new ArrayList<>() : products;
+    }
+
 }

@@ -57,15 +57,17 @@
     <div class="row">
       <div class="col-md-3 my-4">
 
+        <!-- FILTRO DA LOJA -->
         <div class="card mb-3">
           <div class="card-header">
             <h2>Filtros</h2>
           </div>
           <div class="card-body">
-            <form id="filterForm">
+            <form th:action="@{/products/shop/filter}" method="GET" id="filterForm">
 
               <h5 class="card-title">Preço</h5>
-              <input type="range" class="form-range" id="priceRange" min="50" max="5000" step="50" value="50">
+              <input type="range" class="form-range" id="priceRange" min="50" max="5000" step="50" value="50" name="price"
+                     th:value="${price != null ? price : 50}" oninput="updatePriceLabel()">
               <label for="priceRange" class="form-label" style="display:inline;">
                 <span id="priceLabel">Qualquer preço</span>
                 <span id="priceAboveLabel" style="display:none;"> Acima de R$ <span id="priceAboveValue">0</span></span>
@@ -73,54 +75,54 @@
 
               <h5>Categorias</h5>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="category1">
+                <input class="form-check-input" type="checkbox" id="category1" name="categories" value="Chaveiro" th:checked="${category != null && category.contains('Chaveiro')}">
                 <label class="form-check-label" for="category1">Chaveiro</label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="category2">
+                <input class="form-check-input" type="checkbox" id="category2" name="categories" value="Pré-pintado" th:checked="${category != null && category.contains('Pré-pintado')}">
                 <label class="form-check-label" for="category2">Pré-pintado</label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="category3">
+                <input class="form-check-input" type="checkbox" id="category3" name="categories" value="Model Kit" th:checked="${category != null && category.contains('Model Kit')}">
                 <label class="form-check-label" for="category3">Model Kit</label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="category4">
+                <input class="form-check-input" type="checkbox" id="category4" name="categories" value="Nendoroid" th:checked="${category != null && category.contains('Nendoroid')}">
                 <label class="form-check-label" for="category4">Nendoroid</label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="category5">
+                <input class="form-check-input" type="checkbox" id="category5" name="categories" value="Pelúcia" th:checked="${category != null && category.contains('Pelúcia')}">
                 <label class="form-check-label" for="category5">Pelúcia</label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="category6">
+                <input class="form-check-input" type="checkbox" id="category6" name="categories" value="Amiibo" th:checked="${category != null && category.contains('Amiibo')}">
                 <label class="form-check-label" for="category6">Amiibo</label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="category7">
+                <input class="form-check-input" type="checkbox" id="category7" name="categories" value="Figura de ação" th:checked="${category != null && category.contains('Figura de ação')}">
                 <label class="form-check-label" for="category7">Figura de ação</label>
               </div>
 
-
               <h5>Fabricantes</h5>
-              <select class="form-select" id="supplierSelect">
-                <option value="all">Todos</option>
-                <option>Bandai</option>
-                <option>Medicom</option>
-                <option>TakaraTomy</option>
-                <option>Kaiyodo</option>
-                <option>Good Smile</option>
+              <select class="form-select" id="manufacturerSelect" name="manufacturer">
+                <option value="all" th:selected="${manufacturer == 'all'}">Todos</option>
+                <option value="Bandai" th:selected="${manufacturer == 'Bandai'}">Bandai</option>
+                <option value="Medicom" th:selected="${manufacturer == 'Medicom'}">Medicom</option>
+                <option value="TakaraTomy" th:selected="${manufacturer == 'TakaraTomy'}">TakaraTomy</option>
+                <option value="Kaiyodo" th:selected="${manufacturer == 'Kaiyodo'}">Kaiyodo</option>
+                <option value="Good Smile" th:selected="${manufacturer == 'Good Smile'}">Good Smile</option>
               </select>
 
               <h5>Tamanhos</h5>
-              <select class="form-select" id="sizeSelect">
-                <option value="all">Todos</option>
-                <option>1/4</option>
-                <option>1/6</option>
-                <option>1/7</option>
-                <option>1/8</option>
-                <option>1/16</option>
+              <select class="form-select" id="sizeSelect" name="size">
+                <option value="all" th:selected="${size == 'all'}">Todos</option>
+                <option value="1/4" th:selected="${size == '1/4'}">1/4</option>
+                <option value="1/6" th:selected="${size == '1/6'}">1/6</option>
+                <option value="1/7" th:selected="${size == '1/7'}">1/7</option>
+                <option value="1/8" th:selected="${size == '1/8'}">1/8</option>
+                <option value="1/16" th:selected="${size == '1/16'}">1/16</option>
               </select>
+
 
               <div class="d-flex justify-content-end mt-3">
                 <button type="submit" class="btn btn-primary">Filtrar</button>
@@ -173,6 +175,26 @@
       chatWindow: { backgroundColor: "#fff" },
     },
   });
+</script>
+
+<script>
+  function updatePriceLabel() {
+      var price = document.getElementById("priceRange").value;
+      var priceLabel = document.getElementById("priceLabel");
+      var priceAboveLabel = document.getElementById("priceAboveLabel");
+      var priceAboveValue = document.getElementById("priceAboveValue");
+
+      if (price == 50) {
+          priceLabel.innerText = "Qualquer preço";
+          priceAboveLabel.style.display = "none";
+      } else {
+          priceAboveLabel.style.display = "inline";
+          priceAboveValue.innerText = price;
+      }
+  }
+
+  // Atualiza o label ao carregar a página com o valor inicial do slider
+  updatePriceLabel();
 </script>
 
 <script>

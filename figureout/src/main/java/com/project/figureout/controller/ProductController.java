@@ -278,4 +278,24 @@ public class ProductController {
         return "adminSeeProducts";
     }
 
+    // Filtro de produtos na loja.
+    @GetMapping("/shop/filter")
+    public String filterShopProducts(
+                              @RequestParam(required = false) String category,
+                              @RequestParam(required = false) String manufacturer,
+                              @RequestParam(required = false) String size,
+                              @RequestParam(required = false) BigDecimal price,
+                              Model model) {
+
+        List<Product> products = productService.filterShop(category, manufacturer, size, price);
+
+        model.addAttribute("products", products);
+        model.addAttribute("filterCategory", category);
+        model.addAttribute("filterManufacturer", manufacturer);
+        model.addAttribute("filterSize", size);
+        model.addAttribute("filterPrice", price);
+
+        return "shop";
+    }
+
 }
