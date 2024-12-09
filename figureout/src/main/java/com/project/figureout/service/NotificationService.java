@@ -31,14 +31,6 @@ public class NotificationService {
 
     public List<Notification> getClientNotifications(long clientId) {
         List<Notification> notifications = notificationRepository.findAllByClientId(clientId);
-        for(Notification notification : notifications) {
-            System.out.println("");
-            System.out.println(notification.getCategory().name());
-            System.out.println(notification.getNotificationDateTime());
-            System.out.println(notification.getTitle());
-            System.out.println(notification.getDescription());
-            System.out.println(notification.getClient().getId());
-        }
         return notifications;
     }
 

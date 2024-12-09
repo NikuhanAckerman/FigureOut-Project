@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -117,7 +118,6 @@ public class ProductController {
         Product product = productService.getProductById(id);
 
         byte[] image = product.getPicture();
-        System.out.println("Image byte length: " + image.length);
         if (image == null) {
             return ResponseEntity.notFound().build();
         }
@@ -135,11 +135,22 @@ public class ProductController {
 
     @GetMapping("/shop")
     public String showShop(Model model) {
-        List<Product> products =  productService.getAllActiveProducts();
+        List<Product> products = (List<Product>) model.asMap().get("products");
+
+        if(products == null) {
+            products =  productService.getAllActiveProducts();
+        }
+
         Client client = clientService.getClientById(clientNavigator.getInstance().getClientId());
         int notificationQuantity = notificationService.getClientNotifications(client.getId()).size();
+        List<Category> availableProductCategories = productService.getAllCategories();
+        List<Manufacturer> availableProductManufacturers = manufacturerService.getAllManufacturers();
+        List<Size> availableProductSizes = sizeService.getAllSizes();
 
         model.addAttribute("products", products);
+        model.addAttribute("availableProductManufacturers", availableProductManufacturers);
+        model.addAttribute("availableProductCategories", availableProductCategories);
+        model.addAttribute("availableProductSizes", availableProductSizes);
         model.addAttribute("cart", client.getCartList().getLast()); // always get the last card added to the client's cart list
         model.addAttribute("clientId", clientNavigator.getInstance().getClientId());
         model.addAttribute("notificationQuantity", notificationQuantity);
@@ -265,21 +276,23 @@ public class ProductController {
     // Filtro de produtos na loja.
     @GetMapping("/shop/filter")
     public String filterShopProducts(
-                              @RequestParam(required = false) String category,
-                              @RequestParam(required = false) String manufacturer,
-                              @RequestParam(required = false) String size,
-                              @RequestParam(required = false) BigDecimal price,
-                              Model model) {
+            @RequestParam(required = false) List<String> category,
+            @RequestParam(required = false) String manufacturer,
+            @RequestParam(required = false) String size,
+            @RequestParam(required = false) BigDecimal price,
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
         List<Product> products = productService.filterShop(category, manufacturer, size, price);
 
-        model.addAttribute("products", products);
         model.addAttribute("filterCategory", category);
         model.addAttribute("filterManufacturer", manufacturer);
         model.addAttribute("filterSize", size);
         model.addAttribute("filterPrice", price);
 
-        return "shop";
+        redirectAttributes.addFlashAttribute(products);
+
+        return "redirect:/products/shop";
     }
 
 }

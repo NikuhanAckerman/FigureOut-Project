@@ -28,9 +28,6 @@ public class ProductService {
     private PricingGroupRepository pricingGroupRepository;
 
     @Autowired
-    private StockRepository stockRepository;
-
-    @Autowired
     private ManufacturerRepository manufacturerRepository;
 
     @Autowired
@@ -271,33 +268,32 @@ public class ProductService {
 
     // Método para filtrar os atributos dos produtos na loja.
     public List<Product> filterShop(
-                                        String category,
+                                        List<String> category,
                                         String manufacturer,
                                         String size,
                                         BigDecimal price) {
-        List<Product> products = getAllProducts();
+        List<Product> products = getAllActiveProducts();
 
         System.out.println(category);
         System.out.println(manufacturer);
         System.out.println(size);
         System.out.println(price);
 
-
         if (category != null && !category.isEmpty()) {
             products = products.stream()
-                    .filter(product -> product.getName().toLowerCase().contains(category.toLowerCase()))
+                    .filter(product -> product.getCategories().stream().map(Category::getName).anyMatch(category::contains))
                     .collect(Collectors.toList());
         }
 
-        if (manufacturer != null && !manufacturer.isEmpty()) {
+        if (manufacturer != null && !manufacturer.equals("Todos")) {
             products = products.stream()
-                    .filter(product -> product.getName().toLowerCase().contains(manufacturer.toLowerCase()))
+                    .filter(product -> product.getManufacturer().getName().equals(manufacturer.toLowerCase()))
                     .collect(Collectors.toList());
         }
 
-        if (size != null && !size.isEmpty()) {
+        if (size != null && !size.equals("Todos")) {
             products = products.stream()
-                    .filter(product -> product.getName().toLowerCase().contains(size.toLowerCase()))
+                    .filter(product -> product.getSize().getName().equals(size.toLowerCase()))
                     .collect(Collectors.toList());
         }
 
@@ -306,7 +302,6 @@ public class ProductService {
                     .filter(product -> product.getPrice() != null && product.getPrice().compareTo(price) == 0) // Comparação exata com BigDecimal
                     .collect(Collectors.toList());
         }
-
 
         if(products.isEmpty()) {
             System.out.println("sem filtro");

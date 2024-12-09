@@ -502,16 +502,24 @@ public class ClientController {
 
     @GetMapping("/clientProfileExchanges/{id}")
     public String seeClientProfileExchanges(@PathVariable long id, Model model) {
+
         List<Sale> clientSales = saleService.getClientSalesByClientId(id);
 
         int notificationQuantity = notificationService.getClientNotifications(id).size();
         model.addAttribute("notificationQuantity", notificationQuantity);
 
-        List<Exchange> clientExchanges = new ArrayList<>();
-        for(Sale currentSale : clientSales) {
+        List<Exchange> clientExchanges = (List<Exchange>) model.asMap().get("exchanges");
 
-            clientExchanges.addAll(currentSale.getExchangeList());
+        if(clientExchanges == null) {
+            List<Exchange> clientExchangesGetNormally = new ArrayList<>();
 
+            for(Sale currentSale : clientSales) {
+
+                clientExchangesGetNormally.addAll(currentSale.getExchangeList());
+
+            }
+
+            clientExchanges = clientExchangesGetNormally;
         }
 
         model.addAttribute("id", id);

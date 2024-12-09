@@ -38,14 +38,14 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="client, iterStat : ${clients}">
+    <tr th:each="client, i : ${clients}">
       <td th:text="${client.id}"></td>
-      <td th:text="${iterStat.index + 1}"></td>
+      <td th:text="${i.count}"></td>
       <td>
         <span th:text="${client.name}"></span>
-        <span th:if="${iterStat.index == 0}">🥇</span>
-        <span th:if="${iterStat.index == 1}">🥈</span>
-        <span th:if="${iterStat.index == 2}">🥉</span>
+        <span th:if="${i.count == 1}">🥇</span>
+        <span th:if="${i.count == 2}">🥈</span>
+        <span th:if="${i.count == 3}">🥉</span>
       </td>
       <td th:text="'R$' + ${client.totalAmountSpent}"></td>
     </tr>
