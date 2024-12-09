@@ -2,7 +2,6 @@ package com.project.figureout.dto;
 
 import com.project.figureout.model.SaleStatusEnum;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 

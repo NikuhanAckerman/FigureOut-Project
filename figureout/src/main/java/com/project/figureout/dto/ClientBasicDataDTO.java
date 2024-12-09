@@ -1,7 +1,5 @@
 package com.project.figureout.dto;
 
-import com.project.figureout.model.Gender;
-import com.project.figureout.model.Phone;
 import com.project.figureout.validation.CpfCantBeUsedByMultipleAccounts;
 import com.project.figureout.validation.EmailCantBeUsedByMultipleAccounts;
 import com.project.figureout.validation.PasswordsMatch;

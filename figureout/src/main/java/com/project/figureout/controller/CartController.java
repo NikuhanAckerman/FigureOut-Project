@@ -1,10 +1,8 @@
 package com.project.figureout.controller;
 
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import com.project.figureout.ClientNavigator;
 import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
-import com.project.figureout.repository.CartsProductsRepository;
 import com.project.figureout.repository.ExchangeCouponRepository;
 import com.project.figureout.repository.PromotionalCouponRepository;
 import com.project.figureout.service.*;
@@ -17,7 +15,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -30,12 +27,6 @@ public class CartController {
 
     @Autowired
     private ProductService productService;
-
-    @Autowired
-    private ClientService clientService;
-
-    @Autowired
-    private CartsProductsRepository cartsProductsRepository;
 
     @Autowired
     private PromotionalCouponRepository promotionalCouponRepository;

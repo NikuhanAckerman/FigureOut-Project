@@ -1,13 +1,10 @@
 package com.project.figureout.dto;
 
 import com.project.figureout.validation.OnlyOnePreferentialCreditCard;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.CreditCardNumber;
-
-import java.util.Date;
 
 @OnlyOnePreferentialCreditCard
 @Getter @Setter

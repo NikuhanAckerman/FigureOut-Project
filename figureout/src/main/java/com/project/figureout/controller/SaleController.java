@@ -3,22 +3,15 @@ package com.project.figureout.controller;
 import com.project.figureout.ClientNavigator;
 import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
-import com.project.figureout.repository.PromotionalCouponRepository;
-import com.project.figureout.repository.SaleRepository;
-import com.project.figureout.repository.SalesCardsRepository;
 import com.project.figureout.service.*;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.apache.commons.text.RandomStringGenerator;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -26,7 +19,6 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/sales")
@@ -46,9 +38,6 @@ public class SaleController {
     private SaleService saleService;
 
     @Autowired
-    private PromotionalCouponRepository promotionalCouponRepository;
-
-    @Autowired
     private CreditCardService creditCardService;
 
     @Autowired
@@ -60,25 +49,10 @@ public class SaleController {
     private ClientNavigator clientNavigator;
 
     @Autowired
-    private SaleRepository saleRepository;
-
-    @Autowired
     ExchangeService exchangeService;
 
     @Autowired
     NotificationService notificationService;
-
-    @Autowired
-    ChatGptService chatGptService;
-
-    /*@GetMapping("")
-    public String showSalesGet(Model model) {
-
-        List<Sale> sales =  saleService.getAllSales();
-        model.addAttribute("sales", sales);
-
-        return "adminSalesView";
-    }*/
 
     @GetMapping("/makeOrder/{cartId}")
     public String makeOrderGet(@PathVariable long cartId, Model model) {

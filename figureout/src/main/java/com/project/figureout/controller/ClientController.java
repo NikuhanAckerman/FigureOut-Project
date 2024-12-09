@@ -1,13 +1,9 @@
 package com.project.figureout.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.figureout.ClientNavigator;
 import com.project.figureout.dto.*;
 import com.project.figureout.model.*;
-import com.project.figureout.repository.SalesCardsRepository;
 import com.project.figureout.service.*;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,13 +12,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -43,12 +36,6 @@ public class ClientController {
 
     @Autowired
     private SaleService saleService;
-
-    @Autowired
-    private ExchangeService exchangeService;
-
-    @Autowired
-    private SalesCardsRepository salesCardsRepository;
 
     @Autowired
     private NotificationService notificationService;
@@ -285,8 +272,6 @@ public class ClientController {
         }
 
         clientService.registerClient(client, clientDTO);
-
-        //clientService.recalculateClientRanking();
 
         return "redirect:/showAllClients";
     }
@@ -681,7 +666,6 @@ public class ClientController {
 
             }
 
-
             dtoList.add(showSaleOnClientCrudModalDTO);
         }
 
@@ -693,7 +677,7 @@ public class ClientController {
         }
 
         return dtoList;
-    } // you need to apply the ShowSaleOnClientCrudModalDTO lil bro (apparently the JSON is otherwise too big so gotta use a DTO)
+    }
 
 
 
