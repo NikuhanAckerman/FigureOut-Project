@@ -3,36 +3,22 @@ package com.project.figureout.service;
 import com.project.figureout.dto.ChangeExchangeStatusDTO;
 import com.project.figureout.dto.ChangeSaleStatusDTO;
 import com.project.figureout.dto.NotificationDTO;
-import com.project.figureout.dto.SaleDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartRepository;
 import com.project.figureout.repository.ProductRepository;
 import com.project.figureout.repository.SaleRepository;
 import com.project.figureout.repository.SalesCardsRepository;
-import jakarta.transaction.Transactional;
-import org.hibernate.loader.LoaderLogging;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
 public class SaleService {
-
-    @Autowired
-    private CartRepository cartRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
 
     @Autowired
     private SaleRepository saleRepository;
@@ -41,19 +27,10 @@ public class SaleService {
     private SalesCardsRepository salesCardsRepository;
 
     @Autowired
-    private StockService stockService;
-
-    @Autowired
-    private ProductService productService;
-
-    @Autowired
     private ExchangeService exchangeService;
 
     @Autowired
     private NotificationService notificationService;
-
-    @Autowired
-    private ChatGptService chatGptService;
 
     public List<Sale> getAllSales() {
         return saleRepository.findAll();
@@ -103,22 +80,9 @@ public class SaleService {
 
     }
 
-    public List<SalesCards> getSalesCardsBySaleId(long id) {
-
-        return salesCardsRepository.findSalesCardsBySaleId(id);
-    }
-
-    public void deleteSaleById(long id) {
-        saleRepository.deleteById(id); // add exception throwing to this later, apparently this doesnt throw EmptyResultDataAccessException anymore
-    }
-
     public void saveSale(Sale sale) {
         saleRepository.save(sale);
     }
-
-//    public List<SaleDTO> getSalesByProductByMonth() {
-//        return saleRepository.findSalesByProductByMonth();
-//    }
 
     public void changeSaleStatus(Sale sale, ChangeSaleStatusDTO changeSaleStatusDTO) throws IOException {
         SaleStatusEnum changeSaleStatusDTOStatus = changeSaleStatusDTO.getStatus();
@@ -186,10 +150,5 @@ public class SaleService {
         }
 
     }
-
-    public List<Sale> findSalesByDate(LocalDateTime date) {
-        return saleRepository.findByDateTimeSale(date);
-    }
-
 
 }

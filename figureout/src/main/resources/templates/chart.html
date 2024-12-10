@@ -57,58 +57,51 @@
         function drawChart() {
             var data = new google.visualization.DataTable();
 
-            // define the columns of the DataTable
-            data.addColumn('string', 'Data da compra'); // X-axis (date)
+            data.addColumn('string', 'Data da compra');
 
             var products = /*[[${productInChartDTOList}]]*/ [];
             var productNames = [];
 
-            // create a unique list of product names for column headers
             products.forEach(function(product) {
                 if (!productNames.includes(product.name)) {
                     productNames.push(product.name);
                 }
             });
 
-            // add columns for each product
             productNames.forEach(function(productName) {
-                data.addColumn('number', productName); // column for product values
-                data.addColumn({type: 'string', role: 'tooltip', p: { html: true }}); // tooltip column for each product
+                data.addColumn('number', productName);
+                data.addColumn({type: 'string', role: 'tooltip', p: { html: true }});
             });
 
-            // create a map to store cumulative sales data by date and product
             var dataMap = {};
 
             products.forEach(function(product) {
                 var dateKey = new Date(product.datePurchased).toLocaleDateString();
 
                 if (!dataMap[dateKey]) {
-                    dataMap[dateKey] = {}; // initialize date entry if it doesn't exist
+                    dataMap[dateKey] = {};
                 }
 
                 if (!dataMap[dateKey][product.name]) {
-                    // initialize product entry for that date if it doesn't exist
                     dataMap[dateKey][product.name] = {
                         totalValue: 0,
                         totalVolume: 0,
-                        datePurchased: product.datePurchased // store the purchase date
+                        datePurchased: product.datePurchased
                     };
                 }
 
-                // Accumulate sales values and volumes
                 dataMap[dateKey][product.name].totalValue += parseFloat(product.valuePurchased);
                 dataMap[dateKey][product.name].totalVolume += parseFloat(product.volumePurchased);
             });
 
-            // convert the accumulated data into rows for the DataTable
             for (var date in dataMap) {
-                var row = [date]; // start each row with the date
+                var row = [date];
 
                 productNames.forEach(function(productName) {
                     if (dataMap[date][productName]) {
                         var productData = dataMap[date][productName];
 
-                        row.push(productData.totalValue); // Add accumulated value
+                        row.push(productData.totalValue);
                         row.push(`
                     <div style="padding: 5px;">
                         <strong>Nome:</strong> ${productName}<br/>
@@ -116,14 +109,14 @@
                         <strong>Quantidade vendida:</strong> ${productData.totalVolume}<br/>
                         <strong>Data:</strong> ${new Date(productData.datePurchased).toLocaleDateString()}<br/>
                     </div>
-                `); // add tooltip with accumulated details
+                `);
                     } else {
-                        row.push(null); // no data for this product on this date
-                        row.push(''); // empty tooltip
+                        row.push(null);
+                        row.push('');
                     }
                 });
 
-                data.addRow(row); // add the row to the DataTable
+                data.addRow(row);
             }
 
             // Chart options
@@ -136,7 +129,7 @@
                 vAxis: {
                     title: 'Valor'
                 },
-                tooltip: { isHtml: true } // enable HTML tooltips
+                tooltip: { isHtml: true }
             };
 
             var chart = new google.visualization.LineChart(document.getElementById('curve_line'));

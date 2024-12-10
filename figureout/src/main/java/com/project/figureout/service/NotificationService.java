@@ -21,17 +21,12 @@ public class NotificationService {
         return notificationRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Notificação não encontrada com base no ID."));
     }
 
-    public Notification saveNotification(Notification notification) {
-        return notificationRepository.save(notification);
-    }
-
-    public List<Notification> getAllNotifications() {
-        return notificationRepository.findAll();
+    public void saveNotification(Notification notification) {
+        notificationRepository.save(notification);
     }
 
     public List<Notification> getClientNotifications(long clientId) {
-        List<Notification> notifications = notificationRepository.findAllByClientId(clientId);
-        return notifications;
+        return notificationRepository.findAllByClientId(clientId);
     }
 
     public Client getClientByNotification(Notification notification) {

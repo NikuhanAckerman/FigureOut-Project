@@ -174,9 +174,6 @@
                       <div class="d-flex flex-column align-items-start">
                         <div th:if="${productIdExchangeInfo[cartProduct.id] != null and !productIdExchangeInfo[cartProduct.id].isEmpty()}">
 
-                          <!--<p class="text-primary">Este produto está sendo trocado ou foi trocado:</p>
-                          <span class="badge bg-info text-dark mb-2" th:text="'Quantidade ainda devolvível do produto: ' + ${cartProduct.exchangeableQuantity}"></span>-->
-
                           <div th:each="exchangeCartProduct : ${productIdExchangeInfo[cartProduct.id]}">
 
                             <div th:if="${exchangeCartProduct.quantityReturned > 0}">
@@ -194,13 +191,7 @@
 
                     </div>
 
-
-
-
-
                   </div>
-
-
 
                 </div>
 

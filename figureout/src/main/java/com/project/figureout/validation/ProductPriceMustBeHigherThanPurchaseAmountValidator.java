@@ -2,21 +2,15 @@ package com.project.figureout.validation;
 
 import com.project.figureout.dto.ProductDTO;
 import com.project.figureout.model.PricingGroup;
-import com.project.figureout.model.Product;
 import com.project.figureout.repository.PricingGroupRepository;
-import com.project.figureout.service.ProductService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 public class ProductPriceMustBeHigherThanPurchaseAmountValidator implements ConstraintValidator<ProductPriceMustBeHigherThanPurchaseAmount, Object>  {
-
-    @Autowired
-    private ProductService productService;
 
     @Autowired
     private PricingGroupRepository pricingGroupRepository;

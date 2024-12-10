@@ -26,8 +26,6 @@ public class StateAndCountryService {
         return stateRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Estado não encontrado pelo ID."));
     }
 
-    // Country Methods
-
     public List<Country> getAllCountries() {
         return countryRepository.findAll();
     }

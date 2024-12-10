@@ -102,7 +102,6 @@
                 <strong>Telefone: </strong>
                 <span th:if="${phone.cellphone} == true" th:text="${phone.ddd} + ' ' + ${phone.phoneNumber}"></span>
                 <span th:if="${phone.cellphone} == false" th:text="${phone.ddd} + ' ' + ${phone.phoneNumber}"></span>
-                <!--<strong>Telefone: </strong><span th:if="${phone.cellphone} == false" th:text="${phone.ddd} + ' ' + ${phone.phoneNumber}"></span>-->
             </p>
         </div>
     </div>
