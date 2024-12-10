@@ -290,4 +290,16 @@ public class ProductController {
         return "redirect:/products/shop";
     }
 
+    @GetMapping("/shop/search")
+    public String searchShopProducts(
+            @RequestParam(required = false) String name,
+            RedirectAttributes redirectAttributes) {
+
+        List<Product> products = productService.searchShop(name);
+
+        redirectAttributes.addFlashAttribute("products", products);
+
+        return "redirect:/products/shop";
+    }
+
 }

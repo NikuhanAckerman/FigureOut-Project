@@ -104,8 +104,9 @@
 
       <div class="col-md-9 my-4">
 
+        <form th:action="@{/products/shop/search}" method="GET" id="searchForm">
               <div class="input-group">
-                <input type="text" class="form-control" placeholder="Buscar um produto..." aria-label="Buscar">
+                <input type="text" class="form-control" placeholder="Buscar um produto..." aria-label="Buscar" name="name">
                 <div class="input-group-append">
                   <button class="btn btn-primary" type="button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -114,6 +115,7 @@
                   </button>
                 </div>
               </div>
+        </form>
 
             <br>
             <div class="row">

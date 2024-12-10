@@ -323,7 +323,6 @@ public class ProductService {
                 products = products.stream()
                         .filter(product -> product.getPrice().compareTo(price) <= 0) // Comparação exata com BigDecimal
                         .collect(Collectors.toList());
-
             }
 
         }
@@ -336,5 +335,26 @@ public class ProductService {
 
         return products.isEmpty() ? new ArrayList<>() : products;
     }
+
+    public List<Product> searchShop(String name) {
+        List<Product> products = getAllActiveProducts();
+
+        System.out.println(name);
+
+        if (name != null && !name.isEmpty()) {
+            products = products.stream()
+                    .filter(product -> product.getName().toLowerCase().contains(name.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        if(products.isEmpty()) {
+            System.out.println("sem filtro");
+        } else {
+            System.out.println("filtro");
+        }
+
+        return products.isEmpty() ? new ArrayList<>() : products;
+    }
+
 
 }
