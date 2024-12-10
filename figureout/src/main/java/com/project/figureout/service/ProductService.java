@@ -286,21 +286,46 @@ public class ProductService {
         }
 
         if (manufacturer != null && !manufacturer.equals("Todos")) {
+            System.out.println("manufacturer wanted: " + manufacturer);
+            for(Product currentProduct: products) {
+                System.out.println("Product " + currentProduct.getName() + " Manufacturer: " + currentProduct.getManufacturer().getName());
+            }
+
             products = products.stream()
-                    .filter(product -> product.getManufacturer().getName().equals(manufacturer.toLowerCase()))
+                    .filter(product -> product.getManufacturer().getName().equalsIgnoreCase(manufacturer))
                     .collect(Collectors.toList());
         }
 
         if (size != null && !size.equals("Todos")) {
+            System.out.println("size wanted: " + size);
+            for(Product currentProduct: products) {
+                System.out.println("Product " + currentProduct.getName() + " Size: " + currentProduct.getSize().getName());
+            }
+
             products = products.stream()
-                    .filter(product -> product.getSize().getName().equals(size.toLowerCase()))
+                    .filter(product -> product.getSize().getName().equalsIgnoreCase(size))
                     .collect(Collectors.toList());
         }
 
         if (price != null) {
-            products = products.stream()
-                    .filter(product -> product.getPrice() != null && product.getPrice().compareTo(price) == 0) // Comparação exata com BigDecimal
-                    .collect(Collectors.toList());
+            System.out.println("price " + price);
+            System.out.println(price.compareTo(BigDecimal.valueOf(5000.00)) >= 0);
+
+            if(price.compareTo(BigDecimal.valueOf(5000.00)) >= 0) {
+                products = products.stream()
+                        .filter(product -> product.getPrice().compareTo(price) >= 0) // Comparação exata com BigDecimal
+                        .collect(Collectors.toList());
+
+                return products;
+            }
+
+            if(!(price.compareTo(BigDecimal.valueOf(50.00)) <= 0)) {
+                products = products.stream()
+                        .filter(product -> product.getPrice().compareTo(price) <= 0) // Comparação exata com BigDecimal
+                        .collect(Collectors.toList());
+
+            }
+
         }
 
         if(products.isEmpty()) {

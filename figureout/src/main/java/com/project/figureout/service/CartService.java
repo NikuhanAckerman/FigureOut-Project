@@ -294,7 +294,7 @@ public class CartService {
 
     }
 
-    private static final int qntMinutesExpire = 1;  // Set to 20 minutes
+    private static final int qntMinutesExpire = 20;  // Set to 20 minutes
     private static final long qntMinutesExpireInMs = qntMinutesExpire * 60 * 1000; // Convert to milliseconds
 
     @Scheduled(fixedRate = qntMinutesExpireInMs)  // Run every minute (60000 ms)

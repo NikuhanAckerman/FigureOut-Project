@@ -285,12 +285,7 @@ public class ProductController {
 
         List<Product> products = productService.filterShop(category, manufacturer, size, price);
 
-        model.addAttribute("filterCategory", category);
-        model.addAttribute("filterManufacturer", manufacturer);
-        model.addAttribute("filterSize", size);
-        model.addAttribute("filterPrice", price);
-
-        redirectAttributes.addFlashAttribute(products);
+        redirectAttributes.addFlashAttribute("products", products);
 
         return "redirect:/products/shop";
     }
