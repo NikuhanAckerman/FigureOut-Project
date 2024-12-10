@@ -5,7 +5,6 @@ import com.project.figureout.model.Client;
 import com.project.figureout.service.ClientService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import jakarta.validation.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

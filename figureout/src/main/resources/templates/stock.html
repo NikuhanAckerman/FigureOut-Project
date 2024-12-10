@@ -59,9 +59,9 @@
         <td th:text = "${stock.productQuantityAvailable}"></td>
         <td th:text = "'R$' + ${stock.productPurchaseAmount}"></td>
         <td th:text = "'R$' + ${stock.productPurchaseAmount} * ${stock.productQuantityAvailable}"></td>
-        <td th:text = "${#temporals.format(stock.initialEntryDate, 'dd/MM/yyyy HH:mm:ss')}"></td>
-        <td th:text = "${#temporals.format(stock.latestEntryDate, 'dd/MM/yyyy HH:mm:ss')}"></td>
-        <td th:text = "${#temporals.format(stock.latestDropDate, 'dd/MM/yyyy HH:mm:ss')}"></td>
+        <td th:text = "${#temporals.format(stock.initialEntryDate, 'dd/MM/yyyy')}"></td>
+        <td th:text = "${#temporals.format(stock.latestEntryDate, 'dd/MM/yyyy')}"></td>
+        <td th:text = "${#temporals.format(stock.latestDropDate, 'dd/MM/yyyy')}"></td>
 
         <td>
           <button type="button" class="btn btn-secondary" th:data-bs-stock-id = "${stock.id}" th:data-bs-product-id = "${stock.product.id}" data-bs-toggle="modal" data-bs-target="#seeStockHistoryModal" >Ver Histórico</button>
@@ -70,15 +70,6 @@
         <td>
           <a class="btn btn-primary" th:id="'updateStock-' + ${stock.id}" th:href="@{/stock/updateStock/{id}(id=${stock.id})}">Atualizar</a>
         </td>
-
-        <!--
-        <td>
-          <form th:action="@{/products/deleteProduct/{id}(id=${stock.id})}" method="POST">
-            <input type="hidden" name="_method" value="DELETE"/>
-            <button type="submit" class="btn btn-danger btn-delete" onclick="return confirm('Tem certeza?')">Deletar</button>
-          </form>
-        </td>
-        -->
 
       </tr>
       </tbody>
@@ -148,7 +139,7 @@
               return response.json();
             })
             .then(dateLastEntry => {
-              dateOfLastEntry.innerHTML = 'Data da última entrada: ' + new Date(dateLastEntry).toLocaleString('pt-BR');
+              dateOfLastEntry.innerHTML = 'Data da última entrada: ' + new Date(dateLastEntry).toLocaleDateString('pt-BR');
 
             })
 
@@ -160,7 +151,7 @@
               return response.json();
             })
             .then(dateLastDrop => {
-              dateOfLastDrop.innerHTML = 'Data da última retirada: ' + new Date(dateLastDrop).toLocaleString('pt-BR');
+              dateOfLastDrop.innerHTML = 'Data da última retirada: ' + new Date(dateLastDrop).toLocaleDateString('pt-BR');
 
             })
 
@@ -191,7 +182,7 @@
                   suppliers.push(supplier.name);
                 })
 
-                const dateChangeOfStockQuantity = new Date(stockHistory.dateChangeOfStockQuantity).toLocaleString('pt-BR')
+                const dateChangeOfStockQuantity = new Date(stockHistory.dateChangeOfStockQuantity).toLocaleDateString('pt-BR')
 
                 const stockChangeDivInfo = `
 

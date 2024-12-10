@@ -41,23 +41,17 @@ public class StockController {
     // Define o método para lidar com requisições GET para o caminho "/stock"
     @GetMapping("/seeStock")
     public String showStockGet(Model model) {
-        // Chama o serviço para obter a lista de todos os produtos em estoque
+
         List<Stock> stocks = stockService.getAllProductsInStock();
 
-        // Adiciona a lista de produtos ao modelo, com a chave "products"
-        // Esse modelo será passado para a view que será renderizada
         model.addAttribute("stocks", stocks);
 
-
-        // Retorna o nome da view que será renderizada. No caso, é "stock",
-        // que o Spring vai associar ao arquivo "stock.html" ou "stock.jsp"
         return "stock";
     }
 
     // Define o método para lidar com requisições GET para o caminho "/createStock"
     @GetMapping("/updateStock/{productId}")
     public String updateStock(Model model, @PathVariable long productId) {
-        // Chama os serviços para obter a lista de todas os atributos necessários.
         Stock stock = stockService.getProductInStockByProductId(productId);
         UpdateStockDTO updateStockDTO = new UpdateStockDTO();
 
@@ -80,20 +74,12 @@ public class StockController {
 
         updateStockDTO.setProductQuantityAvailable(stock.getProductQuantityAvailable());
 
-        // Chama o repositório para obter a lista de todos os fornecedores
         List<Supplier> supplierList = supplierRepository.findAll();
-
-        // Cria um novo objeto ProductDTO que será o produto a ser gerenciado pelo estoque.
-
-        // Adiciona as listas e o objeto ProductDTO ao modelo, para que esses dados
-        // fiquem disponíveis na view (a página HTML que será renderizada)
 
         model.addAttribute("productId", productId);
         model.addAttribute("supplierList", supplierList);
         model.addAttribute("updateStockDTO", updateStockDTO);
 
-        // Retorna o nome da view que será renderizada. Nesse caso, é "createStock",
-        // que o Spring irá associar ao arquivo "createStock.html".
         return "updateStock";
     }
 

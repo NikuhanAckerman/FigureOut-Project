@@ -100,11 +100,6 @@
               </div>
             </div>
 
-            <!--<div class="col-12 col-md-4">
-              <label><b>Quantidade disponível em estoque</b></label>
-              <input type="number" class="form-control" id="productQuantityAvailable" step="1" placeholder="0" th:field="*{stockDTO.productQuantityAvailable}" required>
-            </div>-->
-
           </div>
 
           <!-- Preço de venda e data de entrada em estoque -->
@@ -115,24 +110,10 @@
               <p class="text-primary" style="display: inline;">O valor do preço de venda não pode ser menor do que o preço de compra + o grupo de precificação.</p>
             </div>
 
-            <!--<div class="col-12 col-md-6">
-              <label><b>Data de entrada em estoque</b></label>
-              <input type="date" class="form-control" id="entryInStockDate" placeholder="Insira a data de entrada do produto no estoque" th:field="*{stockDTO.entryInStockDate}" required>
-            </div>-->
-
           </div>
 
           <!-- Fornecedor, fabricante e tamanho -->
           <div class="row">
-            <!--<div class="col-md-4">
-              <div class="form-group">
-                <label><b>Fornecedor</b></label>
-                <select class="form-control" id="supplier" th:field="*{supplier}">
-                  <option selected value="0">Selecione um fornecedor</option>
-                  <option th:each="supplier : ${supplierList}" th:value="${supplier.id}" th:text="${supplier.name}"></option>
-                </select>
-              </div>
-            </div>-->
 
             <div class="col-md-4">
               <div class="form-group">

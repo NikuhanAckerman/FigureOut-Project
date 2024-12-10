@@ -11,7 +11,6 @@ import com.project.figureout.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -22,9 +21,6 @@ public class AddressService {
 
     @Autowired
     private AddressRepository addressRepository;
-
-    @Autowired
-    private ClientRepository clientRepository;
 
     public void saveAddress(Address address) {
         addressRepository.save(address);

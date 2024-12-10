@@ -280,7 +280,6 @@ public class ProductController {
             @RequestParam(required = false) String manufacturer,
             @RequestParam(required = false) String size,
             @RequestParam(required = false) BigDecimal price,
-            Model model,
             RedirectAttributes redirectAttributes) {
 
         List<Product> products = productService.filterShop(category, manufacturer, size, price);
@@ -291,9 +290,7 @@ public class ProductController {
     }
 
     @GetMapping("/shop/search")
-    public String searchShopProducts(
-            @RequestParam(required = false) String name,
-            RedirectAttributes redirectAttributes) {
+    public String searchShopProducts(@RequestParam(required = false) String name, RedirectAttributes redirectAttributes) {
 
         List<Product> products = productService.searchShop(name);
 

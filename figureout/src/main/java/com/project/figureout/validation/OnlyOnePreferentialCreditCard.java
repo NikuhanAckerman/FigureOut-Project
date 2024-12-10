@@ -1,6 +1,5 @@
 package com.project.figureout.validation;
 
-import com.project.figureout.dto.CreditCardDTO;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 

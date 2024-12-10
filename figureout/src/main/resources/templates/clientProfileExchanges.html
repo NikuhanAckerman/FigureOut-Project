@@ -137,11 +137,7 @@
             <p class="card-text" th:text="'Quantia do cupom: R$' + ${exchange.coupon.amountWorth}"></p>
 
           </div>
-          <!--
-          <p class="card-text">
-            <strong>Data e horário: </strong><span th:text="${#temporals.format(sale.dateTimeSale, 'dd/MM/yyyy - HH:mm:ss')}"></span>
-          </p>
-          -->
+
           <p class="card-text">
             <strong><span th:text="'Data de requisição: ' + ${#temporals.format(exchange.exchangeRequestTime, 'dd/MM/yyyy' + ' - ' + 'HH:mm:ss')}"></span></strong>
           </p>
@@ -216,8 +212,6 @@
         </div>
 
       </div>
-
-
 
     </div>
 

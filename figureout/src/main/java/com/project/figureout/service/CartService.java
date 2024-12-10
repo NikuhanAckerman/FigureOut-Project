@@ -1,14 +1,9 @@
 package com.project.figureout.service;
 
-import com.project.figureout.dto.CartProductDTO;
 import com.project.figureout.dto.ChangeCartProductQuantityDTO;
-import com.project.figureout.dto.StockDTO;
 import com.project.figureout.model.*;
 import com.project.figureout.repository.CartRepository;
-import com.project.figureout.repository.CartsProductsRepository;
 import com.project.figureout.repository.ClientRepository;
-import com.project.figureout.repository.SaleRepository;
-import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +14,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -30,16 +24,7 @@ public class CartService {
     private ClientRepository clientRepository;
 
     @Autowired
-    private ProductService productService;
-
-    @Autowired
     private CartRepository cartRepository;
-
-    @Autowired
-    private ExchangeService exchangeService;
-
-    @Autowired
-    private CartsProductsRepository cartsProductsRepository;
 
     @Autowired
     private SaleService saleService;

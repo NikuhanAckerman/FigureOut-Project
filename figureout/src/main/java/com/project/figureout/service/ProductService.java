@@ -158,16 +158,7 @@ public class ProductService {
         productDTO.setCategoriesIds(productCategoryIdList);
         productDTO.setPricingGroup(product.getPricingGroup().getId());
         productDTO.setPrice(product.getPrice());
-        //productDTO.getStockDTO().setEntryInStockDate(product.getStock().getInitialEntryDate());
 
-        //byte[] productImage = product.getPicture();
-
-        //Stock stock = stockRepository.findAllByProductId(product.getId()).getLast();
-
-        //productDTO.getStockDTO().setProductQuantityAvailable(stock.getProductQuantityAvailable());
-        //productDTO.getStockDTO().setEntryInStockDate(stock.getInitialEntryDate());
-        //productDTO.getStockDTO().setLatestEntryDate(stock.getLatestEntryDate());
-        //productDTO.setSupplier(stock.getSupplier().getId());
         productDTO.setManufacturer(product.getManufacturer().getId());
         productDTO.setSize(product.getSize().getId());
 

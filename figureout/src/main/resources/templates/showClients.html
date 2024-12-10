@@ -390,7 +390,7 @@
 				const creditCardList = document.getElementById("creditCardList");
 				creditCardList.innerHTML = '';
 
-				var changeCreditCardBalanceDTO = /*[[${changeCreditCardBalanceDTO}]]*/
+				//var changeCreditCardBalanceDTO = /*[[${changeCreditCardBalanceDTO}]]*/
 
 						fetch(`index/${clientId}/creditCards`)
 						.then(response => {
@@ -490,9 +490,9 @@
 							return response.json();
 						})
 						.then(sales => {
-							console.log("Full response from server:", sales); // Log the entire JSON response
+							console.log("Full response from server:", sales);
 							sales.forEach(sale => {
-								console.log("Sale object:", sale); // Log individual sale objects
+								console.log("Sale object:", sale);
 							});
 							let listOfSales = ``;
 							sales.forEach(currentSale => {

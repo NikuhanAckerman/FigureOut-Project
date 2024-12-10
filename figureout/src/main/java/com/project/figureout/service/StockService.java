@@ -6,9 +6,7 @@ import com.project.figureout.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
-//import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,10 +28,6 @@ public class StockService {
     @Autowired
     private ProductsActivationRepository productsActivationRepository;
 
-    public Stock getStockById(long id) {
-        return stockRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Estoque não encontrado com base no ID."));
-    }
-
     public List<Stock> getAllProductsInStock() {
         return stockRepository.findAll();
     }
@@ -42,22 +36,11 @@ public class StockService {
         return stockRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Produto não encontrado em estoque."));
     }
 
-    public void dropStockAmountByProductId(long id, int amount) {
-        Stock stock = getProductInStockByProductId(id);
-
-        stock.setProductQuantityAvailable(stock.getProductQuantityAvailable() - amount);
-    }
-
-    public List<Supplier> getAllSuppliers() {
-        return supplierRepository.findAll();
-    }
-
     public List<Supplier> getSupplierByListOfIds(List<Long> idList) {
         return supplierRepository.findAllById(idList);
     }
 
     public List<StockHistory> getStockHistoryByStockId(long id) {
-        Stock stock = getStockById(id);
 
         List<StockHistory> stockHistoryList = new ArrayList<>();
 
@@ -164,7 +147,6 @@ public class StockService {
             Integer value = entry.getValue();
 
             addInStock(key, value);
-
         }
 
     }

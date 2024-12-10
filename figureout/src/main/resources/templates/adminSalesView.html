@@ -246,12 +246,10 @@
                 if (!response.ok) {
                     throw new Error("Erro ao retornar ID do carrinho.");
                 }
-                return response.json();  // Expecting the response to be a long (number)
+                return response.json();
             })
             .then(cartId => {
-                console.log("ID do carrinho:", cartId);  // Log the client ID for inspection
-
-
+                console.log("ID do carrinho:", cartId);
                 cartIdElement.innerHTML = 'ID do carrinho: ' + cartId;
             })
             .catch(error => {
@@ -263,7 +261,7 @@
                 if (!response.ok) {
                     throw new Error("Erro ao retornar data da venda.");
                 }
-                return response.json();  // Expecting the response to be a long (number)
+                return response.json();
             })
             .then(saleDate => {
                 const data = new Date(saleDate).toLocaleString('pt-BR');
@@ -278,7 +276,7 @@
                 if (!response.ok) {
                     throw new Error("Erro ao retornar código da venda.");
                 }
-                return response.text();  // Expecting the response to be a long (number)
+                return response.text();
             })
             .then(saleCode => {
                 saleCodeElement.innerHTML = 'Código da venda: ' + saleCode;
@@ -292,10 +290,10 @@
                 if (!response.ok) {
                     throw new Error("Erro ao retornar ID do cliente.");
                 }
-                return response.json();  // Expecting the response to be a long (number)
+                return response.json();
             })
             .then(clientId => {
-                console.log("ID do cliente:", clientId);  // Log the client ID for inspection
+                console.log("ID do cliente:", clientId);
 
 
                 clientIdElement.innerHTML = 'ID do cliente: ' + clientId;
@@ -309,11 +307,10 @@
                 if (!response.ok) {
                     throw new Error("Erro ao retornar cliente.");
                 }
-                return response.text();  // Use text() to handle the response as plain text
+                return response.text();
             })
             .then(clientName => {
-                console.log(clientName);  // Log the client name for inspection
-
+                console.log(clientName);
                 clientNameElement.innerHTML = 'Nome do cliente: ' + clientName;
             })
             .catch(error => {
@@ -322,16 +319,14 @@
 
         fetch(`/sales/getSaleTotal/${saleId}`)
             .then(response => {
-                console.log(response);  // Log the raw response to check
+                console.log(response);
                 if (!response.ok) {
                     throw new Error("Erro ao retornar total da venda.");
                 }
-                return response.json();  // Handle the response as JSON (since BigDecimal is numeric)
+                return response.json();
             })
             .then(totalPrice => {
-                console.log(totalPrice);  // Log the total price for inspection
-
-                // Update the element to display the formatted price
+                console.log(totalPrice);
                 totalPriceElement.innerHTML = 'Total da venda: R$' + totalPrice.toFixed(2);
             })
             .catch(error => {
@@ -340,17 +335,14 @@
 
         fetch(`/sales/getFreight/${saleId}`)
             .then(response => {
-                console.log(response);  // Log the raw response to check
+                console.log(response);
                 if (!response.ok) {
                     throw new Error("Erro ao retornar frete.");
                 }
-                return response.json();  // Handle the response as JSON (since BigDecimal is numeric)
+                return response.json();
             })
             .then(freight => {
-                console.log(freight);  // Log the freight for inspection
-
-                let totalPrice = totalPriceElement.innerHTML.match(/\d+(\.\d+)?/);
-
+                console.log(freight);
                 freightElement.innerHTML = 'Frete: ' + (freight * 100) + '% do preço da compra';
             })
             .catch(error => {
@@ -362,14 +354,14 @@
                 if (!response.ok) {
                     throw new Error("Erro ao retornar carrinho.");
                 }
-                return response.json();  // Use json() to handle the response as JSON
+                return response.json();
             })
             .then(cartProducts => {
-                console.log(cartProducts);  // Log the JSON response for inspection
+                console.log(cartProducts);
                 let productList = '';
 
                 cartProducts.forEach(cartProduct => {
-                    const product = cartProduct.product;  // Access the Product within CartsProducts
+                    const product = cartProduct.product;
                     const unitaryPrice = cartProduct.unitaryPrice.toFixed(2);
                     const productTotal = cartProduct.finalPrice.toFixed(2);
                     const productQuantity = cartProduct.productQuantity;
@@ -400,11 +392,10 @@
                     if (!response.ok) {
                         throw new Error("Erro ao retornar cupom promocional.");
                     }
-                    return response.json();  // Assuming PromotionalCoupon is a JSON object
+                    return response.json();
                 })
                 .then(promotionalCoupon => {
-                    console.log(promotionalCoupon);  // Log the PromotionalCoupon object for inspection
-
+                    console.log(promotionalCoupon);
                     if (promotionalCoupon == null || Object.keys(promotionalCoupon).length === 0) {
                         console.log("nenhum cupom utilizado")
                         promotionalCouponNameElement.innerHTML = 'Nenhum cupom utilizado.'
@@ -415,9 +406,6 @@
                         promotionalCouponNameElement.innerHTML = 'Cupom: ' + promotionalCoupon.couponName
                         promotionalCouponDiscountElement.innerHTML = 'Desconto: ' + promotionalCoupon.couponDiscount*100 + '%'
                     }
-
-                    // Assuming the PromotionalCoupon has fields like 'code' and 'discount'
-
                 })
                 .catch(error => {
                     console.error(error);
@@ -441,24 +429,23 @@
                 if (!response.ok) {
                     throw new Error("Erro ao retornar trocas.");
                 }
-                return response.json();  // Directly parse as JSON
+                return response.json();
             })
             .then(exchanges => {
-                console.log('Raw exchange data:', exchanges); // Check how many exchanges arrive
+                console.log('Raw exchange data:', exchanges);
 
                 if (exchanges.length === 0) {
                     console.warn("Nenhuma troca encontrada.");
                     exchangeDivElement.innerHTML = '<h1 class="text-primary">Nenhuma troca.</h1>';
-                    return;  // Stop further execution
+                    return;
                 }
 
-                console.log(exchanges.length);  // Log the JSON response for inspection
+                console.log(exchanges.length);
 
                 exchanges.forEach(exchange => {
                     console.log(exchange.exchangeCode);
-                    let exchangeCoupon = ''; // Default as empty
+                    let exchangeCoupon = '';
 
-                    // Check if the exchange has a coupon
                     if (exchange.coupon != null) {
                         console.log("its not null lol")
                         console.log(exchange.coupon.amountWorth)
@@ -543,15 +530,14 @@
                 if (!response.ok) {
                     throw new Error("Erro ao retornar troca.");
                 }
-                return response.json();  // Directly parse as JSON
+                return response.json();
             })
             .then(exchange => {
-                console.log('Raw exchange data:', exchange); // Check how many exchanges arrive
+                console.log('Raw exchange data:', exchange);
 
                 console.log(exchange.exchangeCode);
-                let exchangeCoupon = ''; // Default as empty
+                let exchangeCoupon = '';
 
-                // Check if the exchange has a coupon
                 if (exchange.coupon != null) {
                     console.log("its not null lol")
                     console.log(exchange.coupon.amountWorth)
