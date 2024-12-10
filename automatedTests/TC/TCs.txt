@@ -20,7 +20,7 @@ TC12 - Cadastrar Produto
 TC13 - Atualizar Produto
 TC14 - Atualizar quantidade de produtos em estoque
 TC15 - Remover Produto
-TC16 - (Aplicar filtro de produtos)
+TC16 - Aplicar filtro de produtos
 
 GRUPO: CUPOM PROMOCIONAL
 TC17 - Cadastrar Cupom promocional
@@ -43,5 +43,5 @@ TC29 - (buscar trocas em perfil de cliente)
 
 GRUPO: OUTROS
 TC30 - Visualizar gráfico de vendas
-TC31 - Interação com IA
+TC31 - !Interação com IA!
 TC32 - Visualizar ranking de clientes
