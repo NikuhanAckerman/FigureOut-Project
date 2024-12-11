@@ -33,6 +33,7 @@ scripts = [
     'ChromeTC19.py',
     'ChromeTC20.py',
     'ChromeTC21.py',
+    'ChromeTC22.py',
     'ChromeTC23.py',
     'ChromeTC24.py',
     'ChromeTC25.py',

@@ -176,8 +176,6 @@ public class CartService {
         cart.getExchangeCoupons().add(exchangeCoupon);
         saveCart(cart);
 
-
-
         setCartTotal(cart);
     }
 

@@ -30,7 +30,7 @@ TC19 - Remover Cupom promocional
 GRUPO: TRANSAÇÕES
 TC20 - Comprar Produtos
 TC21 - Aprovar Compra
-TC22 - (Aplicar filtro na loja)
+TC22 - Aplicar filtro na loja
 TC23 - Trocar Produtos comprados
 TC24 - Aprovar Troca
 
